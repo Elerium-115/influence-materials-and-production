@@ -258,7 +258,7 @@ body {
     right: 0;
     background-image: url("img/material-types-icons.png");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 240px; /* scaled to 37.5% of PNG width 640px */
     width: 24px; /* scaled to 37.5% of icon width 64px */
     height: 22.5px; /* scaled to 37.5% of icon height 60px */
 }
