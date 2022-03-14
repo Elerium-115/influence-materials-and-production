@@ -1,0 +1,299 @@
+@font-face {
+    font-family: Jura;
+    src: url("font/Jura-Regular.ttf");
+}
+
+:root {
+    --volatiles: #5bc0f5;
+    --organics: #78d356;
+    --metals: #ff852b;
+    --rare-earth: #ff3636;
+    --fissiles: #8a15ff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+body {
+    background-color: #202634;
+    color: #a9acb3;
+    font-family: Jura, sans-serif;
+}
+
+.wrapper {
+    display: flex;
+    align-items: stretch;
+    min-height: 100vh;
+}
+
+/* sidebar */
+
+#sidebar {
+    background-color: #293042;
+    text-align: center;
+    min-width: 260px;
+}
+
+.sidebar-brand {
+    display: block;
+    font-size: 1.125rem;
+    padding: 1.15rem 1.5rem;
+}
+
+.sidebar-brand img {
+    width: 10em;
+}
+
+/* main */
+
+.main {
+    position: relative;
+    width: 100%;
+    padding: 33px 40px;
+}
+
+/* spectral types */
+
+.spectral-types h2 {
+    margin-bottom: 10px;
+}
+
+.spectral-types > i, .material-types > i {
+    font-style: normal;
+    font-size: 0.8rem;
+    opacity: 0.5;
+}
+
+.spectral-types ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    list-style: none;
+    margin-top: 20px;
+}
+
+.spectral-types ul li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+/* source: https://stackoverflow.com/a/51496341 */
+.spectral-types ul li::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 4px;
+    border-radius: 50%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+.spectral-types ul li:hover {
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+}
+
+.spectral-types ul li.active {
+    color: #fff;
+}
+
+.spectral-types ul li::before { opacity: 0.2; }
+.spectral-types ul li.active::before { opacity: 1; }
+
+/* 1/3 = 120 deg, 1/5 = 72 deg, 1/7 ~= 52 deg (but then 3/7 = only 152) */
+.spectral-types ul li[data-value="c"]::before, .spectral-types ul li.active[data-value="c"]::before {
+    /* type C = volatiles 2/5 (0-144 deg), organics 3/5 (144-360 deg) */
+    background: conic-gradient(transparent 4deg,
+        var(--volatiles) 4deg, var(--volatiles) 140deg, transparent 140deg, transparent 148deg,
+        var(--organics) 148deg, var(--organics) 356deg, transparent 356deg);
+}
+.spectral-types ul li[data-value="ci"]::before, .spectral-types ul li.active[data-value="ci"]::before {
+    /* type CI = volatiles 1/2 (0-180 deg), organics 1/2 (180-360 deg) */
+    background: conic-gradient(transparent 4deg,
+        var(--volatiles) 4deg, var(--volatiles) 176deg, transparent 176deg, transparent 184deg,
+        var(--organics) 184deg, var(--organics) 356deg, transparent 356deg);
+}
+.spectral-types ul li[data-value="cis"]::before, .spectral-types ul li.active[data-value="cis"]::before {
+    /* type CIS = volatiles 3/7 (0-152 deg), organics 152-204 deg, metals 204-256 deg, rare-earth 256-308 deg, fissiles 308-360 */
+    background: conic-gradient(transparent 4deg,
+        var(--volatiles) 4deg, var(--volatiles) 148deg, transparent 148deg, transparent 156deg,
+        var(--organics) 156deg, var(--organics) 200deg, transparent 200deg, transparent 208deg,
+        var(--metals) 208deg, var(--metals) 252deg, transparent 252deg, transparent 260deg,
+        var(--rare-earth) 260deg, var(--rare-earth) 304deg, transparent 304deg, transparent 312deg,
+        var(--fissiles) 312deg, var(--fissiles) 356deg, transparent 356deg);
+}
+.spectral-types ul li[data-value="cm"]::before, .spectral-types ul li.active[data-value="cm"]::before {
+    /* type CM = volatiles 1/5 (0-72 deg), organics 1/5 (72-144 deg), metals 2/5 (144-288 deg), fissiles 1/5 (288-360) */
+    background: conic-gradient(transparent 4deg,
+        var(--volatiles) 4deg, var(--volatiles) 68deg, transparent 68deg, transparent 76deg,
+        var(--organics) 76deg, var(--organics) 140deg, transparent 140deg, transparent 148deg,
+        var(--metals) 148deg, var(--metals) 284deg, transparent 284deg, transparent 292deg,
+        var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
+}
+.spectral-types ul li[data-value="cms"]::before, .spectral-types ul li.active[data-value="cms"]::before {
+    /* type CMS = volatiles 1/7 (0-52 deg), organics 1/7 (52-104 deg), metals 3/7 (104-256 deg), rare-earth 1/7 (256-308 deg), fissiles 1/7 (308-360) */
+    background: conic-gradient(transparent 4deg,
+        var(--volatiles) 4deg, var(--volatiles) 48deg, transparent 48deg, transparent 56deg,
+        var(--organics) 56deg, var(--organics) 100deg, transparent 100deg, transparent 108deg,
+        var(--metals) 108deg, var(--metals) 252deg, transparent 252deg, transparent 260deg,
+        var(--rare-earth) 260deg, var(--rare-earth) 304deg, transparent 304deg, transparent 312deg,
+        var(--fissiles) 312deg, var(--fissiles) 356deg, transparent 356deg);
+}
+.spectral-types ul li[data-value="cs"]::before, .spectral-types ul li.active[data-value="cs"]::before {
+    /* type CS = volatiles 1/5 (0-72 deg), organics 1/5 (72-144 deg), metals 1/5 (144-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360) */
+    background: conic-gradient(transparent 4deg,
+        var(--volatiles) 4deg, var(--volatiles) 68deg, transparent 68deg, transparent 76deg,
+        var(--organics) 76deg, var(--organics) 140deg, transparent 140deg, transparent 148deg,
+        var(--metals) 148deg, var(--metals) 212deg, transparent 212deg, transparent 220deg,
+        var(--rare-earth) 220deg, var(--rare-earth) 284deg, transparent 284deg, transparent 292deg,
+        var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
+}
+.spectral-types ul li[data-value="i"]::before, .spectral-types ul li.active[data-value="i"]::before {
+    /* type I = volatiles 1/1 (0-360 deg) */
+    background: var(--volatiles);
+}
+.spectral-types ul li[data-value="m"]::before, .spectral-types ul li.active[data-value="m"]::before {
+    /* type M = metals 4/5 (0-288 deg), fissiles 1/5 (288-360) */
+    background: conic-gradient(transparent 4deg,
+        var(--metals) 4deg, var(--metals) 284deg, transparent 284deg, transparent 292deg,
+        var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
+}
+.spectral-types ul li[data-value="s"]::before, .spectral-types ul li.active[data-value="s"]::before {
+    /* type S = metals 1/3 (0-120 deg), rare-earth 1/3 (120-240 deg), fissiles 1/3 (240-360) */
+    background: conic-gradient(transparent 4deg,
+        var(--metals) 4deg, var(--metals) 116deg, transparent 116deg, transparent 124deg,
+        var(--rare-earth) 124deg, var(--rare-earth) 236deg, transparent 236deg, transparent 244deg,
+        var(--fissiles) 244deg, var(--fissiles) 356deg, transparent 356deg);
+}
+.spectral-types ul li[data-value="si"]::before, .spectral-types ul li.active[data-value="si"]::before {
+    /* type SI = volatiles 2/5 (0-144 deg), metals 1/5 (144-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360) */
+    background: conic-gradient(transparent 4deg,
+        var(--volatiles) 4deg, var(--volatiles) 140deg, transparent 140deg, transparent 148deg,
+        var(--metals) 148deg, var(--metals) 212deg, transparent 212deg, transparent 220deg,
+        var(--rare-earth) 220deg, var(--rare-earth) 284deg, transparent 284deg, transparent 292deg,
+        var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
+}
+.spectral-types ul li[data-value="sm"]::before, .spectral-types ul li.active[data-value="sm"]::before {
+    /* type SM = metals 3/5 (0-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360) */
+    background: conic-gradient(transparent 4deg,
+        var(--metals) 4deg, var(--metals) 212deg, transparent 212deg, transparent 220deg,
+        var(--rare-earth) 220deg, var(--rare-earth) 284deg, transparent 284deg, transparent 292deg,
+        var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
+}
+
+/* raw materials */
+
+.material-types h2 {
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+.raw-materials {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    column-gap: 10px;
+    row-gap: 10px;
+    max-width: 1200px;
+    margin-top: 20px;
+}
+
+.material-type {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    position: relative;
+    font-size: 1.2rem;
+    margin-right: 10px;
+    padding-right: 40px;
+}
+
+.material-type::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    background-image: url("img/material-types-icons.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 24px; /* scaled to 37.5% of icon width 64px */
+    height: 22.5px; /* scaled to 37.5% of icon height 60px */
+}
+
+/* background-position calculated at 37.5% values, due to "::after" pseudo-element scaled to 37.5% of icon size */
+.material-type[data-value="volatiles"]::after { background-position-x: 0; }
+.material-type[data-value="organics"]::after { background-position-x: -24px; }
+.material-type[data-value="metals"]::after { background-position-x: -48px; }
+.material-type[data-value="rare-earth"]::after { background-position-x: -72px; }
+.material-type[data-value="fissiles"]::after { background-position-x: -96px; }
+
+.material-type[data-value="volatiles"].active::after { background-position-x: -120px; }
+.material-type[data-value="organics"].active::after { background-position-x: -144px; }
+.material-type[data-value="metals"].active::after { background-position-x: -168px; }
+.material-type[data-value="rare-earth"].active::after { background-position-x: -192px; }
+.material-type[data-value="fissiles"].active::after { background-position-x: -216px; }
+
+.material-type[data-value="volatiles"].active { color: var(--volatiles); }
+.material-type[data-value="organics"].active { color: var(--organics); }
+.material-type[data-value="metals"].active { color: var(--metals); }
+.material-type[data-value="rare-earth"].active { color: var(--rare-earth); }
+.material-type[data-value="fissiles"].active { color: var(--fissiles); }
+
+.raw-material {
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 5px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+}
+
+.raw-material:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+}
+
+.raw-material.active.volatiles { border-color: var(--volatiles); color: var(--volatiles); }
+.raw-material.active.organics { border-color: var(--organics); color: var(--organics); }
+.raw-material.active.metals { border-color: var(--metals); color: var(--metals); }
+.raw-material.active.rare-earth { border-color: var(--rare-earth); color: var(--rare-earth); }
+.raw-material.active.fissiles { border-color: var(--fissiles); color: var(--fissiles); }
+
+.raw-material i {
+    display: block;
+    font-style: normal;
+    font-size: 0.7rem;
+    opacity: 0.5;
+}
+
+.reset-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: inherit;
+}
+
+.reset-button a {
+    display: block;
+    color: #a9acb3;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 1px solid #696e7b;
+    border-radius: 10px;
+}
+
+.reset-button a:hover {
+    cursor: pointer;
+    color: #d4d6d9;
+    background-color: rgba(255, 255, 255, 0.05);
+}
