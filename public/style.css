@@ -17,6 +17,16 @@
     font-weight: normal;
 }
 
+a {
+    color: #3f80ea;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #1659c7;
+    text-decoration: underline;
+}
+
 body {
     background-color: #202634;
     color: #a9acb3;
@@ -37,6 +47,12 @@ body {
     min-width: 260px;
 }
 
+.sidebar-content {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
 .sidebar-brand {
     display: block;
     font-size: 1.125rem;
@@ -45,6 +61,24 @@ body {
 
 .sidebar-brand img {
     width: 10em;
+}
+
+.sidebar-author {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    text-align: right;
+    padding: 1.15rem 1.5rem;
+}
+
+.sidebar-author .title {
+    color: #ffd600;
+    font-weight: bold;
+}
+
+.sidebar-author .secondary {
+    opacity: 0.5;
 }
 
 /* main */
@@ -286,7 +320,6 @@ body {
 .reset-button a {
     display: block;
     color: #a9acb3;
-    text-decoration: none;
     padding: 10px 20px;
     border: 1px solid #696e7b;
     border-radius: 10px;
