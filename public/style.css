@@ -77,6 +77,10 @@ body {
     font-weight: bold;
 }
 
+.sidebar-author .primary, .sidebar-author .secondary {
+    font-size: 0.9rem;
+}
+
 .sidebar-author .secondary {
     opacity: 0.5;
 }
@@ -237,7 +241,7 @@ body {
     grid-template-columns: repeat(9, 1fr);
     grid-template-rows: repeat(5, 1fr);
     column-gap: 10px;
-    row-gap: 10px;
+    row-gap: 12px;
     max-width: 1200px;
     margin-top: 20px;
 }
@@ -289,6 +293,8 @@ body {
     font-size: 0.9rem;
     padding: 5px;
     border: 1px solid transparent;
+    border-top-style: hidden;
+    border-bottom-style: hidden;
     border-radius: 10px;
 }
 
