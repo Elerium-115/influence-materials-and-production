@@ -9,12 +9,14 @@
     --metals: #ff852b;
     --rare-earth: #ff3636;
     --fissiles: #8a15ff;
+    font-size: 2.2vmin;
 }
 
 * {
+    box-sizing: border-box;
+    font-weight: normal;
     margin: 0;
     padding: 0;
-    font-weight: normal;
 }
 
 a {
@@ -45,6 +47,7 @@ body {
     background-color: #293042;
     text-align: center;
     min-width: 260px;
+    max-width: 260px;
 }
 
 .sidebar-content {
@@ -55,12 +58,11 @@ body {
 
 .sidebar-brand {
     display: block;
-    font-size: 1.125rem;
-    padding: 1.15rem 1.5rem;
+    padding: 18px 24px;
 }
 
 .sidebar-brand img {
-    width: 10em;
+    width: 85%;
 }
 
 .sidebar-author {
@@ -69,7 +71,8 @@ body {
     bottom: 0;
     right: 0;
     text-align: right;
-    padding: 1.15rem 1.5rem;
+    font-size: 16px;
+    padding: 24px;
 }
 
 .sidebar-author .title {
@@ -78,7 +81,7 @@ body {
 }
 
 .sidebar-author .primary, .sidebar-author .secondary {
-    font-size: 0.9rem;
+    font-size: 0.9em;
 }
 
 .sidebar-author .secondary {
@@ -96,12 +99,12 @@ body {
 /* spectral types */
 
 .spectral-types h2 {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .spectral-types > i, .material-types > i {
     font-style: normal;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     opacity: 0.5;
 }
 
@@ -110,7 +113,7 @@ body {
     flex-wrap: wrap;
     gap: 20px;
     list-style: none;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .spectral-types ul li {
@@ -118,8 +121,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 60px;
+    width: 8.5vmin;
+    height: 8.5vmin;
     border-radius: 50%;
 }
 
@@ -128,12 +131,13 @@ body {
     content: "";
     position: absolute;
     inset: 0;
-    padding: 4px;
+    padding: 0.5vmin;
     border-radius: 50%;
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
+    opacity: 0.2;
 }
 
 .spectral-types ul li:hover {
@@ -145,7 +149,6 @@ body {
     color: #fff;
 }
 
-.spectral-types ul li::before { opacity: 0.2; }
 .spectral-types ul li.active::before { opacity: 1; }
 
 /* 1/3 = 120 deg, 1/5 = 72 deg, 1/7 ~= 52 deg (but then 3/7 = only 152) */
@@ -233,7 +236,7 @@ body {
 
 .material-types h2 {
     margin-top: 40px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .raw-materials {
@@ -243,7 +246,7 @@ body {
     column-gap: 10px;
     row-gap: 12px;
     max-width: 1200px;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .material-type {
@@ -326,6 +329,7 @@ body {
 .reset-button a {
     display: block;
     color: #a9acb3;
+    margin-top: -8px;
     padding: 10px 20px;
     border: 1px solid #696e7b;
     border-radius: 10px;
@@ -335,4 +339,18 @@ body {
     cursor: pointer;
     color: #d4d6d9;
     background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* responsive layout */
+
+@media only screen and (max-width: 990px) {
+    #sidebar {
+        margin-left: -260px;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .spectral-types > i, .material-types > i {
+        display: none;
+    }
 }
