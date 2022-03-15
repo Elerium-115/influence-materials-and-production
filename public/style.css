@@ -65,7 +65,7 @@ body {
     width: 85%;
 }
 
-.sidebar-author {
+.sidebar-about {
     display: block;
     position: absolute;
     bottom: 0;
@@ -75,16 +75,19 @@ body {
     padding: 24px;
 }
 
-.sidebar-author .title {
+.sidebar-about .title,
+.footer-about .title {
     color: #ffd600;
     font-weight: bold;
 }
 
-.sidebar-author .primary, .sidebar-author .secondary {
+.sidebar-about .primary, .sidebar-about .secondary,
+.footer-about .primary, .footer-about .secondary {
     font-size: 0.9em;
 }
 
-.sidebar-author .secondary {
+.sidebar-about .secondary,
+.footer-about .secondary {
     opacity: 0.5;
 }
 
@@ -98,31 +101,53 @@ body {
 
 /* spectral types */
 
+.reset-button {
+    float: right;
+    margin-bottom: 1vw;
+    margin-left: 5vw;
+}
+
+.reset-button a {
+    display: block;
+    color: #a9acb3;
+    margin-top: -8px;
+    padding: 10px 20px;
+    border: 1px solid #696e7b;
+    border-radius: 10px;
+}
+
+.reset-button a:hover {
+    cursor: pointer;
+    color: #d4d6d9;
+    background-color: rgba(255, 255, 255, 0.05);
+    text-decoration: none;
+}
+
 .spectral-types h2 {
     margin-bottom: 20px;
 }
 
-.spectral-types > i, .material-types > i {
+.spectral-types > i,
+.material-types > i {
     font-style: normal;
     font-size: 0.9rem;
     opacity: 0.5;
 }
 
 .spectral-types ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    column-gap: 1.5vw;
     list-style: none;
-    margin-top: 30px;
+    margin-top: 25px;
 }
 
 .spectral-types ul li {
+    aspect-ratio: 1 / 1;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 8.5vmin;
-    height: 8.5vmin;
     border-radius: 50%;
 }
 
@@ -152,19 +177,22 @@ body {
 .spectral-types ul li.active::before { opacity: 1; }
 
 /* 1/3 = 120 deg, 1/5 = 72 deg, 1/7 ~= 52 deg (but then 3/7 = only 152) */
-.spectral-types ul li[data-value="c"]::before, .spectral-types ul li.active[data-value="c"]::before {
+.spectral-types ul li[data-value="c"]::before,
+.spectral-types ul li.active[data-value="c"]::before {
     /* type C = volatiles 2/5 (0-144 deg), organics 3/5 (144-360 deg) */
     background: conic-gradient(transparent 4deg,
         var(--volatiles) 4deg, var(--volatiles) 140deg, transparent 140deg, transparent 148deg,
         var(--organics) 148deg, var(--organics) 356deg, transparent 356deg);
 }
-.spectral-types ul li[data-value="ci"]::before, .spectral-types ul li.active[data-value="ci"]::before {
+.spectral-types ul li[data-value="ci"]::before,
+.spectral-types ul li.active[data-value="ci"]::before {
     /* type CI = volatiles 1/2 (0-180 deg), organics 1/2 (180-360 deg) */
     background: conic-gradient(transparent 4deg,
         var(--volatiles) 4deg, var(--volatiles) 176deg, transparent 176deg, transparent 184deg,
         var(--organics) 184deg, var(--organics) 356deg, transparent 356deg);
 }
-.spectral-types ul li[data-value="cis"]::before, .spectral-types ul li.active[data-value="cis"]::before {
+.spectral-types ul li[data-value="cis"]::before,
+.spectral-types ul li.active[data-value="cis"]::before {
     /* type CIS = volatiles 3/7 (0-152 deg), organics 152-204 deg, metals 204-256 deg, rare-earth 256-308 deg, fissiles 308-360 */
     background: conic-gradient(transparent 4deg,
         var(--volatiles) 4deg, var(--volatiles) 148deg, transparent 148deg, transparent 156deg,
@@ -173,7 +201,8 @@ body {
         var(--rare-earth) 260deg, var(--rare-earth) 304deg, transparent 304deg, transparent 312deg,
         var(--fissiles) 312deg, var(--fissiles) 356deg, transparent 356deg);
 }
-.spectral-types ul li[data-value="cm"]::before, .spectral-types ul li.active[data-value="cm"]::before {
+.spectral-types ul li[data-value="cm"]::before,
+.spectral-types ul li.active[data-value="cm"]::before {
     /* type CM = volatiles 1/5 (0-72 deg), organics 1/5 (72-144 deg), metals 2/5 (144-288 deg), fissiles 1/5 (288-360) */
     background: conic-gradient(transparent 4deg,
         var(--volatiles) 4deg, var(--volatiles) 68deg, transparent 68deg, transparent 76deg,
@@ -181,7 +210,8 @@ body {
         var(--metals) 148deg, var(--metals) 284deg, transparent 284deg, transparent 292deg,
         var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
 }
-.spectral-types ul li[data-value="cms"]::before, .spectral-types ul li.active[data-value="cms"]::before {
+.spectral-types ul li[data-value="cms"]::before,
+.spectral-types ul li.active[data-value="cms"]::before {
     /* type CMS = volatiles 1/7 (0-52 deg), organics 1/7 (52-104 deg), metals 3/7 (104-256 deg), rare-earth 1/7 (256-308 deg), fissiles 1/7 (308-360) */
     background: conic-gradient(transparent 4deg,
         var(--volatiles) 4deg, var(--volatiles) 48deg, transparent 48deg, transparent 56deg,
@@ -190,7 +220,8 @@ body {
         var(--rare-earth) 260deg, var(--rare-earth) 304deg, transparent 304deg, transparent 312deg,
         var(--fissiles) 312deg, var(--fissiles) 356deg, transparent 356deg);
 }
-.spectral-types ul li[data-value="cs"]::before, .spectral-types ul li.active[data-value="cs"]::before {
+.spectral-types ul li[data-value="cs"]::before,
+.spectral-types ul li.active[data-value="cs"]::before {
     /* type CS = volatiles 1/5 (0-72 deg), organics 1/5 (72-144 deg), metals 1/5 (144-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360) */
     background: conic-gradient(transparent 4deg,
         var(--volatiles) 4deg, var(--volatiles) 68deg, transparent 68deg, transparent 76deg,
@@ -199,24 +230,28 @@ body {
         var(--rare-earth) 220deg, var(--rare-earth) 284deg, transparent 284deg, transparent 292deg,
         var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
 }
-.spectral-types ul li[data-value="i"]::before, .spectral-types ul li.active[data-value="i"]::before {
+.spectral-types ul li[data-value="i"]::before,
+.spectral-types ul li.active[data-value="i"]::before {
     /* type I = volatiles 1/1 (0-360 deg) */
     background: var(--volatiles);
 }
-.spectral-types ul li[data-value="m"]::before, .spectral-types ul li.active[data-value="m"]::before {
+.spectral-types ul li[data-value="m"]::before,
+.spectral-types ul li.active[data-value="m"]::before {
     /* type M = metals 4/5 (0-288 deg), fissiles 1/5 (288-360) */
     background: conic-gradient(transparent 4deg,
         var(--metals) 4deg, var(--metals) 284deg, transparent 284deg, transparent 292deg,
         var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
 }
-.spectral-types ul li[data-value="s"]::before, .spectral-types ul li.active[data-value="s"]::before {
+.spectral-types ul li[data-value="s"]::before,
+.spectral-types ul li.active[data-value="s"]::before {
     /* type S = metals 1/3 (0-120 deg), rare-earth 1/3 (120-240 deg), fissiles 1/3 (240-360) */
     background: conic-gradient(transparent 4deg,
         var(--metals) 4deg, var(--metals) 116deg, transparent 116deg, transparent 124deg,
         var(--rare-earth) 124deg, var(--rare-earth) 236deg, transparent 236deg, transparent 244deg,
         var(--fissiles) 244deg, var(--fissiles) 356deg, transparent 356deg);
 }
-.spectral-types ul li[data-value="si"]::before, .spectral-types ul li.active[data-value="si"]::before {
+.spectral-types ul li[data-value="si"]::before,
+.spectral-types ul li.active[data-value="si"]::before {
     /* type SI = volatiles 2/5 (0-144 deg), metals 1/5 (144-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360) */
     background: conic-gradient(transparent 4deg,
         var(--volatiles) 4deg, var(--volatiles) 140deg, transparent 140deg, transparent 148deg,
@@ -224,7 +259,8 @@ body {
         var(--rare-earth) 220deg, var(--rare-earth) 284deg, transparent 284deg, transparent 292deg,
         var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
 }
-.spectral-types ul li[data-value="sm"]::before, .spectral-types ul li.active[data-value="sm"]::before {
+.spectral-types ul li[data-value="sm"]::before,
+.spectral-types ul li.active[data-value="sm"]::before {
     /* type SM = metals 3/5 (0-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360) */
     background: conic-gradient(transparent 4deg,
         var(--metals) 4deg, var(--metals) 212deg, transparent 212deg, transparent 220deg,
@@ -235,7 +271,7 @@ body {
 /* raw materials */
 
 .material-types h2 {
-    margin-top: 40px;
+    margin-top: 33px;
     margin-bottom: 20px;
 }
 
@@ -245,8 +281,7 @@ body {
     grid-template-rows: repeat(5, 1fr);
     column-gap: 10px;
     row-gap: 12px;
-    max-width: 1200px;
-    margin-top: 30px;
+    margin-top: 25px;
 }
 
 .material-type {
@@ -294,7 +329,7 @@ body {
     place-items: center;
     text-align: center;
     font-size: 0.9rem;
-    padding: 5px;
+    padding: 5px 10px;
     border: 1px solid transparent;
     border-top-style: hidden;
     border-bottom-style: hidden;
@@ -319,38 +354,68 @@ body {
     opacity: 0.5;
 }
 
-.reset-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: inherit;
+.footer-about {
+    display: none;
 }
 
-.reset-button a {
-    display: block;
-    color: #a9acb3;
-    margin-top: -8px;
-    padding: 10px 20px;
-    border: 1px solid #696e7b;
-    border-radius: 10px;
-}
-
-.reset-button a:hover {
-    cursor: pointer;
-    color: #d4d6d9;
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-/* responsive layout */
+/* screen below 990 px */
 
 @media only screen and (max-width: 990px) {
     #sidebar {
-        margin-left: -260px;
+        display: none;
+    }
+
+    .main {
+        padding-left: 5vw;
+        padding-right: 5vw;
+    }
+
+    .spectral-types ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5vw;
+    }
+
+    .spectral-types ul li {
+        width: 8.5vmin; /* aspect-ratio 1:1 */
+    }
+
+    .footer-about {
+        display: flex;
+        justify-content: space-evenly;
+        margin-top: 33px;
     }
 }
 
+/* screen below 700 px */
+
 @media only screen and (max-width: 700px) {
+    .spectral-types ul {
+        gap: 3vw;
+    }
+
+    .spectral-types ul li {
+        width: 12vmin; /* aspect-ratio 1:1 */
+    }
+
     .spectral-types > i, .material-types > i {
+        display: none;
+    }
+
+    .raw-materials {
+        /* material-type column width = icon 24px (scaled to 37.5% of icon width 64px) + margin 10px */
+        grid-template-columns: 34px repeat(8, 1fr);
+    }
+
+    .material-type {
+        font-size: 0;
+    }
+
+    .material-type::after {
+        left: 0;
+    }
+
+    .raw-material i {
         display: none;
     }
 }
