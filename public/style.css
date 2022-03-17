@@ -5,10 +5,15 @@
 
 :root {
     --volatiles: #5bc0f5;
+    --volatiles_faded: #5bc0f508;
     --organics: #78d356;
+    --organics_faded: #78d35608;
     --metals: #ff852b;
+    --metals_faded: #ff852b08;
     --rare-earth: #ff3636;
+    --rare-earth_faded: #ff363608;
     --fissiles: #8a15ff;
+    --fissiles_faded: #8a15ff08;
     font-size: 2.2vmin;
 }
 
@@ -123,8 +128,10 @@ body {
     text-decoration: none;
 }
 
-.spectral-types h2 {
-    margin-bottom: 20px;
+.spectral-types h2,
+.material-types h2
+{
+    margin-bottom: 10px;
 }
 
 .spectral-types > i,
@@ -270,17 +277,14 @@ body {
 
 /* raw materials */
 
-.material-types h2 {
+.material-types {
     margin-top: 33px;
-    margin-bottom: 20px;
 }
 
 .raw-materials {
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    column-gap: 10px;
-    row-gap: 12px;
+    grid-template-columns: auto 1fr;
+    row-gap: 0.1rem;
     margin-top: 25px;
 }
 
@@ -290,14 +294,13 @@ body {
     white-space: nowrap;
     position: relative;
     font-size: 1.2rem;
-    margin-right: 10px;
-    padding-right: 40px;
+    padding: 0.5rem 60px 0.5rem 0;
 }
 
 .material-type::after {
     content: "";
     position: absolute;
-    right: 0;
+    right: 1rem;
     background-image: url("img/material-types-icons.png");
     background-repeat: no-repeat;
     background-size: 240px; /* scaled to 37.5% of PNG width 640px */
@@ -318,17 +321,38 @@ body {
 .material-type[data-value="rare-earth"].active::after { background-position-x: -192px; }
 .material-type[data-value="fissiles"].active::after { background-position-x: -216px; }
 
+.material-type[data-value="volatiles"] { background: linear-gradient(-90deg, var(--volatiles_faded) 0%, transparent 100%); }
+.material-type[data-value="organics"] { background: linear-gradient(-90deg, var(--organics_faded) 0%, transparent 100%); }
+.material-type[data-value="metals"] { background: linear-gradient(-90deg, var(--metals_faded) 0%, transparent 100%); }
+.material-type[data-value="rare-earth"] { background: linear-gradient(-90deg, var(--rare-earth_faded) 0%, transparent 100%); }
+.material-type[data-value="fissiles"] { background: linear-gradient(-90deg, var(--fissiles_faded) 0%, transparent 100%); }
+
 .material-type[data-value="volatiles"].active { color: var(--volatiles); }
 .material-type[data-value="organics"].active { color: var(--organics); }
 .material-type[data-value="metals"].active { color: var(--metals); }
 .material-type[data-value="rare-earth"].active { color: var(--rare-earth); }
 .material-type[data-value="fissiles"].active { color: var(--fissiles); }
 
+.materials-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+.materials-wrapper.volatiles { background: linear-gradient(90deg, var(--volatiles_faded) 0%, transparent 100%); }
+.materials-wrapper.organics { background: linear-gradient(90deg, var(--organics_faded) 0%, transparent 100%); }
+.materials-wrapper.metals { background: linear-gradient(90deg, var(--metals_faded) 0%, transparent 100%); }
+.materials-wrapper.rare-earth { background: linear-gradient(90deg, var(--rare-earth_faded) 0%, transparent 100%); }
+.materials-wrapper.fissiles { background: linear-gradient(90deg, var(--fissiles_faded) 0%, transparent 100%); }
+
 .raw-material {
     display: grid;
     place-items: center;
     text-align: center;
     font-size: 0.9rem;
+    min-height: 3.5rem;
     padding: 5px 10px;
     border: 1px solid transparent;
     border-top-style: hidden;
@@ -341,11 +365,11 @@ body {
     cursor: pointer;
 }
 
-.raw-material.active.volatiles { border-color: var(--volatiles); color: var(--volatiles); }
-.raw-material.active.organics { border-color: var(--organics); color: var(--organics); }
-.raw-material.active.metals { border-color: var(--metals); color: var(--metals); }
-.raw-material.active.rare-earth { border-color: var(--rare-earth); color: var(--rare-earth); }
-.raw-material.active.fissiles { border-color: var(--fissiles); color: var(--fissiles); }
+.volatiles .raw-material.active { border-color: var(--volatiles); color: var(--volatiles); }
+.organics .raw-material.active { border-color: var(--organics); color: var(--organics); }
+.metals .raw-material.active { border-color: var(--metals); color: var(--metals); }
+.rare-earth .raw-material.active { border-color: var(--rare-earth); color: var(--rare-earth); }
+.fissiles .raw-material.active { border-color: var(--fissiles); color: var(--fissiles); }
 
 .raw-material i {
     display: block;
@@ -402,17 +426,22 @@ body {
         display: none;
     }
 
-    .raw-materials {
-        /* material-type column width = icon 24px (scaled to 37.5% of icon width 64px) + margin 10px */
-        grid-template-columns: 34px repeat(8, 1fr);
-    }
-
     .material-type {
         font-size: 0;
+        padding-right: 40px;
     }
 
     .material-type::after {
         left: 0;
+    }
+
+    .materials-wrapper {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .raw-material {
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
     }
 
     .raw-material i {
