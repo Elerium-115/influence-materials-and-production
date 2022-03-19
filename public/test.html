@@ -10,11 +10,23 @@
             font-family: Jura;
             src: url("font/Jura-Medium.ttf");
         }
+        #products li.RefinedOutput {
+            background-color: lightgray;
+        }
+        #products li.FinishedGood {
+            background-color: gray;
+        }
+        #products li.RefinedOutput.active {
+            background: yellow;
+        }
+        #products li.FinishedGood.active {
+            background: lime;
+        }
     </style>
 </head>
 <body style="font-family: Jura, sans-serif; padding: 0.5rem;">
     Show production chain for:
-    <ul id="products" style="display: flex; gap: 1rem; list-style: none; margin-top: 0.5rem; padding: 0;"></ul>
+    <ul id="products" style="display: flex; flex-wrap: wrap; gap: 1rem; list-style: none; margin-top: 0.5rem; padding: 0;"></ul>
     <div id="required-spectrals" style="background: cyan; font-weight: bold; margin: 0.5rem 0; padding: 0.5rem 1rem;"></div>
     <div id="production-chain"></div>
     <script src="test.js"></script>

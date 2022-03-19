@@ -86,7 +86,8 @@ for (const itemName in items) {
     }
     const listItem = document.createElement('li');
     listItem.textContent = itemName;
-    listItem.setAttribute('style', 'cursor: pointer; background: lightgray; padding: 0.5rem 1rem;');
+    listItem.classList.add(itemData['itemType'].replace(/\s+/g, ''));
+    listItem.setAttribute('style', 'cursor: pointer; padding: 0.5rem 1rem;');
     document.getElementById('products').appendChild(listItem);
 }
 
@@ -95,6 +96,10 @@ function resetProductionChain() {
     productChainContainer.textContent = '';
     requiredSpectrals = [];
     currentContainerId = 0;
+    const activeListItem = document.querySelector("#products li.active");
+    if (activeListItem) {
+        activeListItem.classList.remove('active');
+    }
 }
 
 function updateRequiredSpectralsHtml() {
@@ -129,7 +134,7 @@ function createItemContainer(itemName, itemData) {
     return itemContainer;
 }
 
-//// CONNECT ELMENTS -- START
+//// CONNECT ELEMENTS -- START
 // source: https://thewebdev.info/2021/09/12/how-to-draw-a-line-between-two-divs-with-javascript/
 const getOffset = (el) => {
     const rect = el.getBoundingClientRect();
@@ -155,10 +160,10 @@ const connect = (div1, div2, color, thickness) => {
     const cy = ((y1 + y2) / 2) - (thickness / 2);
     const angle = Math.atan2((y1 - y2), (x1 - x2)) * (180 / Math.PI);
     const line = document.createElement('div');
-    line.setAttribute('style', "padding: 0px; margin: 0px; height: " + thickness + "px; background-color: " + color + "; line-height: 1px; position: absolute; left: " + cx + "px; top: " + cy + "px; width: " + length + "px; -moz-transform: rotate(" + angle + "deg); -webkit-transform: rotate(" + angle + "deg); -o-transform: rotate(" + angle + "deg); -ms-transform: rotate(" + angle + "deg); transform: rotate(" + angle + "deg);");
+    line.setAttribute('style', `padding: 0px; margin: 0px; height: ${thickness}px; background-color: ${color}; line-height: 1px; position: absolute; left: ${cx}px; top: ${cy}px; width: ${length}px; -moz-transform: rotate(${angle}deg); -webkit-transform: rotate(${angle}deg); -o-transform: rotate(${angle}deg); -ms-transform: rotate(${angle}deg); transform: rotate(${angle}deg);`);
     productChainContainer.appendChild(line);
 }
-//// CONNECT ELMENTS -- END
+//// CONNECT ELEMENTS -- END
 
 // parentContainerId = 0 for the top level item (i.e. no parent)
 // renderOnLevel = 1 for the top level item; higher values = recursing down to raw materials
@@ -222,4 +227,10 @@ on('click', '#products li, .item-name', el => {
     resetProductionChain();
     const itemName = el.textContent;
     renderItem(itemName);
+    // highlight the active item in the list of products
+    document.querySelectorAll("#products li").forEach(el => {
+        if (el.textContent === itemName) {
+            el.classList.add('active');
+        }
+    });
 });

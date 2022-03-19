@@ -4,6 +4,8 @@
 }
 
 :root {
+    font-size: 2.2vmin;
+
     --volatiles: #5bc0f5;
     --volatiles_faded: #5bc0f508;
     --organics: #78d356;
@@ -14,7 +16,76 @@
     --rare-earth_faded: #ff363608;
     --fissiles: #8a15ff;
     --fissiles_faded: #8a15ff08;
-    font-size: 2.2vmin;
+
+    /* 1/3 = 120 deg, 1/5 = 72 deg, 1/7 ~= 52 deg (but then 3/7 = only 152), transparent gap = +/- 4deg */
+
+    /* type C = volatiles 2/5 (0-144 deg), organics 3/5 (144-360 deg) */
+    --gradient-type-c: transparent 1.11%,
+        var(--volatiles) 1.11%, var(--volatiles) 38.88%, transparent 38.88%, transparent 41.11%,
+        var(--organics) 41.11%, var(--organics) 98.88%, transparent 98.88%;
+
+    /* type CI = volatiles 1/2 (0-180 deg), organics 1/2 (180-360 deg) */
+    --gradient-type-ci: transparent 1.11%,
+        var(--volatiles) 1.11%, var(--volatiles) 48.88%, transparent 48.88%, transparent 51.11%,
+        var(--organics) 51.11%, var(--organics) 98.88%, transparent 98.88%;
+
+    /* type CIS = volatiles 3/7 (0-152 deg), organics 152-204 deg, metals 204-256 deg, rare-earth 256-308 deg, fissiles 308-360 */
+    --gradient-type-cis: transparent 1.11%,
+        var(--volatiles) 1.11%, var(--volatiles) 41.11%, transparent 41.11%, transparent 43.33%,
+        var(--organics) 43.33%, var(--organics) 55.55%, transparent 55.55%, transparent 57.77%,
+        var(--metals) 57.77%, var(--metals) 70%, transparent 70%, transparent 72.22%,
+        var(--rare-earth) 72.22%, var(--rare-earth) 84.44%, transparent 84.44%, transparent 86.66%,
+        var(--fissiles) 86.66%, var(--fissiles) 98.88%, transparent 98.88%;
+
+    /* type CM = volatiles 1/5 (0-72 deg), organics 1/5 (72-144 deg), metals 2/5 (144-288 deg), fissiles 1/5 (288-360) */
+    --gradient-type-cm: transparent 1.11%,
+        var(--volatiles) 1.11%, var(--volatiles) 18.88%, transparent 18.88%, transparent 21.11%,
+        var(--organics) 21.11%, var(--organics) 38.88%, transparent 38.88%, transparent 41.11%,
+        var(--metals) 41.11%, var(--metals) 78.88%, transparent 78.88%, transparent 81.11%,
+        var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
+
+    /* type CMS = volatiles 1/7 (0-52 deg), organics 1/7 (52-104 deg), metals 3/7 (104-256 deg), rare-earth 1/7 (256-308 deg), fissiles 1/7 (308-360) */
+    --gradient-type-cms: transparent 1.11%,
+        var(--volatiles) 1.11%, var(--volatiles) 13.33%, transparent 13.33%, transparent 15.55%,
+        var(--organics) 15.55%, var(--organics) 27.77%, transparent 27.77%, transparent 30%,
+        var(--metals) 30%, var(--metals) 70%, transparent 70%, transparent 72.22%,
+        var(--rare-earth) 72.22%, var(--rare-earth) 84.44%, transparent 84.44%, transparent 86.66%,
+        var(--fissiles) 86.66%, var(--fissiles) 98.88%, transparent 98.88%;
+
+    /* type CS = volatiles 1/5 (0-72 deg), organics 1/5 (72-144 deg), metals 1/5 (144-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360) */
+    --gradient-type-cs: transparent 1.11%,
+        var(--volatiles) 1.11%, var(--volatiles) 18.88%, transparent 18.88%, transparent 21.11%,
+        var(--organics) 21.11%, var(--organics) 38.88%, transparent 38.88%, transparent 41.11%,
+        var(--metals) 41.11%, var(--metals) 58.88%, transparent 58.88%, transparent 61.11%,
+        var(--rare-earth) 61.11%, var(--rare-earth) 78.88%, transparent 78.88%, transparent 81.11%,
+        var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
+
+    /* type I = volatiles 1/1 (0-360 deg) */
+    --gradient-type-i: var(--volatiles) 0%, var(--volatiles) 100%;
+
+    /* type M = metals 4/5 (0-288 deg), fissiles 1/5 (288-360) */
+    --gradient-type-m: transparent 1.11%,
+        var(--metals) 1.11%, var(--metals) 78.88%, transparent 78.88%, transparent 81.11%,
+        var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
+
+    /* type S = metals 1/3 (0-120 deg), rare-earth 1/3 (120-240 deg), fissiles 1/3 (240-360) */
+    --gradient-type-s: transparent 1.11%,
+        var(--metals) 1.11%, var(--metals) 32.22%, transparent 32.22%, transparent 34.44%,
+        var(--rare-earth) 34.44%, var(--rare-earth) 65.55%, transparent 65.55%, transparent 67.77%,
+        var(--fissiles) 67.77%, var(--fissiles) 98.88%, transparent 98.88%;
+
+    /* type SI = volatiles 2/5 (0-144 deg), metals 1/5 (144-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360) */
+    --gradient-type-si: transparent 1.11%,
+        var(--volatiles) 1.11%, var(--volatiles) 38.88%, transparent 38.88%, transparent 41.11%,
+        var(--metals) 41.11%, var(--metals) 58.88%, transparent 58.88%, transparent 61.11%,
+        var(--rare-earth) 61.11%, var(--rare-earth) 78.88%, transparent 78.88%, transparent 81.11%,
+        var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
+
+    /* type SM = metals 3/5 (0-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360) */
+    --gradient-type-sm: transparent 1.11%,
+        var(--metals) 1.11%, var(--metals) 58.88%, transparent 58.88%, transparent 61.11%,
+        var(--rare-earth) 61.11%, var(--rare-earth) 78.88%, transparent 78.88%, transparent 81.11%,
+        var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
 }
 
 * {
@@ -183,96 +254,49 @@ body {
 
 .spectral-types ul li.active::before { opacity: 1; }
 
-/* 1/3 = 120 deg, 1/5 = 72 deg, 1/7 ~= 52 deg (but then 3/7 = only 152) */
 .spectral-types ul li[data-value="c"]::before,
 .spectral-types ul li.active[data-value="c"]::before {
-    /* type C = volatiles 2/5 (0-144 deg), organics 3/5 (144-360 deg) */
-    background: conic-gradient(transparent 4deg,
-        var(--volatiles) 4deg, var(--volatiles) 140deg, transparent 140deg, transparent 148deg,
-        var(--organics) 148deg, var(--organics) 356deg, transparent 356deg);
+    background: conic-gradient(var(--gradient-type-c));
 }
 .spectral-types ul li[data-value="ci"]::before,
 .spectral-types ul li.active[data-value="ci"]::before {
-    /* type CI = volatiles 1/2 (0-180 deg), organics 1/2 (180-360 deg) */
-    background: conic-gradient(transparent 4deg,
-        var(--volatiles) 4deg, var(--volatiles) 176deg, transparent 176deg, transparent 184deg,
-        var(--organics) 184deg, var(--organics) 356deg, transparent 356deg);
+    background: conic-gradient(var(--gradient-type-ci));
 }
 .spectral-types ul li[data-value="cis"]::before,
 .spectral-types ul li.active[data-value="cis"]::before {
-    /* type CIS = volatiles 3/7 (0-152 deg), organics 152-204 deg, metals 204-256 deg, rare-earth 256-308 deg, fissiles 308-360 */
-    background: conic-gradient(transparent 4deg,
-        var(--volatiles) 4deg, var(--volatiles) 148deg, transparent 148deg, transparent 156deg,
-        var(--organics) 156deg, var(--organics) 200deg, transparent 200deg, transparent 208deg,
-        var(--metals) 208deg, var(--metals) 252deg, transparent 252deg, transparent 260deg,
-        var(--rare-earth) 260deg, var(--rare-earth) 304deg, transparent 304deg, transparent 312deg,
-        var(--fissiles) 312deg, var(--fissiles) 356deg, transparent 356deg);
+    background: conic-gradient(var(--gradient-type-cis));
 }
 .spectral-types ul li[data-value="cm"]::before,
 .spectral-types ul li.active[data-value="cm"]::before {
-    /* type CM = volatiles 1/5 (0-72 deg), organics 1/5 (72-144 deg), metals 2/5 (144-288 deg), fissiles 1/5 (288-360) */
-    background: conic-gradient(transparent 4deg,
-        var(--volatiles) 4deg, var(--volatiles) 68deg, transparent 68deg, transparent 76deg,
-        var(--organics) 76deg, var(--organics) 140deg, transparent 140deg, transparent 148deg,
-        var(--metals) 148deg, var(--metals) 284deg, transparent 284deg, transparent 292deg,
-        var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
+    background: conic-gradient(var(--gradient-type-cm));
 }
 .spectral-types ul li[data-value="cms"]::before,
 .spectral-types ul li.active[data-value="cms"]::before {
-    /* type CMS = volatiles 1/7 (0-52 deg), organics 1/7 (52-104 deg), metals 3/7 (104-256 deg), rare-earth 1/7 (256-308 deg), fissiles 1/7 (308-360) */
-    background: conic-gradient(transparent 4deg,
-        var(--volatiles) 4deg, var(--volatiles) 48deg, transparent 48deg, transparent 56deg,
-        var(--organics) 56deg, var(--organics) 100deg, transparent 100deg, transparent 108deg,
-        var(--metals) 108deg, var(--metals) 252deg, transparent 252deg, transparent 260deg,
-        var(--rare-earth) 260deg, var(--rare-earth) 304deg, transparent 304deg, transparent 312deg,
-        var(--fissiles) 312deg, var(--fissiles) 356deg, transparent 356deg);
+    background: conic-gradient(var(--gradient-type-cms));
 }
 .spectral-types ul li[data-value="cs"]::before,
 .spectral-types ul li.active[data-value="cs"]::before {
-    /* type CS = volatiles 1/5 (0-72 deg), organics 1/5 (72-144 deg), metals 1/5 (144-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360) */
-    background: conic-gradient(transparent 4deg,
-        var(--volatiles) 4deg, var(--volatiles) 68deg, transparent 68deg, transparent 76deg,
-        var(--organics) 76deg, var(--organics) 140deg, transparent 140deg, transparent 148deg,
-        var(--metals) 148deg, var(--metals) 212deg, transparent 212deg, transparent 220deg,
-        var(--rare-earth) 220deg, var(--rare-earth) 284deg, transparent 284deg, transparent 292deg,
-        var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
+    background: conic-gradient(var(--gradient-type-cs));
 }
 .spectral-types ul li[data-value="i"]::before,
 .spectral-types ul li.active[data-value="i"]::before {
-    /* type I = volatiles 1/1 (0-360 deg) */
-    background: var(--volatiles);
+    background: conic-gradient(var(--gradient-type-i));
 }
 .spectral-types ul li[data-value="m"]::before,
 .spectral-types ul li.active[data-value="m"]::before {
-    /* type M = metals 4/5 (0-288 deg), fissiles 1/5 (288-360) */
-    background: conic-gradient(transparent 4deg,
-        var(--metals) 4deg, var(--metals) 284deg, transparent 284deg, transparent 292deg,
-        var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
+    background: conic-gradient(var(--gradient-type-m));
 }
 .spectral-types ul li[data-value="s"]::before,
 .spectral-types ul li.active[data-value="s"]::before {
-    /* type S = metals 1/3 (0-120 deg), rare-earth 1/3 (120-240 deg), fissiles 1/3 (240-360) */
-    background: conic-gradient(transparent 4deg,
-        var(--metals) 4deg, var(--metals) 116deg, transparent 116deg, transparent 124deg,
-        var(--rare-earth) 124deg, var(--rare-earth) 236deg, transparent 236deg, transparent 244deg,
-        var(--fissiles) 244deg, var(--fissiles) 356deg, transparent 356deg);
+    background: conic-gradient(var(--gradient-type-s));
 }
 .spectral-types ul li[data-value="si"]::before,
 .spectral-types ul li.active[data-value="si"]::before {
-    /* type SI = volatiles 2/5 (0-144 deg), metals 1/5 (144-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360) */
-    background: conic-gradient(transparent 4deg,
-        var(--volatiles) 4deg, var(--volatiles) 140deg, transparent 140deg, transparent 148deg,
-        var(--metals) 148deg, var(--metals) 212deg, transparent 212deg, transparent 220deg,
-        var(--rare-earth) 220deg, var(--rare-earth) 284deg, transparent 284deg, transparent 292deg,
-        var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
+    background: conic-gradient(var(--gradient-type-si));
 }
 .spectral-types ul li[data-value="sm"]::before,
 .spectral-types ul li.active[data-value="sm"]::before {
-    /* type SM = metals 3/5 (0-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360) */
-    background: conic-gradient(transparent 4deg,
-        var(--metals) 4deg, var(--metals) 212deg, transparent 212deg, transparent 220deg,
-        var(--rare-earth) 220deg, var(--rare-earth) 284deg, transparent 284deg, transparent 292deg,
-        var(--fissiles) 292deg, var(--fissiles) 356deg, transparent 356deg);
+    background: conic-gradient(var(--gradient-type-sm));
 }
 
 /* raw materials */
