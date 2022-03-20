@@ -113,8 +113,7 @@ input[type='text'] {
 .ratios-spectral-types ul li .base-spectrals .rare-earth { background-color: var(--rare-earth); }
 .ratios-spectral-types ul li .base-spectrals .fissiles { background-color: var(--fissiles); }
 
-/* Ratios of raw materials */
-
+.ratios-spectral-types > i,
 .ratios-raw-materials > i {
     display: block;
     font-style: normal;
@@ -122,6 +121,8 @@ input[type='text'] {
     opacity: 0.5;
     margin-top: 1rem;
 }
+
+/* Ratios of raw materials */
 
 .ratios-raw-materials ul {
     margin-top: 1rem;
