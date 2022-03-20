@@ -173,7 +173,9 @@ function updateRatios() {
             return;
         }
         el.classList.add('active');
-        el.querySelector(".area").textContent = parseInt(areaByRawMaterial[rawMaterial]);
+        // el.querySelector(".area").textContent = parseInt(areaByRawMaterial[rawMaterial]);
+        el.querySelector(".area").textContent = Math.round(areaByRawMaterial[rawMaterial]);
+        // el.querySelector(".area").textContent = (areaByRawMaterial[rawMaterial]).toFixed(2);
         const barWidthPercent = Math.max(minRatioBarWidth, areaRatioByRawMaterial[rawMaterial]);
         el.querySelector(".ratio-bar").style.width = `${barWidthPercent}%`;
     });
