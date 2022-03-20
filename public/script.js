@@ -1,9 +1,30 @@
-const rawMaterialsBySpectralType = {
+const spectralTypes = ['c', 'ci', 'cis', 'cm', 'cms', 'cs', 'i', 'm', 's', 'si', 'sm'];
+
+const rawMaterialsByBaseSpectralType = {
     'c': ['carbon-dioxide', 'carbon-monoxide', 'methane', 'water', 'apatite', 'bitumen', 'calcite'],
     'i': ['ammonia', 'carbon-dioxide', 'carbon-monoxide', 'hydrogen', 'methane', 'nitrogen', 'sulfur-dioxide', 'water'],
     'm': ['graphite', 'rhabdite', 'taenite', 'troilite', 'uranite'],
     's': ['feldspar', 'olivine', 'pyroxene', 'merrillite', 'xenotime', 'coffinite'],
 };
+
+// determine the raw-materials for each spectral-type (including multi-spectrals e.g. "CMS")
+const rawMaterialsBySpectralType = {};
+spectralTypes.forEach(spectralType => {
+    const rawMaterials = [];
+    // parsing each letter from multi-spectrals as a base-type spectral (e.g. "CMS" => "C" + "M" + "S")
+    for (let i=0; i<spectralType.length; i++) {
+        const baseSpectralType = spectralType[i];
+        rawMaterialsByBaseSpectralType[baseSpectralType].forEach(rawMaterial => {
+            // avoid pushing the same raw-material multiple times (e.g. "Water" from both "C" and "I")
+            if (!rawMaterials.includes(rawMaterial)) {
+                rawMaterials.push(rawMaterial);
+            }
+        });
+    }
+    rawMaterialsBySpectralType[spectralType] = rawMaterials;
+});
+
+const materialTypes = ['volatiles', 'organics', 'metals', 'rare-earth', 'fissiles'];
 
 const rawMaterialsByMaterialType = {
     'volatiles': ['ammonia', 'carbon-dioxide', 'carbon-monoxide', 'hydrogen', 'methane', 'nitrogen', 'sulfur-dioxide', 'water'],
@@ -12,6 +33,18 @@ const rawMaterialsByMaterialType = {
     'rare-earth': ['merrillite', 'xenotime'],
     'fissiles': ['coffinite', 'uranite'],
 };
+
+// determine the material-type of each raw-material
+// (also generate list of all raw-materials, sorted by material-type)
+const materialTypeByRawMaterial = {};
+let rawMaterialsSortedByMaterialType = [];
+materialTypes.forEach(materialType => {
+    const rawMaterials = rawMaterialsByMaterialType[materialType];
+    rawMaterials.forEach(rawMaterial => materialTypeByRawMaterial[rawMaterial] = materialType);
+    rawMaterialsSortedByMaterialType = rawMaterialsSortedByMaterialType.concat(rawMaterials);
+});
+
+//// PAGE-SPECIFIC LOGIC BELOW
 
 const elsSpectralTypes = document.querySelectorAll(".spectral-types ul li");
 const elsMaterialTypes = document.querySelectorAll(".material-type");
@@ -23,48 +56,30 @@ const originalTitleSpectralTypes = elTitleSpectralTypes.textContent;
 const originalTitleRawMaterials = elTitleRawMaterials.textContent;
 
 function getSpectralTypesForRawMaterial(rawMaterial) {
-    let spectralTypes = [];
-    for (spectralType in rawMaterialsBySpectralType) {
-        if (rawMaterialsBySpectralType[spectralType].includes(rawMaterial)) {
-            spectralTypes.push(spectralType);
+    const spectralTypes = [];
+    for (const baseSpectralType in rawMaterialsByBaseSpectralType) {
+        if (rawMaterialsByBaseSpectralType[baseSpectralType].includes(rawMaterial)) {
+            spectralTypes.push(baseSpectralType);
             /**
-             * assuming that multi-spectral types (e.g. "cis")
-             * that include the current "spectralType" (e.g. "s")
+             * multi-spectral types (e.g. "cis")
+             * that include the current "baseSpectralType" (e.g. "s")
              * also contain the same "rawMaterial" (e.g. "xenotime")
              */
-            if (spectralType === 'c') {
+            if (baseSpectralType === 'c') {
                 spectralTypes.push('ci', 'cis', 'cm', 'cms', 'cs');
             }
-            if (spectralType === 'i') {
+            if (baseSpectralType === 'i') {
                 spectralTypes.push('ci', 'cis', 'si');
             }
-            if (spectralType === 'm') {
+            if (baseSpectralType === 'm') {
                 spectralTypes.push('cm', 'cms', 'sm');
             }
-            if (spectralType === 's') {
+            if (baseSpectralType === 's') {
                 spectralTypes.push('cis', 'cms', 'cs', 'si', 'sm');
             }
         }
     }
     return spectralTypes;
-}
-
-function getRawMaterialsForSpectralType(spectralType) {
-    let rawMaterials = [];
-    for (let i=0; i<spectralType.length; i++) {
-        // parsing each base-type (e.g. "C" + "M" + "S") from multi-spectrals (e.g. "CMS")
-        const baseSpectralType = spectralType[i];
-        rawMaterials = rawMaterials.concat(rawMaterialsBySpectralType[baseSpectralType]);
-    }
-    return rawMaterials;
-}
-
-function getMaterialTypeForRawMaterial(rawMaterial) {
-    for (materialType in rawMaterialsByMaterialType) {
-        if (rawMaterialsByMaterialType[materialType].includes(rawMaterial)) {
-            return materialType;
-        }
-    }
 }
 
 function resetSelectionsExcept(skipEntity = null) {
@@ -86,12 +101,12 @@ function updateRawMaterialsForActiveSpectralTypes() {
     const elsSpectralTypesActive = document.querySelectorAll(".spectral-types ul li.active");
     elsSpectralTypesActive.forEach(el => {
         const spectralType = el.dataset.value;
-        const rawMaterials = getRawMaterialsForSpectralType(spectralType);
+        const rawMaterials = rawMaterialsBySpectralType[spectralType];
         if (!rawMaterials) {
             return;
         }
         rawMaterials.forEach(rawMaterial => {
-            const materialType = getMaterialTypeForRawMaterial(rawMaterial);
+            const materialType = materialTypeByRawMaterial[rawMaterial];
             document.querySelector(`.material-type[data-value="${materialType}"]`).classList.add('active');
             document.querySelector(`.raw-material[data-value="${rawMaterial}"]`).classList.add('active');
         });
@@ -107,7 +122,7 @@ function updateSpectralTypesForActiveRawMaterials() {
     }
     elsRawMaterialsActive.forEach(el => {
         const rawMaterial = el.dataset.value;
-        const materialType = getMaterialTypeForRawMaterial(rawMaterial);
+        const materialType = materialTypeByRawMaterial[rawMaterial];
         document.querySelector(`.material-type[data-value="${materialType}"]`).classList.add('active');
         const spectralTypes = getSpectralTypesForRawMaterial(rawMaterial);
         spectralTypes.forEach(spectralType => {
