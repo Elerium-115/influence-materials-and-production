@@ -6,8 +6,12 @@
 :root {
     font-size: 2.2vmin;
 
+    --default-bg: #202634;
+    --sidebar-bg: #293042;
+
     --default-text: #a9acb3;
     --default-text_faded: #a9acb333;
+    --brand-text: #ffd600;
 
     --volatiles: #5bc0f5;
     --volatiles_faded: #5bc0f508;
@@ -113,7 +117,7 @@ ul {
 }
 
 body {
-    background-color: #202634;
+    background-color: var(--default-bg);
     color: var(--default-text);
     font-family: Jura, sans-serif;
 }
@@ -127,7 +131,7 @@ body {
 /* sidebar */
 
 #sidebar {
-    background-color: #293042;
+    background-color: var(--sidebar-bg);
     text-align: center;
     min-width: 260px;
     max-width: 260px;
@@ -160,7 +164,7 @@ body {
 
 .sidebar-about .title,
 .footer-about .title {
-    color: #ffd600;
+    color: var(--brand-text);
     font-weight: bold;
 }
 
@@ -179,7 +183,29 @@ body {
 .main {
     position: relative;
     width: 100%;
-    padding: 33px 40px;
+    padding: 5rem 40px 33px 40px;
+}
+
+#topbar {
+    position: fixed;
+    top: 0;
+    margin-left: -40px; /* match with padding-left of ".main" */
+    width: 100%;
+    display: flex;
+    background: var(--default-bg);
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--sidebar-bg);
+    z-index: 1;
+}
+
+#topbar a {
+    display: block;
+    padding: 1rem;
+}
+
+#topbar a.active {
+    background-color: var(--sidebar-bg);
+    color: var(--brand-text);
 }
 
 /* spectral types */
@@ -422,6 +448,10 @@ body {
     .main {
         padding-left: 5vw;
         padding-right: 5vw;
+    }
+
+    #topbar {
+        margin-left: -5vw; /* match with padding-left of ".main" */
     }
 
     .spectral-types ul {
