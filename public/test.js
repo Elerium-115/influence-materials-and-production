@@ -1,66 +1,74 @@
 
 const items = {
-	"Ammonia":				{ "itemType": "Raw Material",	"label": "NH3",			"materialType": "Volatiles",	"baseSpectrals": ["I"]			},
-	"Carbon Dioxide":		{ "itemType": "Raw Material",	"label": "CO2",			"materialType": "Volatiles",	"baseSpectrals": ["C", "I"]		},
-	"Carbon Monoxide":		{ "itemType": "Raw Material",	"label": "CO",			"materialType": "Volatiles",	"baseSpectrals": ["C", "I"]		},
-	"Hydrogen":				{ "itemType": "Raw Material",	"label": "H",			"materialType": "Volatiles",	"baseSpectrals": ["I"]			},
-	"Methane":				{ "itemType": "Raw Material",	"label": "CH4",			"materialType": "Volatiles",	"baseSpectrals": ["C", "I"]		},
-	"Nitrogen":				{ "itemType": "Raw Material",	"label": "N",			"materialType": "Volatiles",	"baseSpectrals": ["I"]			},
-	"Sulfur Dioxide":		{ "itemType": "Raw Material",	"label": "SO2",			"materialType": "Volatiles",	"baseSpectrals": ["I"]			},
-	"Water":				{ "itemType": "Raw Material",	"label": "H2O",			"materialType": "Volatiles",	"baseSpectrals": ["C", "I"]		},
+	"Ammonia":              { "itemType": "Raw Material",       "label": "NH3",         "materialType": "Volatiles",    "baseSpectrals": ["I"]          },
+	"Carbon Dioxide":       { "itemType": "Raw Material",       "label": "CO2",         "materialType": "Volatiles",    "baseSpectrals": ["C", "I"]     },
+	"Carbon Monoxide":      { "itemType": "Raw Material",       "label": "CO",          "materialType": "Volatiles",    "baseSpectrals": ["C", "I"]     },
+	"Hydrogen":             { "itemType": "Raw Material",       "label": "H",           "materialType": "Volatiles",    "baseSpectrals": ["I"]          },
+	"Methane":              { "itemType": "Raw Material",       "label": "CH4",         "materialType": "Volatiles",    "baseSpectrals": ["C", "I"]     },
+	"Nitrogen":             { "itemType": "Raw Material",       "label": "N",           "materialType": "Volatiles",    "baseSpectrals": ["I"]          },
+	"Sulfur Dioxide":       { "itemType": "Raw Material",       "label": "SO2",         "materialType": "Volatiles",    "baseSpectrals": ["I"]          },
+	"Water":                { "itemType": "Raw Material",       "label": "H2O",         "materialType": "Volatiles",    "baseSpectrals": ["C", "I"]     },
+	"Apatite":              { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Organics",     "baseSpectrals": ["C"]          },
+	"Bitumen":              { "itemType": "Raw Material",       "label": "Hydrocarbon", "materialType": "Organics",     "baseSpectrals": ["C"]          },
+	"Calcite":              { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Organics",     "baseSpectrals": ["C"]          },
+	"Feldspar":             { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["S"]          },
+	"Graphite":             { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["M"]          },
+	"Olivine":              { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["S"]          },
+	"Pyroxene":             { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["S"]          },
+	"Rhabdite":             { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["M"]          },
+	"Taenite":              { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["M"]          },
+	"Troilite":             { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["M"]          },
+	"Merrillite":           { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Rare-Earth",   "baseSpectrals": ["S"]          },
+	"Xenotime":             { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Rare-Earth",   "baseSpectrals": ["S"]          },
+	"Coffinite":            { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Fissiles",     "baseSpectrals": ["S"]          },
+	"Uranite":              { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Fissiles",     "baseSpectrals": ["M"]          },
 
-	"Apatite":				{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Organics",		"baseSpectrals": ["C"]			},
-	"Bitumen":				{ "itemType": "Raw Material",	"label": "Hydrocarbon",	"materialType": "Organics",		"baseSpectrals": ["C"]			},
-	"Calcite":				{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Organics",		"baseSpectrals": ["C"]			},
+    // Food production chain
+	"Sulfuric Acid":        { "itemType": "Refined Material",   "label": "H2SO4"    },
+	"Hydrogen Chloride":    { "itemType": "Refined Material",   "label": "HCl"      },
+	"Potassium Chloride":   { "itemType": "Refined Material",   "label": "KCl"      },
+	"Nitric Acid":          { "itemType": "Refined Material",   "label": "HNO3"     },
+	"Fertilizer":           { "itemType": "Refined Material",   "label": "Mixture"  },
+	"Soil":                 { "itemType": "Refined Material",   "label": "Mixture"  },
+	"Food":                 { "itemType": "Finished Good"       },
 
-	"Feldspar":				{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Metals",		"baseSpectrals": ["S"]			},
-	"Graphite":				{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Metals",		"baseSpectrals": ["M"]			},
-	"Olivine":				{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Metals",		"baseSpectrals": ["S"]			},
-	"Pyroxene":				{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Metals",		"baseSpectrals": ["S"]			},
-	"Rhabdite":				{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Metals",		"baseSpectrals": ["M"]			},
-	"Taenite":				{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Metals",		"baseSpectrals": ["M"]			},
-	"Troilite":				{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Metals",		"baseSpectrals": ["M"]			},
+    // Steel Sheet production chain
+	"Iron Oxide":           { "itemType": "Refined Material"    },
+	"Iron":                 { "itemType": "Refined Material"    },
+	"Steel":                { "itemType": "Refined Material"    },
+	"Steel Sheet":          { "itemType": "Component"           },
 
-	"Merrillite":			{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Rare-Earth",	"baseSpectrals": ["S"]			},
-	"Xenotime":				{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Rare-Earth",	"baseSpectrals": ["S"]			},
-
-	"Coffinite":			{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Fissiles",		"baseSpectrals": ["S"]			},
-	"Uranite":				{ "itemType": "Raw Material",	"label": "Mineral",		"materialType": "Fissiles",		"baseSpectrals": ["M"]			},
-
-	"Sulfuric Acid":		{ "itemType": "Refined Output",	"label": "H2SO4"	},
-
-	"Hydrogen Chloride":	{ "itemType": "Refined Output",	"label": "HCl"		},
-	"Potassium Chloride":	{ "itemType": "Refined Output",	"label": "KCl"		},
-	"Nitric Acid":			{ "itemType": "Refined Output",	"label": "HNO3"		},
-	"Fertilizer":			{ "itemType": "Refined Output",	"label": "Mixture"	},
-	"Soil":					{ "itemType": "Refined Output",	"label": "Mixture"	},
-
-	"Food":					{ "itemType": "Finished Good"	},
-
-	"Iron Oxide":			{ "itemType": "Refined Output"	},
-	"Iron":					{ "itemType": "Refined Output"	},
-	"Steel":				{ "itemType": "Refined Output"	},
-
-	"Steel Sheets":			{ "itemType": "Finished Good"	}
+    // Warehouse production chain
+    "Quicklime":            { "itemType": "Refined Material"    },
+    "Silica":               { "itemType": "Refined Material"    },
+    "Concrete":             { "itemType": "Refined Material"    },
+	"Steel Beam":           { "itemType": "Component"           },
+	"Warehouse":            { "itemType": "Finished Good"       }
 };
 
 const processes = [
-	{ "output": "Sulfuric Acid",		"process": "Wet Sulfuric Process",			"inputs": [ "Sulfur Dioxide", "Water" ]							},
+    // Food production chain
+	{ "output": "Sulfuric Acid",        "process": "Wet Sulfuric Process",          "inputs": [ "Sulfur Dioxide", "Water" ]                         },
+	{ "output": "Hydrogen Chloride",    "process": "Hydrogen Chloride Process",     "inputs": [ "Apatite", "Sulfuric Acid" ]                        },
+	{ "output": "Potassium Chloride",   "process": "Potassium Chloride Process",    "inputs": [ "Feldspar", "Calcite", "Hydrogen Chloride" ]        },
+	{ "output": "Nitric Acid",          "process": "Ostwald Process",               "inputs": [ "Ammonia", "Water" ]                                },
+	{ "output": "Fertilizer",           "process": "Chemical Granulation Process",  "inputs": [ "Potassium Chloride", "Apatite", "Nitric Acid" ]    },
+	{ "output": "Soil",                 "process": "Fungal Soil Process",           "inputs": [ "Water", "Bitumen" ]                                },
+	{ "output": "Food",                 "process": "Growing Process",               "inputs": [ "Soil", "Fertilizer" ]                              },
 
-	{ "output": "Hydrogen Chloride",	"process": "Hydrogen Chloride Process",		"inputs": [ "Apatite", "Sulfuric Acid" ]						},
-	{ "output": "Potassium Chloride",	"process": "Potassium Chloride Process",	"inputs": [ "Feldspar", "Calcite", "Hydrogen Chloride" ]		},
-	{ "output": "Nitric Acid",			"process": "Ostwald Process",				"inputs": [ "Ammonia", "Water" ]								},
-	{ "output": "Fertilizer",			"process": "Chemical Granulation Process",	"inputs": [ "Potassium Chloride", "Apatite", "Nitric Acid" ]	},
-	{ "output": "Soil",					"process": "Fungal Soil Process",			"inputs": [ "Water", "Bitumen" ]								},
+    // Steel Sheet production chain
+	{ "output": "Iron Oxide",           "process": "Iron Leaching",                 "inputs": [ "Olivine", "Sulfuric Acid" ]                        },
+	{ "output": "Iron",                 "process": "Direct Reduction",              "inputs": [ "Carbon Monoxide", "Iron Oxide" ]                   },
+	{ "output": "Iron",                 "process": "Electrolytic Refining",         "inputs": [ "Taenite" ]                                         },
+	{ "output": "Steel",                "process": "Arc Furnace Process",           "inputs": [ "Graphite", "Iron" ]                                },
+	{ "output": "Steel Sheet",          "process": "Rolling Mill Process",          "inputs": [ "Steel" ]                                           },
 
-	{ "output": "Food",					"process": "Growing Process",				"inputs": [ "Soil", "Fertilizer" ]								},
-
-	{ "output": "Iron Oxide",			"process": "Iron Leaching",					"inputs": [ "Olivine", "Sulfuric Acid" ]						},
-	{ "output": "Iron",					"process": "Direct Reduction",				"inputs": [ "Carbon Monoxide", "Iron Oxide" ]					},
-	{ "output": "Iron",					"process": "Refined Output",				"inputs": [ "Taenite" ]											},
-	{ "output": "Steel",				"process": "Steel Making",					"inputs": [ "Graphite", "Iron" ]								},
-
-	{ "output": "Steel Sheets",			"process": "Metal Rolling",					"inputs": [ "Steel" ]											}
+    // Warehouse production chain
+    { "output": "Quicklime",            "process": "Calcination Process",           "inputs": [ "Calcite" ]                                         },
+    { "output": "Silica",               "process": "Enhanced Weathering Process",   "inputs": [ "Water", "Carbon Dioxide", "Olivine" ]              },
+    { "output": "Concrete",             "process": "Concrete Mixing Process",       "inputs": [ "Water", "Quicklime", "Silica" ]                    },
+    { "output": "Steel Beam",           "process": "Rolling Mill Process",          "inputs": [ "Steel" ]                                           },
+    { "output": "Warehouse",            "process": "Construction",                  "inputs": [ "Steel Sheet", "Steel Beam", "Concrete" ]           }
 ];
 
 const productChainContainer = document.getElementById('production-chain');
@@ -126,8 +134,9 @@ function createItemContainer(itemName, itemData) {
     itemContainer.innerHTML = `<strong class="item-name" style="cursor: pointer; font-size: 1.2rem;">${itemName}</strong>`;
     let bgcolor = 'gray';
     switch (itemData['itemType']) {
-        case "Raw Material": bgcolor = 'orange'; break;
-        case "Refined Output": bgcolor = 'yellow'; break;
+        case "Raw Material": bgcolor = 'lightcoral'; break;
+        case "Refined Material": bgcolor = 'orange'; break;
+        case "Component": bgcolor = 'yellow'; break;
         case "Finished Good": bgcolor = 'lime'; break;
     }
     itemContainer.setAttribute('style', `background: ${bgcolor}; padding: 0.5rem 1rem; border: 1px solid gray;`);
