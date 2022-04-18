@@ -185,7 +185,7 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
     if (itemData['itemType'] === "Raw Material") {
         const itemContainer = createItemContainer(itemName, itemData);
         levelContainer.appendChild(itemContainer);
-        itemContainer.innerHTML += `<br>via Mining`;
+        itemContainer.innerHTML += `via Mining`;
         itemContainer.innerHTML += `<br>from ${JSON.stringify(itemData['baseSpectrals'])}`;
         // itemContainer.innerHTML += `<br>[container #${currentContainerId}]`; //// TEST
         if (parentContainerId !== 0) {
@@ -207,7 +207,7 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
             }
             const itemContainer = createItemContainer(itemName, itemData);
             levelContainer.appendChild(itemContainer);
-            itemContainer.innerHTML += `<br>via ${processData.process}`;
+            itemContainer.innerHTML += `via ${processData.process}`;
             itemContainer.innerHTML += `<br>from ${JSON.stringify(processData.inputs)}`;
             // itemContainer.innerHTML += `<br>[container #${currentContainerId}]`; //// TEST
             if (parentContainerId !== 0) {
