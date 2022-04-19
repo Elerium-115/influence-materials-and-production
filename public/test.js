@@ -243,3 +243,7 @@ on('click', '#products li, .item-name', el => {
         }
     });
 });
+
+// pre-select the latest "Finished Good" on page-load
+// -- via small delay to avoid styling bug for connections
+setTimeout(() => [...document.querySelectorAll(".FinishedGood")].pop().click(), 10);
