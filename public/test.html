@@ -8,12 +8,21 @@
     <link rel="icon" href="/img/site-icon.png" type="image/png">
     <title>Test Production Chain</title>
 </head>
-<body>
-    Show production chain for:
+<body class="cold-colors">
+    <div>Show production chain for:</div>
     <ul id="products"></ul>
     <div id="options">
-        <label for="toggle-details">
-            <input type="checkbox" id="toggle-details" checked> Toggle Details
+        <label for="toggle-details" class="checked">
+            <input type="checkbox" id="toggle-details" checked> Item Details
+        </label>
+        <label for="toggle-colors" class="checked">
+            <input type="checkbox" id="toggle-colors" checked> Cold Colors
+            <span id="legend">
+                <span class="legend-raw-material">Raw Material</span>
+                <span class="legend-refined-material">Refined Material</span>
+                <span class="legend-component">Component</span>
+                <span class="legend-finished-good">Finished Good</span>
+            </span>
         </label>
     </div>
     <div id="required-spectrals"></div>
