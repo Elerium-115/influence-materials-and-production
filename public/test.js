@@ -56,9 +56,9 @@ const items = {
     "Oxygen":               { "itemType": "Refined Material"    },
     "Phenol":               { "itemType": "Refined Material"    },
     "Propylene":            { "itemType": "Refined Material"    },
-    "Propylene Glycol":     { "itemType": "Refined Material"    },
+    // "Propylene Glycol":     { "itemType": "Refined Material"    },
     "Salt":                 { "itemType": "Refined Material"    },
-    "Sodium Benzoate":      { "itemType": "Refined Material"    },
+    // "Sodium Benzoate":      { "itemType": "Refined Material"    },
     "Sodium Chloride":      { "itemType": "Refined Material"    },
     "Sodium Hydroxide":     { "itemType": "Refined Material"    },
     "Epoxy":                { "itemType": "Finished Good"       },
@@ -105,7 +105,8 @@ const processes = [
     { "output": "Sodium Hydroxide",     "process": "Chloralkalai Process",              "inputs": [ "Distilled Water", "Sodium Chloride" ]              },
 ];
 
-const productChainContainer = document.getElementById('production-chain');
+const productChainItemsContainer = document.getElementById('production-chain-items');
+const productChainConnectionsContainer = document.getElementById('production-chain-connections');
 const requiredSpectralsContainer = document.getElementById('required-spectrals');
 
 /**
@@ -118,7 +119,11 @@ let requiredSpectrals = [];
  * ID for referencing the DOM containers of each rendered ("output") item.
  * Must be incremented for each newly-rendered itemContainer.
  */
-let currentContainerId = 0;
+let uniqueContainerId = 0;
+
+let maxLevel = 0;
+
+let subchainsFromRawMaterials = {};
 
 // populate "#products" list with NON-raw materials
 for (const itemName in items) {
@@ -129,15 +134,17 @@ for (const itemName in items) {
     const listItem = document.createElement('li');
     listItem.textContent = itemName;
     listItem.classList.add(itemData['itemType'].replace(/\s+/g, ''));
-    listItem.setAttribute('style', 'cursor: pointer; padding: 0.5rem 1rem;');
     document.getElementById('products').appendChild(listItem);
 }
 
 function resetProductionChain() {
     requiredSpectralsContainer.innerHTML = '&nbsp;'; // NOT completely empty, to avoid bug when drawing lines between items
-    productChainContainer.textContent = '';
+    productChainItemsContainer.textContent = '';
+    productChainConnectionsContainer.textContent = '';
     requiredSpectrals = [];
-    currentContainerId = 0;
+    uniqueContainerId = 0;
+    maxLevel = 0;
+    subchainsFromRawMaterials = {};
     const activeListItem = document.querySelector("#products li.active");
     if (activeListItem) {
         activeListItem.classList.remove('active');
@@ -154,78 +161,64 @@ function injectLevelContainerIfNeeded(renderOnLevel) {
     if (!levelContainer) {
         levelContainer = document.createElement('div');
         levelContainer.id = levelId;
-        // levelContainer.textContent = `[level ${renderOnLevel}]`; //// TEST
-        levelContainer.setAttribute('style', 'display: flex; gap: 1rem; padding: 1rem; padding-left: 0;');
-        productChainContainer.appendChild(levelContainer);
+        levelContainer.classList.add('level');
+        productChainItemsContainer.appendChild(levelContainer);
     }
     return levelContainer;
 }
 
-function createItemContainer(itemName, itemData) {
-    currentContainerId++;
+function createItemContainer(itemName, itemData, parentContainerId, inputsCount = 0) {
+    uniqueContainerId++;
     const itemContainer = document.createElement('div');
-    itemContainer.dataset.containerId = currentContainerId;
-    itemContainer.innerHTML = `<strong class="item-name" style="cursor: pointer; font-size: 1.2rem;">${itemName}</strong>`;
-    let bgcolor = 'gray';
+    itemContainer.dataset.containerId = uniqueContainerId;
+    itemContainer.dataset.parentContainerId = parentContainerId;
+    itemContainer.dataset.inputsCount = inputsCount;
+    itemContainer.dataset.longestSubchainLength = 1;
+    itemContainer.innerHTML = `<strong class="item-name">${itemName}</strong>`;
     switch (itemData['itemType']) {
-        case "Raw Material": bgcolor = 'lightcoral'; break;
-        case "Refined Material": bgcolor = 'orange'; break;
-        case "Component": bgcolor = 'yellow'; break;
-        case "Finished Good": bgcolor = 'lime'; break;
+        case "Raw Material": itemContainer.classList.add('item-type-raw-material'); break;
+        case "Refined Material": itemContainer.classList.add('item-type-refined-material'); break;
+        case "Component": itemContainer.classList.add('item-type-component'); break;
+        case "Finished Good": itemContainer.classList.add('item-type-finished-good'); break;
     }
-    itemContainer.setAttribute('style', `background: ${bgcolor}; padding: 0.5rem 1rem; border: 1px solid gray;`);
     return itemContainer;
 }
 
-//// CONNECT ELEMENTS -- START
-// source: https://thewebdev.info/2021/09/12/how-to-draw-a-line-between-two-divs-with-javascript/
-const getOffset = (el) => {
-    const rect = el.getBoundingClientRect();
-    return {
-        left: rect.left + window.pageXOffset,
-        top: rect.top + window.pageYOffset,
-        width: rect.width || el.offsetWidth,
-        height: rect.height || el.offsetHeight
-    };
+function generateSubchainFromRawMaterial(rawMaterialContainer) {
+    const rawMaterialContainerId = rawMaterialContainer.dataset.containerId;
+    subchainsFromRawMaterials[rawMaterialContainerId] = [rawMaterialContainerId];
+    let nextSubchainContainer = rawMaterialContainer;
+    while (nextSubchainContainer) {
+        const nextParentContainerId = nextSubchainContainer.dataset.parentContainerId;
+        subchainsFromRawMaterials[rawMaterialContainerId].push(nextParentContainerId);
+        nextSubchainContainer = document.querySelector(`[data-container-id='${nextParentContainerId}']`);
+        if (nextSubchainContainer) {
+            // update the "longestSubchainLength" for the "nextSubchainContainer"
+            const oldLength = nextSubchainContainer.dataset.longestSubchainLength;
+            const newLength = subchainsFromRawMaterials[rawMaterialContainerId].length;
+            nextSubchainContainer.dataset.longestSubchainLength = Math.max(oldLength, newLength);
+        }
+        // nextSubchainContainer will stop existing when parentContainerId = 0
+    }
 }
 
-const connect = (div1, div2, color, thickness) => {
-    const off1 = getOffset(div1);
-    const off2 = getOffset(div2);
-    // const x1 = off1.left + off1.width;
-    const x1 = off1.left + (off1.width / 2); //// my improvement to connect the mid-points, instead of corners
-    const y1 = off1.top + off1.height;
-    // const x2 = off2.left + off2.width;
-    const x2 = off2.left + (off2.width / 2); //// my improvement to connect the mid-points, instead of corners
-    const y2 = off2.top;
-    const length = Math.sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)));
-    const cx = ((x1 + x2) / 2) - (length / 2);
-    const cy = ((y1 + y2) / 2) - (thickness / 2);
-    const angle = Math.atan2((y1 - y2), (x1 - x2)) * (180 / Math.PI);
-    const line = document.createElement('div');
-    line.setAttribute('style', `padding: 0px; margin: 0px; height: ${thickness}px; background-color: ${color}; line-height: 1px; position: absolute; left: ${cx}px; top: ${cy}px; width: ${length}px; -moz-transform: rotate(${angle}deg); -webkit-transform: rotate(${angle}deg); -o-transform: rotate(${angle}deg); -ms-transform: rotate(${angle}deg); transform: rotate(${angle}deg);`);
-    productChainContainer.appendChild(line);
-}
-//// CONNECT ELEMENTS -- END
-
-// parentContainerId = 0 for the top level item (i.e. no parent)
-// renderOnLevel = 1 for the top level item; higher values = recursing down to raw materials
+// parentContainerId = 0 for the top-level item (i.e. no parent)
+// renderOnLevel = 1 for the top-level item; higher values = recursing down to raw materials
 function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
     const itemData = items[itemName];
     if (!itemData) {
         throw Error(`--- ERROR: itemName not found (${itemName})`);
     }
+    maxLevel = Math.max(maxLevel, renderOnLevel);
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
     if (itemData['itemType'] === "Raw Material") {
-        const itemContainer = createItemContainer(itemName, itemData);
+        const itemContainer = createItemContainer(itemName, itemData, parentContainerId);
         levelContainer.appendChild(itemContainer);
-        itemContainer.innerHTML += `via Mining`;
-        itemContainer.innerHTML += `<br>from ${JSON.stringify(itemData['baseSpectrals'])}`;
-        // itemContainer.innerHTML += `<br>[container #${currentContainerId}]`; //// TEST
+        itemContainer.innerHTML += `<div class="process-name">via Mining</div>`;
+        itemContainer.innerHTML += `<div>from: ${itemData['baseSpectrals'].join(', ')}</div>`;
         if (parentContainerId !== 0) {
-            // itemContainer.innerHTML += `<br>[parent #${parentContainerId}]`; //// TEST
-            const parentContainer = document.querySelector(`[data-container-id='${parentContainerId}']`);
-            connect(parentContainer, itemContainer, 'gray', 1);
+            // after rendering a raw material, trace back its sub-chain until the top-level item
+            generateSubchainFromRawMaterial(itemContainer);
         }
         itemData['baseSpectrals'].forEach(baseSpectral => {
             if (!requiredSpectrals.includes(baseSpectral)) {
@@ -239,20 +232,116 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
             if (processData.output !== itemName) {
                 return;
             }
-            const itemContainer = createItemContainer(itemName, itemData);
+            const itemContainer = createItemContainer(itemName, itemData, parentContainerId, processData.inputs.length);
             levelContainer.appendChild(itemContainer);
-            itemContainer.innerHTML += `via ${processData.process}`;
-            itemContainer.innerHTML += `<br>from ${JSON.stringify(processData.inputs)}`;
-            // itemContainer.innerHTML += `<br>[container #${currentContainerId}]`; //// TEST
-            if (parentContainerId !== 0) {
-                // itemContainer.innerHTML += `<br>[parent #${parentContainerId}]`; //// TEST
-                const parentContainer = document.querySelector(`[data-container-id='${parentContainerId}']`);
-                connect(parentContainer, itemContainer, 'gray', 1);
-            }
+            itemContainer.innerHTML += `<div class="process-name">via ${processData.process}</div>`;
+            itemContainer.innerHTML += `<div>from: ${processData.inputs.join(', ')}</div>`;
             processData.inputs.forEach(inputItemName => {
                 renderItem(inputItemName, itemContainer.dataset.containerId, renderOnLevel + 1);
             });
         });
+    }
+}
+
+function getItemPriorityOnLevel(itemContainer) {
+    const levelContainer = itemContainer.parentElement;
+    const itemContainersOnLevel = [...levelContainer.querySelectorAll("[data-container-id]")];
+    return itemContainersOnLevel.indexOf(itemContainer);
+}
+
+function compareItemContainers(el1, el2) {
+    // #1 - prioritize item whose parent has the highest priority
+    // ("priority" = index among items from the same level, lower value is more prioritary)
+    const el1ParentContainerId = el1.dataset.parentContainerId;
+    const el2ParentContainerId = el2.dataset.parentContainerId;
+    if (el1ParentContainerId !== el2ParentContainerId) {
+        const el1ParentContainer = document.querySelector(`[data-container-id='${el1ParentContainerId}']`);
+        const el2ParentContainer = document.querySelector(`[data-container-id='${el2ParentContainerId}']`);
+        const el1ParentPriority = getItemPriorityOnLevel(el1ParentContainer);
+        const el2ParentPriority = getItemPriorityOnLevel(el2ParentContainer);
+        return el1ParentPriority - el2ParentPriority;
+    }
+
+    // #2 - prioritize item with the longest sub-chain
+    const el1SubchainLength = el1.dataset.longestSubchainLength;
+    const el2SubchainLength = el2.dataset.longestSubchainLength;
+    if (el1SubchainLength !== el2SubchainLength) {
+        return el2SubchainLength - el1SubchainLength;
+    }
+
+    // #3 - prioritize item with the most children (i.e. inputs)
+    const el1InputsCount = el1.dataset.inputsCount;
+    const el2InputsCount = el2.dataset.inputsCount;
+    if (el1InputsCount !== el2InputsCount) {
+        return el2InputsCount - el1InputsCount;
+    }
+
+    return 0;
+}
+
+// re-arrange items on the same level, such that the longest sub-chains are rendered first (left-most)
+function sortLevels() {
+    for (let i = 1; i <= maxLevel; i++) {
+        const levelContainer = document.querySelector(`#level_${i}`);
+        const itemContainers = [...levelContainer.querySelectorAll("[data-container-id]")];
+        itemContainers.sort(compareItemContainers);
+        levelContainer.textContent = '';
+        itemContainers.forEach(el => {
+            levelContainer.appendChild(el);
+        });
+    }
+}
+
+// source: https://thewebdev.info/2021/09/12/how-to-draw-a-line-between-two-divs-with-javascript/
+function getOffset(el) {
+    const rect = el.getBoundingClientRect();
+    return {
+        left: rect.left + window.pageXOffset,
+        top: rect.top + window.pageYOffset,
+        width: rect.width || el.offsetWidth,
+        height: rect.height || el.offsetHeight
+    };
+}
+
+// el1 = parent element, el2 = child element
+function connectContainers(el1, el2, color, thickness) {
+    const off1 = getOffset(el1);
+    const off2 = getOffset(el2);
+    // const x1 = off1.left + off1.width;
+    const x1 = off1.left + (off1.width / 2); //// my improvement to connect the mid-points, instead of corners
+    const y1 = off1.top + off1.height;
+    // const x2 = off2.left + off2.width;
+    const x2 = off2.left + (off2.width / 2); //// my improvement to connect the mid-points, instead of corners
+    const y2 = off2.top;
+    const length = Math.sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)));
+    const cx = ((x1 + x2) / 2) - (length / 2);
+    const cy = ((y1 + y2) / 2) - (thickness / 2);
+    const angle = Math.atan2((y1 - y2), (x1 - x2)) * (180 / Math.PI);
+    const line = document.createElement('div');
+    line.setAttribute('style', `padding: 0px; margin: 0px; height: ${thickness}px; background-color: ${color}; line-height: 1px; position: absolute; left: ${cx}px; top: ${cy}px; width: ${length}px; -moz-transform: rotate(${angle}deg); -webkit-transform: rotate(${angle}deg); -o-transform: rotate(${angle}deg); -ms-transform: rotate(${angle}deg); transform: rotate(${angle}deg);`);
+    productChainConnectionsContainer.appendChild(line);
+}
+
+function connectContainerIds(parentContainerId, childContainerId, color, thickness) {
+    const parentContainer = document.querySelector(`[data-container-id='${parentContainerId}']`);
+    const childContainer = document.querySelector(`[data-container-id='${childContainerId}']`);
+    connectContainers(parentContainer, childContainer, color, thickness);
+}
+
+function connectSubchainFromRawMaterialId(rawMaterialContainerId, color = 'gray', thickness = 1) {
+    const subchain = subchainsFromRawMaterials[rawMaterialContainerId];
+    for (let i = 0; i < subchain.length - 2; i++) {
+        const childContainerId = subchain[i];
+        const parentContainerId = subchain[i + 1];
+        connectContainerIds(parentContainerId, childContainerId, color, thickness);
+    }
+}
+
+function updateAllConnections() {
+    // reset connections first
+    productChainConnectionsContainer.textContent = '';
+    for (const rawMaterialContainerId in subchainsFromRawMaterials) {
+        connectSubchainFromRawMaterialId(rawMaterialContainerId);
     }
 }
 
@@ -270,6 +359,9 @@ on('click', '#products li, .item-name', el => {
     resetProductionChain();
     const itemName = el.textContent;
     renderItem(itemName);
+    // done rendering all items recursively
+    sortLevels();
+    updateAllConnections();
     // highlight the active item in the list of products
     document.querySelectorAll("#products li").forEach(el => {
         if (el.textContent === itemName) {
@@ -278,6 +370,26 @@ on('click', '#products li, .item-name', el => {
     });
 });
 
+on('change', '#toggle-details', el => {
+    if (el.checked) {
+        productChainItemsContainer.classList.add('show-details');
+    } else {
+        productChainItemsContainer.classList.remove('show-details');
+    }
+    updateAllConnections();
+});
+
+// update all connections on mouseover / mousemove / mouseout @ item-containers
+//// DISABLED re: BUGGY
+// on('mouseover', '[data-container-id]', el => {
+//     updateAllConnections();
+// });
+// on('mouseout', '[data-container-id]', el => {
+//     updateAllConnections();
+// });
+
 // pre-select the latest "Finished Good" on page-load
 // -- via small delay to avoid styling bug for connections
 setTimeout(() => [...document.querySelectorAll(".FinishedGood")].pop().click(), 10);
+
+//// TO DO: on hover over raw material, highlight the entire sub-chain (including connections)
