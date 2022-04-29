@@ -388,8 +388,10 @@ on('change', '#toggle-details', el => {
 //     updateAllConnections();
 // });
 
-// pre-select the latest "Finished Good" on page-load
+// pre-select the first "Finished Good" (i.e. "Food") on page-load
 // -- via small delay to avoid styling bug for connections
-setTimeout(() => [...document.querySelectorAll(".FinishedGood")].pop().click(), 10);
+setTimeout(() => [...document.querySelectorAll(".FinishedGood")][0].click(), 10);
 
+//// TO DO: absolute-position items to x-pos >= parent's x-pos? (test w/ "Epichlorohydrin")
+//// TO DO: (pre-)select item via #hash in URL
 //// TO DO: on hover over raw material, highlight the entire sub-chain (including connections)
