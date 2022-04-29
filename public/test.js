@@ -125,13 +125,18 @@ let maxLevel = 0;
 
 let subchainsFromRawMaterials = {};
 
-// populate "#products" list with NON-raw materials
+const itemNamesByHash = {};
+
+// populate "itemNamesByHash" and the top list of products (with NON-raw materials)
 for (const itemName in items) {
+    const itemNameCompact = itemName.replace(/\s+/g, '');
+    itemNamesByHash[itemNameCompact] = itemName;
     const itemData = items[itemName];
     if (itemData['itemType'] === 'Raw Material') {
         continue;
     }
-    const listItem = document.createElement('li');
+    const listItem = document.createElement('a');
+    listItem.href = `#${itemNameCompact}`;
     listItem.textContent = itemName;
     listItem.classList.add(itemData['itemType'].replace(/\s+/g, ''));
     document.getElementById('products').appendChild(listItem);
@@ -145,7 +150,7 @@ function resetProductionChain() {
     uniqueContainerId = 0;
     maxLevel = 0;
     subchainsFromRawMaterials = {};
-    const activeListItem = document.querySelector("#products li.active");
+    const activeListItem = document.querySelector("#products a.active");
     if (activeListItem) {
         activeListItem.classList.remove('active');
     }
@@ -174,12 +179,13 @@ function createItemContainer(itemName, itemData, parentContainerId, inputsCount 
     itemContainer.dataset.parentContainerId = parentContainerId;
     itemContainer.dataset.inputsCount = inputsCount;
     itemContainer.dataset.longestSubchainLength = 1;
-    itemContainer.innerHTML = `<strong class="item-name">${itemName}</strong>`;
+    const itemNameCompact = itemName.replace(/\s+/g, '');
+    itemContainer.innerHTML = `<a href="#${itemNameCompact}" class="item-name">${itemName}</a>`;
     switch (itemData['itemType']) {
-        case "Raw Material": itemContainer.classList.add('item-type-raw-material'); break;
-        case "Refined Material": itemContainer.classList.add('item-type-refined-material'); break;
-        case "Component": itemContainer.classList.add('item-type-component'); break;
-        case "Finished Good": itemContainer.classList.add('item-type-finished-good'); break;
+        case 'Raw Material': itemContainer.classList.add('item-type-raw-material'); break;
+        case 'Refined Material': itemContainer.classList.add('item-type-refined-material'); break;
+        case 'Component': itemContainer.classList.add('item-type-component'); break;
+        case 'Finished Good': itemContainer.classList.add('item-type-finished-good'); break;
     }
     return itemContainer;
 }
@@ -282,7 +288,7 @@ function compareItemContainers(el1, el2) {
 // re-arrange items on the same level, such that the longest sub-chains are rendered first (left-most)
 function sortLevels() {
     for (let i = 1; i <= maxLevel; i++) {
-        const levelContainer = document.querySelector(`#level_${i}`);
+        const levelContainer = document.getElementById(`level_${i}`);
         const itemContainers = [...levelContainer.querySelectorAll("[data-container-id]")];
         itemContainers.sort(compareItemContainers);
         levelContainer.textContent = '';
@@ -345,6 +351,22 @@ function updateAllConnections() {
     }
 }
 
+function selectItemByName(itemName) {
+    resetProductionChain();
+    renderItem(itemName);
+    // done rendering all items recursively
+    sortLevels();
+    updateAllConnections();
+    // highlight the active item in the list of products
+    document.querySelectorAll("#products a").forEach(el => {
+        if (el.textContent === itemName) {
+            el.classList.add('active');
+        }
+    });
+    const itemNameCompact = itemName.replace(/\s+/g, '');
+    window.location.hash = `#${itemNameCompact}`;
+}
+
 // source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
 function on(eventType, selector, callback) {
     document.body.addEventListener(eventType, event => {
@@ -354,22 +376,16 @@ function on(eventType, selector, callback) {
     });
 }
 
-// select product (including sub-products from the current production chain)
-on('click', '#products li, .item-name', el => {
-    resetProductionChain();
-    const itemName = el.textContent;
-    renderItem(itemName);
-    // done rendering all items recursively
-    sortLevels();
-    updateAllConnections();
-    // highlight the active item in the list of products
-    document.querySelectorAll("#products li").forEach(el => {
-        if (el.textContent === itemName) {
-            el.classList.add('active');
-        }
-    });
+// toggle options checked
+on('change', '#options input', el => {
+    if (el.checked) {
+        el.parentElement.classList.add('checked');
+    } else {
+        el.parentElement.classList.remove('checked');
+    }
 });
 
+// toggle item details
 on('change', '#toggle-details', el => {
     if (el.checked) {
         productChainItemsContainer.classList.add('show-details');
@@ -378,6 +394,22 @@ on('change', '#toggle-details', el => {
     }
     updateAllConnections();
 });
+
+// toggle color scheme
+on('change', '#toggle-colors', el => {
+    if (el.checked) {
+        document.body.classList.add('cold-colors');
+    } else {
+        document.body.classList.remove('cold-colors');
+    }
+});
+
+// auto-select item on #Hash-change (including on e.g. history-back navigation)
+window.addEventListener('hashchange', function() {
+    const hashToSelect = window.location.hash.replace(/^#/, '');
+    // this will not select anything if invalid / empty #Hash, but that's fine
+    selectItemByName(itemNamesByHash[hashToSelect]);
+}, false);
 
 // update all connections on mouseover / mousemove / mouseout @ item-containers
 //// DISABLED re: BUGGY
@@ -388,10 +420,14 @@ on('change', '#toggle-details', el => {
 //     updateAllConnections();
 // });
 
-// pre-select the first "Finished Good" (i.e. "Food") on page-load
-// -- via small delay to avoid styling bug for connections
-setTimeout(() => [...document.querySelectorAll(".FinishedGood")][0].click(), 10);
+// pre-select the item from #Hash on page-load
+let hashToPreselect = window.location.hash.replace(/^#/, '');
+if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
+    // pre-select "Food" by default, if invalid / empty #Hash given
+    hashToPreselect = 'Food';
+}
+// pre-select via small delay, to avoid buggy connections between items
+setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
+//// TO DO: on hover over item, highlight the entire sub-chain, and all ancestors (and connections?)
 //// TO DO: absolute-position items to x-pos >= parent's x-pos? (test w/ "Epichlorohydrin")
-//// TO DO: (pre-)select item via #hash in URL
-//// TO DO: on hover over raw material, highlight the entire sub-chain (including connections)

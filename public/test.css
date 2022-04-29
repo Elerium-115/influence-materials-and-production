@@ -17,62 +17,70 @@ body {
     flex-wrap: wrap;
     gap: 1rem;
     list-style: none;
-    margin-top: 0.5rem;
-    padding: 0;
+    margin-top: 1rem;
+    padding: 0 0 1.5rem 0;
+    border-bottom: 1px solid gray;
 }
 
-#products li {
-    cursor: pointer;
+#products a {
+    color: black;
+    text-decoration: none;
     padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
 }
 
-#products li.RefinedMaterial {
-    background-color: lightgray;
+#products a:hover {
+    border-color: black;
 }
 
-#products li.Component {
-    background-color: gray;
-    color: white;
-}
+#products a.RefinedMaterial { background-color: lightgray; }
+#products a.Component { background-color: gray; color: white; }
+#products a.FinishedGood { background-color: black; color: white; }
 
-#products li.FinishedGood {
-    background-color: black;
-    color: white;
-}
-
-#products li.RefinedMaterial.active {
-    background: orange;
-}
-
-#products li.Component.active {
-    background: yellow;
-    color: black;
-}
-
-#products li.FinishedGood.active {
-    background: lime;
-    color: black;
-}
+#products a.RefinedMaterial.active { background: orange; }
+#products a.Component.active { background: yellow; color: black; }
+#products a.FinishedGood.active { background: lime; color: black; }
 
 #options {
-    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
     padding: 0.5rem 0;
 }
 
 #options label {
     cursor: pointer;
     padding: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
 }
 
 #options label:hover {
-    background: rgba(0, 0, 0, 0.1);
+    border-color: gray;
 }
 
+#options label.checked {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+#legend span {
+    margin-left: 0.5rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.4rem;
+}
+
+#legend .legend-raw-material { background: lightcoral; }
+#legend .legend-refined-material { background: orange; }
+#legend .legend-component { background: yellow; }
+#legend .legend-finished-good { background: lime; }
+
 #required-spectrals {
-    background: cyan;
+    background: lightcoral;
     font-weight: bold;
-    margin: 1.5rem 0 0.5rem 0;
+    margin: 1.5rem 0;
     padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
 }
 
 #production-chain-items .level {
@@ -84,6 +92,7 @@ body {
 #production-chain-items [data-container-id] {
     padding: 0.5rem 1rem;
     border: 1px solid gray;
+    border-radius: 0.5rem;
 }
 
 #production-chain-items [data-container-id].item-type-raw-material { background: lightcoral; }
@@ -101,9 +110,11 @@ body {
 
 #production-chain-items [data-container-id] .item-name {
     display: block;
-    border-bottom: 5px solid transparent;
-    cursor: pointer;
+    color: black;
     font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    border-bottom: 5px solid transparent;
 }
 
 #production-chain-items [data-container-id] .item-name:hover {
@@ -114,3 +125,23 @@ body {
 #production-chain-items [data-container-id] .process-name {
     opacity: 0.25;
 }
+
+/* cold colors */
+
+.cold-colors #products a.RefinedMaterial.active { background: #6e96fa; }
+.cold-colors #products a.Component.active { background: #14dcfa; }
+.cold-colors #products a.FinishedGood.active { background: #28e682; }
+
+.cold-colors #legend .legend-raw-material { background: #aa8cfa; }
+.cold-colors #legend .legend-refined-material { background: #6e96fa; }
+.cold-colors #legend .legend-component { background: #14dcfa; }
+.cold-colors #legend .legend-finished-good { background: #28e682; }
+
+.cold-colors #required-spectrals { background: #aa8cfa; }
+
+.cold-colors #production-chain-items [data-container-id].item-type-raw-material { background: #aa8cfa; }
+.cold-colors #production-chain-items [data-container-id].item-type-refined-material { background: #6e96fa; }
+.cold-colors #production-chain-items [data-container-id].item-type-component { background: #14dcfa; }
+.cold-colors #production-chain-items [data-container-id].item-type-finished-good { background: #28e682; }
+
+.cold-colors #production-chain-items [data-container-id] .process-name { color: white; opacity: 0.75; }
