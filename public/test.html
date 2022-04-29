@@ -4,50 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="test.css">
     <link rel="icon" href="/img/site-icon.png" type="image/png">
     <title>Test Production Chain</title>
-    <style>
-        @font-face {
-            font-family: Jura;
-            src: url("font/Jura-Medium.ttf");
-        }
-        #products li.RefinedMaterial {
-            background-color: lightgray;
-        }
-        #products li.Component {
-            background-color: gray;
-            color: white;
-        }
-        #products li.FinishedGood {
-            background-color: black;
-            color: white;
-        }
-        #products li.RefinedMaterial.active {
-            background: orange;
-        }
-        #products li.Component.active {
-            background: yellow;
-            color: black;
-        }
-        #products li.FinishedGood.active {
-            background: lime;
-            color: black;
-        }
-        .item-name {
-            display: block;
-            border-bottom: 5px solid transparent;
-        }
-        .item-name:hover {
-            background-color: rgba(255, 255, 255, 0.5);
-            border-bottom-color: white;
-        }
-    </style>
 </head>
-<body style="font-family: Jura, sans-serif; padding: 0.5rem;">
+<body>
     Show production chain for:
-    <ul id="products" style="display: flex; flex-wrap: wrap; gap: 1rem; list-style: none; margin-top: 0.5rem; padding: 0;"></ul>
-    <div id="required-spectrals" style="background: cyan; font-weight: bold; margin: 0.5rem 0; padding: 0.5rem 1rem;"></div>
-    <div id="production-chain"></div>
+    <ul id="products"></ul>
+    <div id="options">
+        <label for="toggle-details">
+            <input type="checkbox" id="toggle-details" checked> Toggle Details
+        </label>
+    </div>
+    <div id="required-spectrals"></div>
+    <div id="production-chain-items" class="show-details"></div>
+    <div id="production-chain-connections"></div>
     <script src="test.js"></script>
 </body>
 </html>

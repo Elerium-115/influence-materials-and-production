@@ -1,0 +1,116 @@
+@font-face {
+    font-family: Jura;
+    src: url("font/Jura-Medium.ttf");
+}
+
+* {
+    margin: 0;
+}
+
+body {
+    font-family: Jura, sans-serif;
+    padding: 1rem;
+}
+
+#products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    list-style: none;
+    margin-top: 0.5rem;
+    padding: 0;
+}
+
+#products li {
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+}
+
+#products li.RefinedMaterial {
+    background-color: lightgray;
+}
+
+#products li.Component {
+    background-color: gray;
+    color: white;
+}
+
+#products li.FinishedGood {
+    background-color: black;
+    color: white;
+}
+
+#products li.RefinedMaterial.active {
+    background: orange;
+}
+
+#products li.Component.active {
+    background: yellow;
+    color: black;
+}
+
+#products li.FinishedGood.active {
+    background: lime;
+    color: black;
+}
+
+#options {
+    margin-top: 1rem;
+    padding: 0.5rem 0;
+}
+
+#options label {
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+#options label:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+#required-spectrals {
+    background: cyan;
+    font-weight: bold;
+    margin: 1.5rem 0 0.5rem 0;
+    padding: 0.5rem 1rem;
+}
+
+#production-chain-items .level {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1rem 1rem 0;
+}
+
+#production-chain-items [data-container-id] {
+    padding: 0.5rem 1rem;
+    border: 1px solid gray;
+}
+
+#production-chain-items [data-container-id].item-type-raw-material { background: lightcoral; }
+#production-chain-items [data-container-id].item-type-refined-material { background: orange; }
+#production-chain-items [data-container-id].item-type-component { background: yellow; }
+#production-chain-items [data-container-id].item-type-finished-good { background: lime; }
+
+#production-chain-items [data-container-id] > * {
+    display: none;
+}
+
+#production-chain-items.show-details [data-container-id] > * {
+    display: block;
+}
+
+#production-chain-items [data-container-id] .item-name {
+    display: block;
+    border-bottom: 5px solid transparent;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+#production-chain-items [data-container-id] .item-name:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-bottom-color: white;
+}
+
+#production-chain-items [data-container-id] .process-name {
+    opacity: 0.25;
+}
