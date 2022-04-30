@@ -143,8 +143,11 @@ for (const itemName in items) {
 }
 
 function resetProductionChain() {
-    requiredSpectralsContainer.innerHTML = '&nbsp;'; // NOT completely empty, to avoid bug when drawing lines between items
-    productChainItemsContainer.textContent = '';
+    requiredSpectralsContainer.textContent = '';
+    // remove only ".level" elements from "productChainItemsContainer" (keep "#required-spectrals")
+    productChainItemsContainer.querySelectorAll(".level").forEach(el => {
+        el.parentElement.removeChild(el);
+    });
     productChainConnectionsContainer.textContent = '';
     requiredSpectrals = [];
     uniqueContainerId = 0;
@@ -157,7 +160,14 @@ function resetProductionChain() {
 }
 
 function updateRequiredSpectralsHtml() {
-    requiredSpectralsContainer.textContent = `${JSON.stringify(requiredSpectrals)} spectral-types required for this production chain (including alternative production paths)`;
+    let requiredSpectralsHtml = '<div class="line spectral-types">';
+    requiredSpectrals.forEach(spectralType => {
+        requiredSpectralsHtml += `<span class="spectral-type type-${spectralType.toLowerCase()}">${spectralType}</span>`;
+    });
+    requiredSpectralsHtml += '</div>';
+    requiredSpectralsHtml += '<div class="line">spectral-types required for this production chain</div>';
+    requiredSpectralsHtml += '<div class="line faded">(including alternative production paths, if any)</div>';
+    requiredSpectralsContainer.innerHTML = requiredSpectralsHtml;
 }
 
 function injectLevelContainerIfNeeded(renderOnLevel) {
@@ -220,8 +230,8 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
     if (itemData['itemType'] === "Raw Material") {
         const itemContainer = createItemContainer(itemName, itemData, parentContainerId);
         levelContainer.appendChild(itemContainer);
-        itemContainer.innerHTML += `<div class="process-name">via Mining</div>`;
-        itemContainer.innerHTML += `<div>from: ${itemData['baseSpectrals'].join(', ')}</div>`;
+        itemContainer.innerHTML += `<div class="details process-name">via Mining</div>`;
+        itemContainer.innerHTML += `<div class="details inputs">from: ${itemData['baseSpectrals'].join(', ')}</div>`;
         if (parentContainerId !== 0) {
             // after rendering a raw material, trace back its sub-chain until the top-level item
             generateSubchainFromRawMaterial(itemContainer);
@@ -240,8 +250,8 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
             }
             const itemContainer = createItemContainer(itemName, itemData, parentContainerId, processData.inputs.length);
             levelContainer.appendChild(itemContainer);
-            itemContainer.innerHTML += `<div class="process-name">via ${processData.process}</div>`;
-            itemContainer.innerHTML += `<div>from: ${processData.inputs.join(', ')}</div>`;
+            itemContainer.innerHTML += `<div class="details process-name">via ${processData.process}</div>`;
+            itemContainer.innerHTML += `<div class="details inputs">from: ${processData.inputs.join(', ')}</div>`;
             processData.inputs.forEach(inputItemName => {
                 renderItem(inputItemName, itemContainer.dataset.containerId, renderOnLevel + 1);
             });
@@ -298,7 +308,6 @@ function sortLevels() {
     }
 }
 
-// source: https://thewebdev.info/2021/09/12/how-to-draw-a-line-between-two-divs-with-javascript/
 function getOffset(el) {
     const rect = el.getBoundingClientRect();
     return {
@@ -309,7 +318,10 @@ function getOffset(el) {
     };
 }
 
-// el1 = parent element, el2 = child element
+/**
+ * el1 = parent element, el2 = child element
+ * source: https://thewebdev.info/2021/09/12/how-to-draw-a-line-between-two-divs-with-javascript/
+ */
 function connectContainers(el1, el2, color, thickness) {
     const off1 = getOffset(el1);
     const off2 = getOffset(el2);
@@ -411,6 +423,8 @@ window.addEventListener('hashchange', function() {
     selectItemByName(itemNamesByHash[hashToSelect]);
 }, false);
 
+window.addEventListener('resize', updateAllConnections);
+
 // update all connections on mouseover / mousemove / mouseout @ item-containers
 //// DISABLED re: BUGGY
 // on('mouseover', '[data-container-id]', el => {
@@ -430,4 +444,3 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
 //// TO DO: on hover over item, highlight the entire sub-chain, and all ancestors (and connections?)
-//// TO DO: absolute-position items to x-pos >= parent's x-pos? (test w/ "Epichlorohydrin")
