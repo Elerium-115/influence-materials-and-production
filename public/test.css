@@ -3,8 +3,28 @@
     src: url("font/Jura-Medium.ttf");
 }
 
+:root {
+    font-size: 0.8rem;
+
+    --type-c: #5639cc;
+    --type-i: #4099ff;
+    --type-m: #ad3900;
+    --type-s: #c58f00;
+
+    --raw-material: lightcoral;
+    --refined-material: orange;
+    --component: yellow;
+    --finished-good: lime;
+
+    --cold-raw-material: #aa8cfa;
+    --cold-refined-material: #6e96fa;
+    --cold-component: #14dcfa;
+    --cold-finished-good: #28e682;
+}
+
 * {
     margin: 0;
+    padding: 0;
 }
 
 body {
@@ -12,41 +32,10 @@ body {
     padding: 1rem;
 }
 
-#products {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    list-style: none;
-    margin-top: 1rem;
-    padding: 0 0 1.5rem 0;
-    border-bottom: 1px solid gray;
-}
-
-#products a {
-    color: black;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border: 1px solid transparent;
-    border-radius: 0.5rem;
-}
-
-#products a:hover {
-    border-color: black;
-}
-
-#products a.RefinedMaterial { background-color: lightgray; }
-#products a.Component { background-color: gray; color: white; }
-#products a.FinishedGood { background-color: black; color: white; }
-
-#products a.RefinedMaterial.active { background: orange; }
-#products a.Component.active { background: yellow; color: black; }
-#products a.FinishedGood.active { background: lime; color: black; }
-
 #options {
     display: flex;
     gap: 1rem;
-    margin-top: 1.5rem;
-    padding: 0.5rem 0;
+    margin-top: 1rem;
 }
 
 #options label {
@@ -65,48 +54,108 @@ body {
 }
 
 #legend span {
+    white-space: nowrap;
     margin-left: 0.5rem;
     padding: 0.1rem 0.4rem;
     border-radius: 0.4rem;
 }
 
-#legend .legend-raw-material { background: lightcoral; }
-#legend .legend-refined-material { background: orange; }
-#legend .legend-component { background: yellow; }
-#legend .legend-finished-good { background: lime; }
+#legend .legend-raw-material { background: var(--raw-material); }
+#legend .legend-refined-material { background: var(--refined-material); }
+#legend .legend-component { background: var(--component); }
+#legend .legend-finished-good { background: var(--finished-good); }
+
+#products-wrapper {
+    margin-top: 2rem;
+}
+
+#products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    list-style: none;
+    margin-top: 1rem;
+}
+
+#products a {
+    color: black;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+}
+
+#products a:hover {
+    border-color: black;
+}
+
+#products a.RefinedMaterial { background-color: lightgray; }
+#products a.Component { background-color: gray; color: white; }
+#products a.FinishedGood { background-color: black; color: white; }
+
+#products a.RefinedMaterial.active { background: var(--refined-material); }
+#products a.Component.active { background: var(--component); color: black; }
+#products a.FinishedGood.active { background: var(--finished-good); color: black; }
+
+#production-chain-container {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+#production-chain-items {
+    display: inline-block;
+    text-align: center;
+}
 
 #required-spectrals {
-    background: lightcoral;
+    display: inline-block;
+}
+
+#required-spectrals .line {
+    text-align: center;
+}
+
+#required-spectrals .spectral-types {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
     font-weight: bold;
-    margin: 1.5rem 0;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+#required-spectrals .spectral-type {
+    display: inline-block;
+    width: 2.5rem;
+    line-height: 2.5rem;
+    color: white;
+    border-radius: 50%;
+}
+
+#required-spectrals .type-c { background: var(--type-c); }
+#required-spectrals .type-i { background: var(--type-i); }
+#required-spectrals .type-m { background: var(--type-m); }
+#required-spectrals .type-s { background: var(--type-s); }
+
+#required-spectrals .faded {
+    opacity: 0.25;
 }
 
 #production-chain-items .level {
     display: flex;
+    justify-content: space-around;
     gap: 1rem;
-    padding: 1rem 1rem 1rem 0;
+    padding: 1.5rem 1rem 1.5rem 0;
 }
 
 #production-chain-items [data-container-id] {
-    padding: 0.5rem 1rem;
     border: 1px solid gray;
     border-radius: 0.5rem;
 }
 
-#production-chain-items [data-container-id].item-type-raw-material { background: lightcoral; }
-#production-chain-items [data-container-id].item-type-refined-material { background: orange; }
-#production-chain-items [data-container-id].item-type-component { background: yellow; }
-#production-chain-items [data-container-id].item-type-finished-good { background: lime; }
-
-#production-chain-items [data-container-id] > * {
-    display: none;
-}
-
-#production-chain-items.show-details [data-container-id] > * {
-    display: block;
-}
+#production-chain-items [data-container-id].item-type-raw-material { background: var(--raw-material); }
+#production-chain-items [data-container-id].item-type-refined-material { background: var(--refined-material); }
+#production-chain-items [data-container-id].item-type-component { background: var(--component); }
+#production-chain-items [data-container-id].item-type-finished-good { background: var(--finished-good); }
 
 #production-chain-items [data-container-id] .item-name {
     display: block;
@@ -114,34 +163,53 @@ body {
     font-size: 1.2rem;
     font-weight: bold;
     text-decoration: none;
+    padding: 0.5rem;
     border-bottom: 5px solid transparent;
+    border-radius: 0.5rem;
 }
 
 #production-chain-items [data-container-id] .item-name:hover {
-    background-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.5);
     border-bottom-color: white;
+}
+
+#production-chain-items.show-details [data-container-id] .item-name {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#production-chain-items [data-container-id] .details {
+    display: none;
+    padding: 0 0.5rem;
+}
+
+#production-chain-items.show-details [data-container-id] .details {
+    display: block;
 }
 
 #production-chain-items [data-container-id] .process-name {
     opacity: 0.25;
+    margin-bottom: 0.2rem;
+}
+
+#production-chain-items [data-container-id] .inputs {
+    margin-bottom: 0.5rem;
 }
 
 /* cold colors */
 
-.cold-colors #products a.RefinedMaterial.active { background: #6e96fa; }
-.cold-colors #products a.Component.active { background: #14dcfa; }
-.cold-colors #products a.FinishedGood.active { background: #28e682; }
+.cold-colors #products a.RefinedMaterial.active { background: var(--cold-refined-material); }
+.cold-colors #products a.Component.active { background: var(--cold-component); }
+.cold-colors #products a.FinishedGood.active { background: var(--cold-finished-good); }
 
-.cold-colors #legend .legend-raw-material { background: #aa8cfa; }
-.cold-colors #legend .legend-refined-material { background: #6e96fa; }
-.cold-colors #legend .legend-component { background: #14dcfa; }
-.cold-colors #legend .legend-finished-good { background: #28e682; }
+.cold-colors #legend .legend-raw-material { background: var(--cold-raw-material); }
+.cold-colors #legend .legend-refined-material { background: var(--cold-refined-material); }
+.cold-colors #legend .legend-component { background: var(--cold-component); }
+.cold-colors #legend .legend-finished-good { background: var(--cold-finished-good); }
 
-.cold-colors #required-spectrals { background: #aa8cfa; }
-
-.cold-colors #production-chain-items [data-container-id].item-type-raw-material { background: #aa8cfa; }
-.cold-colors #production-chain-items [data-container-id].item-type-refined-material { background: #6e96fa; }
-.cold-colors #production-chain-items [data-container-id].item-type-component { background: #14dcfa; }
-.cold-colors #production-chain-items [data-container-id].item-type-finished-good { background: #28e682; }
+.cold-colors #production-chain-items [data-container-id].item-type-raw-material { background: var(--cold-raw-material); }
+.cold-colors #production-chain-items [data-container-id].item-type-refined-material { background: var(--cold-refined-material); }
+.cold-colors #production-chain-items [data-container-id].item-type-component { background: var(--cold-component); }
+.cold-colors #production-chain-items [data-container-id].item-type-finished-good { background: var(--cold-finished-good); }
 
 .cold-colors #production-chain-items [data-container-id] .process-name { color: white; opacity: 0.75; }

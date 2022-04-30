@@ -9,8 +9,6 @@
     <title>Test Production Chain</title>
 </head>
 <body class="cold-colors">
-    <div>Show production chain for:</div>
-    <ul id="products"></ul>
     <div id="options">
         <label for="toggle-details" class="checked">
             <input type="checkbox" id="toggle-details" checked> Item Details
@@ -25,9 +23,16 @@
             </span>
         </label>
     </div>
-    <div id="required-spectrals"></div>
-    <div id="production-chain-items" class="show-details"></div>
-    <div id="production-chain-connections"></div>
+    <div id="products-wrapper">
+        <div>Show production chain for:</div>
+        <ul id="products"></ul>
+    </div>
+    <div id="production-chain-container">
+        <div id="production-chain-items" class="show-details">
+            <div id="required-spectrals"></div>
+        </div>
+        <div id="production-chain-connections"></div>
+    </div>
     <script src="test.js"></script>
 </body>
 </html>
