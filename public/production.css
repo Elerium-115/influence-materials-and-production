@@ -152,6 +152,14 @@ body {
     border-radius: 0.5rem;
 }
 
+#production-chain-items.faded [data-container-id] {
+    opacity: 0.2;
+}
+
+#production-chain-items .active[data-container-id] {
+    opacity: 1;
+}
+
 #production-chain-items [data-container-id].item-type-raw-material { background: var(--raw-material); }
 #production-chain-items [data-container-id].item-type-refined-material { background: var(--refined-material); }
 #production-chain-items [data-container-id].item-type-component { background: var(--component); }
@@ -164,7 +172,7 @@ body {
     font-weight: bold;
     text-decoration: none;
     padding: 0.5rem;
-    border-bottom: 5px solid transparent;
+    border-bottom: 0.3rem solid transparent;
     border-radius: 0.5rem;
 }
 
@@ -194,6 +202,14 @@ body {
 
 #production-chain-items [data-container-id] .inputs {
     margin-bottom: 0.5rem;
+}
+
+#production-chain-connections .faded {
+    opacity: 0.2;
+}
+
+#production-chain-items [data-container-id], #production-chain-connections * {
+    transition: opacity 500ms;
 }
 
 /* cold colors */
