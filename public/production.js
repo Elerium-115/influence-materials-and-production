@@ -107,17 +107,20 @@ const processes = [
 
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const productChainConnectionsContainer = document.getElementById('production-chain-connections');
+const processVariantsContainer = document.getElementById('process-variants');
 const requiredSpectralsContainer = document.getElementById('required-spectrals');
 
+let itemsWithProcessVariants = {};
+
 /**
- * Spectral-types required for the entire production chain.
- * WARNING: May include optional spectrals, if a product / sub-product can be created via different processes.
+ * spectral-types required for the entire production chain
+ * (including optional spectrals, if any item in the production chain has process variants)
  */
 let requiredSpectrals = [];
 
 /**
- * ID for referencing the DOM containers of each rendered ("output") item.
- * Must be incremented for each newly-rendered itemContainer.
+ * ID for referencing the DOM containers of each rendered ("output") item
+ * (must be incremented for each newly-rendered itemContainer)
  */
 let uniqueContainerId = 0;
 
@@ -139,13 +142,13 @@ itemNamesSorted.forEach(itemName => {
     const itemNameCompact = itemName.replace(/\s+/g, '');
     itemNamesByHash[itemNameCompact] = itemName;
     const itemData = items[itemName];
-    if (itemData['itemType'] === 'Raw Material') {
+    if (itemData.itemType === 'Raw Material') {
         return;
     }
     const listItem = document.createElement('a');
     listItem.href = `#${itemNameCompact}`;
     listItem.textContent = itemName;
-    listItem.classList.add(itemData['itemType'].replace(/\s+/g, ''));
+    listItem.classList.add(itemData.itemType.replace(/\s+/g, ''));
     document.getElementById('products').appendChild(listItem);
 });
 
@@ -153,10 +156,10 @@ function getItemContainerById(itemContainerId) {
     return document.querySelector(`[data-container-id='${itemContainerId}']`);
 }
 
-// return an array of item IDs covering the entire sub-chain of an item, and all its ancestors, including the item itself
+// return an array of item IDs covering the entire subchain of an item, and all its ancestors, including the item itself
 function getFullchainForItemId(itemContainerId) {
     const fullchain = [];
-    // search for "itemContainerId" in the up-chains of all raw materials from the current production chain
+    // search for "itemContainerId" in the upchains of all raw materials from the current production chain
     for (const rawMaterialContainerId in upchainsFromRawMaterials) {
         const upchain = upchainsFromRawMaterials[rawMaterialContainerId];
         if (upchain.includes(itemContainerId)) {
@@ -171,12 +174,14 @@ function getFullchainForItemId(itemContainerId) {
 }
 
 function resetProductionChain() {
+    document.body.classList.remove('has-process-variants');
     requiredSpectralsContainer.textContent = '';
     // remove only ".level" elements from "productChainItemsContainer" (keep "#required-spectrals")
     productChainItemsContainer.querySelectorAll('.level').forEach(el => {
         el.parentElement.removeChild(el);
     });
     productChainConnectionsContainer.textContent = '';
+    itemsWithProcessVariants = {};
     requiredSpectrals = [];
     uniqueContainerId = 0;
     maxLevel = 0;
@@ -197,11 +202,11 @@ function resetFadedItemsAndConnections() {
 function updateRequiredSpectralsHtml() {
     let requiredSpectralsHtml = '<div class="line spectral-types">';
     requiredSpectrals.forEach(spectralType => {
-        requiredSpectralsHtml += `<span class="spectral-type type-${spectralType.toLowerCase()}">${spectralType}</span>`;
+        requiredSpectralsHtml += `<span class="spectral-type type-${spectralType}">${spectralType}</span>`;
     });
     requiredSpectralsHtml += '</div>';
     requiredSpectralsHtml += '<div class="line">spectral-types required for this production chain</div>';
-    requiredSpectralsHtml += '<div class="line faded">(including alternative production paths, if any)</div>';
+    requiredSpectralsHtml += '<div class="line variants">(including alternative production paths)</div>';
     requiredSpectralsContainer.innerHTML = requiredSpectralsHtml;
 }
 
@@ -226,7 +231,7 @@ function createItemContainer(itemName, itemData, parentContainerId, inputsCount 
     itemContainer.dataset.longestSubchainLength = 1;
     const itemNameCompact = itemName.replace(/\s+/g, '');
     itemContainer.innerHTML = `<a href="#${itemNameCompact}" class="item-name">${itemName}</a>`;
-    switch (itemData['itemType']) {
+    switch (itemData.itemType) {
         case 'Raw Material': itemContainer.classList.add('item-type-raw-material'); break;
         case 'Refined Material': itemContainer.classList.add('item-type-refined-material'); break;
         case 'Component': itemContainer.classList.add('item-type-component'); break;
@@ -262,16 +267,16 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
     }
     maxLevel = Math.max(maxLevel, renderOnLevel);
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
-    if (itemData['itemType'] === "Raw Material") {
+    if (itemData.itemType === "Raw Material") {
         const itemContainer = createItemContainer(itemName, itemData, parentContainerId);
         levelContainer.appendChild(itemContainer);
         itemContainer.innerHTML += `<div class="details process-name">via Mining</div>`;
-        itemContainer.innerHTML += `<div class="details inputs">from: ${itemData['baseSpectrals'].join(', ')}</div>`;
+        itemContainer.innerHTML += `<div class="details inputs">from: ${itemData.baseSpectrals.join(', ')}</div>`;
         if (parentContainerId !== 0) {
-            // after rendering a raw material, trace back its up-chain until the top-level item
+            // after rendering a raw material, trace back its upchain until the top-level item
             generateUpchainFromRawMaterial(itemContainer);
         }
-        itemData['baseSpectrals'].forEach(baseSpectral => {
+        itemData.baseSpectrals.forEach(baseSpectral => {
             if (!requiredSpectrals.includes(baseSpectral)) {
                 requiredSpectrals.push(baseSpectral);
                 requiredSpectrals.sort();
@@ -280,10 +285,12 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
         });
     } else {
         // NOT raw material
+        const processVariants = [];
         processes.forEach(processData => {
             if (processData.output !== itemName) {
                 return;
             }
+            processVariants.push(processData);
             const itemContainer = createItemContainer(itemName, itemData, parentContainerId, processData.inputs.length);
             levelContainer.appendChild(itemContainer);
             itemContainer.innerHTML += `<div class="details process-name">via ${processData.process}</div>`;
@@ -291,7 +298,11 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
             processData.inputs.forEach(inputItemName => {
                 renderItem(inputItemName, itemContainer.dataset.containerId, renderOnLevel + 1);
             });
+            itemContainer.dataset.processCode = itemName.replace(/\s+/g, '') + '-' + processData.process.replace(/\s+/g, '');
         });
+        if (processVariants.length >= 2 && !itemsWithProcessVariants[itemName]) {
+            itemsWithProcessVariants[itemName] = processVariants;
+        }
     }
 }
 
@@ -314,7 +325,7 @@ function compareItemContainers(el1, el2) {
         return el1ParentPriority - el2ParentPriority;
     }
 
-    // #2 - prioritize item with the longest sub-chain
+    // #2 - prioritize item with the longest subchain
     const el1SubchainLength = el1.dataset.longestSubchainLength;
     const el2SubchainLength = el2.dataset.longestSubchainLength;
     if (el1SubchainLength !== el2SubchainLength) {
@@ -331,7 +342,7 @@ function compareItemContainers(el1, el2) {
     return 0;
 }
 
-// re-arrange items on the same level, such that the longest sub-chains are rendered first (left-most)
+// re-arrange items on the same level, such that the longest subchains are rendered first (left-most)
 function sortLevels() {
     for (let i = 1; i <= maxLevel; i++) {
         const levelContainer = document.getElementById(`level_${i}`);
@@ -381,15 +392,19 @@ function connectContainers(el1, el2, color, thickness, faded) {
 
 function connectContainerIds(parentContainerId, childContainerId, color, thickness) {
     // prevent multiple connections between the same item-pair
-    const itemPair = `${parentContainerId}-${childContainerId}`;
+    const itemPair = parentContainerId + '-' + childContainerId;
     if (connectedItemPairs.includes(itemPair)) {
         return;
     }
     const parentContainer = getItemContainerById(parentContainerId);
     const childContainer = getItemContainerById(childContainerId);
+    // do not connect disabled items (i.e. subchains of unchecked process variants)
+    if (parentContainer.classList.contains('disabled') || childContainer.classList.contains('disabled')) {
+        return;
+    }
+    // fade connections between non-active items
     let faded = false;
     if (productChainItemsContainer.classList.contains('faded')) {
-        // fade connections between non-active items
         if (!parentContainer.classList.contains('active') || !childContainer.classList.contains('active')) {
             faded = true;
         }
@@ -407,6 +422,7 @@ function connectUpchainFromRawMaterialId(rawMaterialContainerId, color = 'gray',
     }
 }
 
+// this function should be called after ANY event / change that affects the position of items in the production chain
 function updateAllConnections() {
     // reset connections first
     productChainConnectionsContainer.textContent = '';
@@ -416,10 +432,98 @@ function updateAllConnections() {
     }
 }
 
+function initializeProcessVariants() {
+    // this function is only called when multiple process variants are initially checked
+    document.querySelector("#required-spectrals .variants").classList.add('active');
+    document.body.classList.add('has-process-variants');
+    let processVariantsHtml = '';
+    for (const itemName in itemsWithProcessVariants) {
+        processVariantsHtml += `<div class="item">`;
+        processVariantsHtml += `<div class="item-name">${itemName}</div>`;
+        itemsWithProcessVariants[itemName].forEach(processVariant => {
+            const processName = processVariant.process;
+            const processCode = itemName.replace(/\s+/g, '') + '-' + processName.replace(/\s+/g, '');
+            processVariantsHtml += `
+                <label for="${processCode}" class="process checked">
+                    <input type="checkbox" id="${processCode}" checked>
+                    <span class="process-info">
+                        via ${processName} from ${processVariant.inputs.join(', ')}
+                    </span>
+                </label>`;
+        });
+        processVariantsHtml += `</div>`;
+    }
+    processVariantsContainer.innerHTML = processVariantsHtml;
+    /**
+     * ensure at least 1 process variant per item is always checked
+     * (i.e. prevent the click-event from triggering, if that would
+     * uncheck the only remaining process variant for that item)
+     */
+    document.querySelectorAll(".process").forEach(elProcess => {
+        elProcess.addEventListener('click', event => {
+            const elItem = elProcess.closest(".item");
+            if (elProcess.classList.contains('checked') && elItem.querySelectorAll(".process.checked").length === 1) {
+                // this is the only remaining process variant for the current item
+                event.preventDefault(); // prevent the descendants from capturing this event ("stopPropagation" does not work here)
+                // flash error
+                elProcess.classList.add('error');
+                setTimeout(() => {
+                    elProcess.classList.remove('error');
+                }, 150); // match the animation duration for "flash-error"
+            }
+        }, true); // capture event before propagation (seems irrelevant though)
+    });
+}
+
+function disableItemContainerAndSubchain(itemContainer) {
+    itemContainer.classList.add('disabled');
+    const itemContainerId = itemContainer.dataset.containerId;
+    document.querySelectorAll(`[data-parent-container-id='${itemContainerId}']`).forEach(disableItemContainerAndSubchain);
+}
+
+function updateAllProcessVariants() {
+    // first enable subchains for all process variants
+    document.querySelectorAll(".disabled[data-container-id]").forEach(itemContainer => {
+        itemContainer.classList.remove('disabled');
+    });
+    // then disable subchains for process variants which are not currently checked (for ALL items with process variants)
+    document.querySelectorAll(".process:not(.checked) input").forEach(elProcess => {
+        const processCode = elProcess.id;
+        // disable all occurrences of this process in the production chain, along with their subchains
+        document.querySelectorAll(`[data-process-code=${processCode}]`).forEach(disableItemContainerAndSubchain);
+    });
+}
+
+function updateRequiredSpectrals() {
+    // first disable all required spectrals, and the ".variants" disclaimer
+    document.querySelectorAll("#required-spectrals .spectral-type").forEach(spectralType => {
+        spectralType.classList.add('disabled');
+    });
+    document.querySelector("#required-spectrals .variants").classList.remove('active');
+    // then enable required spectrals for raw materials which are not currently disabled
+    document.querySelectorAll(".item-type-raw-material:not(.disabled)").forEach(rawMaterialContainer => {
+        const rawMaterialName = rawMaterialContainer.querySelector("a").textContent;
+        items[rawMaterialName].baseSpectrals.forEach(baseSpectral => {
+            document.querySelector(`#required-spectrals .spectral-type.type-${baseSpectral}`).classList.remove('disabled');
+        });
+    });
+    // show the ".variants" disclaimer, if multiple process variants are currently checked for any item
+    document.querySelectorAll(".process.checked").forEach(elProcess => {
+        const elItem = elProcess.closest(".item");
+        if (elItem.querySelectorAll(".process.checked").length >= 2) {
+            document.querySelector("#required-spectrals .variants").classList.add('active');
+            return;
+        }
+    });
+}
+
 function selectItemByName(itemName) {
     resetProductionChain();
     renderItem(itemName);
     // done rendering all items recursively
+    if (Object.keys(itemsWithProcessVariants).length) {
+        initializeProcessVariants();
+    }
     sortLevels();
     updateAllConnections();
     // highlight the active item in the list of products
@@ -444,7 +548,7 @@ function on(eventType, selector, callback) {
 }
 
 // toggle option checked
-on('change', '#options input', el => {
+on('change', 'label > input', el => {
     if (el.checked) {
         el.parentElement.classList.add('checked');
     } else {
@@ -471,8 +575,15 @@ on('change', '#toggle-colors', el => {
     }
 });
 
+// toggle process variant
+on('change', '.process input', el => {
+    updateAllProcessVariants();
+    updateRequiredSpectrals();
+    updateAllConnections();
+});
+
 /**
- * highlight sub-chain and ancestors, on hover over item
+ * highlight subchain and ancestors, on hover over item
  * use "mouseenter" instead of "mouseover", and "mouseleave" instead of "mouseout" (to avoid triggering on children)
  */
 on('mouseenter', '[data-container-id]', el => {
@@ -505,5 +616,5 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
+//// TO DO: FIX BUG re: ".variants" disclaimer shown when multiple process variants enabled ONLY for DISABLED items
 //// TO DO: integrate with the other tools (raw materials + ratios)
-//// TO DO: implement toggle for items that can be produced in different ways (e.g. Iron)
