@@ -188,6 +188,12 @@ function resetProductionChain() {
     }
 }
 
+function resetFadedItemsAndConnections() {
+    document.querySelectorAll('.active[data-container-id]').forEach(el => el.classList.remove('active'));
+    productChainItemsContainer.classList.remove('faded');
+    updateAllConnections();
+}
+
 function updateRequiredSpectralsHtml() {
     let requiredSpectralsHtml = '<div class="line spectral-types">';
     requiredSpectrals.forEach(spectralType => {
@@ -479,13 +485,12 @@ on('mouseenter', '[data-container-id]', el => {
     updateAllConnections();
 });
 on('mouseleave', '[data-container-id]', el => {
-    document.querySelectorAll('.active[data-container-id]').forEach(el => el.classList.remove('active'));
-    productChainItemsContainer.classList.remove('faded');
-    updateAllConnections();
+    resetFadedItemsAndConnections();
 });
 
 // auto-select item on #Hash-change (including on e.g. history-back navigation)
 window.addEventListener('hashchange', () => {
+    resetFadedItemsAndConnections();
     const hashToSelect = window.location.hash.replace(/^#/, '');
     // this will not select anything if invalid / empty #Hash, but that's fine
     selectItemByName(itemNamesByHash[hashToSelect]);
