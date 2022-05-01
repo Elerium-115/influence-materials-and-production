@@ -130,19 +130,24 @@ let connectedItemPairs = [];
 const itemNamesByHash = {};
 
 // populate "itemNamesByHash" and the top list of products (with NON-raw materials)
+const itemNamesSorted = [];
 for (const itemName in items) {
+    itemNamesSorted.push(itemName);
+}
+itemNamesSorted.sort();
+itemNamesSorted.forEach(itemName => {
     const itemNameCompact = itemName.replace(/\s+/g, '');
     itemNamesByHash[itemNameCompact] = itemName;
     const itemData = items[itemName];
     if (itemData['itemType'] === 'Raw Material') {
-        continue;
+        return;
     }
     const listItem = document.createElement('a');
     listItem.href = `#${itemNameCompact}`;
     listItem.textContent = itemName;
     listItem.classList.add(itemData['itemType'].replace(/\s+/g, ''));
     document.getElementById('products').appendChild(listItem);
-}
+});
 
 function getItemContainerById(itemContainerId) {
     return document.querySelector(`[data-container-id='${itemContainerId}']`);
