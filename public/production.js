@@ -507,8 +507,13 @@ function updateRequiredSpectrals() {
             document.querySelector(`#required-spectrals .spectral-type.type-${baseSpectral}`).classList.remove('disabled');
         });
     });
-    // show the ".variants" disclaimer, if multiple process variants are currently checked for any item
-    document.querySelectorAll(".process.checked").forEach(elProcess => {
+    // show the ".variants" disclaimer, if multiple process variants are currently checked for any non-disabled item
+    document.querySelectorAll(".process.checked input").forEach(elProcess => {
+        const processCode = elProcess.id;
+        if (!document.querySelector(`[data-process-code=${processCode}]:not(.disabled)`)) {
+            // all occurrences of this process in the production chain are disabled => irrelevant if multiple process variants checked
+            return;
+        }
         const elItem = elProcess.closest(".item");
         if (elItem.querySelectorAll(".process.checked").length >= 2) {
             document.querySelector("#required-spectrals .variants").classList.add('active');
