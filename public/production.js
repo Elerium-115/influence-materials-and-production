@@ -123,7 +123,9 @@ let uniqueContainerId = 0;
 
 let maxLevel = 0;
 
-let subchainsFromRawMaterials = {};
+let upchainsFromRawMaterials = {};
+
+let connectedItemPairs = [];
 
 const itemNamesByHash = {};
 
@@ -142,20 +144,42 @@ for (const itemName in items) {
     document.getElementById('products').appendChild(listItem);
 }
 
+function getItemContainerById(itemContainerId) {
+    return document.querySelector(`[data-container-id='${itemContainerId}']`);
+}
+
+// return an array of item IDs covering the entire sub-chain of an item, and all its ancestors, including the item itself
+function getFullchainForItemId(itemContainerId) {
+    const fullchain = [];
+    // search for "itemContainerId" in the up-chains of all raw materials from the current production chain
+    for (const rawMaterialContainerId in upchainsFromRawMaterials) {
+        const upchain = upchainsFromRawMaterials[rawMaterialContainerId];
+        if (upchain.includes(itemContainerId)) {
+            upchain.forEach(itemContainerId => {
+                if (!fullchain.includes(itemContainerId)) {
+                    fullchain.push(itemContainerId);
+                }
+            });
+        }
+    }
+    return fullchain;
+}
+
 function resetProductionChain() {
     requiredSpectralsContainer.textContent = '';
     // remove only ".level" elements from "productChainItemsContainer" (keep "#required-spectrals")
-    productChainItemsContainer.querySelectorAll(".level").forEach(el => {
+    productChainItemsContainer.querySelectorAll('.level').forEach(el => {
         el.parentElement.removeChild(el);
     });
     productChainConnectionsContainer.textContent = '';
     requiredSpectrals = [];
     uniqueContainerId = 0;
     maxLevel = 0;
-    subchainsFromRawMaterials = {};
-    const activeListItem = document.querySelector("#products a.active");
-    if (activeListItem) {
-        activeListItem.classList.remove('active');
+    upchainsFromRawMaterials = {};
+    connectedItemPairs = [];
+    const listItemActive = document.querySelector('#products a.active');
+    if (listItemActive) {
+        listItemActive.classList.remove('active');
     }
 }
 
@@ -200,21 +224,21 @@ function createItemContainer(itemName, itemData, parentContainerId, inputsCount 
     return itemContainer;
 }
 
-function generateSubchainFromRawMaterial(rawMaterialContainer) {
+function generateUpchainFromRawMaterial(rawMaterialContainer) {
     const rawMaterialContainerId = rawMaterialContainer.dataset.containerId;
-    subchainsFromRawMaterials[rawMaterialContainerId] = [rawMaterialContainerId];
-    let nextSubchainContainer = rawMaterialContainer;
-    while (nextSubchainContainer) {
-        const nextParentContainerId = nextSubchainContainer.dataset.parentContainerId;
-        subchainsFromRawMaterials[rawMaterialContainerId].push(nextParentContainerId);
-        nextSubchainContainer = document.querySelector(`[data-container-id='${nextParentContainerId}']`);
-        if (nextSubchainContainer) {
-            // update the "longestSubchainLength" for the "nextSubchainContainer"
-            const oldLength = nextSubchainContainer.dataset.longestSubchainLength;
-            const newLength = subchainsFromRawMaterials[rawMaterialContainerId].length;
-            nextSubchainContainer.dataset.longestSubchainLength = Math.max(oldLength, newLength);
+    upchainsFromRawMaterials[rawMaterialContainerId] = [rawMaterialContainerId];
+    let nextUpchainContainer = rawMaterialContainer;
+    while (nextUpchainContainer) {
+        const nextParentContainerId = nextUpchainContainer.dataset.parentContainerId;
+        nextUpchainContainer = getItemContainerById(nextParentContainerId);
+        if (nextUpchainContainer) {
+            upchainsFromRawMaterials[rawMaterialContainerId].push(nextParentContainerId);
+            // update the "longestSubchainLength" for the "nextUpchainContainer"
+            const oldLength = nextUpchainContainer.dataset.longestSubchainLength;
+            const newLength = upchainsFromRawMaterials[rawMaterialContainerId].length;
+            nextUpchainContainer.dataset.longestSubchainLength = Math.max(oldLength, newLength);
         }
-        // nextSubchainContainer will stop existing when parentContainerId = 0
+        // nextUpchainContainer will stop existing when parentContainerId = 0
     }
 }
 
@@ -233,12 +257,13 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
         itemContainer.innerHTML += `<div class="details process-name">via Mining</div>`;
         itemContainer.innerHTML += `<div class="details inputs">from: ${itemData['baseSpectrals'].join(', ')}</div>`;
         if (parentContainerId !== 0) {
-            // after rendering a raw material, trace back its sub-chain until the top-level item
-            generateSubchainFromRawMaterial(itemContainer);
+            // after rendering a raw material, trace back its up-chain until the top-level item
+            generateUpchainFromRawMaterial(itemContainer);
         }
         itemData['baseSpectrals'].forEach(baseSpectral => {
             if (!requiredSpectrals.includes(baseSpectral)) {
                 requiredSpectrals.push(baseSpectral);
+                requiredSpectrals.sort();
                 updateRequiredSpectralsHtml();
             }
         });
@@ -261,7 +286,7 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
 
 function getItemPriorityOnLevel(itemContainer) {
     const levelContainer = itemContainer.parentElement;
-    const itemContainersOnLevel = [...levelContainer.querySelectorAll("[data-container-id]")];
+    const itemContainersOnLevel = [...levelContainer.querySelectorAll('[data-container-id]')];
     return itemContainersOnLevel.indexOf(itemContainer);
 }
 
@@ -271,8 +296,8 @@ function compareItemContainers(el1, el2) {
     const el1ParentContainerId = el1.dataset.parentContainerId;
     const el2ParentContainerId = el2.dataset.parentContainerId;
     if (el1ParentContainerId !== el2ParentContainerId) {
-        const el1ParentContainer = document.querySelector(`[data-container-id='${el1ParentContainerId}']`);
-        const el2ParentContainer = document.querySelector(`[data-container-id='${el2ParentContainerId}']`);
+        const el1ParentContainer = getItemContainerById(el1ParentContainerId);
+        const el2ParentContainer = getItemContainerById(el2ParentContainerId);
         const el1ParentPriority = getItemPriorityOnLevel(el1ParentContainer);
         const el2ParentPriority = getItemPriorityOnLevel(el2ParentContainer);
         return el1ParentPriority - el2ParentPriority;
@@ -299,10 +324,10 @@ function compareItemContainers(el1, el2) {
 function sortLevels() {
     for (let i = 1; i <= maxLevel; i++) {
         const levelContainer = document.getElementById(`level_${i}`);
-        const itemContainers = [...levelContainer.querySelectorAll("[data-container-id]")];
-        itemContainers.sort(compareItemContainers);
+        const itemContainersOnLevel = [...levelContainer.querySelectorAll('[data-container-id]')];
+        itemContainersOnLevel.sort(compareItemContainers);
         levelContainer.textContent = '';
-        itemContainers.forEach(el => {
+        itemContainersOnLevel.forEach(el => {
             levelContainer.appendChild(el);
         });
     }
@@ -322,7 +347,7 @@ function getOffset(el) {
  * el1 = parent element, el2 = child element
  * source: https://thewebdev.info/2021/09/12/how-to-draw-a-line-between-two-divs-with-javascript/
  */
-function connectContainers(el1, el2, color, thickness) {
+function connectContainers(el1, el2, color, thickness, faded) {
     const off1 = getOffset(el1);
     const off2 = getOffset(el2);
     // const x1 = off1.left + off1.width;
@@ -337,20 +362,36 @@ function connectContainers(el1, el2, color, thickness) {
     const angle = Math.atan2((y1 - y2), (x1 - x2)) * (180 / Math.PI);
     const line = document.createElement('div');
     line.setAttribute('style', `padding: 0px; margin: 0px; height: ${thickness}px; background-color: ${color}; line-height: 1px; position: absolute; left: ${cx}px; top: ${cy}px; width: ${length}px; -moz-transform: rotate(${angle}deg); -webkit-transform: rotate(${angle}deg); -o-transform: rotate(${angle}deg); -ms-transform: rotate(${angle}deg); transform: rotate(${angle}deg);`);
+    if (faded) {
+        line.classList.add('faded');
+    }
     productChainConnectionsContainer.appendChild(line);
 }
 
 function connectContainerIds(parentContainerId, childContainerId, color, thickness) {
-    const parentContainer = document.querySelector(`[data-container-id='${parentContainerId}']`);
-    const childContainer = document.querySelector(`[data-container-id='${childContainerId}']`);
-    connectContainers(parentContainer, childContainer, color, thickness);
+    // prevent multiple connections between the same item-pair
+    const itemPair = `${parentContainerId}-${childContainerId}`;
+    if (connectedItemPairs.includes(itemPair)) {
+        return;
+    }
+    const parentContainer = getItemContainerById(parentContainerId);
+    const childContainer = getItemContainerById(childContainerId);
+    let faded = false;
+    if (productChainItemsContainer.classList.contains('faded')) {
+        // fade connections between non-active items
+        if (!parentContainer.classList.contains('active') || !childContainer.classList.contains('active')) {
+            faded = true;
+        }
+    }
+    connectContainers(parentContainer, childContainer, color, thickness, faded);
+    connectedItemPairs.push(itemPair);
 }
 
-function connectSubchainFromRawMaterialId(rawMaterialContainerId, color = 'gray', thickness = 1) {
-    const subchain = subchainsFromRawMaterials[rawMaterialContainerId];
-    for (let i = 0; i < subchain.length - 2; i++) {
-        const childContainerId = subchain[i];
-        const parentContainerId = subchain[i + 1];
+function connectUpchainFromRawMaterialId(rawMaterialContainerId, color = 'gray', thickness = 1) {
+    const upchain = upchainsFromRawMaterials[rawMaterialContainerId];
+    for (let i = 0; i < upchain.length - 1; i++) {
+        const childContainerId = upchain[i];
+        const parentContainerId = upchain[i + 1];
         connectContainerIds(parentContainerId, childContainerId, color, thickness);
     }
 }
@@ -358,8 +399,9 @@ function connectSubchainFromRawMaterialId(rawMaterialContainerId, color = 'gray'
 function updateAllConnections() {
     // reset connections first
     productChainConnectionsContainer.textContent = '';
-    for (const rawMaterialContainerId in subchainsFromRawMaterials) {
-        connectSubchainFromRawMaterialId(rawMaterialContainerId);
+    connectedItemPairs = [];
+    for (const rawMaterialContainerId in upchainsFromRawMaterials) {
+        connectUpchainFromRawMaterialId(rawMaterialContainerId);
     }
 }
 
@@ -370,7 +412,7 @@ function selectItemByName(itemName) {
     sortLevels();
     updateAllConnections();
     // highlight the active item in the list of products
-    document.querySelectorAll("#products a").forEach(el => {
+    document.querySelectorAll('#products a').forEach(el => {
         if (el.textContent === itemName) {
             el.classList.add('active');
         }
@@ -379,16 +421,18 @@ function selectItemByName(itemName) {
     window.location.hash = `#${itemNameCompact}`;
 }
 
+window.addEventListener('resize', updateAllConnections);
+
 // source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
 function on(eventType, selector, callback) {
     document.body.addEventListener(eventType, event => {
         if (event.target.matches(selector)) {
             callback(event.target);
         }
-    });
+    }, true); // "true" required for correct behaviour of e.g. "mouseenter" / "mouseleave" attached to elements that have children
 }
 
-// toggle options checked
+// toggle option checked
 on('change', '#options input', el => {
     if (el.checked) {
         el.parentElement.classList.add('checked');
@@ -407,7 +451,7 @@ on('change', '#toggle-details', el => {
     updateAllConnections();
 });
 
-// toggle color scheme
+// toggle cold colors
 on('change', '#toggle-colors', el => {
     if (el.checked) {
         document.body.classList.add('cold-colors');
@@ -416,23 +460,31 @@ on('change', '#toggle-colors', el => {
     }
 });
 
+/**
+ * highlight sub-chain and ancestors, on hover over item
+ * use "mouseenter" instead of "mouseover", and "mouseleave" instead of "mouseout" (to avoid triggering on children)
+ */
+on('mouseenter', '[data-container-id]', el => {
+    const itemContainerId = el.dataset.containerId;
+    const fullchain = getFullchainForItemId(itemContainerId);
+    fullchain.forEach(itemContainerId => {
+        getItemContainerById(itemContainerId).classList.add('active');
+    });
+    productChainItemsContainer.classList.add('faded');
+    updateAllConnections();
+});
+on('mouseleave', '[data-container-id]', el => {
+    document.querySelectorAll('.active[data-container-id]').forEach(el => el.classList.remove('active'));
+    productChainItemsContainer.classList.remove('faded');
+    updateAllConnections();
+});
+
 // auto-select item on #Hash-change (including on e.g. history-back navigation)
-window.addEventListener('hashchange', function() {
+window.addEventListener('hashchange', () => {
     const hashToSelect = window.location.hash.replace(/^#/, '');
     // this will not select anything if invalid / empty #Hash, but that's fine
     selectItemByName(itemNamesByHash[hashToSelect]);
-}, false);
-
-window.addEventListener('resize', updateAllConnections);
-
-// update all connections on mouseover / mousemove / mouseout @ item-containers
-//// DISABLED re: BUGGY
-// on('mouseover', '[data-container-id]', el => {
-//     updateAllConnections();
-// });
-// on('mouseout', '[data-container-id]', el => {
-//     updateAllConnections();
-// });
+});
 
 // pre-select the item from #Hash on page-load
 let hashToPreselect = window.location.hash.replace(/^#/, '');
@@ -443,4 +495,5 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
-//// TO DO: on hover over item, highlight the entire sub-chain, and all ancestors (and connections?)
+//// TO DO: integrate with the other tools (raw materials + ratios)
+//// TO DO: implement toggle for items that can be produced in different ways (e.g. Iron)

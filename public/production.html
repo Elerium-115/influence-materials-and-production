@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="production.css">
+    <link rel="icon" href="/img/site-icon.png" type="image/png">
+    <title>Influence Production Chains</title>
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Influence Production Chains">
+    <meta name="twitter:image" content="https://materials.adalia.id/img/site-icon.png">
+    <meta name="twitter:creator" content="@elerium115">
+    <meta name="twitter:description" content="View the production chains for each refined material, component, and finished good.">
+</head>
+<body class="cold-colors">
+    <div class="wrapper">
+        <nav id="sidebar">
+            <div class="sidebar-content">
+                <a class="sidebar-brand" href="https://my.adalia.id/">
+                    <img src="https://my.adalia.id/static/my_adalia_id/images/logo.3bca139c953e.png">
+                </a>
+                <div class="sidebar-about">
+                    <div class="title">"Raw Materials" Tool</div>
+                    <div class="primary">created by <a href="https://twitter.com/elerium115" target="_blank">@elerium115</a></div>
+                    <div class="secondary">hosted by <a href="https://my.adalia.id" target="_blank">my.adalia.id</a></div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="main">
+            <nav id="topbar">
+                <a href="./">Raw Materials by Spectral Type</a>
+                <a href="./ratios.html">Ratios of Raw Materials</a>
+                <a href="./production.html" class="active">Production Chains</a>
+            </nav>
+
+            <div id="options">
+                <label for="toggle-details" class="checked">
+                    <input type="checkbox" id="toggle-details" checked> Item Details
+                </label>
+                <label for="toggle-colors" class="checked">
+                    <input type="checkbox" id="toggle-colors" checked> Cold Colors
+                    <span id="legend">
+                        <span class="legend-raw-material">Raw Material</span>
+                        <span class="legend-refined-material">Refined Material</span>
+                        <span class="legend-component">Component</span>
+                        <span class="legend-finished-good">Finished Good</span>
+                    </span>
+                </label>
+            </div>
+            <div id="products-wrapper">
+                <div>Show production chain for:</div>
+                <ul id="products"></ul>
+            </div>
+            <div id="production-chain-container">
+                <div id="production-chain-items" class="show-details">
+                    <div id="required-spectrals"></div>
+                </div>
+                <div id="production-chain-connections"></div>
+            </div>
+
+    <script src="production.js"></script>
+</body>
+</html>
