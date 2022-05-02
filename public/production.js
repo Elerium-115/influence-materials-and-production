@@ -585,6 +585,13 @@ on('change', '.process input', el => {
     updateAllProcessVariants();
     updateRequiredSpectrals();
     updateAllConnections();
+    if (el.checked) {
+        // fake "mousenter" on label, to highlight items in the production chain for this process variant
+        el.closest("label").dispatchEvent(new Event('mouseenter'));
+    } else {
+        // stop highlighting items in the production chain for this process variant
+        resetFadedItemsAndConnections();
+    }
 });
 
 /**
@@ -601,6 +608,18 @@ on('mouseenter', '[data-container-id]', el => {
     updateAllConnections();
 });
 on('mouseleave', '[data-container-id]', el => {
+    resetFadedItemsAndConnections();
+});
+
+// highlight subchain and ancestors, on hover over checked process variant
+on('mouseenter', '.process.checked', el => {
+    const processCode = el.getAttribute('for');
+    // fake "mouseenter" on all occurrences of this process in the production chain
+    document.querySelectorAll(`[data-process-code='${processCode}']`).forEach(itemContainer => {
+        itemContainer.dispatchEvent(new Event('mouseenter'));
+    });
+});
+on('mouseleave', '.process.checked', el => {
     resetFadedItemsAndConnections();
 });
 
@@ -621,5 +640,4 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
-//// TO DO: FIX BUG re: ".variants" disclaimer shown when multiple process variants enabled ONLY for DISABLED items
 //// TO DO: integrate with the other tools (raw materials + ratios)
