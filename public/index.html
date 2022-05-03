@@ -14,120 +14,110 @@
     <meta name="twitter:description" content="View the raw materials available on each asteroid by spectral type.">
 </head>
 <body>
-    <div class="wrapper">
-        <nav id="sidebar">
-            <div class="sidebar-content">
-                <a class="sidebar-brand" href="https://my.adalia.id/">
-                    <img src="https://my.adalia.id/static/my_adalia_id/images/logo.3bca139c953e.png">
-                </a>
-                <div class="sidebar-about">
-                    <div class="title">"Raw Materials" Tool</div>
-                    <div class="primary">created by <a href="https://twitter.com/elerium115" target="_blank">@elerium115</a></div>
-                    <div class="secondary">hosted by <a href="https://my.adalia.id" target="_blank">my.adalia.id</a></div>
-                </div>
-            </div>
+    <div class="main">
+        <nav id="topbar">
+            <a href="https://my.adalia.id/" target="_blank" id="dalia-id-logo">
+                <img src="./img/adalia-id-logo.png" alt="my.adalia.id" class="logo-small">
+                <img src="./img/adalia-id-logo-text.webp" alt="my.adalia.id" class="logo-large">
+            </a>
+            <a href="./" class="active">Raw Materials</a>
+            <a href="./ratios.html">Materials Ratios</a>
+            <a href="./production.html">Production Chains</a>
         </nav>
 
-        <div class="main">
-            <nav id="topbar">
-                <a href="./" class="active">Raw Materials by Spectral Type</a>
-                <a href="./ratios.html">Ratios of Raw Materials</a>
-                <!-- <a href="./production.html">Production Chains</a> -->
-            </nav>
-
-            <div class="spectral-types">
-                <div class="reset-button">
-                    <a href="javascript: resetSelectionsExcept();">Clear selections</a>
-                </div>
-                <h2>Spectral Types</h2>
-                <i>Selecting one or more spectral types will highlight the raw materials that can be mined from them</i>
-                <ul>
-                    <li data-value="c">C</li>
-                    <li data-value="ci">CI</li>
-                    <li data-value="cis">CIS</li>
-                    <li data-value="cm">CM</li>
-                    <li data-value="cms">CMS</li>
-                    <li data-value="cs">CS</li>
-                    <li data-value="i">I</li>
-                    <li data-value="m">M</li>
-                    <li data-value="s">S</li>
-                    <li data-value="si">SI</li>
-                    <li data-value="sm">SM</li>
-                </ul>
+        <div class="spectral-types">
+            <div class="reset-button">
+                <a href="javascript: resetSelectionsExcept();">Clear selections</a>
             </div>
+            <h2>Spectral Types</h2>
+            <i>Selecting one or more spectral types will highlight the raw materials that can be mined from them</i>
+            <ul>
+                <li data-value="c">C</li>
+                <li data-value="ci">CI</li>
+                <li data-value="cis">CIS</li>
+                <li data-value="cm">CM</li>
+                <li data-value="cms">CMS</li>
+                <li data-value="cs">CS</li>
+                <li data-value="i">I</li>
+                <li data-value="m">M</li>
+                <li data-value="s">S</li>
+                <li data-value="si">SI</li>
+                <li data-value="sm">SM</li>
+            </ul>
+        </div>
 
-            <div class="material-types">
-                <h2>Raw Materials</h2>
-                <i>Selecting a raw material will highlight the spectral types from which it can be mined</i>
-                <div class="raw-materials">
-                    <!-- Volatiles -->
-                    <div class="material-type" data-value="volatiles">Volatiles</div>
-                    <div class="materials-wrapper volatiles">
-                        <div class="raw-material" data-value="ammonia"><span>Ammonia<i>NH<sub>3</sub></i></span></div>
-                        <div class="raw-material" data-value="carbon-dioxide"><span>Carbon Dioxide<i>CO<sub>2</sub></i></span></div>
-                        <div class="raw-material" data-value="carbon-monoxide"><span>Carbon Monoxide<i>CO</i></span></div>
-                        <div class="raw-material" data-value="hydrogen"><span>Hydrogen<i>H</i></span></div>
-                        <div class="raw-material" data-value="methane"><span>Methane<i>CH<sub>4</sub></i></span></div>
-                        <div class="raw-material" data-value="nitrogen"><span>Nitrogen<i>N</i></span></div>
-                        <div class="raw-material" data-value="sulfur-dioxide"><span>Sulfur Dioxide<i>SO<sub>2</sub></i></span></div>
-                        <div class="raw-material" data-value="water"><span>Water<i>H<sub>2</sub>O</i></span></div>
-                    </div>
-                    <!-- Organics -->
-                    <div class="material-type" data-value="organics">Organics</div>
-                    <div class="materials-wrapper organics">
-                        <div class="raw-material" data-value="apatite"><span>Apatite<i>Mineral</i></span></div>
-                        <div class="raw-material" data-value="bitumen"><span>Bitumen<i>Hydrocarbon</i></span></div>
-                        <div class="raw-material" data-value="calcite"><span>Calcite<i>Mineral</i></span></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                    <!-- Metals -->
-                    <div class="material-type" data-value="metals">Metals</div>
-                    <div class="materials-wrapper metals">
-                        <div class="raw-material" data-value="feldspar"><span>Feldspar<i>Mineral</i></span></div>
-                        <div class="raw-material" data-value="graphite"><span>Graphite<i>Mineral</i></span></div>
-                        <div class="raw-material" data-value="olivine"><span>Olivine<i>Mineral</i></span></div>
-                        <div class="raw-material" data-value="pyroxene"><span>Pyroxene<i>Mineral</i></span></div>
-                        <div class="raw-material" data-value="rhabdite"><span>Rhabdite<i>Mineral</i></span></div>
-                        <div class="raw-material" data-value="taenite"><span>Taenite<i>Mineral</i></span></div>
-                        <div class="raw-material" data-value="troilite"><span>Troilite<i>Mineral</i></span></div>
-                        <div></div>
-                    </div>
-                    <!-- Rare-Earth -->
-                    <div class="material-type" data-value="rare-earth">Rare-Earth</div>
-                    <div class="materials-wrapper rare-earth">
-                        <div class="raw-material" data-value="merrillite"><span>Merrillite<i>Mineral</i></span></div>
-                        <div class="raw-material" data-value="xenotime"><span>Xenotime<i>Mineral</i></span></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                    <!-- Fissiles -->
-                    <div class="material-type" data-value="fissiles">Fissiles</div>
-                    <div class="materials-wrapper fissiles">
-                        <div class="raw-material" data-value="coffinite"><span>Coffinite<i>Mineral</i></span></div>
-                        <div class="raw-material" data-value="uranite"><span>Uranite<i>Mineral</i></span></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
+        <div class="material-types">
+            <h2>Raw Materials</h2>
+            <i>Selecting a raw material will highlight the spectral types from which it can be mined</i>
+            <div class="raw-materials">
+                <!-- Volatiles -->
+                <div class="material-type" data-value="volatiles">Volatiles</div>
+                <div class="materials-wrapper volatiles">
+                    <div class="raw-material" data-value="ammonia"><span>Ammonia<i>NH<sub>3</sub></i></span></div>
+                    <div class="raw-material" data-value="carbon-dioxide"><span>Carbon Dioxide<i>CO<sub>2</sub></i></span></div>
+                    <div class="raw-material" data-value="carbon-monoxide"><span>Carbon Monoxide<i>CO</i></span></div>
+                    <div class="raw-material" data-value="hydrogen"><span>Hydrogen<i>H</i></span></div>
+                    <div class="raw-material" data-value="methane"><span>Methane<i>CH<sub>4</sub></i></span></div>
+                    <div class="raw-material" data-value="nitrogen"><span>Nitrogen<i>N</i></span></div>
+                    <div class="raw-material" data-value="sulfur-dioxide"><span>Sulfur Dioxide<i>SO<sub>2</sub></i></span></div>
+                    <div class="raw-material" data-value="water"><span>Water<i>H<sub>2</sub>O</i></span></div>
+                </div>
+                <!-- Organics -->
+                <div class="material-type" data-value="organics">Organics</div>
+                <div class="materials-wrapper organics">
+                    <div class="raw-material" data-value="apatite"><span>Apatite<i>Mineral</i></span></div>
+                    <div class="raw-material" data-value="bitumen"><span>Bitumen<i>Hydrocarbon</i></span></div>
+                    <div class="raw-material" data-value="calcite"><span>Calcite<i>Mineral</i></span></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <!-- Metals -->
+                <div class="material-type" data-value="metals">Metals</div>
+                <div class="materials-wrapper metals">
+                    <div class="raw-material" data-value="feldspar"><span>Feldspar<i>Mineral</i></span></div>
+                    <div class="raw-material" data-value="graphite"><span>Graphite<i>Mineral</i></span></div>
+                    <div class="raw-material" data-value="olivine"><span>Olivine<i>Mineral</i></span></div>
+                    <div class="raw-material" data-value="pyroxene"><span>Pyroxene<i>Mineral</i></span></div>
+                    <div class="raw-material" data-value="rhabdite"><span>Rhabdite<i>Mineral</i></span></div>
+                    <div class="raw-material" data-value="taenite"><span>Taenite<i>Mineral</i></span></div>
+                    <div class="raw-material" data-value="troilite"><span>Troilite<i>Mineral</i></span></div>
+                    <div></div>
+                </div>
+                <!-- Rare-Earth -->
+                <div class="material-type" data-value="rare-earth">Rare-Earth</div>
+                <div class="materials-wrapper rare-earth">
+                    <div class="raw-material" data-value="merrillite"><span>Merrillite<i>Mineral</i></span></div>
+                    <div class="raw-material" data-value="xenotime"><span>Xenotime<i>Mineral</i></span></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <!-- Fissiles -->
+                <div class="material-type" data-value="fissiles">Fissiles</div>
+                <div class="materials-wrapper fissiles">
+                    <div class="raw-material" data-value="coffinite"><span>Coffinite<i>Mineral</i></span></div>
+                    <div class="raw-material" data-value="uranite"><span>Uranite<i>Mineral</i></span></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
             </div>
+        </div>
 
-            <div class="footer-about">
-                <div class="title">"Raw Materials" Tool</div>
-                <div class="primary">created by <a href="https://twitter.com/elerium115" target="_blank">@elerium115</a></div>
-                <div class="secondary">hosted by <a href="https://my.adalia.id" target="_blank">my.adalia.id</a></div>
-            </div>
+        <div class="footer-about">
+            <div class="title">Materials & Production Tools</div>
+            <div class="primary">created by <a href="https://twitter.com/elerium115" target="_blank">@elerium115</a></div>
+            <div class="secondary extra-info">for <a href="https://twitter.com/influenceth" target="_blank">@influenceth</a></div>
+            <div class="secondary">hosted by <a href="https://my.adalia.id" target="_blank">my.adalia.id</a></div>
         </div>
     </div>
 

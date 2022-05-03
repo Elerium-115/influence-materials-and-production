@@ -1,10 +1,6 @@
-@font-face {
-    font-family: Jura;
-    src: url("font/Jura-Medium.ttf");
-}
-
 :root {
-    font-size: 0.8rem;
+    --active-bg: #293142;
+    --overactive-bg: #333c52;
 
     --type-c: #5639cc;
     --type-i: #4099ff;
@@ -22,18 +18,8 @@
     --cold-finished-good: #28e682;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Jura, sans-serif;
-    padding: 1rem;
-}
-
-label {
-    cursor: pointer;
+#production-wrapper {
+    font-size: 0.8rem;
 }
 
 /* options */
@@ -41,7 +27,6 @@ label {
 #options {
     display: flex;
     gap: 1rem;
-    margin-top: 1rem;
 }
 
 #options label {
@@ -55,10 +40,11 @@ label {
 }
 
 #options label.checked {
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--active-bg);
 }
 
 #legend span {
+    color: black;
     white-space: nowrap;
     margin-left: 0.5rem;
     padding: 0.1rem 0.4rem;
@@ -85,7 +71,6 @@ label {
 
 #products a {
     color: black;
-    text-decoration: none;
     padding: 0.5rem 1rem;
     border: 1px solid transparent;
     border-radius: 0.5rem;
@@ -122,14 +107,14 @@ label {
 
 #process-variants .item {
     display: inline-block;
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--active-bg);
     margin-top: 1rem;
     padding: 1rem;
     border-radius: 0.5rem;
 }
 
 #process-variants .item .item-name {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
 }
 
@@ -146,7 +131,7 @@ label {
 }
 
 #process-variants .item .process.checked {
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--overactive-bg);
 }
 
 @keyframes flash-error {
@@ -178,9 +163,10 @@ label {
 
 #required-spectrals .spectral-type {
     display: inline-block;
-    width: 2.5rem;
-    line-height: 2.5rem;
     color: white;
+    font-weight: bold;
+    line-height: 2rem;
+    width: 2rem;
     border-radius: 50%;
 }
 
@@ -211,16 +197,19 @@ label {
 #production-chain-items {
     display: inline-block;
     text-align: center;
+    margin-left: -2rem; /* compensate for padding 2rem */
+    padding: 0 2rem;
 }
 
 #production-chain-items .level {
     display: flex;
     justify-content: space-around;
     gap: 1rem;
-    padding: 1.5rem 1rem 1.5rem 0;
+    padding: 1.5rem 0;
 }
 
 #production-chain-items [data-container-id] {
+    color: black;
     border: 1px solid gray;
     border-radius: 0.5rem;
 }
@@ -245,9 +234,8 @@ label {
 #production-chain-items [data-container-id] .item-name {
     display: block;
     color: black;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
-    text-decoration: none;
     padding: 0.5rem;
     border-bottom: 0.3rem solid transparent;
     border-radius: 0.5rem;

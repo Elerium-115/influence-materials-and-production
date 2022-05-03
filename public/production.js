@@ -105,6 +105,7 @@ const processes = [
     { "output": "Sodium Hydroxide",     "process": "Chloralkalai Process",              "inputs": [ "Distilled Water", "Sodium Chloride" ]              },
 ];
 
+const productionWrapper = document.getElementById('production-wrapper');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const productChainConnectionsContainer = document.getElementById('production-chain-connections');
 const processVariantsContainer = document.getElementById('process-variants');
@@ -174,7 +175,7 @@ function getFullchainForItemId(itemContainerId) {
 }
 
 function resetProductionChain() {
-    document.body.classList.remove('has-process-variants');
+    productionWrapper.classList.remove('has-process-variants');
     requiredSpectralsContainer.textContent = '';
     // remove only ".level" elements from "productChainItemsContainer" (keep "#required-spectrals")
     productChainItemsContainer.querySelectorAll('.level').forEach(el => {
@@ -435,7 +436,7 @@ function updateAllConnections() {
 function initializeProcessVariants() {
     // this function is only called when multiple process variants are initially checked
     document.querySelector("#required-spectrals .variants").classList.add('active');
-    document.body.classList.add('has-process-variants');
+    productionWrapper.classList.add('has-process-variants');
     let processVariantsHtml = '';
     for (const itemName in itemsWithProcessVariants) {
         processVariantsHtml += `<div class="item">`;
@@ -545,7 +546,7 @@ window.addEventListener('resize', updateAllConnections);
 
 // source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
 function on(eventType, selector, callback) {
-    document.body.addEventListener(eventType, event => {
+    productionWrapper.addEventListener(eventType, event => {
         if (event.target.matches(selector)) {
             callback(event.target);
         }
@@ -574,9 +575,9 @@ on('change', '#toggle-details', el => {
 // toggle cold colors
 on('change', '#toggle-colors', el => {
     if (el.checked) {
-        document.body.classList.add('cold-colors');
+        productionWrapper.classList.add('cold-colors');
     } else {
-        document.body.classList.remove('cold-colors');
+        productionWrapper.classList.remove('cold-colors');
     }
 });
 
@@ -639,5 +640,3 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
-
-//// TO DO: integrate with the other tools (raw materials + ratios)

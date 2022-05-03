@@ -4,10 +4,8 @@
 }
 
 :root {
-    font-size: 2.2vmin;
-
     --default-bg: #202634;
-    --sidebar-bg: #293042;
+    --active-bg: #293142;
 
     --default-text: #a9acb3;
     --default-text_faded: #a9acb333;
@@ -116,66 +114,14 @@ ul {
     list-style: none;
 }
 
+label {
+    cursor: pointer;
+}
+
 body {
     background-color: var(--default-bg);
     color: var(--default-text);
     font-family: Jura, sans-serif;
-}
-
-.wrapper {
-    display: flex;
-    align-items: stretch;
-    min-height: 100vh;
-}
-
-/* sidebar */
-
-#sidebar {
-    background-color: var(--sidebar-bg);
-    text-align: center;
-    min-width: 260px;
-    max-width: 260px;
-}
-
-.sidebar-content {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-}
-
-.sidebar-brand {
-    display: block;
-    padding: 18px 24px;
-}
-
-.sidebar-brand img {
-    width: 85%;
-}
-
-.sidebar-about {
-    display: block;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    text-align: right;
-    font-size: 16px;
-    padding: 24px;
-}
-
-.sidebar-about .title,
-.footer-about .title {
-    color: var(--brand-text);
-    font-weight: bold;
-}
-
-.sidebar-about .primary, .sidebar-about .secondary,
-.footer-about .primary, .footer-about .secondary {
-    font-size: 0.9em;
-}
-
-.sidebar-about .secondary,
-.footer-about .secondary {
-    opacity: 0.5;
 }
 
 /* main */
@@ -183,7 +129,8 @@ body {
 .main {
     position: relative;
     width: 100%;
-    padding: 5rem 40px 33px 40px;
+    min-height: 100vh;
+    padding: 5rem 2rem 2rem 2rem;
 }
 
 #topbar {
@@ -194,18 +141,33 @@ body {
     display: flex;
     background: var(--default-bg);
     font-size: 0.9rem;
-    border-bottom: 1px solid var(--sidebar-bg);
+    padding-left: 1.5rem;
+    border-bottom: 1px solid var(--active-bg);
     z-index: 1;
 }
 
-#topbar a {
-    display: block;
-    padding: 1rem;
+#topbar > * {
+    display: flex;
+    align-items: center;
+    height: 3rem;
+    padding: 0 1rem;
 }
 
-#topbar a.active {
-    background-color: var(--sidebar-bg);
+#topbar .active {
+    background-color: var(--active-bg);
     color: var(--brand-text);
+}
+
+#topbar #dalia-id-logo:hover {
+    opacity: 0.8;
+}
+
+#topbar #dalia-id-logo img {
+    max-height: 60%;
+}
+
+#topbar #dalia-id-logo .logo-small {
+    display: none;
 }
 
 /* spectral types */
@@ -334,7 +296,7 @@ body {
 /* raw materials */
 
 .material-types {
-    margin-top: 33px;
+    margin-top: 2rem;
 }
 
 .raw-materials {
@@ -435,45 +397,57 @@ body {
 }
 
 .footer-about {
-    display: none;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 2rem;
+}
+
+.footer-about > * {
+    padding: 0 0.5rem;
+}
+
+.footer-about .title {
+    color: var(--brand-text);
+    font-weight: bold;
+}
+
+.footer-about .primary, .footer-about .secondary {
+    font-size: 0.9em;
+}
+
+.footer-about .secondary {
+    opacity: 0.5;
 }
 
 /* screen below 990 px */
 
 @media only screen and (max-width: 990px) {
-    #sidebar {
-        display: none;
-    }
-
-    .main {
-        padding-left: 5vw;
-        padding-right: 5vw;
-    }
-
-    #topbar {
-        margin-left: -5vw; /* match with padding-left of ".main" */
-    }
-
     .spectral-types ul {
         display: flex;
         flex-wrap: wrap;
-        gap: 1.5vw;
+        gap: 2vw;
     }
 
     .spectral-types ul li {
         width: 8.5vmin; /* aspect-ratio 1:1 */
-    }
-
-    .footer-about {
-        display: flex;
-        justify-content: space-evenly;
-        margin-top: 33px;
     }
 }
 
 /* screen below 700 px */
 
 @media only screen and (max-width: 700px) {
+    #topbar {
+        font-size: 0.8rem;
+    }
+
+    #topbar #dalia-id-logo .logo-large {
+        display: none;
+    }
+
+    #topbar #dalia-id-logo .logo-small {
+        display: block;
+    }
+
     .spectral-types ul {
         gap: 3vw;
     }
@@ -505,6 +479,14 @@ body {
     }
 
     .raw-material i {
+        display: none;
+    }
+
+    .footer-about {
+        font-size: 0.8rem;
+    }
+
+    .footer-about .secondary.extra-info {
         display: none;
     }
 }
