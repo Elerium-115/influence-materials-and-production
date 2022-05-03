@@ -14,28 +14,19 @@
     <meta name="twitter:creator" content="@elerium115">
     <meta name="twitter:description" content="View the production chains for each refined material, component, and finished good.">
 </head>
-<body class="cold-colors">
-    <div class="wrapper">
-        <nav id="sidebar">
-            <div class="sidebar-content">
-                <a class="sidebar-brand" href="https://my.adalia.id/">
-                    <img src="https://my.adalia.id/static/my_adalia_id/images/logo.3bca139c953e.png">
-                </a>
-                <div class="sidebar-about">
-                    <div class="title">"Raw Materials" Tool</div>
-                    <div class="primary">created by <a href="https://twitter.com/elerium115" target="_blank">@elerium115</a></div>
-                    <div class="secondary">hosted by <a href="https://my.adalia.id" target="_blank">my.adalia.id</a></div>
-                </div>
-            </div>
+<body>
+    <div class="main">
+        <nav id="topbar">
+            <a href="https://my.adalia.id/" target="_blank" id="dalia-id-logo">
+                <img src="./img/adalia-id-logo.png" alt="my.adalia.id" class="logo-small">
+                <img src="./img/adalia-id-logo-text.webp" alt="my.adalia.id" class="logo-large">
+            </a>
+            <a href="./">Raw Materials</a>
+            <a href="./ratios.html">Materials Ratios</a>
+            <a href="./production.html" class="active">Production Chains</a>
         </nav>
 
-        <div class="main">
-            <nav id="topbar">
-                <a href="./">Raw Materials by Spectral Type</a>
-                <a href="./ratios.html">Ratios of Raw Materials</a>
-                <a href="./production.html" class="active">Production Chains</a>
-            </nav>
-
+        <div id="production-wrapper" class="cold-colors">
             <div id="options">
                 <label for="toggle-details" class="checked">
                     <input type="checkbox" id="toggle-details" checked> Item Details
@@ -52,7 +43,11 @@
             </div>
             <div id="products-wrapper">
                 <div>Show production chain for:</div>
-                <ul id="products"></ul>
+                <div id="products"></div>
+            </div>
+            <div id="process-variants-wrapper">
+                <div>Select alternative production paths:</div>
+                <div id="process-variants"></div>
             </div>
             <div id="production-chain-container">
                 <div id="production-chain-items" class="show-details">
@@ -60,6 +55,15 @@
                 </div>
                 <div id="production-chain-connections"></div>
             </div>
+        </div>
+
+        <div class="footer-about">
+            <div class="title">Materials & Production Tools</div>
+            <div class="primary">created by <a href="https://twitter.com/elerium115" target="_blank">@elerium115</a></div>
+            <div class="secondary extra-info">for <a href="https://twitter.com/influenceth" target="_blank">@influenceth</a></div>
+            <div class="secondary">hosted by <a href="https://my.adalia.id" target="_blank">my.adalia.id</a></div>
+        </div>
+    </div>
 
     <script src="production.js"></script>
 </body>
