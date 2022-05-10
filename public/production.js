@@ -23,86 +23,102 @@ const items = {
     "Coffinite":            { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Fissiles",     "baseSpectrals": ["S"]          },
     "Uranite":              { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Fissiles",     "baseSpectrals": ["M"]          },
 
-    // Food production chain
-    "Fertilizer":           { "itemType": "Refined Material",   "label": "Mixture"  },
-    "Hydrogen Chloride":    { "itemType": "Refined Material",   "label": "HCl"      },
-    "Nitric Acid":          { "itemType": "Refined Material",   "label": "HNO3"     },
-    "Potassium Chloride":   { "itemType": "Refined Material",   "label": "KCl"      },
-    "Soil":                 { "itemType": "Refined Material",   "label": "Mixture"  },
-    "Sulfuric Acid":        { "itemType": "Refined Material",   "label": "H2SO4"    },
-    "Food":                 { "itemType": "Finished Good"       },
-
-    // Steel Sheet production chain
-    "Iron":                 { "itemType": "Refined Material"    },
-    "Iron Oxide":           { "itemType": "Refined Material"    },
-    "Steel":                { "itemType": "Refined Material"    },
-    "Steel Sheet":          { "itemType": "Component"           },
-
-    // Warehouse production chain
-    "Concrete":             { "itemType": "Refined Material"    },
-    "Quicklime":            { "itemType": "Refined Material"    },
-    "Silica":               { "itemType": "Refined Material"    },
-    "Steel Beam":           { "itemType": "Component"           },
-    "Warehouse":            { "itemType": "Finished Good"       },
-
-    // Epoxy production chain
+    // Refined Materials
     "Acetone":              { "itemType": "Refined Material"    },
+    "Acrylonitrile":        { "itemType": "Refined Material"    },
     "Benzene":              { "itemType": "Refined Material"    },
     "Bisphenol A":          { "itemType": "Refined Material"    },
     "Chlorine":             { "itemType": "Refined Material"    },
+    "Concrete":             { "itemType": "Refined Material"    },
     "Distilled Water":      { "itemType": "Refined Material"    },
     "Epichlorohydrin":      { "itemType": "Refined Material"    },
+    "Fertilizer":           { "itemType": "Refined Material",   "label": "Mixture"  },
+    "Hydrogen Chloride":    { "itemType": "Refined Material",   "label": "HCl"      },
+    "Hydrochloric Acid":    { "itemType": "Refined Material"    },
+    "Iron":                 { "itemType": "Refined Material"    },
+    "Iron Oxide":           { "itemType": "Refined Material"    },
+    "Lithium":              { "itemType": "Refined Material"    },
+    "Lithium Carbonate":    { "itemType": "Refined Material"    },
+    "Lithium Chloride":     { "itemType": "Refined Material"    },
+    "Lithium Sulfate":      { "itemType": "Refined Material"    },
     "Naphtha":              { "itemType": "Refined Material"    },
+    "Nitric Acid":          { "itemType": "Refined Material",   "label": "HNO3"     },
     "Oxygen":               { "itemType": "Refined Material"    },
     "Phenol":               { "itemType": "Refined Material"    },
+    "Polyacrylonitrile":    { "itemType": "Refined Material"    },
+    "Potassium Chloride":   { "itemType": "Refined Material",   "label": "KCl"      },
     "Propylene":            { "itemType": "Refined Material"    },
-    // "Propylene Glycol":     { "itemType": "Refined Material"    },
+    // "Propylene Glycol":  { "itemType": "Refined Material"    }, // unused material for Mission 7 (Epoxy production chain)
+    "Quicklime":            { "itemType": "Refined Material"    },
     "Salt":                 { "itemType": "Refined Material"    },
-    // "Sodium Benzoate":      { "itemType": "Refined Material"    },
+    "Silica":               { "itemType": "Refined Material"    },
+    // "Sodium Benzoate":   { "itemType": "Refined Material"    }, // unused material for Mission 7 (Epoxy production chain)
+    "Sodium Carbonate":     { "itemType": "Refined Material"    },
     "Sodium Chloride":      { "itemType": "Refined Material"    },
     "Sodium Hydroxide":     { "itemType": "Refined Material"    },
+    "Soil":                 { "itemType": "Refined Material",   "label": "Mixture"  },
+    "Steel":                { "itemType": "Refined Material"    },
+    "Sulfuric Acid":        { "itemType": "Refined Material",   "label": "H2SO4"    },
+
+    // Components
+    "Steel Beam":           { "itemType": "Component"           },
+    "Steel Sheet":          { "itemType": "Component"           },
+
+    // Finished Goods
     "Epoxy":                { "itemType": "Finished Good"       },
+    "Food":                 { "itemType": "Finished Good"       },
+    "LiPo Battery":         { "itemType": "Finished Good"       },
+    "Warehouse":            { "itemType": "Finished Good"       },
 };
 
 const processes = [
-    // Food production chain
+    // Refined Materials
+    { "output": "Acetone",              "process": "Cumene Process",                    "inputs": [ "Benzene", "Propylene", "Oxygen" ]                  },
+    { "output": "Acrylonitrile",        "process": "Ammoxidation",                      "inputs": [ "Ammonia", "Oxygen", "Propylene" ]                  },
+    { "output": "Benzene",              "process": "Hydro-Cracking",                    "inputs": [ "Bitumen", "Hydrogen" ]                             },
+    { "output": "Bisphenol A",          "process": "Condensation Process",              "inputs": [ "Acetone", "Phenol", "Sulfuric Acid" ]              },
+    { "output": "Chlorine",             "process": "Chloralkalai Process",              "inputs": [ "Distilled Water", "Sodium Chloride" ]              },
+    { "output": "Concrete",             "process": "Concrete Mixing Process",           "inputs": [ "Quicklime", "Silica", "Water" ]                    },
+    { "output": "Distilled Water",      "process": "Desalination",                      "inputs": [ "Water" ]                                           },
+    { "output": "Epichlorohydrin",      "process": "Epichlorohydrin Process",           "inputs": [ "Chlorine", "Propylene", "Sodium Hydroxide" ]       },
     { "output": "Fertilizer",           "process": "Chemical Granulation Process",      "inputs": [ "Apatite", "Nitric Acid", "Potassium Chloride" ]    },
-    { "output": "Food",                 "process": "Growing Process",                   "inputs": [ "Fertilizer", "Soil" ]                              },
     { "output": "Hydrogen Chloride",    "process": "Hydrogen Chloride Process",         "inputs": [ "Apatite", "Sulfuric Acid" ]                        },
-    { "output": "Nitric Acid",          "process": "Ostwald Process",                   "inputs": [ "Ammonia", "Water" ]                                },
-    { "output": "Potassium Chloride",   "process": "Potassium Chloride Process",        "inputs": [ "Calcite", "Feldspar", "Hydrogen Chloride" ]        },
-    { "output": "Soil",                 "process": "Fungal Soil Process",               "inputs": [ "Bitumen", "Water" ]                                },
-    { "output": "Sulfuric Acid",        "process": "Wet Sulfuric Acid Process",         "inputs": [ "Sulfur Dioxide", "Distilled Water" ]               },
-
-    // Steel Sheet production chain
+    { "output": "Hydrochloric Acid",    "process": "Hydrochloric Extraction",           "inputs": [ "Apatite", "Sulfuric Acid" ]                        },
     { "output": "Iron",                 "process": "Direct Reduction",                  "inputs": [ "Carbon Monoxide", "Iron Oxide" ]                   },
     { "output": "Iron",                 "process": "Electrolytic Refining",             "inputs": [ "Taenite" ]                                         },
     { "output": "Iron Oxide",           "process": "Iron Leaching",                     "inputs": [ "Olivine", "Sulfuric Acid" ]                        },
-    { "output": "Steel",                "process": "Arc Furnace Process",               "inputs": [ "Graphite", "Iron" ]                                },
-    { "output": "Steel Sheet",          "process": "Rolling Mill Process",              "inputs": [ "Steel" ]                                           },
-
-    // Warehouse production chain
-    { "output": "Concrete",             "process": "Concrete Mixing Process",           "inputs": [ "Quicklime", "Silica", "Water" ]                    },
-    { "output": "Quicklime",            "process": "Calcination Process",               "inputs": [ "Calcite" ]                                         },
-    { "output": "Silica",               "process": "Enhanced Weathering Process",       "inputs": [ "Carbon Dioxide", "Olivine", "Water" ]              },
-    { "output": "Steel Beam",           "process": "Rolling Mill Process",              "inputs": [ "Steel" ]                                           },
-    { "output": "Warehouse",            "process": "Construction",                      "inputs": [ "Concrete", "Steel Beam", "Steel Sheet" ]           },
-
-    // Epoxy production chain
-    { "output": "Acetone",              "process": "Cumene Process",                    "inputs": [ "Benzene", "Propylene", "Oxygen" ]                  },
-    { "output": "Benzene",              "process": "Hydro Cracking",                    "inputs": [ "Bitumen", "Hydrogen" ]                             },
-    { "output": "Bisphenol A",          "process": "Condensation Process",              "inputs": [ "Acetone", "Phenol", "Sulfuric Acid" ]              },
-    { "output": "Chlorine",             "process": "Chloralkalai Process",              "inputs": [ "Distilled Water", "Sodium Chloride" ]              },
-    { "output": "Distilled Water",      "process": "Desalination Process",              "inputs": [ "Water" ]                                           },
-    { "output": "Epichlorohydrin",      "process": "Epichlorohydrin Process",           "inputs": [ "Chlorine", "Propylene", "Sodium Hydroxide" ]       },
-    { "output": "Epoxy",                "process": "Epoxy Mixing",                      "inputs": [ "Bisphenol A", "Epichlorohydrin" ]                  },
-    { "output": "Naphtha",              "process": "Hydro Cracking",                    "inputs": [ "Bitumen", "Hydrogen" ]                             },
+    { "output": "Lithium",              "process": "Lithium Electrolysis",              "inputs": [ "Potassium Chloride", "Lithium Chloride" ]          },
+    { "output": "Lithium Carbonate",    "process": "Lithium Carbonate Process",         "inputs": [ "Sodium Carbonate", "Lithium Sulfate" ]             },
+    { "output": "Lithium Carbonate",    "process": "Selective Crystalization",          "inputs": [ "Salt" ]                                            },
+    { "output": "Lithium Chloride",     "process": "Lithium Chloride Process",          "inputs": [ "Hydrochloric Acid", "Lithium Carbonate" ]          },
+    { "output": "Lithium Sulfate",      "process": "Lithium Sulfate Extraction",        "inputs": [ "Pyroxene", "Sulfuric Acid" ]                       },
+    { "output": "Naphtha",              "process": "Hydro-Cracking",                    "inputs": [ "Bitumen", "Hydrogen" ]                             },
+    { "output": "Nitric Acid",          "process": "Ostwald Process",                   "inputs": [ "Ammonia", "Water" ]                                },
     { "output": "Oxygen",               "process": "Water Electrolysis",                "inputs": [ "Water" ]                                           },
     { "output": "Phenol",               "process": "Cumene Process",                    "inputs": [ "Benzene", "Propylene", "Oxygen" ]                  },
-    { "output": "Propylene",            "process": "Steam Cracking",                    "inputs": [ "Distilled Water", "Naphtha" ]                      },
-    { "output": "Salt",                 "process": "Desalination Process",              "inputs": [ "Water" ]                                           },
-    { "output": "Sodium Chloride",      "process": "Selective Crystalization Process",  "inputs": [ "Salt" ]                                            },
+    { "output": "Polyacrylonitrile",    "process": "Polymerization",                    "inputs": [ "Sulfur Dioxide", "Acrylonitrile" ]                 },
+    { "output": "Potassium Chloride",   "process": "Selective Crystalization",          "inputs": [ "Salt" ]                                            },
+    { "output": "Potassium Chloride",   "process": "Potassium Chloride Process",        "inputs": [ "Calcite", "Feldspar", "Hydrogen Chloride" ]        },
+    { "output": "Propylene",            "process": "Steam-Cracking",                    "inputs": [ "Distilled Water", "Naphtha" ]                      },
+    { "output": "Quicklime",            "process": "Calcination Process",               "inputs": [ "Calcite" ]                                         },
+    { "output": "Salt",                 "process": "Desalination",                      "inputs": [ "Water" ]                                           },
+    { "output": "Silica",               "process": "Enhanced Weathering Process",       "inputs": [ "Carbon Dioxide", "Olivine", "Water" ]              },
+    { "output": "Sodium Carbonate",     "process": "Solvay Process",                    "inputs": [ "Water", "Calcite", "Sodium Chloride" ]             },
+    { "output": "Sodium Chloride",      "process": "Selective Crystalization",          "inputs": [ "Salt" ]                                            },
     { "output": "Sodium Hydroxide",     "process": "Chloralkalai Process",              "inputs": [ "Distilled Water", "Sodium Chloride" ]              },
+    { "output": "Soil",                 "process": "Fungal Soil Process",               "inputs": [ "Bitumen", "Water" ]                                },
+    { "output": "Steel",                "process": "Arc Furnace Process",               "inputs": [ "Graphite", "Iron" ]                                },
+    { "output": "Sulfuric Acid",        "process": "Wet Sulfuric Acid Process",         "inputs": [ "Sulfur Dioxide", "Distilled Water" ]               },
+
+    // Components
+    { "output": "Steel Beam",           "process": "Rolling Mill Process",              "inputs": [ "Steel" ]                                           },
+    { "output": "Steel Sheet",          "process": "Rolling Mill Process",              "inputs": [ "Steel" ]                                           },
+
+    // Finished Goods
+    { "output": "Epoxy",                "process": "Epoxy Mixing",                      "inputs": [ "Bisphenol A", "Epichlorohydrin" ]                  },
+    { "output": "Food",                 "process": "Growing Process",                   "inputs": [ "Fertilizer", "Soil" ]                              },
+    { "output": "LiPo Battery",         "process": "LiPo Battery Assembly",             "inputs": [ "Graphite", "Lithium", "Polyacrylonitrile" ]        },
+    { "output": "Warehouse",            "process": "Construction",                      "inputs": [ "Concrete", "Steel Beam", "Steel Sheet" ]           },
 ];
 
 const productionWrapper = document.getElementById('production-wrapper');
@@ -272,7 +288,7 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
         const itemContainer = createItemContainer(itemName, itemData, parentContainerId);
         levelContainer.appendChild(itemContainer);
         itemContainer.innerHTML += `<div class="details process-name">via Mining</div>`;
-        itemContainer.innerHTML += `<div class="details inputs">from: ${itemData.baseSpectrals.join(', ')}</div>`;
+        itemContainer.innerHTML += `<div class="details inputs">from: ${itemData.baseSpectrals.join(' or ')}</div>`;
         if (parentContainerId !== 0) {
             // after rendering a raw material, trace back its upchain until the top-level item
             generateUpchainFromRawMaterial(itemContainer);
@@ -640,3 +656,13 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
+
+//// TO DO: HOW TO inform when C / I types are optional?
+////        - Chlorine requires only Water (C/I) => C and I both optional
+////        - Concrete requires e.g. Water (C/I), and only C is required for other raws => only I optional
+////        - Iron (v1) requires e.g. Water (C/I), and only I is required for other raws => only C optional
+////        - Acetone requires Water (C/I), but also other raws which require BOTH C+I => C/I NOT optional
+
+//// TO DO: rework visuals using a third-party tool
+////        - google "Neo4j" / "Sankey"
+////            https://www.mssqltips.com/sqlservertip/5288/analyze-entity-data-flow-in-power-bi-desktop-using-sankey-charts/
