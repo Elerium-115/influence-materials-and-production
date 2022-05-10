@@ -5,7 +5,7 @@
 
 :root {
     --default-bg: #202634;
-    --active-bg: #293142;
+    --dark-bg: #10131a;
 
     --default-text: #a9acb3;
     --default-text_faded: #a9acb333;
@@ -139,10 +139,9 @@ body {
     margin-left: -40px; /* match with padding-left of ".main" */
     width: 100%;
     display: flex;
-    background: var(--default-bg);
+    background: var(--dark-bg);
     font-size: 0.9rem;
     padding-left: 1.5rem;
-    border-bottom: 1px solid var(--active-bg);
     z-index: 1;
 }
 
@@ -154,7 +153,7 @@ body {
 }
 
 #topbar .active {
-    background-color: var(--active-bg);
+    background-color: var(--default-bg);
     color: var(--brand-text);
 }
 
