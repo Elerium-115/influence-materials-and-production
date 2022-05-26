@@ -65,13 +65,13 @@
 #products {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.6rem;
     margin-top: 1rem;
 }
 
 #products a {
     color: black;
-    padding: 0.5rem 1rem;
+    padding: 0.2rem 0.6rem;
     border: 1px solid transparent;
     border-radius: 0.5rem;
 }
@@ -103,14 +103,18 @@
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    margin-top: 1rem;
 }
 
 #process-variants .item {
     display: inline-block;
     background: var(--active-bg);
-    margin-top: 1rem;
     padding: 1rem;
     border-radius: 0.5rem;
+}
+
+#process-variants .item.irrelevant {
+    display: none;
 }
 
 #process-variants .item .item-name {
@@ -302,7 +306,7 @@
 
 #required-raw-materials ul li {
     display: grid;
-    grid-template-columns: 9rem 8rem 1fr;
+    grid-template-columns: 8rem 4rem 1fr;
     margin-top: 0.1rem;
     padding-left: 1rem; /* match with margin-left from "#required-raw-materials ul" */
     padding-right: 1rem; /* match with margin-right from "#required-raw-materials ul" */

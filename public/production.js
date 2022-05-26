@@ -332,6 +332,7 @@ function createItemContainer(itemName, itemData, parentContainerId, inputsCount 
     itemContainer.dataset.parentContainerId = parentContainerId;
     itemContainer.dataset.inputsCount = inputsCount;
     itemContainer.dataset.longestSubchainLength = 1;
+    itemContainer.dataset.itemName = itemName;
     const itemNameCompact = itemName.replace(/\s+/g, '');
     itemContainer.innerHTML = `<a href="#${itemNameCompact}" class="item-name">${itemName}</a>`;
     switch (itemData.itemType) {
@@ -595,6 +596,20 @@ function updateAllProcessVariants() {
         const processCode = elProcess.id;
         // disable all occurrences of this process in the production chain, along with their subchains
         document.querySelectorAll(`[data-process-code=${processCode}]`).forEach(disableItemContainerAndSubchain);
+    });
+    /**
+     * hide items from process-variants which have become irrelevant,
+     * due to all their occurrences in the production chain being disabled
+     * - e.g. for "Neodymium", de-selecting the "Lithium" variant leads to the other 2 items
+     * from process-variants becoming irrelevant ("Potassium Chloride", "Lithium Carbonate")
+     */
+    processVariantsContainer.querySelectorAll(".item").forEach(elItem => {
+        const itemName = elItem.querySelector(".item-name").textContent;
+        if (document.querySelector(`[data-item-name='${itemName}']:not(.disabled)`)) {
+            elItem.classList.remove('irrelevant');
+        } else {
+            elItem.classList.add('irrelevant');
+        }
     });
 }
 
