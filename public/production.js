@@ -1,4 +1,30 @@
 
+// raw materials sorted by material-type (Volatiles > Organics > Metals > Rare-Earth > Fissiles)
+const rawMaterialsSorted = [
+    "Ammonia",
+    "Carbon Dioxide",
+    "Carbon Monoxide",
+    "Hydrogen",
+    "Methane",
+    "Nitrogen",
+    "Sulfur Dioxide",
+    "Water",
+    "Apatite",
+    "Bitumen",
+    "Calcite",
+    "Feldspar",
+    "Graphite",
+    "Olivine",
+    "Pyroxene",
+    "Rhabdite",
+    "Taenite",
+    "Troilite",
+    "Merrillite",
+    "Xenotime",
+    "Coffinite",
+    "Uranite",
+];
+
 const items = {
     "Ammonia":                  { "itemType": "Raw Material",       "label": "NH3",         "materialType": "Volatiles",    "baseSpectrals": ["I"]          },
     "Carbon Dioxide":           { "itemType": "Raw Material",       "label": "CO2",         "materialType": "Volatiles",    "baseSpectrals": ["C", "I"]     },
@@ -146,9 +172,17 @@ const productionWrapper = document.getElementById('production-wrapper');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const productChainConnectionsContainer = document.getElementById('production-chain-connections');
 const processVariantsContainer = document.getElementById('process-variants');
+const requiredRawMaterialsContainer = document.getElementById('required-raw-materials');
 const requiredSpectralsContainer = document.getElementById('required-spectrals');
 
 let itemsWithProcessVariants = {};
+
+/**
+ * raw materials required for the entire production chain, counting each occurrence per raw material
+ * (including optional raw materials, if any item in the production chain has process variants)
+ */
+let requiredRawMaterials = {};
+let requiredRawMaterialsMaxCounter = 0;
 
 /**
  * spectral-types required for the entire production chain
@@ -190,6 +224,11 @@ itemNamesSorted.forEach(itemName => {
     document.getElementById('products').appendChild(listItem);
 });
 
+// e.g. "Carbon Dioxide" => "carbon-dioxide"
+function getItemNameSafe(itemName) {
+    return itemName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
+}
+
 function getItemContainerById(itemContainerId) {
     return document.querySelector(`[data-container-id='${itemContainerId}']`);
 }
@@ -213,6 +252,7 @@ function getFullchainForItemId(itemContainerId) {
 
 function resetProductionChain() {
     productionWrapper.classList.remove('has-process-variants');
+    requiredRawMaterialsContainer.textContent = '';
     requiredSpectralsContainer.textContent = '';
     // remove only ".level" elements from "productChainItemsContainer" (keep "#required-spectrals")
     productChainItemsContainer.querySelectorAll('.level').forEach(el => {
@@ -220,6 +260,8 @@ function resetProductionChain() {
     });
     productChainConnectionsContainer.textContent = '';
     itemsWithProcessVariants = {};
+    requiredRawMaterials = {};
+    requiredRawMaterialsMaxCounter = 0;
     requiredSpectrals = [];
     uniqueContainerId = 0;
     maxLevel = 0;
@@ -237,14 +279,37 @@ function resetFadedItemsAndConnections() {
     updateAllConnections();
 }
 
+function updateRequiredRawMaterialsHtml() {
+    let requiredRawMaterialsHtml = '<div>Raw materials required for this production chain</div>';
+    requiredRawMaterialsHtml += '<div class="variants">(including alternative production paths)</div>';
+    requiredRawMaterialsHtml += '<ul>';
+    for (const rawMaterial of rawMaterialsSorted) {
+        if (!requiredRawMaterials[rawMaterial]) {
+            continue;
+        }
+        const counter = requiredRawMaterials[rawMaterial];
+        const percent = 100 * counter / requiredRawMaterialsMaxCounter;
+        requiredRawMaterialsHtml += `<li class="${getItemNameSafe(items[rawMaterial].materialType)} active" data-value="${getItemNameSafe(rawMaterial)}">
+                <div class="label">${rawMaterial}</div>
+                <div class="counter">${counter}</div>
+                <div class="ratio-cell">
+                    <div class="ratio-bar" style="width: ${percent}%;"></div>
+                </div>
+            </li>
+            `;
+    }
+    requiredRawMaterialsHtml += '</ul>';
+    requiredRawMaterialsContainer.innerHTML = requiredRawMaterialsHtml;
+}
+
 function updateRequiredSpectralsHtml() {
-    let requiredSpectralsHtml = '<div class="line spectral-types">';
+    let requiredSpectralsHtml = '<div class="spectral-types">';
     requiredSpectrals.forEach(spectralType => {
         requiredSpectralsHtml += `<span class="spectral-type type-${spectralType}">${spectralType}</span>`;
     });
     requiredSpectralsHtml += '</div>';
-    requiredSpectralsHtml += '<div class="line">spectral-types required for this production chain</div>';
-    requiredSpectralsHtml += '<div class="line variants">(including alternative production paths)</div>';
+    requiredSpectralsHtml += '<div>spectral-types required for this production chain</div>';
+    requiredSpectralsHtml += '<div class="variants">(including alternative production paths)</div>';
     requiredSpectralsContainer.innerHTML = requiredSpectralsHtml;
 }
 
@@ -314,11 +379,11 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
             // after rendering a raw material, trace back its upchain until the top-level item
             generateUpchainFromRawMaterial(itemContainer);
         }
+        requiredRawMaterials[itemName] = requiredRawMaterials[itemName] ? requiredRawMaterials[itemName] + 1 : 1;
+        requiredRawMaterialsMaxCounter = Math.max(requiredRawMaterialsMaxCounter, requiredRawMaterials[itemName]);
         itemData.baseSpectrals.forEach(baseSpectral => {
             if (!requiredSpectrals.includes(baseSpectral)) {
                 requiredSpectrals.push(baseSpectral);
-                requiredSpectrals.sort();
-                updateRequiredSpectralsHtml();
             }
         });
     } else {
@@ -472,7 +537,8 @@ function updateAllConnections() {
 
 function initializeProcessVariants() {
     // this function is only called when multiple process variants are initially checked
-    document.querySelector("#required-spectrals .variants").classList.add('active');
+    requiredRawMaterialsContainer.querySelector(".variants").classList.add('active');
+    requiredSpectralsContainer.querySelector(".variants").classList.add('active');
     productionWrapper.classList.add('has-process-variants');
     let processVariantsHtml = '';
     for (const itemName in itemsWithProcessVariants) {
@@ -532,20 +598,27 @@ function updateAllProcessVariants() {
     });
 }
 
-function updateRequiredSpectrals() {
-    // first disable all required spectrals, and the ".variants" disclaimer
-    document.querySelectorAll("#required-spectrals .spectral-type").forEach(spectralType => {
+function updateRequiredSpectralsAndRawMaterials() {
+    // first disable all required spectrals, and the ".variants" disclaimers
+    requiredSpectralsContainer.querySelectorAll(".spectral-type").forEach(spectralType => {
         spectralType.classList.add('disabled');
     });
-    document.querySelector("#required-spectrals .variants").classList.remove('active');
-    // then enable required spectrals for raw materials which are not currently disabled
+    requiredRawMaterialsContainer.querySelector(".variants").classList.remove('active');
+    requiredSpectralsContainer.querySelector(".variants").classList.remove('active');
+    // then update the required raw materials which are not currently disabled, and enable their spectrals
+    requiredRawMaterials = {};
+    requiredRawMaterialsMaxCounter = 0;
     document.querySelectorAll(".item-type-raw-material:not(.disabled)").forEach(rawMaterialContainer => {
         const rawMaterialName = rawMaterialContainer.querySelector("a").textContent;
+        requiredRawMaterials[rawMaterialName] = requiredRawMaterials[rawMaterialName] ? requiredRawMaterials[rawMaterialName] + 1 : 1;
+        requiredRawMaterialsMaxCounter = Math.max(requiredRawMaterialsMaxCounter, requiredRawMaterials[rawMaterialName]);
         items[rawMaterialName].baseSpectrals.forEach(baseSpectral => {
-            document.querySelector(`#required-spectrals .spectral-type.type-${baseSpectral}`).classList.remove('disabled');
+            requiredSpectralsContainer.querySelector(`.spectral-type.type-${baseSpectral}`).classList.remove('disabled');
         });
     });
-    // show the ".variants" disclaimer, if multiple process variants are currently checked for any non-disabled item
+    // then update the required raw materials HTML, based on their updated counters
+    updateRequiredRawMaterialsHtml();
+    // show the ".variants" disclaimers, if multiple process variants are currently checked for any non-disabled item
     document.querySelectorAll(".process.checked input").forEach(elProcess => {
         const processCode = elProcess.id;
         if (!document.querySelector(`[data-process-code=${processCode}]:not(.disabled)`)) {
@@ -554,7 +627,8 @@ function updateRequiredSpectrals() {
         }
         const elItem = elProcess.closest(".item");
         if (elItem.querySelectorAll(".process.checked").length >= 2) {
-            document.querySelector("#required-spectrals .variants").classList.add('active');
+            requiredRawMaterialsContainer.querySelector(".variants").classList.add('active');
+            requiredSpectralsContainer.querySelector(".variants").classList.add('active');
             return;
         }
     });
@@ -564,6 +638,9 @@ function selectItemByName(itemName) {
     resetProductionChain();
     renderItem(itemName);
     // done rendering all items recursively
+    updateRequiredRawMaterialsHtml();
+    requiredSpectrals.sort();
+    updateRequiredSpectralsHtml();
     if (Object.keys(itemsWithProcessVariants).length) {
         initializeProcessVariants();
     }
@@ -621,7 +698,7 @@ on('change', '#toggle-colors', el => {
 // toggle process variant
 on('change', '.process input', el => {
     updateAllProcessVariants();
-    updateRequiredSpectrals();
+    updateRequiredSpectralsAndRawMaterials();
     updateAllConnections();
     if (el.checked) {
         // fake "mousenter" on label, to highlight items in the production chain for this process variant

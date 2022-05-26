@@ -149,10 +149,6 @@
     display: inline-block;
 }
 
-#required-spectrals .line {
-    text-align: center;
-}
-
 #required-spectrals .spectral-types {
     display: flex;
     justify-content: center;
@@ -276,6 +272,121 @@
 #production-chain-items [data-container-id], #production-chain-connections * {
     transition: opacity 500ms;
 }
+
+/* required raw materials */
+
+#required-raw-materials {
+    background: var(--active-bg);
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+#required-raw-materials > div {
+    font-size: 1rem;
+}
+
+#required-raw-materials .variants {
+    display: none;
+}
+
+#required-raw-materials .variants.active {
+    display: block;
+}
+
+#required-raw-materials ul {    
+    margin-top: 1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+}
+
+#required-raw-materials ul li {
+    display: grid;
+    grid-template-columns: 9rem 8rem 1fr;
+    margin-top: 0.1rem;
+    padding-left: 1rem; /* match with margin-left from "#required-raw-materials ul" */
+    padding-right: 1rem; /* match with margin-right from "#required-raw-materials ul" */
+}
+
+/* keep margin-top (from "#required-raw-materials ul li") only for the first "li" of each material-type group */
+#required-raw-materials ul li.volatiles ~ li.volatiles,
+#required-raw-materials ul li.organics ~ li.organics,
+#required-raw-materials ul li.metals ~ li.metals,
+#required-raw-materials ul li.rare-earth ~ li.rare-earth,
+#required-raw-materials ul li.fissiles ~ li.fissiles {
+    margin-top: 0;
+}
+
+#required-raw-materials ul li:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+#required-raw-materials ul li > * {
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+}
+
+#required-raw-materials ul li .label {
+    white-space: nowrap;
+}
+
+#required-raw-materials ul li:not(.active) .label,
+#required-raw-materials ul li:not(.active) .counter {
+    color:var(--default-text_faded);
+}
+
+#required-raw-materials ul li .counter {
+    text-align: right;
+    white-space: nowrap;
+    padding-right: 2rem;
+}
+
+#required-raw-materials ul li .counter::before {
+    content: "x ";
+    margin-left: 0.5rem;
+}
+
+#required-raw-materials ul li .ratio-cell {
+    display: flex;
+    align-items: center;
+    width: 50%;
+}
+
+#required-raw-materials ul li .ratio-bar {
+    width: 2%; /* default minimum, overwritten with ratio for each raw-material */
+    height: 0.2rem;
+}
+
+#required-raw-materials ul li:not(.active) .ratio-bar {
+    opacity: 0.2;
+}
+
+#required-raw-materials ul li.volatiles .ratio-bar { background-color: var(--volatiles); }
+#required-raw-materials ul li.organics .ratio-bar { background-color: var(--organics); }
+#required-raw-materials ul li.metals .ratio-bar { background-color: var(--metals); }
+#required-raw-materials ul li.rare-earth .ratio-bar { background-color: var(--rare-earth); }
+#required-raw-materials ul li.fissiles .ratio-bar { background-color: var(--fissiles); }
+
+/* background gradients for the entire row - 1st cell */
+#required-raw-materials ul li.volatiles .label { background: linear-gradient(-90deg, var(--volatiles_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.organics .label { background: linear-gradient(-90deg, var(--organics_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.metals .label { background: linear-gradient(-90deg, var(--metals_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.rare-earth .label { background: linear-gradient(-90deg, var(--rare-earth_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.fissiles .label { background: linear-gradient(-90deg, var(--fissiles_faded) 0%, transparent 100%); }
+
+/* background gradients for the entire row - 2nd cell */
+#required-raw-materials ul li.volatiles .counter { background: var(--volatiles_faded); }
+#required-raw-materials ul li.organics .counter { background: var(--organics_faded); }
+#required-raw-materials ul li.metals .counter { background: var(--metals_faded); }
+#required-raw-materials ul li.rare-earth .counter { background: var(--rare-earth_faded); }
+#required-raw-materials ul li.fissiles .counter { background: var(--fissiles_faded); }
+
+/* background gradients for the entire row - 3rd cell */
+#required-raw-materials ul li.volatiles .ratio-cell { background: linear-gradient(90deg, var(--volatiles_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.organics .ratio-cell { background: linear-gradient(90deg, var(--organics_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.metals .ratio-cell { background: linear-gradient(90deg, var(--metals_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.rare-earth .ratio-cell { background: linear-gradient(90deg, var(--rare-earth_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.fissiles .ratio-cell { background: linear-gradient(90deg, var(--fissiles_faded) 0%, transparent 100%); }
 
 /* cold colors */
 
