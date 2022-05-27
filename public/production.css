@@ -147,11 +147,6 @@
 }
 
 /* required spectrals */
-/* (inside "#production-chain-items") */
-
-#required-spectrals {
-    display: inline-block;
-}
 
 #required-spectrals .spectral-types {
     display: flex;
@@ -194,18 +189,28 @@
     margin-top: 2rem;
 }
 
-#production-chain-items {
+#production-chain-items.vertical-layout {
     display: inline-block;
-    text-align: center;
-    margin-left: -2rem; /* compensate for padding 2rem */
-    padding: 0 2rem;
+}
+
+#production-chain-items.horizontal-layout {
+    display: flex;
+    gap: 4rem;
+    padding: 1.5rem 0;
 }
 
 #production-chain-items .level {
     display: flex;
     justify-content: space-around;
     gap: 1rem;
+}
+
+#production-chain-items.vertical-layout .level {
     padding: 1.5rem 0;
+}
+
+#production-chain-items.horizontal-layout .level {
+    flex-direction: column;
 }
 
 #production-chain-items [data-container-id] {

@@ -175,6 +175,8 @@ const processVariantsContainer = document.getElementById('process-variants');
 const requiredRawMaterialsContainer = document.getElementById('required-raw-materials');
 const requiredSpectralsContainer = document.getElementById('required-spectrals');
 
+let verticalLayout = true;
+
 let itemsWithProcessVariants = {};
 
 /**
@@ -476,12 +478,22 @@ function getOffset(el) {
 function connectContainers(el1, el2, color, thickness, faded) {
     const off1 = getOffset(el1);
     const off2 = getOffset(el2);
-    // const x1 = off1.left + off1.width;
-    const x1 = off1.left + (off1.width / 2); //// my improvement to connect the mid-points, instead of corners
-    const y1 = off1.top + off1.height;
-    // const x2 = off2.left + off2.width;
-    const x2 = off2.left + (off2.width / 2); //// my improvement to connect the mid-points, instead of corners
-    const y2 = off2.top;
+    let x1, y1, x2, y2;
+    if (verticalLayout) {
+        // connect the mid-bottom side of the parent element
+        x1 = off1.left + (off1.width / 2);
+        y1 = off1.top + off1.height;
+        // connect the mid-top side of the child element
+        x2 = off2.left + (off2.width / 2);
+        y2 = off2.top;
+    } else {
+        // connect the mid-right side of the parent element
+        x1 = off1.left + off1.width;
+        y1 = off1.top + (off1.height / 2);
+        // connect the mid-left side of the child element
+        x2 = off2.left;
+        y2 = off2.top + (off2.height / 2);
+    }
     const length = Math.sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)));
     const cx = ((x1 + x2) / 2) - (length / 2);
     const cy = ((y1 + y2) / 2) - (thickness / 2);
@@ -691,6 +703,20 @@ on('change', 'label > input', el => {
     }
 });
 
+// toggle vertical vs. horizontal layout of the production chain
+on('change', '#toggle-vertical-layout', el => {
+    if (el.checked) {
+        verticalLayout = true;
+        productChainItemsContainer.classList.remove('horizontal-layout');
+        productChainItemsContainer.classList.add('vertical-layout');
+    } else {
+        verticalLayout = false;
+        productChainItemsContainer.classList.remove('vertical-layout');
+        productChainItemsContainer.classList.add('horizontal-layout');
+    }
+    updateAllConnections();
+});
+
 // toggle item details
 on('change', '#toggle-details', el => {
     if (el.checked) {
@@ -778,4 +804,5 @@ setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
 //// TO DO: rework visuals using a third-party tool
 ////        - google "Neo4j" / "Sankey"
+////            https://neo4j.com/product/bloom/
 ////            https://www.mssqltips.com/sqlservertip/5288/analyze-entity-data-flow-in-power-bi-desktop-using-sankey-charts/
