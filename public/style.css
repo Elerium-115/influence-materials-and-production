@@ -136,7 +136,7 @@ body {
 #topbar {
     position: fixed;
     top: 0;
-    margin-left: -40px; /* match with padding-left of ".main" */
+    margin-left: -2rem; /* match with padding-left of ".main" */
     width: 100%;
     display: flex;
     background: var(--dark-bg);
