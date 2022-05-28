@@ -11,6 +11,8 @@
 
     --raw-material-gradient: #1c1c1c;
     --raw-material: #373737;
+    --process-gradient: #241033;
+    --process: #482066;
     --refined-material-gradient: #05151b;
     --refined-material: #0a2936;
     --component-gradient: #0e2c37;
@@ -70,6 +72,7 @@
 }
 
 #legend .legend-raw-material { background: var(--raw-material); }
+#legend .legend-process { background: var(--process); }
 #legend .legend-refined-material { background: var(--refined-material); }
 #legend .legend-component { background: var(--component); }
 #legend .legend-finished-good { background: var(--finished-good); }
@@ -96,6 +99,7 @@
 }
 
 #products a:hover {
+    text-decoration: none;
     border-color: var(--item-name);
     opacity: 1;
 }
@@ -168,57 +172,22 @@
     animation: flash-error 150ms;
 }
 
-/* required spectrals */
-
-#required-spectrals .spectral-types {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-#required-spectrals .spectral-type {
-    display: inline-block;
-    color: white;
-    font-weight: bold;
-    line-height: 2rem;
-    width: 2rem;
-    border-radius: 50%;
-}
-
-#required-spectrals .spectral-type.disabled {
-    display: none;
-}
-
-#required-spectrals .spectral-type.type-C { background: var(--type-c); }
-#required-spectrals .spectral-type.type-I { background: var(--type-i); }
-#required-spectrals .spectral-type.type-M { background: var(--type-m); }
-#required-spectrals .spectral-type.type-S { background: var(--type-s); }
-
-#required-spectrals .variants {
-    display: none;
-}
-
-#required-spectrals .variants.active {
-    display: block;
-}
-
 /* production chain */
 
-#production-chain-container {
+#production-chain-wrapper {
     text-align: center;
     margin-top: 2rem;
 }
 
-#production-chain-items.vertical-layout {
-    display: inline-block;
-}
-
 #production-chain-items.horizontal-layout {
     display: flex;
-    gap: 4rem;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
     padding: 1.5rem 0;
+}
+
+#production-chain-items.vertical-layout {
+    display: inline-block;
 }
 
 #production-chain-items .level {
@@ -227,27 +196,25 @@
     gap: 1rem;
 }
 
-#production-chain-items.vertical-layout .level {
-    padding: 1.5rem 0;
-}
-
 #production-chain-items.horizontal-layout .level {
     flex-direction: column;
 }
 
 #production-chain-items [data-container-id] {
-    color: black;
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
+    color: black;
     /* https://css-tricks.com/snippets/css/multiple-borders/ */
     background-clip: content-box !important;
     padding: 0.1rem;
+    border: 1px solid gray;
+    border-radius: 0.5rem;
 }
+
+/* the gap between levels must be applied only for levels with VISIBLE items, after disabling an alternative production path */
+#production-chain-items.horizontal-layout [data-container-id] { margin: 0 1.5rem; }
+#production-chain-items.vertical-layout [data-container-id] { margin: 1.5rem 0; }
 
 #production-chain-items.faded [data-container-id] {
     opacity: 0.2;
@@ -262,12 +229,16 @@
 }
 
 #production-chain-items [data-container-id].item-type-raw-material { background: linear-gradient(180deg, var(--raw-material-gradient) 0%, var(--raw-material) 100%); }
+#production-chain-items [data-container-id].item-type-process { background: linear-gradient(180deg, var(--process-gradient) 0%, var(--process) 100%); }
 #production-chain-items [data-container-id].item-type-refined-material { background: linear-gradient(180deg, var(--refined-material-gradient) 0%, var(--refined-material) 100%); }
 #production-chain-items [data-container-id].item-type-component { background: linear-gradient(180deg, var(--component-gradient) 0%, var(--component) 100%); }
 #production-chain-items [data-container-id].item-type-finished-good { background: linear-gradient(180deg, var(--finished-good-gradient) 0%, var(--finished-good) 100%); }
 
 #production-chain-items [data-container-id] .item-name {
     flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--item-name);
     font-size: 0.9rem;
     padding: 0.5rem;
@@ -275,6 +246,11 @@
 
 #production-chain-items #level_1 [data-container-id] .item-name {
     color: white;
+}
+
+#production-chain-items [data-container-id] .process-name {
+    color: var(--item-name);
+    padding: 0.5rem;
 }
 
 #production-chain-items [data-container-id] .spectral-types {
@@ -306,25 +282,60 @@
     transition: opacity 500ms;
 }
 
-/* required raw materials */
+/* required spectral types and raw materials */
 
-#required-raw-materials {
+#required-spectrals-and-raw-materials {
+    display: inline-block;
     background: var(--active-bg);
     margin-top: 1rem;
     padding: 1rem;
     border-radius: 0.5rem;
 }
 
-#required-raw-materials > div {
-    font-size: 0.9rem;
+#required-spectrals-wrapper {
+    display: flex;
 }
 
-#required-raw-materials .variants {
+#required-spectrals {
+    /* same width and padding, as the first 2 columns from "#required-raw-materials ul li" */
+    width: 14rem;
+    padding-right: 2rem;
+}
+
+#required-spectrals .spectral-types {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+#required-spectrals .spectral-type {
+    color: white;
+    font-weight: bold;
+    line-height: 2rem;
+    text-align: center;
+    width: 2rem;
+    border-radius: 50%;
+}
+
+#required-spectrals .spectral-type.disabled {
     display: none;
 }
 
-#required-raw-materials .variants.active {
+#required-spectrals .spectral-type.type-C { background: var(--type-c); }
+#required-spectrals .spectral-type.type-I { background: var(--type-i); }
+#required-spectrals .spectral-type.type-M { background: var(--type-m); }
+#required-spectrals .spectral-type.type-S { background: var(--type-s); }
+
+#required-text .variants {
+    display: none;
+}
+
+#required-text .variants.active {
     display: block;
+}
+
+#required-raw-materials > div {
+    font-size: 0.9rem;
 }
 
 #required-raw-materials ul {    
@@ -335,7 +346,7 @@
 
 #required-raw-materials ul li {
     display: grid;
-    grid-template-columns: 8rem 4rem 1fr;
+    grid-template-columns: 10rem 4rem 1fr;
     margin-top: 0.1rem;
     padding-left: 1rem; /* match with margin-left from "#required-raw-materials ul" */
     padding-right: 1rem; /* match with margin-right from "#required-raw-materials ul" */
@@ -382,7 +393,6 @@
 #required-raw-materials ul li .ratio-cell {
     display: flex;
     align-items: center;
-    width: 50%;
 }
 
 #required-raw-materials ul li .ratio-bar {
