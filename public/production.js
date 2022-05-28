@@ -352,8 +352,8 @@ function createProcessContainer(processData, parentContainerId) {
     processContainer.dataset.longestSubchainLength = 1;
     processContainer.dataset.processName = processName;
     processContainer.dataset.processCode = processData.output.replace(/\s+/g, '') + '-' + processData.process.replace(/\s+/g, '');
-    processContainer.innerHTML = `<span class="process-name">${processName}</span>`;
-    processContainer.classList.add('item-type-process');
+    processContainer.innerHTML = `<span class="process-name">${processName.replace(/\s+/g, '<br>')}</span>`;
+    processContainer.classList.add('item-type-process', 'hexagon');
     return processContainer;
 }
 
@@ -789,10 +789,6 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
-
-//// TO DO: style processes as hexagons
-////        https://stackoverflow.com/questions/17896791/hexagon-shape-with-css3
-////        https://stackoverflow.com/questions/19418486/hexagon-shape-with-a-border-outline
 
 //// TO DO: HOW TO inform when C / I types are optional?
 ////        - Chlorine requires only Water (C/I) => C and I both optional
