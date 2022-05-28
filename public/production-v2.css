@@ -1,0 +1,422 @@
+:root {
+    --active-bg: #293142;
+    --overactive-bg: #333c52;
+
+    --type-c: #5639cc;
+    --type-i: #4099ff;
+    --type-m: #ad3900;
+    --type-s: #c58f00;
+
+    --item-name: #ccc;
+
+    --raw-material-gradient: #1c1c1c;
+    --raw-material: #373737;
+    --refined-material-gradient: #05151b;
+    --refined-material: #0a2936;
+    --component-gradient: #0e2c37;
+    --component: #1b576c;
+    --finished-good-gradient: #164352;
+    --finished-good: #2b84a2;
+}
+
+#production-wrapper {
+    font-size: 0.8rem;
+}
+
+/* options */
+
+#production-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+#options {
+    display: flex;
+    gap: 1rem;
+}
+
+#options label {
+    padding: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+}
+
+#options label:hover {
+    border-color: gray;
+}
+
+#options label.checked {
+    background: var(--active-bg);
+}
+
+#options label input {
+    margin-right: 0.5rem;
+}
+
+#legend-wrapper {
+    background: var(--active-bg);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+#legend span {
+    color: var(--item-name);
+    white-space: nowrap;
+    margin-left: 0.5rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.4rem;
+}
+
+#legend .legend-raw-material { background: var(--raw-material); }
+#legend .legend-refined-material { background: var(--refined-material); }
+#legend .legend-component { background: var(--component); }
+#legend .legend-finished-good { background: var(--finished-good); }
+
+/* products */
+
+#products-wrapper {
+    margin-top: 2rem;
+}
+
+#products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+#products a {
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    opacity: 0.5;
+}
+
+#products a:hover {
+    border-color: var(--item-name);
+    opacity: 1;
+}
+
+#products a.RefinedMaterial { background: var(--refined-material); }
+#products a.Component { background-color: var(--component); }
+#products a.FinishedGood { background-color: var(--finished-good); }
+
+#products a.active {
+    color: white;
+    border-color: var(--item-name);
+    opacity: 1;
+}
+
+/* process variants */
+
+#process-variants-wrapper {
+    display: none;
+    margin-top: 2rem;
+}
+
+.has-process-variants #process-variants-wrapper {
+    display: block;
+}
+
+#process-variants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+#process-variants .item {
+    display: inline-block;
+    background: var(--active-bg);
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+#process-variants .item.irrelevant {
+    display: none;
+}
+
+#process-variants .item .item-name {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+#process-variants .item .process {
+    display: block;
+    margin: 0.5rem 0 0 -0.5rem;
+    padding: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.4rem;
+}
+
+#process-variants .item .process:hover {
+    border-color: gray;
+}
+
+#process-variants .item .process.checked {
+    background: var(--overactive-bg);
+}
+
+@keyframes flash-error {
+    50% { background: rgba(255, 0, 0, 0.5); }
+}
+
+#process-variants .item .process.error {
+    animation: flash-error 150ms;
+}
+
+/* required spectrals */
+
+#required-spectrals .spectral-types {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+#required-spectrals .spectral-type {
+    display: inline-block;
+    color: white;
+    font-weight: bold;
+    line-height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+}
+
+#required-spectrals .spectral-type.disabled {
+    display: none;
+}
+
+#required-spectrals .spectral-type.type-C { background: var(--type-c); }
+#required-spectrals .spectral-type.type-I { background: var(--type-i); }
+#required-spectrals .spectral-type.type-M { background: var(--type-m); }
+#required-spectrals .spectral-type.type-S { background: var(--type-s); }
+
+#required-spectrals .variants {
+    display: none;
+}
+
+#required-spectrals .variants.active {
+    display: block;
+}
+
+/* production chain */
+
+#production-chain-container {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+#production-chain-items.vertical-layout {
+    display: inline-block;
+}
+
+#production-chain-items.horizontal-layout {
+    display: flex;
+    gap: 4rem;
+    padding: 1.5rem 0;
+}
+
+#production-chain-items .level {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+}
+
+#production-chain-items.vertical-layout .level {
+    padding: 1.5rem 0;
+}
+
+#production-chain-items.horizontal-layout .level {
+    flex-direction: column;
+}
+
+#production-chain-items [data-container-id] {
+    color: black;
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    /* https://css-tricks.com/snippets/css/multiple-borders/ */
+    background-clip: content-box !important;
+    padding: 0.1rem;
+}
+
+#production-chain-items.faded [data-container-id] {
+    opacity: 0.2;
+}
+
+#production-chain-items .active[data-container-id] {
+    opacity: 1;
+}
+
+#production-chain-items .disabled[data-container-id] {
+    display: none;
+}
+
+#production-chain-items [data-container-id].item-type-raw-material { background: linear-gradient(180deg, var(--raw-material-gradient) 0%, var(--raw-material) 100%); }
+#production-chain-items [data-container-id].item-type-refined-material { background: linear-gradient(180deg, var(--refined-material-gradient) 0%, var(--refined-material) 100%); }
+#production-chain-items [data-container-id].item-type-component { background: linear-gradient(180deg, var(--component-gradient) 0%, var(--component) 100%); }
+#production-chain-items [data-container-id].item-type-finished-good { background: linear-gradient(180deg, var(--finished-good-gradient) 0%, var(--finished-good) 100%); }
+
+#production-chain-items [data-container-id] .item-name {
+    flex-grow: 1;
+    color: var(--item-name);
+    font-size: 0.9rem;
+    padding: 0.5rem;
+}
+
+#production-chain-items #level_1 [data-container-id] .item-name {
+    color: white;
+}
+
+#production-chain-items [data-container-id] .spectral-types {
+    display: flex;
+    justify-content: center;
+    gap: 0.2rem;
+    margin: 0.2rem 0;
+}
+
+#production-chain-items [data-container-id] .spectral-type {
+    display: inline-block;
+    color: white;
+    font-size: 0.7rem;
+    line-height: 1rem;
+    width: 1rem;
+    border-radius: 50%;
+}
+
+#production-chain-items [data-container-id] .spectral-type.type-C { background: var(--type-c); }
+#production-chain-items [data-container-id] .spectral-type.type-I { background: var(--type-i); }
+#production-chain-items [data-container-id] .spectral-type.type-M { background: var(--type-m); }
+#production-chain-items [data-container-id] .spectral-type.type-S { background: var(--type-s); }
+
+#production-chain-connections .faded {
+    opacity: 0.2;
+}
+
+#production-chain-items [data-container-id], #production-chain-connections * {
+    transition: opacity 500ms;
+}
+
+/* required raw materials */
+
+#required-raw-materials {
+    background: var(--active-bg);
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+#required-raw-materials > div {
+    font-size: 0.9rem;
+}
+
+#required-raw-materials .variants {
+    display: none;
+}
+
+#required-raw-materials .variants.active {
+    display: block;
+}
+
+#required-raw-materials ul {    
+    margin-top: 1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+}
+
+#required-raw-materials ul li {
+    display: grid;
+    grid-template-columns: 8rem 4rem 1fr;
+    margin-top: 0.1rem;
+    padding-left: 1rem; /* match with margin-left from "#required-raw-materials ul" */
+    padding-right: 1rem; /* match with margin-right from "#required-raw-materials ul" */
+}
+
+/* keep margin-top (from "#required-raw-materials ul li") only for the first "li" of each material-type group */
+#required-raw-materials ul li.volatiles ~ li.volatiles,
+#required-raw-materials ul li.organics ~ li.organics,
+#required-raw-materials ul li.metals ~ li.metals,
+#required-raw-materials ul li.rare-earth ~ li.rare-earth,
+#required-raw-materials ul li.fissiles ~ li.fissiles {
+    margin-top: 0;
+}
+
+#required-raw-materials ul li:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+#required-raw-materials ul li > * {
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+}
+
+#required-raw-materials ul li .label {
+    white-space: nowrap;
+}
+
+#required-raw-materials ul li:not(.active) .label,
+#required-raw-materials ul li:not(.active) .counter {
+    color:var(--default-text_faded);
+}
+
+#required-raw-materials ul li .counter {
+    text-align: right;
+    white-space: nowrap;
+    padding-right: 2rem;
+}
+
+#required-raw-materials ul li .counter::before {
+    content: "x ";
+    margin-left: 0.5rem;
+}
+
+#required-raw-materials ul li .ratio-cell {
+    display: flex;
+    align-items: center;
+    width: 50%;
+}
+
+#required-raw-materials ul li .ratio-bar {
+    width: 2%; /* default minimum, overwritten with ratio for each raw-material */
+    height: 0.2rem;
+}
+
+#required-raw-materials ul li:not(.active) .ratio-bar {
+    opacity: 0.2;
+}
+
+#required-raw-materials ul li.volatiles .ratio-bar { background-color: var(--volatiles); }
+#required-raw-materials ul li.organics .ratio-bar { background-color: var(--organics); }
+#required-raw-materials ul li.metals .ratio-bar { background-color: var(--metals); }
+#required-raw-materials ul li.rare-earth .ratio-bar { background-color: var(--rare-earth); }
+#required-raw-materials ul li.fissiles .ratio-bar { background-color: var(--fissiles); }
+
+/* background gradients for the entire row - 1st cell */
+#required-raw-materials ul li.volatiles .label { background: linear-gradient(-90deg, var(--volatiles_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.organics .label { background: linear-gradient(-90deg, var(--organics_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.metals .label { background: linear-gradient(-90deg, var(--metals_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.rare-earth .label { background: linear-gradient(-90deg, var(--rare-earth_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.fissiles .label { background: linear-gradient(-90deg, var(--fissiles_faded) 0%, transparent 100%); }
+
+/* background gradients for the entire row - 2nd cell */
+#required-raw-materials ul li.volatiles .counter { background: var(--volatiles_faded); }
+#required-raw-materials ul li.organics .counter { background: var(--organics_faded); }
+#required-raw-materials ul li.metals .counter { background: var(--metals_faded); }
+#required-raw-materials ul li.rare-earth .counter { background: var(--rare-earth_faded); }
+#required-raw-materials ul li.fissiles .counter { background: var(--fissiles_faded); }
+
+/* background gradients for the entire row - 3rd cell */
+#required-raw-materials ul li.volatiles .ratio-cell { background: linear-gradient(90deg, var(--volatiles_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.organics .ratio-cell { background: linear-gradient(90deg, var(--organics_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.metals .ratio-cell { background: linear-gradient(90deg, var(--metals_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.rare-earth .ratio-cell { background: linear-gradient(90deg, var(--rare-earth_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.fissiles .ratio-cell { background: linear-gradient(90deg, var(--fissiles_faded) 0%, transparent 100%); }
