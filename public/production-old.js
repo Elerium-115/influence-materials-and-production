@@ -172,11 +172,10 @@ const productionWrapper = document.getElementById('production-wrapper');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const productChainConnectionsContainer = document.getElementById('production-chain-connections');
 const processVariantsContainer = document.getElementById('process-variants');
-const requiredSpectralsContainer = document.getElementById('required-spectrals');
-const requiredTextContainer = document.getElementById('required-text');
 const requiredRawMaterialsContainer = document.getElementById('required-raw-materials');
+const requiredSpectralsContainer = document.getElementById('required-spectrals');
 
-let horizontalLayout = document.querySelector("#toggle-horizontal-layout").checked;
+let verticalLayout = true;
 
 let itemsWithProcessVariants = {};
 
@@ -282,17 +281,10 @@ function resetFadedItemsAndConnections() {
     updateAllConnections();
 }
 
-function updateRequiredSpectralsHtml() {
-    let requiredSpectralsHtml = '<div class="spectral-types">';
-    requiredSpectrals.forEach(spectralType => {
-        requiredSpectralsHtml += `<span class="spectral-type type-${spectralType}">${spectralType}</span>`;
-    });
-    requiredSpectralsHtml += '</div>';
-    requiredSpectralsContainer.innerHTML = requiredSpectralsHtml;
-}
-
 function updateRequiredRawMaterialsHtml() {
-    let requiredRawMaterialsHtml = '<ul>';
+    let requiredRawMaterialsHtml = '<div>Raw materials required for this production chain</div>';
+    requiredRawMaterialsHtml += '<div class="variants">(including alternative production paths)</div>';
+    requiredRawMaterialsHtml += '<ul>';
     for (const rawMaterial of rawMaterialsSorted) {
         if (!requiredRawMaterials[rawMaterial]) {
             continue;
@@ -312,6 +304,17 @@ function updateRequiredRawMaterialsHtml() {
     requiredRawMaterialsContainer.innerHTML = requiredRawMaterialsHtml;
 }
 
+function updateRequiredSpectralsHtml() {
+    let requiredSpectralsHtml = '<div class="spectral-types">';
+    requiredSpectrals.forEach(spectralType => {
+        requiredSpectralsHtml += `<span class="spectral-type type-${spectralType}">${spectralType}</span>`;
+    });
+    requiredSpectralsHtml += '</div>';
+    requiredSpectralsHtml += '<div>spectral-types required for this production chain</div>';
+    requiredSpectralsHtml += '<div class="variants">(including alternative production paths)</div>';
+    requiredSpectralsContainer.innerHTML = requiredSpectralsHtml;
+}
+
 function injectLevelContainerIfNeeded(renderOnLevel) {
     const levelId = `level_${renderOnLevel}`;
     let levelContainer = document.getElementById(levelId);
@@ -324,11 +327,12 @@ function injectLevelContainerIfNeeded(renderOnLevel) {
     return levelContainer;
 }
 
-function createItemContainer(itemName, itemData, parentContainerId) {
+function createItemContainer(itemName, itemData, parentContainerId, inputsCount = 0) {
     uniqueContainerId++;
     const itemContainer = document.createElement('div');
     itemContainer.dataset.containerId = uniqueContainerId;
     itemContainer.dataset.parentContainerId = parentContainerId;
+    itemContainer.dataset.inputsCount = inputsCount;
     itemContainer.dataset.longestSubchainLength = 1;
     itemContainer.dataset.itemName = itemName;
     const itemNameCompact = itemName.replace(/\s+/g, '');
@@ -340,21 +344,6 @@ function createItemContainer(itemName, itemData, parentContainerId) {
         case 'Finished Good': itemContainer.classList.add('item-type-finished-good'); break;
     }
     return itemContainer;
-}
-
-function createProcessContainer(processData, parentContainerId) {
-    uniqueContainerId++;
-    const processName = processData.process;
-    const processContainer = document.createElement('div');
-    processContainer.dataset.containerId = uniqueContainerId;
-    processContainer.dataset.parentContainerId = parentContainerId;
-    // processContainer.dataset.inputsCount =  processData.inputs.length;
-    processContainer.dataset.longestSubchainLength = 1;
-    processContainer.dataset.processName = processName;
-    processContainer.dataset.processCode = processData.output.replace(/\s+/g, '') + '-' + processData.process.replace(/\s+/g, '');
-    processContainer.innerHTML = `<span class="process-name">${processName}</span>`;
-    processContainer.classList.add('item-type-process');
-    return processContainer;
 }
 
 function generateUpchainFromRawMaterial(rawMaterialContainer) {
@@ -384,15 +373,11 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
     }
     maxLevel = Math.max(maxLevel, renderOnLevel);
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
-    const itemContainer = createItemContainer(itemName, itemData, parentContainerId);
-    levelContainer.appendChild(itemContainer);
     if (itemData.itemType === "Raw Material") {
-        let baseSpectralsHtml = `<div class="spectral-types">`;
-        itemData.baseSpectrals.forEach(baseSpectral => {
-            baseSpectralsHtml += `<span class="spectral-type type-${baseSpectral}">${baseSpectral}</span>`;
-        });
-        baseSpectralsHtml += `</div>`;
-        itemContainer.innerHTML += baseSpectralsHtml;
+        const itemContainer = createItemContainer(itemName, itemData, parentContainerId);
+        levelContainer.appendChild(itemContainer);
+        itemContainer.innerHTML += `<div class="details process-name">via Mining</div>`;
+        itemContainer.innerHTML += `<div class="details inputs">from: ${itemData.baseSpectrals.join(' or ')}</div>`;
         if (parentContainerId !== 0) {
             // after rendering a raw material, trace back its upchain until the top-level item
             generateUpchainFromRawMaterial(itemContainer);
@@ -412,13 +397,14 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
                 return;
             }
             processVariants.push(processData);
-            // render each process as a pseudo-item, between its output ("itemName") and inputs ("processData.inputs")
-            const processLevelContainer = injectLevelContainerIfNeeded(renderOnLevel + 1);
-            const processContainer = createProcessContainer(processData, itemContainer.dataset.containerId);
-            processLevelContainer.appendChild(processContainer);
+            const itemContainer = createItemContainer(itemName, itemData, parentContainerId, processData.inputs.length);
+            levelContainer.appendChild(itemContainer);
+            itemContainer.innerHTML += `<div class="details process-name">via ${processData.process}</div>`;
+            itemContainer.innerHTML += `<div class="details inputs">from: ${processData.inputs.join(', ')}</div>`;
             processData.inputs.forEach(inputItemName => {
-                renderItem(inputItemName, processContainer.dataset.containerId, renderOnLevel + 2);
+                renderItem(inputItemName, itemContainer.dataset.containerId, renderOnLevel + 1);
             });
+            itemContainer.dataset.processCode = itemName.replace(/\s+/g, '') + '-' + processData.process.replace(/\s+/g, '');
         });
         if (processVariants.length >= 2 && !itemsWithProcessVariants[itemName]) {
             itemsWithProcessVariants[itemName] = processVariants;
@@ -452,14 +438,12 @@ function compareItemContainers(el1, el2) {
         return el2SubchainLength - el1SubchainLength;
     }
 
-    /* DISABLED b/c the inputs-count is now specific to the process, not to the item
     // #3 - prioritize item with the most children (i.e. inputs)
     const el1InputsCount = el1.dataset.inputsCount;
     const el2InputsCount = el2.dataset.inputsCount;
     if (el1InputsCount !== el2InputsCount) {
         return el2InputsCount - el1InputsCount;
     }
-    */
 
     return 0;
 }
@@ -495,20 +479,20 @@ function connectContainers(el1, el2, color, thickness, faded) {
     const off1 = getOffset(el1);
     const off2 = getOffset(el2);
     let x1, y1, x2, y2;
-    if (horizontalLayout) {
-        // connect the mid-left side of the parent element
-        x1 = off1.left;
-        y1 = off1.top + (off1.height / 2);
-        // connect the mid-right side of the child element
-        x2 = off2.left + off2.width;
-        y2 = off2.top + (off2.height / 2);
-    } else {
+    if (verticalLayout) {
         // connect the mid-bottom side of the parent element
         x1 = off1.left + (off1.width / 2);
         y1 = off1.top + off1.height;
         // connect the mid-top side of the child element
         x2 = off2.left + (off2.width / 2);
         y2 = off2.top;
+    } else {
+        // connect the mid-right side of the parent element
+        x1 = off1.left + off1.width;
+        y1 = off1.top + (off1.height / 2);
+        // connect the mid-left side of the child element
+        x2 = off2.left;
+        y2 = off2.top + (off2.height / 2);
     }
     const length = Math.sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)));
     const cx = ((x1 + x2) / 2) - (length / 2);
@@ -566,7 +550,8 @@ function updateAllConnections() {
 
 function initializeProcessVariants() {
     // this function is only called when multiple process variants are initially checked
-    requiredTextContainer.querySelector(".variants").classList.add('active');
+    requiredRawMaterialsContainer.querySelector(".variants").classList.add('active');
+    requiredSpectralsContainer.querySelector(".variants").classList.add('active');
     productionWrapper.classList.add('has-process-variants');
     let processVariantsHtml = '';
     for (const itemName in itemsWithProcessVariants) {
@@ -641,11 +626,12 @@ function updateAllProcessVariants() {
 }
 
 function updateRequiredSpectralsAndRawMaterials() {
-    // first disable all required spectrals, and the ".variants" disclaimer
+    // first disable all required spectrals, and the ".variants" disclaimers
     requiredSpectralsContainer.querySelectorAll(".spectral-type").forEach(spectralType => {
         spectralType.classList.add('disabled');
     });
-    requiredTextContainer.querySelector(".variants").classList.remove('active');
+    requiredRawMaterialsContainer.querySelector(".variants").classList.remove('active');
+    requiredSpectralsContainer.querySelector(".variants").classList.remove('active');
     // then update the required raw materials which are not currently disabled, and enable their spectrals
     requiredRawMaterials = {};
     requiredRawMaterialsMaxCounter = 0;
@@ -659,7 +645,7 @@ function updateRequiredSpectralsAndRawMaterials() {
     });
     // then update the required raw materials HTML, based on their updated counters
     updateRequiredRawMaterialsHtml();
-    // show the ".variants" disclaimer, if multiple process variants are currently checked for any non-disabled item
+    // show the ".variants" disclaimers, if multiple process variants are currently checked for any non-disabled item
     document.querySelectorAll(".process.checked input").forEach(elProcess => {
         const processCode = elProcess.id;
         if (!document.querySelector(`[data-process-code=${processCode}]:not(.disabled)`)) {
@@ -668,7 +654,8 @@ function updateRequiredSpectralsAndRawMaterials() {
         }
         const elItem = elProcess.closest(".item");
         if (elItem.querySelectorAll(".process.checked").length >= 2) {
-            requiredTextContainer.querySelector(".variants").classList.add('active');
+            requiredRawMaterialsContainer.querySelector(".variants").classList.add('active');
+            requiredSpectralsContainer.querySelector(".variants").classList.add('active');
             return;
         }
     });
@@ -678,9 +665,9 @@ function selectItemByName(itemName) {
     resetProductionChain();
     renderItem(itemName);
     // done rendering all items recursively
+    updateRequiredRawMaterialsHtml();
     requiredSpectrals.sort();
     updateRequiredSpectralsHtml();
-    updateRequiredRawMaterialsHtml();
     if (Object.keys(itemsWithProcessVariants).length) {
         initializeProcessVariants();
     }
@@ -716,18 +703,37 @@ on('change', 'label > input', el => {
     }
 });
 
-// toggle horizontal vs. vertical layout for the production chain
-on('change', '#toggle-horizontal-layout', el => {
+// toggle vertical vs. horizontal layout of the production chain
+on('change', '#toggle-vertical-layout', el => {
     if (el.checked) {
-        horizontalLayout = true;
-        productChainItemsContainer.classList.remove('vertical-layout');
-        productChainItemsContainer.classList.add('horizontal-layout');
-    } else {
-        horizontalLayout = false;
+        verticalLayout = true;
         productChainItemsContainer.classList.remove('horizontal-layout');
         productChainItemsContainer.classList.add('vertical-layout');
+    } else {
+        verticalLayout = false;
+        productChainItemsContainer.classList.remove('vertical-layout');
+        productChainItemsContainer.classList.add('horizontal-layout');
     }
     updateAllConnections();
+});
+
+// toggle item details
+on('change', '#toggle-details', el => {
+    if (el.checked) {
+        productChainItemsContainer.classList.add('show-details');
+    } else {
+        productChainItemsContainer.classList.remove('show-details');
+    }
+    updateAllConnections();
+});
+
+// toggle cold colors
+on('change', '#toggle-colors', el => {
+    if (el.checked) {
+        productionWrapper.classList.add('cold-colors');
+    } else {
+        productionWrapper.classList.remove('cold-colors');
+    }
 });
 
 // toggle process variant
@@ -789,10 +795,6 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
-
-//// TO DO: style processes as hexagons
-////        https://stackoverflow.com/questions/17896791/hexagon-shape-with-css3
-////        https://stackoverflow.com/questions/19418486/hexagon-shape-with-a-border-outline
 
 //// TO DO: HOW TO inform when C / I types are optional?
 ////        - Chlorine requires only Water (C/I) => C and I both optional

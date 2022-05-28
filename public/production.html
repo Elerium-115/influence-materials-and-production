@@ -24,26 +24,25 @@
             <a href="./">Raw Materials</a>
             <a href="./ratios.html">Materials Ratios</a>
             <a href="./production.html" class="active">Production Chains</a>
-            <a href="./production-v2.html">~ v2</a>
         </nav>
 
-        <div id="production-wrapper" class="cold-colors">
-            <div id="options">
-                <label for="toggle-vertical-layout" class="checked">
-                    <input type="checkbox" id="toggle-vertical-layout" checked> Vertical Layout
-                </label>
-                <label for="toggle-details" class="checked">
-                    <input type="checkbox" id="toggle-details" checked> Item Details
-                </label>
-                <label for="toggle-colors" class="checked">
-                    <input type="checkbox" id="toggle-colors" checked> Cold Colors
+        <div id="production-wrapper">
+            <div id="production-topbar">
+                <div id="options">
+                    <label for="toggle-horizontal-layout" class="checked">
+                        <input type="checkbox" id="toggle-horizontal-layout" checked>Horizontal Layout
+                    </label>
+                </div>
+                <div id="legend-wrapper">
+                    Legend:
                     <span id="legend">
                         <span class="legend-raw-material">Raw Material</span>
+                        <span class="legend-process">Process</span>
                         <span class="legend-refined-material">Refined Material</span>
                         <span class="legend-component">Component</span>
                         <span class="legend-finished-good">Finished Good</span>
                     </span>
-                </label>
+                </div>
             </div>
             <div id="products-wrapper">
                 <div>Show production chain for:</div>
@@ -53,13 +52,20 @@
                 <div>Select alternative production paths:</div>
                 <div id="process-variants"></div>
             </div>
-            <div id="production-chain-container">
-                <div id="required-spectrals"></div>
-                <div id="production-chain-items" class="vertical-layout show-details">
-                </div>
+            <div id="production-chain-wrapper">
+                <div id="production-chain-items" class="horizontal-layout"></div>
                 <div id="production-chain-connections"></div>
             </div>
-            <div id="required-raw-materials"></div>
+            <div id="required-spectrals-and-raw-materials">
+                <div id="required-spectrals-wrapper">
+                    <div id="required-spectrals"></div>
+                    <div id="required-text">
+                        <div>Spectral types and raw materials required for this production chain</div>
+                        <div class="variants">(including alternative production paths)</div>
+                    </div>
+                </div>
+                <div id="required-raw-materials"></div>
+            </div>
         </div>
 
         <div class="footer-about">
