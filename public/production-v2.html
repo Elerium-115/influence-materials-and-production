@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="production.css">
+    <link rel="stylesheet" href="production-v2.css">
     <link rel="icon" href="/img/site-icon.png" type="image/png">
     <title>Influence Production Chains</title>
     <meta name="twitter:card" content="summary">
@@ -23,27 +23,26 @@
             </a>
             <a href="./">Raw Materials</a>
             <a href="./ratios.html">Materials Ratios</a>
-            <a href="./production.html" class="active">Production Chains</a>
-            <a href="./production-v2.html">~ v2</a>
+            <a href="./production.html">Production Chains</a>
+            <a href="./production-v2.html" class="active">~ v2</a>
         </nav>
 
-        <div id="production-wrapper" class="cold-colors">
-            <div id="options">
-                <label for="toggle-vertical-layout" class="checked">
-                    <input type="checkbox" id="toggle-vertical-layout" checked> Vertical Layout
-                </label>
-                <label for="toggle-details" class="checked">
-                    <input type="checkbox" id="toggle-details" checked> Item Details
-                </label>
-                <label for="toggle-colors" class="checked">
-                    <input type="checkbox" id="toggle-colors" checked> Cold Colors
+        <div id="production-wrapper">
+            <div id="production-topbar">
+                <div id="options">
+                    <label for="toggle-vertical-layout" class="checked">
+                        <input type="checkbox" id="toggle-vertical-layout" checked>Vertical Layout
+                    </label>
+                </div>
+                <div id="legend-wrapper">
+                    Legend:
                     <span id="legend">
                         <span class="legend-raw-material">Raw Material</span>
                         <span class="legend-refined-material">Refined Material</span>
                         <span class="legend-component">Component</span>
                         <span class="legend-finished-good">Finished Good</span>
                     </span>
-                </label>
+                </div>
             </div>
             <div id="products-wrapper">
                 <div>Show production chain for:</div>
@@ -55,7 +54,7 @@
             </div>
             <div id="production-chain-container">
                 <div id="required-spectrals"></div>
-                <div id="production-chain-items" class="vertical-layout show-details">
+                <div id="production-chain-items" class="vertical-layout">
                 </div>
                 <div id="production-chain-connections"></div>
             </div>
@@ -70,6 +69,6 @@
         </div>
     </div>
 
-    <script src="production.js"></script>
+    <script src="production-v2.js"></script>
 </body>
 </html>
