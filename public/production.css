@@ -7,15 +7,18 @@
     --type-m: #ad3900;
     --type-s: #c58f00;
 
-    --raw-material: lightcoral;
-    --refined-material: orange;
-    --component: yellow;
-    --finished-good: lime;
+    --item-name: #ccc;
 
-    --cold-raw-material: #aa8cfa;
-    --cold-refined-material: #6e96fa;
-    --cold-component: #14dcfa;
-    --cold-finished-good: #28e682;
+    --raw-material-gradient: #1c1c1c;
+    --raw-material: #373737;
+    --process-gradient: #241033;
+    --process: #482066;
+    --refined-material-gradient: #05151b;
+    --refined-material: #0a2936;
+    --component-gradient: #0e2c37;
+    --component: #1b576c;
+    --finished-good-gradient: #164352;
+    --finished-good: #2b84a2;
 }
 
 #production-wrapper {
@@ -23,6 +26,13 @@
 }
 
 /* options */
+
+#production-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
 
 #options {
     display: flex;
@@ -43,15 +53,26 @@
     background: var(--active-bg);
 }
 
+#options label input {
+    margin-right: 0.5rem;
+}
+
+#legend-wrapper {
+    background: var(--active-bg);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
 #legend span {
-    color: black;
+    color: var(--item-name);
     white-space: nowrap;
     margin-left: 0.5rem;
-    padding: 0.1rem 0.4rem;
+    padding: 0.2rem 0.4rem;
     border-radius: 0.4rem;
 }
 
 #legend .legend-raw-material { background: var(--raw-material); }
+#legend .legend-process { background: var(--process); }
 #legend .legend-refined-material { background: var(--refined-material); }
 #legend .legend-component { background: var(--component); }
 #legend .legend-finished-good { background: var(--finished-good); }
@@ -70,23 +91,28 @@
 }
 
 #products a {
-    color: black;
+    color: white;
     padding: 0.2rem 0.6rem;
     border: 1px solid transparent;
     border-radius: 0.5rem;
+    opacity: 0.5;
 }
 
 #products a:hover {
-    border-color: black;
+    text-decoration: none;
+    border-color: var(--item-name);
+    opacity: 1;
 }
 
-#products a.RefinedMaterial { background-color: lightgray; }
-#products a.Component { background-color: gray; color: white; }
-#products a.FinishedGood { background-color: black; color: white; }
+#products a.RefinedMaterial { background: var(--refined-material); }
+#products a.Component { background-color: var(--component); }
+#products a.FinishedGood { background-color: var(--finished-good); }
 
-#products a.RefinedMaterial.active { background: var(--refined-material); }
-#products a.Component.active { background: var(--component); color: black; }
-#products a.FinishedGood.active { background: var(--finished-good); color: black; }
+#products a.active {
+    color: white;
+    border-color: var(--item-name);
+    opacity: 1;
+}
 
 /* process variants */
 
@@ -118,7 +144,7 @@
 }
 
 #process-variants .item .item-name {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: bold;
 }
 
@@ -146,57 +172,22 @@
     animation: flash-error 150ms;
 }
 
-/* required spectrals */
-
-#required-spectrals .spectral-types {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-#required-spectrals .spectral-type {
-    display: inline-block;
-    color: white;
-    font-weight: bold;
-    line-height: 2rem;
-    width: 2rem;
-    border-radius: 50%;
-}
-
-#required-spectrals .spectral-type.disabled {
-    display: none;
-}
-
-#required-spectrals .spectral-type.type-C { background: var(--type-c); }
-#required-spectrals .spectral-type.type-I { background: var(--type-i); }
-#required-spectrals .spectral-type.type-M { background: var(--type-m); }
-#required-spectrals .spectral-type.type-S { background: var(--type-s); }
-
-#required-spectrals .variants {
-    display: none;
-}
-
-#required-spectrals .variants.active {
-    display: block;
-}
-
 /* production chain */
 
-#production-chain-container {
+#production-chain-wrapper {
     text-align: center;
     margin-top: 2rem;
 }
 
-#production-chain-items.vertical-layout {
-    display: inline-block;
-}
-
 #production-chain-items.horizontal-layout {
     display: flex;
-    gap: 4rem;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
     padding: 1.5rem 0;
+}
+
+#production-chain-items.vertical-layout {
+    display: inline-block;
 }
 
 #production-chain-items .level {
@@ -205,19 +196,25 @@
     gap: 1rem;
 }
 
-#production-chain-items.vertical-layout .level {
-    padding: 1.5rem 0;
-}
-
 #production-chain-items.horizontal-layout .level {
     flex-direction: column;
 }
 
 #production-chain-items [data-container-id] {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     color: black;
+    /* https://css-tricks.com/snippets/css/multiple-borders/ */
+    background-clip: content-box !important;
+    padding: 0.1rem;
     border: 1px solid gray;
     border-radius: 0.5rem;
 }
+
+/* the gap between levels must be applied only for levels with VISIBLE items, after disabling an alternative production path */
+#production-chain-items.horizontal-layout [data-container-id] { margin: 0 1.5rem; }
+#production-chain-items.vertical-layout [data-container-id] { margin: 1.5rem 0; }
 
 #production-chain-items.faded [data-container-id] {
     opacity: 0.2;
@@ -231,48 +228,51 @@
     display: none;
 }
 
-#production-chain-items [data-container-id].item-type-raw-material { background: var(--raw-material); }
-#production-chain-items [data-container-id].item-type-refined-material { background: var(--refined-material); }
-#production-chain-items [data-container-id].item-type-component { background: var(--component); }
-#production-chain-items [data-container-id].item-type-finished-good { background: var(--finished-good); }
+#production-chain-items [data-container-id].item-type-raw-material { background: linear-gradient(180deg, var(--raw-material-gradient) 0%, var(--raw-material) 100%); }
+#production-chain-items [data-container-id].item-type-process { background: linear-gradient(180deg, var(--process-gradient) 0%, var(--process) 100%); }
+#production-chain-items [data-container-id].item-type-refined-material { background: linear-gradient(180deg, var(--refined-material-gradient) 0%, var(--refined-material) 100%); }
+#production-chain-items [data-container-id].item-type-component { background: linear-gradient(180deg, var(--component-gradient) 0%, var(--component) 100%); }
+#production-chain-items [data-container-id].item-type-finished-good { background: linear-gradient(180deg, var(--finished-good-gradient) 0%, var(--finished-good) 100%); }
 
 #production-chain-items [data-container-id] .item-name {
-    display: block;
-    color: black;
-    font-size: 1rem;
-    font-weight: bold;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--item-name);
+    font-size: 0.9rem;
     padding: 0.5rem;
-    border-bottom: 0.3rem solid transparent;
-    border-radius: 0.5rem;
 }
 
-#production-chain-items [data-container-id] .item-name:hover {
-    background: rgba(255, 255, 255, 0.5);
-    border-bottom-color: white;
-}
-
-#production-chain-items.show-details [data-container-id] .item-name {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-}
-
-#production-chain-items [data-container-id] .details {
-    display: none;
-    padding: 0 0.5rem;
-}
-
-#production-chain-items.show-details [data-container-id] .details {
-    display: block;
+#production-chain-items #level_1 [data-container-id] .item-name {
+    color: white;
 }
 
 #production-chain-items [data-container-id] .process-name {
-    opacity: 0.25;
-    margin-bottom: 0.2rem;
+    color: var(--item-name);
+    padding: 0.5rem;
 }
 
-#production-chain-items [data-container-id] .inputs {
-    margin-bottom: 0.5rem;
+#production-chain-items [data-container-id] .spectral-types {
+    display: flex;
+    justify-content: center;
+    gap: 0.2rem;
+    margin: 0.2rem 0;
 }
+
+#production-chain-items [data-container-id] .spectral-type {
+    display: inline-block;
+    color: white;
+    font-size: 0.7rem;
+    line-height: 1rem;
+    width: 1rem;
+    border-radius: 50%;
+}
+
+#production-chain-items [data-container-id] .spectral-type.type-C { background: var(--type-c); }
+#production-chain-items [data-container-id] .spectral-type.type-I { background: var(--type-i); }
+#production-chain-items [data-container-id] .spectral-type.type-M { background: var(--type-m); }
+#production-chain-items [data-container-id] .spectral-type.type-S { background: var(--type-s); }
 
 #production-chain-connections .faded {
     opacity: 0.2;
@@ -282,25 +282,60 @@
     transition: opacity 500ms;
 }
 
-/* required raw materials */
+/* required spectral types and raw materials */
 
-#required-raw-materials {
+#required-spectrals-and-raw-materials {
+    display: inline-block;
     background: var(--active-bg);
     margin-top: 1rem;
     padding: 1rem;
     border-radius: 0.5rem;
 }
 
-#required-raw-materials > div {
-    font-size: 1rem;
+#required-spectrals-wrapper {
+    display: flex;
 }
 
-#required-raw-materials .variants {
+#required-spectrals {
+    /* same width and padding, as the first 2 columns from "#required-raw-materials ul li" */
+    width: 14rem;
+    padding-right: 2rem;
+}
+
+#required-spectrals .spectral-types {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+#required-spectrals .spectral-type {
+    color: white;
+    font-weight: bold;
+    line-height: 2rem;
+    text-align: center;
+    width: 2rem;
+    border-radius: 50%;
+}
+
+#required-spectrals .spectral-type.disabled {
     display: none;
 }
 
-#required-raw-materials .variants.active {
+#required-spectrals .spectral-type.type-C { background: var(--type-c); }
+#required-spectrals .spectral-type.type-I { background: var(--type-i); }
+#required-spectrals .spectral-type.type-M { background: var(--type-m); }
+#required-spectrals .spectral-type.type-S { background: var(--type-s); }
+
+#required-text .variants {
+    display: none;
+}
+
+#required-text .variants.active {
     display: block;
+}
+
+#required-raw-materials > div {
+    font-size: 0.9rem;
 }
 
 #required-raw-materials ul {    
@@ -311,7 +346,7 @@
 
 #required-raw-materials ul li {
     display: grid;
-    grid-template-columns: 8rem 4rem 1fr;
+    grid-template-columns: 10rem 4rem 1fr;
     margin-top: 0.1rem;
     padding-left: 1rem; /* match with margin-left from "#required-raw-materials ul" */
     padding-right: 1rem; /* match with margin-right from "#required-raw-materials ul" */
@@ -358,7 +393,6 @@
 #required-raw-materials ul li .ratio-cell {
     display: flex;
     align-items: center;
-    width: 50%;
 }
 
 #required-raw-materials ul li .ratio-bar {
@@ -396,21 +430,3 @@
 #required-raw-materials ul li.metals .ratio-cell { background: linear-gradient(90deg, var(--metals_faded) 0%, transparent 100%); }
 #required-raw-materials ul li.rare-earth .ratio-cell { background: linear-gradient(90deg, var(--rare-earth_faded) 0%, transparent 100%); }
 #required-raw-materials ul li.fissiles .ratio-cell { background: linear-gradient(90deg, var(--fissiles_faded) 0%, transparent 100%); }
-
-/* cold colors */
-
-.cold-colors #products a.RefinedMaterial.active { background: var(--cold-refined-material); }
-.cold-colors #products a.Component.active { background: var(--cold-component); }
-.cold-colors #products a.FinishedGood.active { background: var(--cold-finished-good); }
-
-.cold-colors #legend .legend-raw-material { background: var(--cold-raw-material); }
-.cold-colors #legend .legend-refined-material { background: var(--cold-refined-material); }
-.cold-colors #legend .legend-component { background: var(--cold-component); }
-.cold-colors #legend .legend-finished-good { background: var(--cold-finished-good); }
-
-.cold-colors #production-chain-items [data-container-id].item-type-raw-material { background: var(--cold-raw-material); }
-.cold-colors #production-chain-items [data-container-id].item-type-refined-material { background: var(--cold-refined-material); }
-.cold-colors #production-chain-items [data-container-id].item-type-component { background: var(--cold-component); }
-.cold-colors #production-chain-items [data-container-id].item-type-finished-good { background: var(--cold-finished-good); }
-
-.cold-colors #production-chain-items [data-container-id] .process-name { color: white; opacity: 0.75; }
