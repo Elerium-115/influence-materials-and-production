@@ -9,15 +9,10 @@
 
     --item-name: #ccc;
 
-    --raw-material-gradient: #1c1c1c;
     --raw-material: #373737;
-    --process-gradient: #241033;
     --process: #482066;
-    --refined-material-gradient: #05151b;
     --refined-material: #0a2936;
-    --component-gradient: #0e2c37;
     --component: #1b576c;
-    --finished-good-gradient: #164352;
     --finished-good: #2b84a2;
 }
 
@@ -183,6 +178,7 @@
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
+    margin-left: -1.5rem;
     padding: 1.5rem 0;
 }
 
@@ -204,10 +200,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: black;
-    /* https://css-tricks.com/snippets/css/multiple-borders/ */
-    background-clip: content-box !important;
-    padding: 0.1rem;
     border: 1px solid gray;
     border-radius: 0.5rem;
 }
@@ -228,11 +220,11 @@
     display: none;
 }
 
-#production-chain-items [data-container-id].item-type-raw-material { background: linear-gradient(180deg, var(--raw-material-gradient) 0%, var(--raw-material) 100%); }
-#production-chain-items [data-container-id].item-type-process { background: linear-gradient(180deg, var(--process-gradient) 0%, var(--process) 100%); }
-#production-chain-items [data-container-id].item-type-refined-material { background: linear-gradient(180deg, var(--refined-material-gradient) 0%, var(--refined-material) 100%); }
-#production-chain-items [data-container-id].item-type-component { background: linear-gradient(180deg, var(--component-gradient) 0%, var(--component) 100%); }
-#production-chain-items [data-container-id].item-type-finished-good { background: linear-gradient(180deg, var(--finished-good-gradient) 0%, var(--finished-good) 100%); }
+#production-chain-items [data-container-id].item-type-raw-material { background: var(--raw-material); }
+#production-chain-items [data-container-id].item-type-process { background: var(--process); }
+#production-chain-items [data-container-id].item-type-refined-material { background: var(--refined-material); }
+#production-chain-items [data-container-id].item-type-component { background: var(--component); }
+#production-chain-items [data-container-id].item-type-finished-good { background: var(--finished-good); }
 
 #production-chain-items [data-container-id] .item-name {
     flex-grow: 1;
@@ -250,6 +242,7 @@
 
 #production-chain-items [data-container-id] .process-name {
     color: var(--item-name);
+    font-size: 0.7rem;
     padding: 0.5rem;
 }
 
@@ -280,6 +273,34 @@
 
 #production-chain-items [data-container-id], #production-chain-connections * {
     transition: opacity 500ms;
+}
+
+/* hexagon */
+
+#production-chain-items [data-container-id].hexagon, #production-chain-items [data-container-id].hexagon .process-name {
+    /* order of corners in clip-path below: right, bottom-right, bottom-left, left, top-left, top-right */
+    clip-path: polygon(
+        97% 40%, 98.5% 43%, 99.5% 46%, 100% 50%, 99.5% 54%, 98.5% 57%, 97% 60%,
+        80% 94%, 78.8% 95.5%, 77.3% 97%, 75.5% 98.2%, 73.7% 99.1%, 71.6% 99.7%, 69.5% 100%,
+        30.5% 100%, 28.4% 99.7%, 26.3% 99.1%, 24.5% 98.2%, 22.7% 97%, 21.2% 95.5%, 20% 94%,
+        3% 60%, 1.5% 57%, 0.5% 54%, 0% 50%, 0.5% 46%, 1.5% 43%, 3% 40%,
+        20% 6%, 21.2% 4.5%, 22.7% 3%, 24.5% 1.8%, 26.3% 0.9%, 28.4% 0.3%, 30.5% 0%,
+        69.5% 0%, 71.6% 0.3%, 73.7% 0.9%, 75.5% 1.8%, 77.3% 3%, 78.8% 4.5%, 80% 6%
+    );
+}
+
+#production-chain-items [data-container-id].hexagon {
+    background: gray;
+    min-width: 6rem;
+    min-height: 4rem;
+}
+#production-chain-items [data-container-id].hexagon .process-name {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--process);
+    padding: 0.5rem 1rem;
 }
 
 /* required spectral types and raw materials */
