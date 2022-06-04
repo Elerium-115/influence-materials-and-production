@@ -363,6 +363,15 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     return processContainer;
 }
 
+function getBaseSpectralsHtmlForRawMaterial(itemData) {
+    let baseSpectralsHtml = `<div class="spectral-types">`;
+    itemData.baseSpectrals.forEach(baseSpectral => {
+        baseSpectralsHtml += `<span class="spectral-type type-${baseSpectral}">${baseSpectral}</span>`;
+    });
+    baseSpectralsHtml += `</div>`;
+    return baseSpectralsHtml;
+}
+
 function generateUpchainFromRawMaterial(rawMaterialContainer) {
     const rawMaterialContainerId = rawMaterialContainer.dataset.containerId;
     upchainsFromRawMaterials[rawMaterialContainerId] = [rawMaterialContainerId];
@@ -396,12 +405,7 @@ function renderItem(itemName, parentContainerId, renderOnLevel, isSelectedItem =
     }
     levelContainer.appendChild(itemContainer);
     if (itemData.itemType === "Raw Material") {
-        let baseSpectralsHtml = `<div class="spectral-types">`;
-        itemData.baseSpectrals.forEach(baseSpectral => {
-            baseSpectralsHtml += `<span class="spectral-type type-${baseSpectral}">${baseSpectral}</span>`;
-        });
-        baseSpectralsHtml += `</div>`;
-        itemContainer.innerHTML += baseSpectralsHtml;
+        itemContainer.innerHTML += getBaseSpectralsHtmlForRawMaterial(itemData);
         if (!isSelectedItem) {
             // after rendering a raw material which is NOT the selected item, trace back its upchain until the top-level item
             generateUpchainFromRawMaterial(itemContainer);
@@ -472,6 +476,9 @@ function renderItemDerivatives(itemName) {
         const itemContainer = createItemContainer(itemName, itemData, parentProcessContainerIds);
         itemContainer.classList.add('selected-item');
         itemLevelContainer.appendChild(itemContainer);
+        if (itemData.itemType === "Raw Material") {
+            itemContainer.innerHTML += getBaseSpectralsHtmlForRawMaterial(itemData);
+        }
     }
     if (chainType === 'combined') {
         // render both the selected item, and its production chain
