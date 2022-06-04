@@ -172,11 +172,14 @@ const productionWrapper = document.getElementById('production-wrapper');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const productChainConnectionsContainer = document.getElementById('production-chain-connections');
 const processVariantsContainer = document.getElementById('process-variants');
+const requiredSpectralsAndRawMaterialsContainer = document.getElementById('required-spectrals-and-raw-materials');
 const requiredSpectralsContainer = document.getElementById('required-spectrals');
 const requiredTextContainer = document.getElementById('required-text');
 const requiredRawMaterialsContainer = document.getElementById('required-raw-materials');
 
-let horizontalLayout = document.querySelector("#toggle-horizontal-layout").checked;
+let chainType = document.querySelector('input[name="chain-type"][checked]').value; // 'production' vs. 'derivatives'
+
+let horizontalLayout = document.querySelector('#toggle-horizontal-layout').checked; // true vs. false
 
 let itemsWithProcessVariants = {};
 
@@ -206,6 +209,9 @@ let upchainsFromRawMaterials = {};
 let connectedItemPairs = [];
 
 const itemNamesByHash = {};
+
+const connectionDefaultColor = 'gray';
+const connectionDefaultThickness = 1;
 
 // populate "itemNamesByHash" and the top list of products (with NON-raw materials)
 const itemNamesSorted = [];
@@ -328,6 +334,7 @@ function createItemContainer(itemName, itemData, parentContainerId) {
     uniqueContainerId++;
     const itemContainer = document.createElement('div');
     itemContainer.dataset.containerId = uniqueContainerId;
+    // if "parentContainerId" is an array [1, 2, 4] => this will be set as string "1,2,4"
     itemContainer.dataset.parentContainerId = parentContainerId;
     itemContainer.dataset.longestSubchainLength = 1;
     itemContainer.dataset.itemName = itemName;
@@ -342,9 +349,9 @@ function createItemContainer(itemName, itemData, parentContainerId) {
     return itemContainer;
 }
 
-function createProcessContainer(processData, parentContainerId) {
+function createProcessContainer(processData, parentContainerId, processNameOverwrite = '') {
     uniqueContainerId++;
-    const processName = processData.process;
+    const processName = processNameOverwrite || processData.process;
     const processContainer = document.createElement('div');
     processContainer.dataset.containerId = uniqueContainerId;
     processContainer.dataset.parentContainerId = parentContainerId;
@@ -380,7 +387,7 @@ function generateUpchainFromRawMaterial(rawMaterialContainer) {
 function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
     const itemData = items[itemName];
     if (!itemData) {
-        throw Error(`--- ERROR: itemName not found (${itemName})`);
+        throw Error(`--- renderItem ERROR: itemName not found (${itemName})`);
     }
     maxLevel = Math.max(maxLevel, renderOnLevel);
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
@@ -424,6 +431,39 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
             itemsWithProcessVariants[itemName] = processVariants;
         }
     }
+}
+
+function renderItemDerivatives(itemName) {
+    const itemData = items[itemName];
+    if (!itemData) {
+        throw Error(`--- renderItemDerivatives ERROR: itemName not found (${itemName})`);
+    }
+    const parentProcessContainerIds = [];
+    // start by rendering the outputs first, on level 1
+    processes.forEach(processData => {
+        if (processData.inputs.includes(itemName)) {
+            const outputName = processData.output;
+            const outputData = items[outputName];
+            const outputsLevelContainer = injectLevelContainerIfNeeded(1);
+            const outputContainer = createItemContainer(outputName, outputData, 0);
+            outputsLevelContainer.appendChild(outputContainer);
+            // then render the processes, on level 2
+            let extraInputsText = '';
+            if (processData.inputs.length >= 2) {
+                const inputWord = processData.inputs.length == 2 ? 'input' : 'inputs';
+                extraInputsText = ` (+${processData.inputs.length - 1}&nbsp;${inputWord})`
+            }
+            const processNameOverwrite = processData.process + extraInputsText;
+            const processLevelContainer = injectLevelContainerIfNeeded(2);
+            const processContainer = createProcessContainer(processData, outputContainer.dataset.containerId, processNameOverwrite);
+            processLevelContainer.appendChild(processContainer);
+            parentProcessContainerIds.push(processContainer.dataset.containerId);
+        }
+    });
+    // end by rendering the selected item as an input for all processes, on level 3
+    const itemLevelContainer = injectLevelContainerIfNeeded(3);
+    const itemContainer = createItemContainer(itemName, itemData, parentProcessContainerIds);
+    itemLevelContainer.appendChild(itemContainer);
 }
 
 function getItemPriorityOnLevel(itemContainer) {
@@ -545,13 +585,30 @@ function connectContainerIds(parentContainerId, childContainerId, color, thickne
     connectedItemPairs.push(itemPair);
 }
 
-function connectUpchainFromRawMaterialId(rawMaterialContainerId, color = 'gray', thickness = 1) {
+function connectUpchainFromRawMaterialId(rawMaterialContainerId) {
     const upchain = upchainsFromRawMaterials[rawMaterialContainerId];
     for (let i = 0; i < upchain.length - 1; i++) {
         const childContainerId = upchain[i];
         const parentContainerId = upchain[i + 1];
-        connectContainerIds(parentContainerId, childContainerId, color, thickness);
+        connectContainerIds(parentContainerId, childContainerId, connectionDefaultColor, connectionDefaultThickness);
     }
+}
+
+function connectItemToDerivatives() {
+    const itemContainer = document.getElementById('level_3').querySelector('[data-container-id]');
+    const itemContainerId = itemContainer.dataset.containerId;
+    if (!itemContainer.dataset.parentContainerId) {
+        return; // Finished Good, nothing to connect
+    }
+    const parentProcessContainerIds = itemContainer.dataset.parentContainerId.split(',');
+    parentProcessContainerIds.forEach(processContainerId => {
+        // connect item to derivative processes
+        connectContainerIds(processContainerId, itemContainerId, connectionDefaultColor, connectionDefaultThickness);
+        // connect each process to its output
+        const processContainer = getItemContainerById(processContainerId);
+        const outputContainerId = processContainer.dataset.parentContainerId;
+        connectContainerIds(outputContainerId, processContainerId, connectionDefaultColor, connectionDefaultThickness);
+    });
 }
 
 // this function should be called after ANY event / change that affects the position of items in the production chain
@@ -559,14 +616,20 @@ function updateAllConnections() {
     // reset connections first
     productChainConnectionsContainer.textContent = '';
     connectedItemPairs = [];
-    for (const rawMaterialContainerId in upchainsFromRawMaterials) {
-        connectUpchainFromRawMaterialId(rawMaterialContainerId);
+    if (chainType === 'production') {
+        // connect production chain
+        for (const rawMaterialContainerId in upchainsFromRawMaterials) {
+            connectUpchainFromRawMaterialId(rawMaterialContainerId);
+        }
+    } else {
+        // connect derivatives chain
+        connectItemToDerivatives();
     }
 }
 
 function initializeProcessVariants() {
     // this function is only called when multiple process variants are initially checked
-    requiredTextContainer.querySelector(".variants").classList.add('active');
+    requiredTextContainer.querySelector('.variants').classList.add('active');
     productionWrapper.classList.add('has-process-variants');
     let processVariantsHtml = '';
     for (const itemName in itemsWithProcessVariants) {
@@ -591,10 +654,10 @@ function initializeProcessVariants() {
      * (i.e. prevent the click-event from triggering, if that would
      * uncheck the only remaining process variant for that item)
      */
-    document.querySelectorAll(".process").forEach(elProcess => {
+    document.querySelectorAll('.process').forEach(elProcess => {
         elProcess.addEventListener('click', event => {
             const elItem = elProcess.closest(".item");
-            if (elProcess.classList.contains('checked') && elItem.querySelectorAll(".process.checked").length === 1) {
+            if (elProcess.classList.contains('checked') && elItem.querySelectorAll('.process.checked').length === 1) {
                 // this is the only remaining process variant for the current item
                 event.preventDefault(); // prevent the descendants from capturing this event ("stopPropagation" does not work here)
                 // flash error
@@ -615,11 +678,11 @@ function disableItemContainerAndSubchain(itemContainer) {
 
 function updateAllProcessVariants() {
     // first enable subchains for all process variants
-    document.querySelectorAll(".disabled[data-container-id]").forEach(itemContainer => {
+    document.querySelectorAll('.disabled[data-container-id]').forEach(itemContainer => {
         itemContainer.classList.remove('disabled');
     });
     // then disable subchains for process variants which are not currently checked (for ALL items with process variants)
-    document.querySelectorAll(".process:not(.checked) input").forEach(elProcess => {
+    document.querySelectorAll('.process:not(.checked) input').forEach(elProcess => {
         const processCode = elProcess.id;
         // disable all occurrences of this process in the production chain, along with their subchains
         document.querySelectorAll(`[data-process-code=${processCode}]`).forEach(disableItemContainerAndSubchain);
@@ -630,8 +693,8 @@ function updateAllProcessVariants() {
      * - e.g. for "Neodymium", de-selecting the "Lithium" variant leads to the other 2 items
      * from process-variants becoming irrelevant ("Potassium Chloride", "Lithium Carbonate")
      */
-    processVariantsContainer.querySelectorAll(".item").forEach(elItem => {
-        const itemName = elItem.querySelector(".item-name").textContent;
+    processVariantsContainer.querySelectorAll('.item').forEach(elItem => {
+        const itemName = elItem.querySelector('.item-name').textContent;
         if (document.querySelector(`[data-item-name='${itemName}']:not(.disabled)`)) {
             elItem.classList.remove('irrelevant');
         } else {
@@ -642,15 +705,15 @@ function updateAllProcessVariants() {
 
 function updateRequiredSpectralsAndRawMaterials() {
     // first disable all required spectrals, and the ".variants" disclaimer
-    requiredSpectralsContainer.querySelectorAll(".spectral-type").forEach(spectralType => {
+    requiredSpectralsContainer.querySelectorAll('.spectral-type').forEach(spectralType => {
         spectralType.classList.add('disabled');
     });
-    requiredTextContainer.querySelector(".variants").classList.remove('active');
+    requiredTextContainer.querySelector('.variants').classList.remove('active');
     // then update the required raw materials which are not currently disabled, and enable their spectrals
     requiredRawMaterials = {};
     requiredRawMaterialsMaxCounter = 0;
-    document.querySelectorAll(".item-type-raw-material:not(.disabled)").forEach(rawMaterialContainer => {
-        const rawMaterialName = rawMaterialContainer.querySelector("a").textContent;
+    document.querySelectorAll('.item-type-raw-material:not(.disabled)').forEach(rawMaterialContainer => {
+        const rawMaterialName = rawMaterialContainer.querySelector('a').textContent;
         requiredRawMaterials[rawMaterialName] = requiredRawMaterials[rawMaterialName] ? requiredRawMaterials[rawMaterialName] + 1 : 1;
         requiredRawMaterialsMaxCounter = Math.max(requiredRawMaterialsMaxCounter, requiredRawMaterials[rawMaterialName]);
         items[rawMaterialName].baseSpectrals.forEach(baseSpectral => {
@@ -660,15 +723,15 @@ function updateRequiredSpectralsAndRawMaterials() {
     // then update the required raw materials HTML, based on their updated counters
     updateRequiredRawMaterialsHtml();
     // show the ".variants" disclaimer, if multiple process variants are currently checked for any non-disabled item
-    document.querySelectorAll(".process.checked input").forEach(elProcess => {
+    document.querySelectorAll('.process.checked input').forEach(elProcess => {
         const processCode = elProcess.id;
         if (!document.querySelector(`[data-process-code=${processCode}]:not(.disabled)`)) {
             // all occurrences of this process in the production chain are disabled => irrelevant if multiple process variants checked
             return;
         }
         const elItem = elProcess.closest(".item");
-        if (elItem.querySelectorAll(".process.checked").length >= 2) {
-            requiredTextContainer.querySelector(".variants").classList.add('active');
+        if (elItem.querySelectorAll('.process.checked').length >= 2) {
+            requiredTextContainer.querySelector('.variants').classList.add('active');
             return;
         }
     });
@@ -676,7 +739,13 @@ function updateRequiredSpectralsAndRawMaterials() {
 
 function selectItemByName(itemName) {
     resetProductionChain();
-    renderItem(itemName);
+    if (chainType === 'production') {
+        // render production chain
+        renderItem(itemName);
+    } else {
+        // render derivatives chain
+        renderItemDerivatives(itemName);
+    }
     // done rendering all items recursively
     requiredSpectrals.sort();
     updateRequiredSpectralsHtml();
@@ -728,6 +797,23 @@ on('change', '#toggle-horizontal-layout', el => {
         productChainItemsContainer.classList.add('vertical-layout');
     }
     updateAllConnections();
+});
+
+// toggle production chain vs. derivatives chain
+on('change', 'input[name="chain-type"]', el => {
+    chainType = el.value;
+    if (chainType === 'production') {
+        document.querySelector('label[for="radio-chain-derivatives"]').classList.remove('checked');
+        document.querySelector('label[for="radio-chain-production"]').classList.add('checked');
+        // this should match the CSS style for "#required-spectrals-and-raw-materials"
+        requiredSpectralsAndRawMaterialsContainer.style.display = 'inline-block';
+    } else {
+        document.querySelector('label[for="radio-chain-production"]').classList.remove('checked');
+        document.querySelector('label[for="radio-chain-derivatives"]').classList.add('checked');
+        requiredSpectralsAndRawMaterialsContainer.style.display = 'none';
+    }
+    const hashToSelect = window.location.hash.replace(/^#/, '');
+    selectItemByName(itemNamesByHash[hashToSelect]);
 });
 
 // toggle process variant
@@ -784,11 +870,16 @@ window.addEventListener('hashchange', () => {
 // pre-select the item from #Hash on page-load
 let hashToPreselect = window.location.hash.replace(/^#/, '');
 if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
-    // pre-select "Food" by default, if invalid / empty #Hash given
-    hashToPreselect = 'Food';
+    // pre-select "Propylene" by default, if invalid / empty #Hash given
+    hashToPreselect = 'Propylene';
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
+
+//// TO DO: SHOW ARROW that points INTO the selected item, if chainType === 'production'
+////        - vs. arrows that point OUT OF the selected item, if chainType === 'derivatives'
+////        + DISABLE mouseover logic if chainType === 'derivatives'
+////        - (v2) instead of a toggle, COMBINE everything into a single production+derivatives chain, with the selected item clearly highlighted?
 
 //// TO DO: HOW TO inform when C / I types are optional?
 ////        - Chlorine requires only Water (C/I) => C and I both optional
@@ -800,3 +891,6 @@ setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 ////        - google "Neo4j" / "Sankey"
 ////            https://neo4j.com/product/bloom/
 ////            https://www.mssqltips.com/sqlservertip/5288/analyze-entity-data-flow-in-power-bi-desktop-using-sankey-charts/
+
+//// TO DO: visualize the flow of materials through the production chain?
+////        https://machinations.io/

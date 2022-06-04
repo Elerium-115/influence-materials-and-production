@@ -29,26 +29,26 @@
     gap: 1rem;
 }
 
-#options {
+.options {
     display: flex;
     gap: 1rem;
 }
 
-#options label {
+.options label {
     padding: 0.5rem;
     border: 1px solid transparent;
     border-radius: 0.5rem;
 }
 
-#options label:hover {
+.options label:hover {
     border-color: gray;
 }
 
-#options label.checked {
+.options label.checked {
     background: var(--active-bg);
 }
 
-#options label input {
+.options label input {
     margin-right: 0.5rem;
 }
 
