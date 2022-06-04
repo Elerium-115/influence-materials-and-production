@@ -176,7 +176,7 @@ const requiredSpectralsContainer = document.getElementById('required-spectrals')
 const requiredTextContainer = document.getElementById('required-text');
 const requiredRawMaterialsContainer = document.getElementById('required-raw-materials');
 
-let chainType = document.querySelector('input[name="chain-type"][checked]').value; // 'production' vs. 'derivatives'
+let chainType = document.querySelector('input[name="chain-type"][checked]').value; // 'production' / 'derivatives' / 'combined'
 
 let horizontalLayout = document.querySelector('#toggle-horizontal-layout').checked; // true vs. false
 
@@ -377,13 +377,13 @@ function generateUpchainFromRawMaterial(rawMaterialContainer) {
             const newLength = upchainsFromRawMaterials[rawMaterialContainerId].length;
             nextUpchainContainer.dataset.longestSubchainLength = Math.max(oldLength, newLength);
         }
-        // nextUpchainContainer will stop existing when parentContainerId = 0
+        // nextUpchainContainer will stop existing when parentContainerId = 0 (or an array of derivatives for the selected item?)
     }
 }
 
 // parentContainerId = 0 for the top-level item (i.e. no parent)
 // renderOnLevel = 1 for the top-level item; higher values = recursing down to raw materials
-function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
+function renderItem(itemName, parentContainerId, renderOnLevel, isSelectedItem = false) {
     const itemData = items[itemName];
     if (!itemData) {
         throw Error(`--- renderItem ERROR: itemName not found (${itemName})`);
@@ -391,7 +391,7 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
     maxLevel = Math.max(maxLevel, renderOnLevel);
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
     const itemContainer = createItemContainer(itemName, itemData, parentContainerId);
-    if (parentContainerId === 0) {
+    if (isSelectedItem) {
         itemContainer.classList.add('selected-item');
     }
     levelContainer.appendChild(itemContainer);
@@ -402,8 +402,8 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
         });
         baseSpectralsHtml += `</div>`;
         itemContainer.innerHTML += baseSpectralsHtml;
-        if (parentContainerId !== 0) {
-            // after rendering a raw material, trace back its upchain until the top-level item
+        if (!isSelectedItem) {
+            // after rendering a raw material which is NOT the selected item, trace back its upchain until the top-level item
             generateUpchainFromRawMaterial(itemContainer);
         }
         requiredRawMaterials[itemName] = requiredRawMaterials[itemName] ? requiredRawMaterials[itemName] + 1 : 1;
@@ -462,11 +462,19 @@ function renderItemDerivatives(itemName) {
             parentProcessContainerIds.push(processContainer.dataset.containerId);
         }
     });
-    // end by rendering the selected item as an input for all processes, on level 3
-    const itemLevelContainer = injectLevelContainerIfNeeded(3);
-    const itemContainer = createItemContainer(itemName, itemData, parentProcessContainerIds);
-    itemContainer.classList.add('selected-item');
-    itemLevelContainer.appendChild(itemContainer);
+    // end by rendering the selected item as an input for all processes, on level 3 (or level 1 if Finished Good)
+    const itemLevel = parentProcessContainerIds.length ? 3 : 1;
+    if (chainType === 'derivatives') {
+        // only render the selected item, without its production chain
+        const itemLevelContainer = injectLevelContainerIfNeeded(itemLevel);
+        const itemContainer = createItemContainer(itemName, itemData, parentProcessContainerIds);
+        itemContainer.classList.add('selected-item');
+        itemLevelContainer.appendChild(itemContainer);
+    }
+    if (chainType === 'combined') {
+        // render both the selected item, and its production chain
+        renderItem(itemName, parentProcessContainerIds, itemLevel, true);
+    }
 }
 
 function getItemPriorityOnLevel(itemContainer) {
@@ -627,13 +635,12 @@ function updateAllConnections() {
     // reset connections first
     productChainConnectionsContainer.textContent = '';
     connectedItemPairs = [];
-    if (chainType === 'production') {
-        // connect production chain
-        for (const rawMaterialContainerId in upchainsFromRawMaterials) {
-            connectUpchainFromRawMaterialId(rawMaterialContainerId);
-        }
-    } else {
-        // connect derivatives chain
+    // connect production chain, if non-empty "upchainsFromRawMaterials"
+    for (const rawMaterialContainerId in upchainsFromRawMaterials) {
+        connectUpchainFromRawMaterialId(rawMaterialContainerId);
+    }
+    if (chainType !== 'production') {
+        // connect derivatives chain / combined chain
         connectItemToDerivatives();
     }
 }
@@ -752,9 +759,9 @@ function selectItemByName(itemName) {
     resetProductionChain();
     if (chainType === 'production') {
         // render production chain
-        renderItem(itemName);
+        renderItem(itemName, 0, 1, true);
     } else {
-        // render derivatives chain
+        // render derivatives chain / combined chain
         renderItemDerivatives(itemName);
     }
     // done rendering all items recursively
@@ -812,17 +819,24 @@ on('change', '#toggle-horizontal-layout', el => {
 
 // toggle production chain vs. derivatives chain
 on('change', 'input[name="chain-type"]', el => {
+    document.querySelectorAll('#chain-types label').forEach(el => {
+        el.classList.remove('checked');
+    });
+    productionWrapper.classList.remove('chain-type-production', 'chain-type-derivatives', 'chain-type-combined');
     chainType = el.value;
-    if (chainType === 'production') {
-        document.querySelector('label[for="radio-chain-derivatives"]').classList.remove('checked');
-        document.querySelector('label[for="radio-chain-production"]').classList.add('checked');
-        productionWrapper.classList.remove('chain-type-derivatives');
-        productionWrapper.classList.add('chain-type-production');
-    } else {
-        document.querySelector('label[for="radio-chain-production"]').classList.remove('checked');
-        document.querySelector('label[for="radio-chain-derivatives"]').classList.add('checked');
-        productionWrapper.classList.remove('chain-type-production');
-        productionWrapper.classList.add('chain-type-derivatives');
+    switch (chainType) {
+        case 'production':
+            document.querySelector('label[for="radio-chain-production"]').classList.add('checked');
+            productionWrapper.classList.add('chain-type-production');
+            break;
+        case 'derivatives':
+            document.querySelector('label[for="radio-chain-derivatives"]').classList.add('checked');
+            productionWrapper.classList.add('chain-type-derivatives');
+            break;
+        case 'combined':
+            document.querySelector('label[for="radio-chain-combined"]').classList.add('checked');
+            productionWrapper.classList.add('chain-type-combined');
+            break;
     }
     const hashToSelect = window.location.hash.replace(/^#/, '');
     selectItemByName(itemNamesByHash[hashToSelect]);
@@ -843,10 +857,10 @@ on('change', '.process input', el => {
 });
 
 /**
- * highlight subchain and ancestors, on hover over item, IFF chain-type production
+ * highlight subchain and ancestors, on hover over item, IFF NOT derivatives chain
  * use "mouseenter" instead of "mouseover", and "mouseleave" instead of "mouseout" (to avoid triggering on children)
  */
-on('mouseenter', '.chain-type-production [data-container-id]', el => {
+on('mouseenter', '#production-wrapper:not(.chain-type-derivatives) [data-container-id]', el => {
     const itemContainerId = el.dataset.containerId;
     const fullchain = getFullchainForItemId(itemContainerId);
     fullchain.forEach(itemContainerId => {
@@ -855,7 +869,7 @@ on('mouseenter', '.chain-type-production [data-container-id]', el => {
     productChainItemsContainer.classList.add('faded');
     updateAllConnections();
 });
-on('mouseleave', '.chain-type-production [data-container-id]', el => {
+on('mouseleave', '#production-wrapper:not(.chain-type-derivatives) [data-container-id]', el => {
     resetFadedItemsAndConnections();
 });
 
@@ -888,9 +902,11 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
-//// TO DO: STREAMLINE the list of products (via filters + dropdown?) + ADD raw materials to that list
+//// TO DO: FIX combined chain, to NOT trigger hover-logic on the derivatives part of the chain
 
-//// TO DO: COMBINE the different chain-types into a single production+derivatives chain?
+//// TO DO: FIX derivatives chain, to show the spectral-types inside the selected item, if it's a raw material
+
+//// TO DO: STREAMLINE the list of products (via filters + dropdown?) + ADD raw materials to that list
 
 //// TO DO: HOW TO inform when C / I types are optional?
 ////        - Chlorine requires only Water (C/I) => C and I both optional

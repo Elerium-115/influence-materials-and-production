@@ -26,16 +26,8 @@
             <a href="./production.html" class="active">Production Chains</a>
         </nav>
 
-        <div id="production-wrapper" class="chain-type-production">
+        <div id="production-wrapper" class="chain-type-combined">
             <div id="production-topbar">
-                <div class="options">
-                    <label for="radio-chain-production" class="checked">
-                        <input type="radio" name="chain-type" id="radio-chain-production" value="production" checked>How it's made
-                    </label>
-                    <label for="radio-chain-derivatives">
-                        <input type="radio" name="chain-type" id="radio-chain-derivatives" value="derivatives">What it's good for
-                    </label>
-                </div>
                 <div class="options">
                     <label for="toggle-horizontal-layout" class="checked">
                         <input type="checkbox" id="toggle-horizontal-layout" checked>Horizontal Layout
@@ -55,6 +47,17 @@
             <div id="products-wrapper">
                 <div>Show production chain for:</div>
                 <div id="products"></div>
+            </div>
+            <div id="chain-types" class="options">
+                <label for="radio-chain-production">
+                    <input type="radio" name="chain-type" id="radio-chain-production" value="production">How it's made
+                </label>
+                <label for="radio-chain-derivatives">
+                    <input type="radio" name="chain-type" id="radio-chain-derivatives" value="derivatives">What it's good for
+                </label>
+                <label for="radio-chain-combined" class="checked">
+                    <input type="radio" name="chain-type" id="radio-chain-combined" value="combined" checked>Why not both
+                </label>
             </div>
             <div id="process-variants-wrapper">
                 <div>Select alternative production paths:</div>
