@@ -50,6 +50,35 @@
 #legend .legend-component { background: var(--component); }
 #legend .legend-finished-good { background: var(--finished-good); }
 
+/* options */
+
+.options label {
+    padding: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+}
+
+.options label:hover {
+    border-color: gray;
+}
+
+.options label.checked {
+    background: var(--active-bg);
+}
+
+.options label input {
+    margin-right: 0.5rem;
+}
+
+.options .separator {
+    display: inline-block;
+    width: 2rem;
+}
+
+#chain-types {
+    margin-top: 2rem;
+}
+
 /* products */
 
 #products-wrapper {
@@ -85,35 +114,6 @@
     color: white;
     border-color: var(--item-name);
     opacity: 1;
-}
-
-/* options */
-
-.options label {
-    padding: 0.5rem;
-    border: 1px solid transparent;
-    border-radius: 0.5rem;
-}
-
-.options label:hover {
-    border-color: gray;
-}
-
-.options label.checked {
-    background: var(--active-bg);
-}
-
-.options label input {
-    margin-right: 0.5rem;
-}
-
-.options .separator {
-    display: inline-block;
-    width: 2rem;
-}
-
-#chain-types {
-    margin-top: 2rem;
 }
 
 /* process variants */
