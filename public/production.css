@@ -109,6 +109,11 @@
     opacity: 1;
 }
 
+/* chain types */
+#chain-types {
+    margin-top: 2rem;
+}
+
 /* process variants */
 
 #process-variants-wrapper {
@@ -222,6 +227,7 @@
 
 #production-chain-items .selected-item[data-container-id] {
     border-color: var(--item-name);
+    border-width: 2px;
 }
 
 #production-chain-items [data-container-id].item-type-raw-material { background: var(--raw-material); }
