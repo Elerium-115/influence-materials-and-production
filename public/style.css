@@ -100,6 +100,10 @@
     padding: 0;
 }
 
+h2 {
+    font-size: 1.5rem;
+}
+
 a {
     color: #3f80ea;
     text-decoration: none;
@@ -116,10 +120,6 @@ ul {
 
 label {
     cursor: pointer;
-}
-
-h2 {
-    font-size: 1.5rem;
 }
 
 body {
