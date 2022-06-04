@@ -20,40 +20,18 @@
     font-size: 0.8rem;
 }
 
-/* options */
+/* production toolbar */
 
-#production-topbar {
+.production-toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
 }
 
-.options {
-    display: flex;
-    gap: 1rem;
-}
-
-.options label {
-    padding: 0.5rem;
-    border: 1px solid transparent;
-    border-radius: 0.5rem;
-}
-
-.options label:hover {
-    border-color: gray;
-}
-
-.options label.checked {
-    background: var(--active-bg);
-}
-
-.options label input {
-    margin-right: 0.5rem;
-}
-
 #legend-wrapper {
     background: var(--active-bg);
+    margin-bottom: -0.2rem;
     padding: 0.5rem;
     border-radius: 0.5rem;
 }
@@ -109,7 +87,31 @@
     opacity: 1;
 }
 
-/* chain types */
+/* options */
+
+.options label {
+    padding: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+}
+
+.options label:hover {
+    border-color: gray;
+}
+
+.options label.checked {
+    background: var(--active-bg);
+}
+
+.options label input {
+    margin-right: 0.5rem;
+}
+
+.options .separator {
+    display: inline-block;
+    width: 2rem;
+}
+
 #chain-types {
     margin-top: 2rem;
 }

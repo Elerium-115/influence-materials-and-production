@@ -911,8 +911,6 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
-//// TO DO: FIX derivatives chain, to show the spectral-types inside the selected item, if it's a raw material
-
 //// TO DO: STREAMLINE the list of products (via filters + dropdown?) + ADD raw materials to that list
 
 //// TO DO: HOW TO inform when C / I types are optional?
