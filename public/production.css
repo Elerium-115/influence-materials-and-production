@@ -313,6 +313,10 @@
     border-radius: 0.5rem;
 }
 
+.chain-type-derivatives #required-spectrals-and-raw-materials {
+    display: none;
+}
+
 #required-spectrals-wrapper {
     display: flex;
 }

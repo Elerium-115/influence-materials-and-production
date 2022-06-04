@@ -172,7 +172,6 @@ const productionWrapper = document.getElementById('production-wrapper');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const productChainConnectionsContainer = document.getElementById('production-chain-connections');
 const processVariantsContainer = document.getElementById('process-variants');
-const requiredSpectralsAndRawMaterialsContainer = document.getElementById('required-spectrals-and-raw-materials');
 const requiredSpectralsContainer = document.getElementById('required-spectrals');
 const requiredTextContainer = document.getElementById('required-text');
 const requiredRawMaterialsContainer = document.getElementById('required-raw-materials');
@@ -805,12 +804,13 @@ on('change', 'input[name="chain-type"]', el => {
     if (chainType === 'production') {
         document.querySelector('label[for="radio-chain-derivatives"]').classList.remove('checked');
         document.querySelector('label[for="radio-chain-production"]').classList.add('checked');
-        // this should match the CSS style for "#required-spectrals-and-raw-materials"
-        requiredSpectralsAndRawMaterialsContainer.style.display = 'inline-block';
+        productionWrapper.classList.remove('chain-type-derivatives');
+        productionWrapper.classList.add('chain-type-production');
     } else {
         document.querySelector('label[for="radio-chain-production"]').classList.remove('checked');
         document.querySelector('label[for="radio-chain-derivatives"]').classList.add('checked');
-        requiredSpectralsAndRawMaterialsContainer.style.display = 'none';
+        productionWrapper.classList.remove('chain-type-production');
+        productionWrapper.classList.add('chain-type-derivatives');
     }
     const hashToSelect = window.location.hash.replace(/^#/, '');
     selectItemByName(itemNamesByHash[hashToSelect]);
@@ -831,10 +831,10 @@ on('change', '.process input', el => {
 });
 
 /**
- * highlight subchain and ancestors, on hover over item
+ * highlight subchain and ancestors, on hover over item, IFF chain-type production
  * use "mouseenter" instead of "mouseover", and "mouseleave" instead of "mouseout" (to avoid triggering on children)
  */
-on('mouseenter', '[data-container-id]', el => {
+on('mouseenter', '.chain-type-production [data-container-id]', el => {
     const itemContainerId = el.dataset.containerId;
     const fullchain = getFullchainForItemId(itemContainerId);
     fullchain.forEach(itemContainerId => {
@@ -843,7 +843,7 @@ on('mouseenter', '[data-container-id]', el => {
     productChainItemsContainer.classList.add('faded');
     updateAllConnections();
 });
-on('mouseleave', '[data-container-id]', el => {
+on('mouseleave', '.chain-type-production [data-container-id]', el => {
     resetFadedItemsAndConnections();
 });
 
@@ -876,9 +876,10 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
+//// TO DO: STREAMLINE the list of products (via filters + dropdown?) + ADD raw materials to that list
+
 //// TO DO: SHOW ARROW that points INTO the selected item, if chainType === 'production'
 ////        - vs. arrows that point OUT OF the selected item, if chainType === 'derivatives'
-////        + DISABLE mouseover logic if chainType === 'derivatives'
 ////        - (v2) instead of a toggle, COMBINE everything into a single production+derivatives chain, with the selected item clearly highlighted?
 
 //// TO DO: HOW TO inform when C / I types are optional?
