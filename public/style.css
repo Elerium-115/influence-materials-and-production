@@ -118,6 +118,10 @@ label {
     cursor: pointer;
 }
 
+h2 {
+    font-size: 1.5rem;
+}
+
 body {
     background-color: var(--default-bg);
     color: var(--default-text);
