@@ -448,6 +448,7 @@ function renderItemDerivatives(itemName) {
             const outputData = items[outputName];
             const outputsLevelContainer = injectLevelContainerIfNeeded(1);
             const outputContainer = createItemContainer(outputName, outputData, 0);
+            outputContainer.classList.add('derivative-item');
             outputsLevelContainer.appendChild(outputContainer);
             // then render the processes, on level 2
             let extraInputsText = '';
@@ -458,6 +459,7 @@ function renderItemDerivatives(itemName) {
             const processNameOverwrite = processData.process + extraInputsText;
             const processLevelContainer = injectLevelContainerIfNeeded(2);
             const processContainer = createProcessContainer(processData, outputContainer.dataset.containerId, processNameOverwrite);
+            processContainer.classList.add('derivative-item');
             processLevelContainer.appendChild(processContainer);
             parentProcessContainerIds.push(processContainer.dataset.containerId);
         }
@@ -860,7 +862,7 @@ on('change', '.process input', el => {
  * highlight subchain and ancestors, on hover over item, IFF NOT derivatives chain
  * use "mouseenter" instead of "mouseover", and "mouseleave" instead of "mouseout" (to avoid triggering on children)
  */
-on('mouseenter', '#production-wrapper:not(.chain-type-derivatives) [data-container-id]', el => {
+on('mouseenter', '[data-container-id]:not(.derivative-item)', el => {
     const itemContainerId = el.dataset.containerId;
     const fullchain = getFullchainForItemId(itemContainerId);
     fullchain.forEach(itemContainerId => {
@@ -869,7 +871,7 @@ on('mouseenter', '#production-wrapper:not(.chain-type-derivatives) [data-contain
     productChainItemsContainer.classList.add('faded');
     updateAllConnections();
 });
-on('mouseleave', '#production-wrapper:not(.chain-type-derivatives) [data-container-id]', el => {
+on('mouseleave', '[data-container-id]:not(.derivative-item)', el => {
     resetFadedItemsAndConnections();
 });
 
@@ -901,8 +903,6 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
-
-//// TO DO: FIX combined chain, to NOT trigger hover-logic on the derivatives part of the chain
 
 //// TO DO: FIX derivatives chain, to show the spectral-types inside the selected item, if it's a raw material
 
