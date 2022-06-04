@@ -220,6 +220,10 @@
     display: none;
 }
 
+#production-chain-items .selected-item[data-container-id] {
+    border-color: var(--item-name);
+}
+
 #production-chain-items [data-container-id].item-type-raw-material { background: var(--raw-material); }
 #production-chain-items [data-container-id].item-type-process { background: var(--process); }
 #production-chain-items [data-container-id].item-type-refined-material { background: var(--refined-material); }
@@ -236,7 +240,7 @@
     padding: 0.5rem;
 }
 
-#production-chain-items #level_1 [data-container-id] .item-name {
+#production-chain-items .selected-item[data-container-id] .item-name {
     color: white;
 }
 
@@ -269,6 +273,12 @@
 
 #production-chain-connections .faded {
     opacity: 0.2;
+}
+
+#production-chain-connections .arrow::after {
+    content: '▶';
+    position: absolute;
+    right: 0;
 }
 
 #production-chain-items [data-container-id], #production-chain-connections * {

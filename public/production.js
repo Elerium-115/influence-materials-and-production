@@ -391,6 +391,9 @@ function renderItem(itemName, parentContainerId = 0, renderOnLevel = 1) {
     maxLevel = Math.max(maxLevel, renderOnLevel);
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
     const itemContainer = createItemContainer(itemName, itemData, parentContainerId);
+    if (parentContainerId === 0) {
+        itemContainer.classList.add('selected-item');
+    }
     levelContainer.appendChild(itemContainer);
     if (itemData.itemType === "Raw Material") {
         let baseSpectralsHtml = `<div class="spectral-types">`;
@@ -462,6 +465,7 @@ function renderItemDerivatives(itemName) {
     // end by rendering the selected item as an input for all processes, on level 3
     const itemLevelContainer = injectLevelContainerIfNeeded(3);
     const itemContainer = createItemContainer(itemName, itemData, parentProcessContainerIds);
+    itemContainer.classList.add('selected-item');
     itemLevelContainer.appendChild(itemContainer);
 }
 
@@ -530,7 +534,7 @@ function getOffset(el) {
  * el1 = parent element, el2 = child element
  * source: https://thewebdev.info/2021/09/12/how-to-draw-a-line-between-two-divs-with-javascript/
  */
-function connectContainers(el1, el2, color, thickness, faded) {
+function connectContainers(el1, el2, color, thickness, faded, arrow) {
     const off1 = getOffset(el1);
     const off2 = getOffset(el2);
     let x1, y1, x2, y2;
@@ -558,6 +562,9 @@ function connectContainers(el1, el2, color, thickness, faded) {
     if (faded) {
         line.classList.add('faded');
     }
+    if (arrow) {
+        line.classList.add('arrow');
+    }
     productChainConnectionsContainer.appendChild(line);
 }
 
@@ -580,7 +587,12 @@ function connectContainerIds(parentContainerId, childContainerId, color, thickne
             faded = true;
         }
     }
-    connectContainers(parentContainer, childContainer, color, thickness, faded);
+    // draw arrow to / from the selected item
+    let arrow = false;
+    if (parentContainer.classList.contains('selected-item') || childContainer.classList.contains('selected-item')) {
+        arrow = true;
+    }
+    connectContainers(parentContainer, childContainer, color, thickness, faded, arrow);
     connectedItemPairs.push(itemPair);
 }
 
@@ -878,9 +890,7 @@ setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
 //// TO DO: STREAMLINE the list of products (via filters + dropdown?) + ADD raw materials to that list
 
-//// TO DO: SHOW ARROW that points INTO the selected item, if chainType === 'production'
-////        - vs. arrows that point OUT OF the selected item, if chainType === 'derivatives'
-////        - (v2) instead of a toggle, COMBINE everything into a single production+derivatives chain, with the selected item clearly highlighted?
+//// TO DO: COMBINE the different chain-types into a single production+derivatives chain?
 
 //// TO DO: HOW TO inform when C / I types are optional?
 ////        - Chlorine requires only Water (C/I) => C and I both optional
