@@ -51,16 +51,58 @@
     padding-bottom: 0.5rem; /* compensate for padding of options */
 }
 
-/* products */
+/* products list and filters */
 
-#products-list {
-    width: 14rem;
-    height: 2rem;
+#products-list-wrapper {
+    display: inline-block;
+    position: relative;
     margin-left: 0.5rem;
 }
 
-#products-list option {
+#products-list-wrapper input {
+    width: 14rem;
+    height: 2rem;
+    padding: 0 2rem 0 1rem;
+    border: 1px solid var(--item-name);
+}
+
+#products-list-wrapper::after {
+    content: '✖';
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    line-height: 2rem;
+}
+
+#products-list-wrapper.list-hidden::after {
+    content: '▼';
+}
+
+#products-list {
+    position: absolute;
+    z-index: 1;
+    width: 14rem;
+    max-height: 20rem; /* fit 10 list-items */
+    overflow: auto;
+    background: var(--overactive-bg);
+    border: 1px solid var(--item-name);
+    border-top: none;
+}
+
+#products-list-wrapper.list-hidden #products-list {
+    display: none;
+}
+
+#products-list a {
+    display: block;
+    line-height: 2rem;
     color: var(--item-name);
+    text-decoration: none;
+    padding: 0 1rem;
+}
+
+#products-list a:hover {
+    background: var(--dark-bg) !important;
 }
 
 #filter-item-types label {
@@ -69,6 +111,11 @@
 
 #filter-item-types .groupText {
     margin-right: 0.5rem;
+}
+
+#products-list a.item-type-finished-good,
+#filter-item-types label.checked[for='filter-finished-goods'] {
+    color: white;
 }
 
 #selected-production-chain {
@@ -249,7 +296,7 @@
 
 /* item-type backgrounds */
 
-#products-list option.item-type-raw-material,
+#products-list .item-type-raw-material,
 #filter-item-types label.checked[for='filter-raw-materials'],
 #production-chain-items [data-container-id].item-type-raw-material {
     background: var(--raw-material);
@@ -259,19 +306,19 @@
     background: var(--process);
 }
 
-#products-list option.item-type-refined-material,
+#products-list .item-type-refined-material,
 #filter-item-types label.checked[for='filter-refined-materials'],
 #production-chain-items [data-container-id].item-type-refined-material {
     background: var(--refined-material);
 }
 
-#products-list option.item-type-component,
+#products-list .item-type-component,
 #filter-item-types label.checked[for='filter-components'],
 #production-chain-items [data-container-id].item-type-component {
     background: var(--component);
 }
 
-#products-list option.item-type-finished-good,
+#products-list .item-type-finished-good,
 #filter-item-types label.checked[for='filter-finished-goods'],
 #production-chain-items [data-container-id].item-type-finished-good {
     background: var(--finished-good);

@@ -223,8 +223,8 @@ itemNamesSorted.forEach(itemName => {
     const itemNameCompact = getCompactName(itemName);
     itemNamesByHash[itemNameCompact] = itemName;
     const itemData = items[itemName];
-    const listItem = document.createElement('option');
-    listItem.value = itemNameCompact;
+    const listItem = document.createElement('a');
+    listItem.href = `#${itemNameCompact}`;
     listItem.textContent = itemName;
     listItem.classList.add(getItemTypeClass(itemData.itemType));
     productsListContainer.appendChild(listItem);
@@ -691,7 +691,7 @@ function initializeProcessVariants() {
      */
     document.querySelectorAll('.process').forEach(elProcess => {
         elProcess.addEventListener('click', event => {
-            const elItem = elProcess.closest(".item");
+            const elItem = elProcess.closest('.item');
             if (elProcess.classList.contains('checked') && elItem.querySelectorAll('.process.checked').length === 1) {
                 // this is the only remaining process variant for the current item
                 event.preventDefault(); // prevent the descendants from capturing this event ("stopPropagation" does not work here)
@@ -764,7 +764,7 @@ function updateRequiredSpectralsAndRawMaterials() {
             // all occurrences of this process in the production chain are disabled => irrelevant if multiple process variants checked
             return;
         }
-        const elItem = elProcess.closest(".item");
+        const elItem = elProcess.closest('.item');
         if (elItem.querySelectorAll('.process.checked').length >= 2) {
             requiredTextContainer.querySelector('.variants').classList.add('active');
             return;
@@ -792,8 +792,8 @@ function selectItemByName(itemName) {
     updateAllConnections();
     // highlight the selected item in the products-list
     const itemNameCompact = getCompactName(itemName);
-    productsListContainer.querySelector(`option[value='${itemNameCompact}']`).selected = true;
-    document.querySelector("#selected-item-name").textContent = itemName;
+    document.querySelector('#product-input').value = itemName;
+    document.querySelector('#selected-item-name').textContent = itemName;
     window.location.hash = `#${itemNameCompact}`;
 }
 
@@ -817,20 +817,23 @@ on('change', 'label > input', el => {
     }
 });
 
-// select item from the products-list
-on('change', '#products-list', el => {
-    window.location.hash = `#${el.value}`;
+// toggle products-list (also when clicking on "#products-list-wrapper::after")
+on('click', '#products-list-wrapper, #products-list-wrapper input', el => {
+    document.querySelector('#products-list-wrapper').classList.toggle('list-hidden');
+});
+on('mouseleave', '#products-list-wrapper', el => {
+    document.querySelector('#products-list-wrapper').classList.add('list-hidden');
 });
 
 // filter item-types in the products-list
 on('change', '#filter-item-types input', el => {
     // e.g. "filter-raw-materials" => "item-type-raw-material"
     const itemTypeClass = 'item-type-' + el.id.replace(/^filter-(.+)s$/, '$1');
-    productsListContainer.querySelectorAll(`option.${itemTypeClass}`).forEach(elOption => {
+    productsListContainer.querySelectorAll(`.${itemTypeClass}`).forEach(elListItem => {
         if (el.checked) {
-            elOption.classList.remove('hidden');
+            elListItem.classList.remove('hidden');
         } else {
-            elOption.classList.add('hidden');
+            elListItem.classList.add('hidden');
         }
     });
 });
@@ -881,7 +884,7 @@ on('change', '.process input', el => {
     updateAllConnections();
     if (el.checked) {
         // fake "mousenter" on label, to highlight items in the production chain for this process variant
-        el.closest("label").dispatchEvent(new Event('mouseenter'));
+        el.closest('label').dispatchEvent(new Event('mouseenter'));
     } else {
         // stop highlighting items in the production chain for this process variant
         resetFadedItemsAndConnections();
