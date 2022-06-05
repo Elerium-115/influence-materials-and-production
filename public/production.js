@@ -213,21 +213,6 @@ const itemNamesByHash = {};
 const connectionDefaultColor = 'gray';
 const connectionDefaultThickness = 1;
 
-function getCompactName(name) {
-    return name.replace(/\s+/g, '');
-}
-
-function getItemTypeClass(itemType) {
-    let itemTypeClass = '';
-    switch (itemType) {
-        case 'Raw Material': itemTypeClass = 'item-type-raw-material'; break;
-        case 'Refined Material': itemTypeClass = 'item-type-refined-material'; break;
-        case 'Component': itemTypeClass = 'item-type-component'; break;
-        case 'Finished Good': itemTypeClass = 'item-type-finished-good'; break;
-    }
-    return itemTypeClass;
-}
-
 // populate "itemNamesByHash" and the products-list
 const itemNamesSorted = [];
 for (const itemName in items) {
@@ -245,9 +230,25 @@ itemNamesSorted.forEach(itemName => {
     productsListContainer.appendChild(listItem);
 });
 
+// e.g. "Carbon Dioxide" => "CarbonDioxide"
+function getCompactName(name) {
+    return name.replace(/\s+/g, '');
+}
+
 // e.g. "Carbon Dioxide" => "carbon-dioxide"
 function getItemNameSafe(itemName) {
     return itemName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
+}
+
+function getItemTypeClass(itemType) {
+    let itemTypeClass = '';
+    switch (itemType) {
+        case 'Raw Material': itemTypeClass = 'item-type-raw-material'; break;
+        case 'Refined Material': itemTypeClass = 'item-type-refined-material'; break;
+        case 'Component': itemTypeClass = 'item-type-component'; break;
+        case 'Finished Good': itemTypeClass = 'item-type-finished-good'; break;
+    }
+    return itemTypeClass;
 }
 
 function getItemContainerById(itemContainerId) {
@@ -932,8 +933,6 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
-
-//// TO DO: PREVENT all filters from being un-checked?
 
 //// TO DO: IMPROVE products-list logic to allow searching (with auto-complete?)
 
