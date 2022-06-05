@@ -67,15 +67,17 @@
 }
 
 #products-list-wrapper::after {
-    content: '✖';
+    content: '✕';
     position: absolute;
     top: 0;
     right: 1rem;
+    cursor: pointer;
     line-height: 2rem;
 }
 
 #products-list-wrapper.list-hidden::after {
     content: '▼';
+    margin: 1px -1px 0 0;
 }
 
 #products-list {
@@ -103,6 +105,10 @@
 
 #products-list a:hover {
     background: var(--dark-bg) !important;
+}
+
+#products-list a.not-matching-search {
+    display: none;
 }
 
 #filter-item-types label {
