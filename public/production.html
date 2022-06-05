@@ -27,20 +27,30 @@
         </nav>
 
         <div id="production-wrapper" class="chain-type-combined">
-            <div class="production-toolbar">
-                <h2>Production Chains</h2>
-                <div id="legend-wrapper">
-                    Legend:
-                    <span id="legend">
-                        <span class="legend-raw-material">Raw Material</span>
-                        <span class="legend-process">Process</span>
-                        <span class="legend-refined-material">Refined Material</span>
-                        <span class="legend-component">Component</span>
-                        <span class="legend-finished-good">Finished Good</span>
-                    </span>
-                </div>
+            <div class="options">
+                <span>Select product:</span>
+                <select id="products-list"></select>
+                <span class="separator"></span>
+                <span id="filter-item-types">
+                    <span>Filter:</span>
+                    <label for="filter-raw-materials" class="checked">
+                        <input type="checkbox" id="filter-raw-materials" checked>Raw Materials
+                    </label>
+                    <label for="filter-refined-materials" class="checked">
+                        <input type="checkbox" id="filter-refined-materials" checked>Refined Materials
+                    </label>
+                    <label for="filter-components" class="checked">
+                        <input type="checkbox" id="filter-components" checked>Components
+                    </label>
+                    <label for="filter-finished-goods" class="checked">
+                        <input type="checkbox" id="filter-finished-goods" checked>Finished Goods
+                    </label>
+                </span>
             </div>
-            <div id="chain-types" class="options">
+            <h2 id="selected-production-chain">
+                <span id="selected-item-name"></span> - Production Chain
+            </h2>
+            <div id="chain-settings" class="options">
                 <label for="radio-chain-production">
                     <input type="radio" name="chain-type" id="radio-chain-production" value="production">How it's made
                 </label>
@@ -54,10 +64,6 @@
                 <label for="toggle-horizontal-layout" class="checked">
                     <input type="checkbox" id="toggle-horizontal-layout" checked>Horizontal Layout
                 </label>
-            </div>
-            <div id="products-wrapper">
-                <div>Show production chain for:</div>
-                <div id="products"></div>
             </div>
             <div id="process-variants-wrapper">
                 <div>Select alternative production paths:</div>

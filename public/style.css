@@ -122,6 +122,10 @@ label {
     cursor: pointer;
 }
 
+.hidden {
+    display: none;
+}
+
 body {
     background-color: var(--default-bg);
     color: var(--default-text);

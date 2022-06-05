@@ -169,6 +169,7 @@ const processes = [
 ];
 
 const productionWrapper = document.getElementById('production-wrapper');
+const productsListContainer = document.getElementById('products-list');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const productChainConnectionsContainer = document.getElementById('production-chain-connections');
 const processVariantsContainer = document.getElementById('process-variants');
@@ -212,24 +213,36 @@ const itemNamesByHash = {};
 const connectionDefaultColor = 'gray';
 const connectionDefaultThickness = 1;
 
-// populate "itemNamesByHash" and the top list of products (with NON-raw materials)
+function getCompactName(name) {
+    return name.replace(/\s+/g, '');
+}
+
+function getItemTypeClass(itemType) {
+    let itemTypeClass = '';
+    switch (itemType) {
+        case 'Raw Material': itemTypeClass = 'item-type-raw-material'; break;
+        case 'Refined Material': itemTypeClass = 'item-type-refined-material'; break;
+        case 'Component': itemTypeClass = 'item-type-component'; break;
+        case 'Finished Good': itemTypeClass = 'item-type-finished-good'; break;
+    }
+    return itemTypeClass;
+}
+
+// populate "itemNamesByHash" and the products-list
 const itemNamesSorted = [];
 for (const itemName in items) {
     itemNamesSorted.push(itemName);
 }
 itemNamesSorted.sort();
 itemNamesSorted.forEach(itemName => {
-    const itemNameCompact = itemName.replace(/\s+/g, '');
+    const itemNameCompact = getCompactName(itemName);
     itemNamesByHash[itemNameCompact] = itemName;
     const itemData = items[itemName];
-    if (itemData.itemType === 'Raw Material') {
-        return;
-    }
-    const listItem = document.createElement('a');
-    listItem.href = `#${itemNameCompact}`;
+    const listItem = document.createElement('option');
+    listItem.value = itemNameCompact;
     listItem.textContent = itemName;
-    listItem.classList.add(itemData.itemType.replace(/\s+/g, ''));
-    document.getElementById('products').appendChild(listItem);
+    listItem.classList.add(getItemTypeClass(itemData.itemType));
+    productsListContainer.appendChild(listItem);
 });
 
 // e.g. "Carbon Dioxide" => "carbon-dioxide"
@@ -337,14 +350,8 @@ function createItemContainer(itemName, itemData, parentContainerId) {
     itemContainer.dataset.parentContainerId = parentContainerId;
     itemContainer.dataset.longestSubchainLength = 1;
     itemContainer.dataset.itemName = itemName;
-    const itemNameCompact = itemName.replace(/\s+/g, '');
-    itemContainer.innerHTML = `<a href="#${itemNameCompact}" class="item-name">${itemName}</a>`;
-    switch (itemData.itemType) {
-        case 'Raw Material': itemContainer.classList.add('item-type-raw-material'); break;
-        case 'Refined Material': itemContainer.classList.add('item-type-refined-material'); break;
-        case 'Component': itemContainer.classList.add('item-type-component'); break;
-        case 'Finished Good': itemContainer.classList.add('item-type-finished-good'); break;
-    }
+    itemContainer.innerHTML = `<a href="#${getCompactName(itemName)}" class="item-name">${itemName}</a>`;
+    itemContainer.classList.add(getItemTypeClass(itemData.itemType));
     return itemContainer;
 }
 
@@ -357,7 +364,7 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     // processContainer.dataset.inputsCount =  processData.inputs.length;
     processContainer.dataset.longestSubchainLength = 1;
     processContainer.dataset.processName = processName;
-    processContainer.dataset.processCode = processData.output.replace(/\s+/g, '') + '-' + processData.process.replace(/\s+/g, '');
+    processContainer.dataset.processCode = getCompactName(processData.output) + '-' + getCompactName(processData.process);
     processContainer.innerHTML = `<span class="process-name">${processName.replace(/\s+/g, '<br>')}</span>`;
     processContainer.classList.add('item-type-process', 'hexagon');
     return processContainer;
@@ -623,7 +630,11 @@ function connectUpchainFromRawMaterialId(rawMaterialContainerId) {
 }
 
 function connectItemToDerivatives() {
-    const itemContainer = document.getElementById('level_3').querySelector('[data-container-id]');
+    const level3Container = document.getElementById('level_3');
+    if (!level3Container) {
+        return; // this must be a raw-material without any derivatives
+    }
+    const itemContainer = level3Container.querySelector('[data-container-id]');
     const itemContainerId = itemContainer.dataset.containerId;
     if (!itemContainer.dataset.parentContainerId) {
         return; // Finished Good, nothing to connect
@@ -664,7 +675,7 @@ function initializeProcessVariants() {
         processVariantsHtml += `<div class="item-name">${itemName}</div>`;
         itemsWithProcessVariants[itemName].forEach(processVariant => {
             const processName = processVariant.process;
-            const processCode = itemName.replace(/\s+/g, '') + '-' + processName.replace(/\s+/g, '');
+            const processCode = getCompactName(itemName) + '-' + getCompactName(processName);
             processVariantsHtml += `
                 <label for="${processCode}" class="process checked">
                     <input type="checkbox" id="${processCode}" checked>
@@ -782,13 +793,10 @@ function selectItemByName(itemName) {
     }
     sortLevels();
     updateAllConnections();
-    // highlight the active item in the list of products
-    document.querySelectorAll('#products a').forEach(el => {
-        if (el.textContent === itemName) {
-            el.classList.add('active');
-        }
-    });
-    const itemNameCompact = itemName.replace(/\s+/g, '');
+    // highlight the selected item in the products-list
+    const itemNameCompact = getCompactName(itemName);
+    productsListContainer.querySelector(`option[value='${itemNameCompact}']`).selected = true;
+    document.querySelector("#selected-item-name").textContent = itemName;
     window.location.hash = `#${itemNameCompact}`;
 }
 
@@ -812,24 +820,28 @@ on('change', 'label > input', el => {
     }
 });
 
-// toggle horizontal vs. vertical layout for the production chain
-on('change', '#toggle-horizontal-layout', el => {
-    if (el.checked) {
-        horizontalLayout = true;
-        productChainItemsContainer.classList.remove('vertical-layout');
-        productChainItemsContainer.classList.add('horizontal-layout');
-    } else {
-        horizontalLayout = false;
-        productChainItemsContainer.classList.remove('horizontal-layout');
-        productChainItemsContainer.classList.add('vertical-layout');
-    }
-    updateAllConnections();
+// select item from the products-list
+on('change', '#products-list', el => {
+    window.location.hash = `#${el.value}`;
 });
 
-// toggle production chain vs. derivatives chain
+// filter item-types in the products-list
+on('change', '#filter-item-types input', el => {
+    // e.g. "filter-raw-materials" => "item-type-raw-material"
+    const itemTypeClass = 'item-type-' + el.id.replace(/^filter-(.+)s$/, '$1');
+    productsListContainer.querySelectorAll(`option.${itemTypeClass}`).forEach(elOption => {
+        if (el.checked) {
+            elOption.classList.remove('hidden');
+        } else {
+            elOption.classList.add('hidden');
+        }
+    });
+});
+
+// toggle production chain vs. derivatives chain vs. combined chain
 on('change', 'input[name="chain-type"]', el => {
-    document.querySelectorAll('#chain-types label').forEach(el => {
-        el.classList.remove('checked');
+    document.querySelectorAll('label[for^="radio-chain-]').forEach(elLabel => {
+        elLabel.classList.remove('checked');
     });
     productionWrapper.classList.remove('chain-type-production', 'chain-type-derivatives', 'chain-type-combined');
     chainType = el.value;
@@ -849,6 +861,20 @@ on('change', 'input[name="chain-type"]', el => {
     }
     const hashToSelect = window.location.hash.replace(/^#/, '');
     selectItemByName(itemNamesByHash[hashToSelect]);
+});
+
+// toggle horizontal vs. vertical layout for the production chain
+on('change', '#toggle-horizontal-layout', el => {
+    if (el.checked) {
+        horizontalLayout = true;
+        productChainItemsContainer.classList.remove('vertical-layout');
+        productChainItemsContainer.classList.add('horizontal-layout');
+    } else {
+        horizontalLayout = false;
+        productChainItemsContainer.classList.remove('horizontal-layout');
+        productChainItemsContainer.classList.add('vertical-layout');
+    }
+    updateAllConnections();
 });
 
 // toggle process variant
@@ -911,7 +937,7 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
-//// TO DO: STREAMLINE the list of products (via filters + dropdown?) + ADD raw materials to that list
+//// TO DO: IMPROVE products-list logic to allow searching
 
 //// TO DO: HOW TO inform when C / I types are optional?
 ////        - Chlorine requires only Water (C/I) => C and I both optional
