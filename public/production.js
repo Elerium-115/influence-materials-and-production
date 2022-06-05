@@ -773,6 +773,15 @@ function updateRequiredSpectralsAndRawMaterials() {
     });
 }
 
+function hideAndResetProductsList() {
+    productsListWrapper.classList.add('list-hidden');
+    productsListWrapper.querySelector('input').value = '';
+    // show the list-items which did not match the last search
+    productsListContainer.querySelectorAll('.not-matching-search').forEach(elListItem => {
+        elListItem.classList.remove('not-matching-search');
+    });
+}
+
 function selectItemByName(itemName) {
     resetProductionChain();
     if (chainType === 'production') {
@@ -791,11 +800,11 @@ function selectItemByName(itemName) {
     }
     sortLevels();
     updateAllConnections();
-    // highlight the selected item in the products-list
-    const itemNameCompact = getCompactName(itemName);
-    document.querySelector('#product-input').value = '';
-    document.querySelector('#product-input').placeholder = itemName;
+    // hide-and-reset products-list, and highlight the selected item
+    hideAndResetProductsList();
+    productsListWrapper.querySelector('input').placeholder = itemName;
     document.querySelector('#selected-item-name').textContent = itemName;
+    const itemNameCompact = getCompactName(itemName);
     window.location.hash = `#${itemNameCompact}`;
 }
 
@@ -829,24 +838,22 @@ on('click', '#products-list-wrapper input', el => {
     productsListWrapper.classList.remove('list-hidden');
 });
 
-// show products-list on mouse-over, if the input has focus
-on('mouseenter', '#products-list-wrapper', el => {
-    if (productsListWrapper.querySelector('input:focus')) {
-        productsListWrapper.classList.remove('list-hidden');
+// hide-and-reset products-list if the input loses focus
+on('focusout', '#products-list-wrapper input', el => {
+    // prevent hiding the products-list, before triggering a click on a list-item
+    if (document.querySelector('#products-list-wrapper:hover')) {
+        return;
     }
+    hideAndResetProductsList();
 });
 
-// hide products-list on mouse-out, and also reset the input-value, and show the list-items which did not match the last search
+// hide-and-reset products-list on mouse-out
 on('mouseleave', '#products-list-wrapper', el => {
-    // do NOT hide products-list if the input has focus
+    // prevent hiding the products-list, if the input has focus
     if (productsListWrapper.querySelector('input:focus')) {
         return;
     }
-    productsListWrapper.classList.add('list-hidden');
-    productsListWrapper.querySelector('input').value = '';
-    productsListContainer.querySelectorAll('.not-matching-search').forEach(elListItem => {
-        elListItem.classList.remove('not-matching-search');
-    });
+    hideAndResetProductsList();
 });
 
 // search in products-list
@@ -971,8 +978,6 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
-
-//// TO DO: IMPROVE products-list logic to allow searching (with auto-complete?)
 
 //// TO DO: HOW TO inform when C / I types are optional?
 ////        - Chlorine requires only Water (C/I) => C and I both optional
