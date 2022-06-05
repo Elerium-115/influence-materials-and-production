@@ -169,6 +169,7 @@ const processes = [
 ];
 
 const productionWrapper = document.getElementById('production-wrapper');
+const productsListWrapper = document.getElementById('products-list-wrapper');
 const productsListContainer = document.getElementById('products-list');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const productChainConnectionsContainer = document.getElementById('production-chain-connections');
@@ -792,7 +793,8 @@ function selectItemByName(itemName) {
     updateAllConnections();
     // highlight the selected item in the products-list
     const itemNameCompact = getCompactName(itemName);
-    document.querySelector('#product-input').value = itemName;
+    document.querySelector('#product-input').value = '';
+    document.querySelector('#product-input').placeholder = itemName;
     document.querySelector('#selected-item-name').textContent = itemName;
     window.location.hash = `#${itemNameCompact}`;
 }
@@ -817,12 +819,45 @@ on('change', 'label > input', el => {
     }
 });
 
-// toggle products-list (also when clicking on "#products-list-wrapper::after")
-on('click', '#products-list-wrapper, #products-list-wrapper input', el => {
-    document.querySelector('#products-list-wrapper').classList.toggle('list-hidden');
+// toggle products-list when clicking on "▼" / "✕"
+on('click', '#products-list-wrapper', el => {
+    productsListWrapper.classList.toggle('list-hidden');
 });
+
+// show products-list when clicking on input
+on('click', '#products-list-wrapper input', el => {
+    productsListWrapper.classList.remove('list-hidden');
+});
+
+// show products-list on mouse-over, if the input has focus
+on('mouseenter', '#products-list-wrapper', el => {
+    if (productsListWrapper.querySelector('input:focus')) {
+        productsListWrapper.classList.remove('list-hidden');
+    }
+});
+
+// hide products-list on mouse-out, and also reset the input-value, and show the list-items which did not match the last search
 on('mouseleave', '#products-list-wrapper', el => {
-    document.querySelector('#products-list-wrapper').classList.add('list-hidden');
+    // do NOT hide products-list if the input has focus
+    if (productsListWrapper.querySelector('input:focus')) {
+        return;
+    }
+    productsListWrapper.classList.add('list-hidden');
+    productsListWrapper.querySelector('input').value = '';
+    productsListContainer.querySelectorAll('.not-matching-search').forEach(elListItem => {
+        elListItem.classList.remove('not-matching-search');
+    });
+});
+
+// search in products-list
+on('input', '#products-list-wrapper input', el => {
+    productsListContainer.querySelectorAll('*').forEach(elListItem => {
+        if (elListItem.textContent.toLowerCase().includes(el.value.toLowerCase())) {
+            elListItem.classList.remove('not-matching-search');
+        } else {
+            elListItem.classList.add('not-matching-search');
+        }
+    });
 });
 
 // filter item-types in the products-list
