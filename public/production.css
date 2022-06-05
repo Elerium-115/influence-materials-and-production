@@ -11,9 +11,9 @@
 
     --raw-material: #373737;
     --process: #482066;
-    --refined-material: #0a2936;
-    --component: #1b576c;
-    --finished-good: #2b84a2;
+    --refined-material: #1c323d;
+    --component: #315a6e;
+    --finished-good: #47819e;
 }
 
 #production-wrapper {
@@ -65,7 +65,10 @@
 
 #filter-item-types label {
     color: var(--item-name);
-    margin-left: 0.5rem;
+}
+
+#filter-item-types .groupText {
+    margin-right: 0.5rem;
 }
 
 #selected-production-chain {
