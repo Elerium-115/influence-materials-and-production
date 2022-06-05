@@ -288,10 +288,6 @@ function resetProductionChain() {
     maxLevel = 0;
     upchainsFromRawMaterials = {};
     connectedItemPairs = [];
-    const listItemActive = document.querySelector('#products a.active');
-    if (listItemActive) {
-        listItemActive.classList.remove('active');
-    }
 }
 
 function resetFadedItemsAndConnections() {
@@ -750,7 +746,7 @@ function updateRequiredSpectralsAndRawMaterials() {
     // then update the required raw materials which are not currently disabled, and enable their spectrals
     requiredRawMaterials = {};
     requiredRawMaterialsMaxCounter = 0;
-    document.querySelectorAll('.item-type-raw-material:not(.disabled)').forEach(rawMaterialContainer => {
+    document.querySelectorAll('.item-type-raw-material[data-container-id]:not(.disabled)').forEach(rawMaterialContainer => {
         const rawMaterialName = rawMaterialContainer.querySelector('a').textContent;
         requiredRawMaterials[rawMaterialName] = requiredRawMaterials[rawMaterialName] ? requiredRawMaterials[rawMaterialName] + 1 : 1;
         requiredRawMaterialsMaxCounter = Math.max(requiredRawMaterialsMaxCounter, requiredRawMaterials[rawMaterialName]);
@@ -936,6 +932,8 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
+
+//// TO DO: PREVENT all filters from being un-checked?
 
 //// TO DO: IMPROVE products-list logic to allow searching (with auto-complete?)
 
