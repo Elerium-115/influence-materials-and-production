@@ -54,6 +54,7 @@
 /* products */
 
 #products-list {
+    width: 15rem;
     height: 2rem;
     margin-left: 0.5rem;
 }
