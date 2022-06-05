@@ -20,39 +20,10 @@
     font-size: 0.8rem;
 }
 
-/* production toolbar */
-
-.production-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-}
-
-#legend-wrapper {
-    background: var(--active-bg);
-    margin-bottom: -0.2rem;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-}
-
-#legend span {
-    color: var(--item-name);
-    white-space: nowrap;
-    margin-left: 0.5rem;
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.4rem;
-}
-
-#legend .legend-raw-material { background: var(--raw-material); }
-#legend .legend-process { background: var(--process); }
-#legend .legend-refined-material { background: var(--refined-material); }
-#legend .legend-component { background: var(--component); }
-#legend .legend-finished-good { background: var(--finished-good); }
-
 /* options */
 
 .options label {
+    margin-right: 0.5rem;
     padding: 0.5rem;
     border: 1px solid transparent;
     border-radius: 0.5rem;
@@ -75,45 +46,29 @@
     width: 2rem;
 }
 
-#chain-types {
+#chain-settings {
     margin-top: 2rem;
+    padding-bottom: 0.5rem; /* compensate for padding of options */
 }
 
 /* products */
 
-#products-wrapper {
+#products-list {
+    height: 2rem;
+    margin-left: 0.5rem;
+}
+
+#products-list option {
+    color: var(--item-name);
+}
+
+#filter-item-types label {
+    color: var(--item-name);
+    margin-left: 0.5rem;
+}
+
+#selected-production-chain {
     margin-top: 2rem;
-}
-
-#products {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-top: 1rem;
-}
-
-#products a {
-    color: white;
-    padding: 0.2rem 0.6rem;
-    border: 1px solid transparent;
-    border-radius: 0.5rem;
-    opacity: 0.5;
-}
-
-#products a:hover {
-    text-decoration: none;
-    border-color: var(--item-name);
-    opacity: 1;
-}
-
-#products a.RefinedMaterial { background: var(--refined-material); }
-#products a.Component { background-color: var(--component); }
-#products a.FinishedGood { background-color: var(--finished-good); }
-
-#products a.active {
-    color: white;
-    border-color: var(--item-name);
-    opacity: 1;
 }
 
 /* process variants */
@@ -186,11 +141,12 @@
     flex-direction: row-reverse;
     justify-content: flex-end;
     margin-left: -1.5rem;
-    padding: 1.5rem 0;
 }
 
 #production-chain-items.vertical-layout {
     display: inline-block;
+    /* compensate for the margin of the top-most and bottom-most "#production-chain-items.vertical-layout [data-container-id]" */
+    margin: -1.5rem 0;
 }
 
 #production-chain-items .level {
@@ -231,12 +187,6 @@
     border-color: var(--item-name);
     border-width: 2px;
 }
-
-#production-chain-items [data-container-id].item-type-raw-material { background: var(--raw-material); }
-#production-chain-items [data-container-id].item-type-process { background: var(--process); }
-#production-chain-items [data-container-id].item-type-refined-material { background: var(--refined-material); }
-#production-chain-items [data-container-id].item-type-component { background: var(--component); }
-#production-chain-items [data-container-id].item-type-finished-good { background: var(--finished-good); }
 
 #production-chain-items [data-container-id] .item-name {
     flex-grow: 1;
@@ -293,7 +243,37 @@
     transition: opacity 500ms;
 }
 
-/* hexagon */
+/* item-type backgrounds */
+
+#products-list option.item-type-raw-material,
+#filter-item-types label.checked[for='filter-raw-materials'],
+#production-chain-items [data-container-id].item-type-raw-material {
+    background: var(--raw-material);
+}
+
+#production-chain-items [data-container-id].item-type-process {
+    background: var(--process);
+}
+
+#products-list option.item-type-refined-material,
+#filter-item-types label.checked[for='filter-refined-materials'],
+#production-chain-items [data-container-id].item-type-refined-material {
+    background: var(--refined-material);
+}
+
+#products-list option.item-type-component,
+#filter-item-types label.checked[for='filter-components'],
+#production-chain-items [data-container-id].item-type-component {
+    background: var(--component);
+}
+
+#products-list option.item-type-finished-good,
+#filter-item-types label.checked[for='filter-finished-goods'],
+#production-chain-items [data-container-id].item-type-finished-good {
+    background: var(--finished-good);
+}
+
+/* hexagon, must be set AFTER item-type backgrounds above */
 
 #production-chain-items [data-container-id].hexagon, #production-chain-items [data-container-id].hexagon .process-name {
     /* order of corners in clip-path below: right, bottom-right, bottom-left, left, top-left, top-right */
@@ -326,7 +306,7 @@
 #required-spectrals-and-raw-materials {
     display: inline-block;
     background: var(--active-bg);
-    margin-top: 1rem;
+    margin-top: 2rem;
     padding: 1rem;
     border-radius: 0.5rem;
 }
