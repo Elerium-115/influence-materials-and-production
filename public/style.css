@@ -110,7 +110,7 @@ a {
 }
 
 a:hover {
-    color: #1659c7;
+    color: #6599ee;
     text-decoration: underline;
 }
 
@@ -165,8 +165,12 @@ body {
     color: var(--brand-text);
 }
 
-#topbar #dalia-id-logo:hover {
+#topbar #dalia-id-logo {
     opacity: 0.8;
+}
+
+#topbar #dalia-id-logo:hover {
+    opacity: 1;
 }
 
 #topbar #dalia-id-logo img {
@@ -410,6 +414,7 @@ body {
 }
 
 .footer-about > * {
+    text-align: center;
     padding: 0 0.5rem;
 }
 
@@ -424,6 +429,15 @@ body {
 
 .footer-about .secondary {
     opacity: 0.5;
+}
+
+.footer-about .secondary:hover {
+    opacity: 1;
+}
+
+.footer-logo {
+    max-width: 4rem;
+    max-height: 4rem;
 }
 
 /* screen below 990 px */
@@ -494,6 +508,10 @@ body {
     }
 
     .footer-about .secondary.extra-info {
+        display: none;
+    }
+
+    .footer-logo {
         display: none;
     }
 }
