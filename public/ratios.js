@@ -200,5 +200,7 @@ on('change', ".ratios-spectral-types ul li .area input[type='text']", el => {
 // update ratios on page-load, based on input-values hardcoded in the HTML
 updateRatios();
 
+//// TO DO: MINIMUM NON-ZERO surface area per spectral-type = 13 km2 (i.e. smallest asteroid)
+
 //// TO DO: FIX BUG re: ratios-bars length identical for different values
 ////        TEST w/ C-types 100 km2, I-types 200 km2
