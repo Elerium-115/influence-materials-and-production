@@ -295,6 +295,10 @@ function getFullchainForItemId(itemContainerId) {
             });
         }
     }
+    // "fullchain" is empty when rendering only the derivatives chain
+    if (!fullchain.length) {
+        fullchain.push(itemContainerId);
+    }
     return fullchain;
 }
 
@@ -317,8 +321,20 @@ function resetProductionChain() {
     connectedItemPairs = [];
 }
 
+function highlightFullchainForItemContainer(itemContainer) {
+    itemContainer.classList.add('hover');
+    const itemContainerId = itemContainer.dataset.containerId;
+    const fullchain = getFullchainForItemId(itemContainerId);
+    fullchain.forEach(itemContainerId => {
+        getItemContainerById(itemContainerId).classList.add('active');
+    });
+    productChainItemsContainer.classList.add('faded');
+    updateAllConnections();
+}
+
 function resetFadedItemsAndConnections() {
     document.querySelectorAll('.active[data-container-id]').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.hover[data-container-id]').forEach(el => el.classList.remove('hover'));
     productChainItemsContainer.classList.remove('faded');
     updateAllConnections();
 }
@@ -388,8 +404,15 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     processContainer.dataset.longestSubchainLength = 1;
     processContainer.dataset.processName = processName;
     processContainer.dataset.processCode = getCompactName(processData.output) + '-' + getCompactName(processData.process);
-    processContainer.innerHTML = `<span class="process-name">${processName.replace(/\s+/g, '<br>')}</span>`;
-    processContainer.classList.add('item-type-process', 'hexagon');
+    processContainer.classList.add('item-type-process');
+    /**
+     * inner-container required for styling the outer-container with "filter: drop-shadow",
+     * such that the shadow follows the ".hexagon" shape
+     */
+    const processHexagon = document.createElement('div');
+    processHexagon.innerHTML = `<span class="process-name">${processName.replace(/\s+/g, '<br>')}</span>`;
+    processHexagon.classList.add('hexagon');
+    processContainer.appendChild(processHexagon);
     return processContainer;
 }
 
@@ -959,28 +982,34 @@ on('change', '.process input', el => {
 });
 
 /**
- * highlight subchain and ancestors, on hover over item, IFF NOT derivatives chain
+ * highlight fullchain (subchain and ancestors), on hover over item / process, IFF NOT derivatives chain
  * use "mouseenter" instead of "mouseover", and "mouseleave" instead of "mouseout" (to avoid triggering on children)
  */
 on('mouseenter', '[data-container-id]:not(.derivative-item)', el => {
-    const itemContainerId = el.dataset.containerId;
-    const fullchain = getFullchainForItemId(itemContainerId);
-    fullchain.forEach(itemContainerId => {
-        getItemContainerById(itemContainerId).classList.add('active');
+    // highlight fullchain for all occurrences of this item / process in the production chain
+    const itemName = el.dataset.itemName;
+    const processCode = el.dataset.processCode;
+    let selector = '';
+    if (itemName) {
+        selector = `[data-item-name='${itemName}']`;
+    }
+    if (processCode) {
+        selector = `[data-process-code='${processCode}']`;
+    }
+    document.querySelectorAll(selector).forEach(itemContainer => {
+        highlightFullchainForItemContainer(itemContainer);
     });
-    productChainItemsContainer.classList.add('faded');
-    updateAllConnections();
 });
 on('mouseleave', '[data-container-id]:not(.derivative-item)', el => {
     resetFadedItemsAndConnections();
 });
 
-// highlight subchain and ancestors, on hover over checked process variant
+// highlight fullchain (subchain and ancestors), on hover over checked process variant
 on('mouseenter', '.process.checked', el => {
     const processCode = el.getAttribute('for');
-    // fake "mouseenter" on all occurrences of this process in the production chain
+    // highlight fullchain for all occurrences of this process in the production chain
     document.querySelectorAll(`[data-process-code='${processCode}']`).forEach(itemContainer => {
-        itemContainer.dispatchEvent(new Event('mouseenter'));
+        highlightFullchainForItemContainer(itemContainer);
     });
 });
 on('mouseleave', '.process.checked', el => {
@@ -1007,6 +1036,13 @@ setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 //// TO DO: SMART-SPLIT process-names on multiple lines => do NOT split pairs of words that together are shorter than e.g. 10 chars
 ////        - e.g. parse a string, keep a char-counter since the last linebreak, inject a linebreak only if char-counter > 10?
 ////        http://127.0.0.1:5500/public/production.html#SodiumDichromate
+
+//// TO DO: TOGGLE TO HIDE PROCESSES => more compact chains, especially useful in the Horizontal layout
+
+//// TO DO: SLIDER for hiding sub-chains for all items of a certain tier
+////        - default tier-limit relative to screen-size? - e.g. low-res mobile screen => tier-limit 8 for a tier-10 finished good
+
+////        https://discord.com/channels/814990637178290177/814990637664305214/984786638657974312
 
 //// TO DO: HOW TO inform when C / I types are optional?
 ////        - Chlorine requires only Water (C/I) => C and I both optional
