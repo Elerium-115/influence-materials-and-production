@@ -216,7 +216,8 @@
     flex-direction: column;
 }
 
-#production-chain-items [data-container-id] {
+#production-chain-items [data-container-id]:not(.item-type-process),
+#production-chain-items .item-type-process .hexagon {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -234,6 +235,11 @@
 
 #production-chain-items .active[data-container-id] {
     opacity: 1;
+}
+
+#production-chain-items .hover[data-container-id] {
+    /* "box-shadow" does not work with "clip-path" from ".hexagon" */
+    filter: drop-shadow(0 0 0.4rem var(--item-name));
 }
 
 #production-chain-items .disabled[data-container-id] {
@@ -308,10 +314,6 @@
     background: var(--raw-material);
 }
 
-#production-chain-items [data-container-id].item-type-process {
-    background: var(--process);
-}
-
 #products-list .item-type-refined-material,
 #filter-item-types label.checked[for='filter-refined-materials'],
 #production-chain-items [data-container-id].item-type-refined-material {
@@ -330,9 +332,9 @@
     background: var(--finished-good);
 }
 
-/* hexagon, must be set AFTER item-type backgrounds above */
+/* hexagon inside process container */
 
-#production-chain-items [data-container-id].hexagon, #production-chain-items [data-container-id].hexagon .process-name {
+#production-chain-items .hexagon, #production-chain-items .hexagon .process-name {
     /* order of corners in clip-path below: right, bottom-right, bottom-left, left, top-left, top-right */
     clip-path: polygon(
         97% 40%, 98.5% 43%, 99.5% 46%, 100% 50%, 99.5% 54%, 98.5% 57%, 97% 60%,
@@ -344,12 +346,12 @@
     );
 }
 
-#production-chain-items [data-container-id].hexagon {
+#production-chain-items .hexagon {
     background: gray;
     min-width: 6rem;
     min-height: 4rem;
 }
-#production-chain-items [data-container-id].hexagon .process-name {
+#production-chain-items .hexagon .process-name {
     flex-grow: 1;
     display: flex;
     align-items: center;
