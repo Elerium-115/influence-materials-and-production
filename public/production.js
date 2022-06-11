@@ -266,6 +266,14 @@ function getItemNameSafe(itemName) {
     return itemName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
 }
 
+// smart-split process-names on multiple lines, to avoid excessive linebreaks
+function getItemNameWithSmartLinebreaks(itemName) {
+    return itemName.replace(/\s+/g, '<br>');
+    //// TO DO: do NOT split pairs of words that have a combined length of max. 10 chars
+    ////        - e.g. parse a string, keep a char-counter since the last linebreak, inject a linebreak only if char-counter > 10?
+    ////        http://127.0.0.1:5500/public/production.html#SodiumDichromate
+}
+
 function getItemTypeClass(itemType) {
     let itemTypeClass = '';
     switch (itemType) {
@@ -410,7 +418,7 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
      * such that the shadow follows the ".hexagon" shape
      */
     const processHexagon = document.createElement('div');
-    processHexagon.innerHTML = `<span class="process-name">${processName.replace(/\s+/g, '<br>')}</span>`;
+    processHexagon.innerHTML = `<span class="process-name">${getItemNameWithSmartLinebreaks(processName)}</span>`;
     processHexagon.classList.add('hexagon');
     processContainer.appendChild(processHexagon);
     return processContainer;
@@ -1032,10 +1040,6 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
-
-//// TO DO: SMART-SPLIT process-names on multiple lines => do NOT split pairs of words that together are shorter than e.g. 10 chars
-////        - e.g. parse a string, keep a char-counter since the last linebreak, inject a linebreak only if char-counter > 10?
-////        http://127.0.0.1:5500/public/production.html#SodiumDichromate
 
 //// TO DO: TOGGLE TO HIDE PROCESSES => more compact chains, especially useful in the Horizontal layout
 
