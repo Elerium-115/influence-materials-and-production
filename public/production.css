@@ -350,7 +350,9 @@
     background: gray;
     min-width: 6rem;
     min-height: 4rem;
+    height: 100%;
 }
+
 #production-chain-items .hexagon .process-name {
     flex-grow: 1;
     display: flex;
