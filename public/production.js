@@ -985,17 +985,18 @@ on('change', '.process input', el => {
 on('mouseenter', '[data-container-id]:not(.derivative-item)', el => {
     // highlight all occurrences of this item / process in the production chain
     const itemName = el.dataset.itemName;
-    const processName = el.dataset.processName;
+    const processCode = el.dataset.processCode;
     let selector = '';
     if (itemName) {
         selector = `[data-item-name='${itemName}']`;
     }
-    if (processName) {
+    if (processCode) {
         /**
-         * selecting based on process-name, instead of process-code, to highlight
-         * all processes with the same name, even if they have different outputs
+         * selecting based on process-code, instead of process-name,
+         * to highlight only same-name processes that have the same inputs-and-outputs
+         * (as opposed to e.g. "Chlorination", which can have different inputs-and-outputs)
          */
-        selector = `[data-process-name='${processName}']`;
+        selector = `[data-process-code='${processCode}']`;
     }
     document.querySelectorAll(selector).forEach(itemContainer => {
         itemContainer.classList.add('active', 'hover');
