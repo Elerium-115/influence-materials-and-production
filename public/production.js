@@ -329,17 +329,6 @@ function resetProductionChain() {
     connectedItemPairs = [];
 }
 
-function highlightFullchainForItemContainer(itemContainer) {
-    itemContainer.classList.add('hover');
-    const itemContainerId = itemContainer.dataset.containerId;
-    const fullchain = getFullchainForItemId(itemContainerId);
-    fullchain.forEach(itemContainerId => {
-        getItemContainerById(itemContainerId).classList.add('active');
-    });
-    productChainItemsContainer.classList.add('faded');
-    updateAllConnections();
-}
-
 function resetFadedItemsAndConnections() {
     document.querySelectorAll('.active[data-container-id]').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.hover[data-container-id]').forEach(el => el.classList.remove('hover'));
@@ -990,34 +979,46 @@ on('change', '.process input', el => {
 });
 
 /**
- * highlight fullchain (subchain and ancestors), on hover over item / process, IFF NOT derivatives chain
+ * highlight + activate fullchain (subchain and ancestors), on hover over item / process, IFF NOT derivatives chain
  * use "mouseenter" instead of "mouseover", and "mouseleave" instead of "mouseout" (to avoid triggering on children)
  */
 on('mouseenter', '[data-container-id]:not(.derivative-item)', el => {
-    // highlight fullchain for all occurrences of this item / process in the production chain
+    // highlight all occurrences of this item / process in the production chain
     const itemName = el.dataset.itemName;
-    const processCode = el.dataset.processCode;
+    const processName = el.dataset.processName;
     let selector = '';
     if (itemName) {
         selector = `[data-item-name='${itemName}']`;
     }
-    if (processCode) {
-        selector = `[data-process-code='${processCode}']`;
+    if (processName) {
+        /**
+         * selecting based on process-name, instead of process-code, to highlight
+         * all processes with the same name, even if they have different outputs
+         */
+        selector = `[data-process-name='${processName}']`;
     }
     document.querySelectorAll(selector).forEach(itemContainer => {
-        highlightFullchainForItemContainer(itemContainer);
+        itemContainer.classList.add('active', 'hover');
     });
+    // activate fullchain only for the currently-hovered item
+    const itemContainerId = el.dataset.containerId;
+    const fullchain = getFullchainForItemId(itemContainerId);
+    fullchain.forEach(itemContainerId => {
+        getItemContainerById(itemContainerId).classList.add('active');
+    });
+    productChainItemsContainer.classList.add('faded');
+    updateAllConnections();
 });
 on('mouseleave', '[data-container-id]:not(.derivative-item)', el => {
     resetFadedItemsAndConnections();
 });
 
-// highlight fullchain (subchain and ancestors), on hover over checked process variant
+// highlight + activate fullchain (subchain and ancestors), on hover over checked process variant
 on('mouseenter', '.process.checked', el => {
     const processCode = el.getAttribute('for');
-    // highlight fullchain for all occurrences of this process in the production chain
-    document.querySelectorAll(`[data-process-code='${processCode}']`).forEach(itemContainer => {
-        highlightFullchainForItemContainer(itemContainer);
+    // fake "mouseenter" on all occurrences of this process in the production chain
+    document.querySelectorAll(`[data-process-code='${processCode}']`).forEach(processContainer => {
+        processContainer.dispatchEvent(new Event('mouseenter'));
     });
 });
 on('mouseleave', '.process.checked', el => {
