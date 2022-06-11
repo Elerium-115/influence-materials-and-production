@@ -268,10 +268,33 @@ function getItemNameSafe(itemName) {
 
 // smart-split process-names on multiple lines, to avoid excessive linebreaks
 function getItemNameWithSmartLinebreaks(itemName) {
-    return itemName.replace(/\s+/g, '<br>');
-    //// TO DO: do NOT split pairs of words that have a combined length of max. 10 chars
-    ////        - e.g. parse a string, keep a char-counter since the last linebreak, inject a linebreak only if char-counter > 10?
-    ////        http://127.0.0.1:5500/public/production.html#SodiumDichromate
+    let nameWithLinebreaks = '';
+    let charsSinceLinebreak = 0;
+    const words = itemName.split(/\s+/);
+    for (let i = 0; i < words.length; i++) {
+        const thisWord = words[i];
+        nameWithLinebreaks += thisWord;
+        charsSinceLinebreak += thisWord.length;
+        const nextWord = words[i+1];
+        if (!nextWord) {
+            break;
+        }
+        /**
+         * do NOT split pairs of words that have a combined length of max. 12 chars
+         * e.g. "Hot Acid Leaching and Crystallization" => "Hot Acid<br>Leaching and<br>Crystallization"
+         */
+        if (charsSinceLinebreak + 1 + nextWord.length <= 14) {
+            // do not add linebreak between short words
+            nameWithLinebreaks += ' ';
+            charsSinceLinebreak += 1;
+        }
+        else {
+            // add linebreak between long words
+            nameWithLinebreaks += '<br>';
+            charsSinceLinebreak = 0;
+        }
+    }
+    return nameWithLinebreaks;
 }
 
 function getItemTypeClass(itemType) {
