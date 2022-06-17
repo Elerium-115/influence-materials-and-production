@@ -11,6 +11,9 @@
     --default-text_faded: #a9acb333;
     --brand-text: #ffd600;
 
+    --link: #3f80ea;
+    --link-hover: #6599ee;
+
     --volatiles: #5bc0f5;
     --volatiles_faded: #5bc0f508;
     --organics: #78d356;
@@ -105,12 +108,12 @@ h2 {
 }
 
 a {
-    color: #3f80ea;
+    color: var(--link);
     text-decoration: none;
 }
 
 a:hover {
-    color: #6599ee;
+    color: var(--link-hover);
     text-decoration: underline;
 }
 

@@ -67,6 +67,29 @@
                 <label for="toggle-horizontal-layout" class="checked">
                     <input type="checkbox" id="toggle-horizontal-layout" checked>Horizontal Layout
                 </label>
+                <span class="separator"></span>
+                <div id="tier-slider-wrapper">
+                    <div id="tier-slider-flex">
+                        <div id="tier-legend">
+                            <div id="tier-legend-text">Tier Limit<i>ⓘ</i></div>
+                            <div id="tier-legend-details">
+                                Hide sub-chains for products up to this tier
+                                <ul>
+                                    <li>Tier 0 = Raw materials</li>
+                                    <li>Tier 1 = Products refined directly from raw materials</li>
+                                    <li id="tier-legend-dots">...</li>
+                                    <li id="tier-legend-max">Tier <span id="tier-legend-selected-value"></span> = <span id="tier-legend-selected-name"></span></li>
+                                </ul>
+                            </div>    
+                        </div>
+                        <div id="tier-value-box">
+                            <input type="text" value="0" id="tier-slider-value">
+                        </div>
+                        <div id="tier-slider">
+                            <input type="range" min="0" max="0" value="0" id="tier-slider-range">
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="process-variants-wrapper">
                 <div>Select alternative production paths:</div>

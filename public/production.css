@@ -9,6 +9,8 @@
 
     --item-name: #ccc;
 
+    --tier-limit-highlight: #b34fff;
+
     --raw-material: #373737;
     --process: #482066;
     --refined-material: #1c323d;
@@ -126,6 +128,70 @@
 
 #selected-production-chain {
     margin-top: 2rem;
+}
+
+/* tier slider */
+
+#tier-slider-wrapper {
+    display: inline-block;
+}
+
+#tier-slider-flex {
+    display: flex;
+    align-items: center;
+}
+
+#tier-legend-text {
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+#tier-legend:hover #tier-legend-text {
+    background: var(--active-bg);
+}
+
+#tier-legend-text i {
+    color: var(--link);
+    font-style: normal;
+    margin-left: 0.5rem;
+}
+
+#tier-legend-details {
+    display: none;
+    position: absolute;
+    background: var(--active-bg);
+    line-height: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border-top-left-radius: 0;
+    z-index: 1;
+}
+
+#tier-legend:hover #tier-legend-details {
+    display: block;
+}
+
+#tier-legend-details ul {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
+#tier-value-box input {
+    text-align: center;
+    width: 2.5rem;
+    padding: 0.5rem 0;
+    border: none;
+    border-radius: 0.5rem;
+}
+
+#tier-slider {
+    padding-left: 1rem;
+}
+
+#tier-slider-range {
+    cursor: pointer;
 }
 
 /* process variants */
@@ -248,7 +314,7 @@
 
 #production-chain-items .selected-item[data-container-id] {
     border-color: var(--item-name);
-    border-width: 2px;
+    border-width: 0.2rem;
 }
 
 #production-chain-items [data-container-id] .item-name {
@@ -304,6 +370,15 @@
 
 #production-chain-items [data-container-id], #production-chain-connections * {
     transition: opacity 500ms;
+}
+
+/* hide low-tier items and connections */
+.low-tier-hidden {
+    display: none !important;
+}
+
+.tier-limit-highlight {
+    box-shadow: 0 0 0.75rem var(--tier-limit-highlight);
 }
 
 /* item-type backgrounds */
