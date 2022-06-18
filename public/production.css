@@ -195,14 +195,15 @@
 }
 
 #tier-slider-range.pulse {
-	box-shadow: 0 0 0 var(--tier-limit-highlight);
+    /* "box-shadow" looks ugly on Chrome */
+    filter: drop-shadow(0 0 0 var(--tier-limit-highlight));
 	animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-	0% { box-shadow: 0 0 0 var(--tier-limit-highlight); }
-	25% { box-shadow: 0 0 0.75rem var(--tier-limit-highlight); }
-	50% { box-shadow: 0 0 0 var(--tier-limit-highlight); }
+	0% { filter: drop-shadow(0 0 0 var(--tier-limit-highlight)); }
+	25% { filter: drop-shadow(0 0 0.4rem var(--tier-limit-highlight)); }
+	50% { filter: drop-shadow(0 0 0 var(--tier-limit-highlight)); }
 }
 
 /* process variants */
