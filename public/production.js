@@ -1006,6 +1006,8 @@ function selectItemByName(itemName) {
 
 // update production chain (and text-input), based on tier-limit from range-input
 tierSliderRange.oninput = function() {
+    // stop pulse animation on range-slider
+    tierSliderRange.classList.remove('pulse');
     updateProductionChainForTierLimit(this.value);
 }
 
@@ -1205,8 +1207,8 @@ window.addEventListener('hashchange', () => {
 // pre-select the item from #Hash on page-load
 let hashToPreselect = window.location.hash.replace(/^#/, '');
 if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
-    // pre-select "Propylene" by default, if invalid / empty #Hash given
-    hashToPreselect = 'Propylene';
+    // pre-select "Neodymium(III) Chloride" by default, if invalid / empty #Hash given
+    hashToPreselect = 'Neodymium(III)Chloride';
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
