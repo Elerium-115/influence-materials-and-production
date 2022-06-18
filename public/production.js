@@ -1014,12 +1014,13 @@ tierSliderRange.oninput = function() {
 // update production chain (and range-input), based on tier-limit from text-input
 tierSliderValue.onchange = function() {
     /**
-     * validate the value:
+     * validate the text-input value:
      * - if non-numeric or negative value => convert to 0
      * - if numeric value higher than "tierSliderRange.max" => convert to "tierSliderRange.max"
      */
-    //// TO BE IMPLEMENTED
-    updateProductionChainForTierLimit(this.value);
+    let validValue = parseInt(0 + this.value);
+    validValue = Math.min(validValue, tierSliderRange.max);
+    updateProductionChainForTierLimit(validValue);
 }
 
 window.addEventListener('resize', updateAllConnections);
