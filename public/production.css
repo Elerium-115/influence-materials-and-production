@@ -195,7 +195,7 @@
 }
 
 #tier-slider-range.pulse {
-    /* "box-shadow" looks ugly on Chrome */
+    /* "box-shadow" looks buggy on Chrome */
     filter: drop-shadow(0 0 0 var(--tier-limit-highlight));
 	animation: pulse 2s infinite;
 }
