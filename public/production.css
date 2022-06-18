@@ -242,6 +242,7 @@
 
 #process-variants .item .process {
     display: block;
+    position: relative;
     margin: 0.5rem 0 0 -0.5rem;
     padding: 0.5rem;
     border: 1px solid transparent;
@@ -262,6 +263,30 @@
 
 #process-variants .item .process.error {
     animation: flash-error 150ms;
+}
+
+#process-variants .item .process-inputs {
+    position: absolute;
+    top: -1px; /* compensate for border */
+    bottom: -1px; /* compensate for border */
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    background: var(--active-bg);
+    padding: 0 0.5rem;
+    border: 1px solid gray;
+    border-left: none;
+    border-top-right-radius: 0.4rem;
+    border-bottom-right-radius: 0.4rem;
+    z-index: 1;
+}
+
+#process-variants .item .process.checked .process-inputs {
+    background: var(--overactive-bg);
+}
+
+#process-variants .item .process:not(:hover) .process-inputs {
+    display: none;
 }
 
 /* production chain */

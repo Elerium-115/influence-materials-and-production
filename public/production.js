@@ -796,9 +796,8 @@ function initializeProcessVariants() {
             processVariantsHtml += `
                 <label for="${processCode}" class="process checked">
                     <input type="checkbox" id="${processCode}" checked>
-                    <span class="process-info">
-                        via ${processName} from ${processVariant.inputs.join(', ')}
-                    </span>
+                    <span class="process-info">via ${processName}</span>
+                    <span class="process-inputs">from ${processVariant.inputs.join(', ')}</span>
                 </label>`;
         });
         processVariantsHtml += `</div>`;
@@ -1139,6 +1138,13 @@ on('change', '#toggle-horizontal-layout', el => {
 on('change', '.process input', el => {
     updateAllProcessVariants();
     updateUpchainsFromRawMaterialsAndLongestSubchainLengths();
+    /**
+     * after re-enabling a process-variant, the production chain needs to be updated based on the current tier-limit;
+     * otherwise the re-enabled process-variant will not have its sub-chain rendered correctly;
+     * e.g. select "Neodymium" > set tier-limit 4 > disable one of the process-variants > set tier-limit 3
+     * or lower > re-enable that process-variant => only its inputs rendered, without their sub-chains
+     */
+    updateProductionChainForTierLimit(tierSliderRange.value);
     updateRequiredSpectralsAndRawMaterials();
     updateAllConnections();
     if (el.checked) {
