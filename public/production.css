@@ -384,7 +384,7 @@
     transition: opacity 500ms;
 }
 
-/* hide low-tier items and connections */
+/* hide low-tier items, connections, and process variants */
 .low-tier-hidden {
     display: none !important;
 }

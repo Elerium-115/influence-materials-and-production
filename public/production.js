@@ -936,14 +936,15 @@ function updateProductionChainForTierLimit(tierLimit) {
             }
         }
     });
-
-    /**
-     * toggle process-variants items, based on the visibility of their corresponding processes in the chain
-     * - first make all process-variants items visible
-     * - then hide any process-variant item which does not have 2+ of its processes visible
-     */
-    //// TO BE IMPLEMENTED
-
+    // hide items from process-variants, if their corresponding processes are hidden, due to the current tier-limit
+    processVariantsContainer.querySelectorAll('.item').forEach(elItem => {
+        const firstProcessCode = elItem.querySelector('.process').getAttribute('for');
+        if (productChainItemsContainer.querySelector(`.low-tier-hidden[data-process-code='${firstProcessCode}']`)) {
+            elItem.classList.add('low-tier-hidden');
+        } else {
+            elItem.classList.remove('low-tier-hidden');
+        }
+    });
     updateAllConnections();
 }
 
@@ -1213,8 +1214,6 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
-
-//// TO DO: FINISH code re: "TO BE IMPLEMENTED"
 
 //// TO DO: SELECT FIRST-MATCHING product, if pressing "Enter" while the search-input is focused
 ////        - only if there are search-results in the products-list
