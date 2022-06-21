@@ -11,6 +11,8 @@
 
     --tier-limit-highlight: #b34fff;
 
+    --flash-error: #8e373a;
+
     --raw-material: #373737;
     --process: #482066;
     --refined-material: #1c323d;
@@ -257,12 +259,12 @@
     background: var(--overactive-bg);
 }
 
-@keyframes flash-error {
-    50% { background: rgba(255, 0, 0, 0.5); }
-}
-
 #process-variants .item .process.error {
     animation: flash-error 150ms;
+}
+
+@keyframes flash-error {
+    50% { background: var(--flash-error); }
 }
 
 #process-variants .item .process-inputs {
@@ -283,6 +285,10 @@
 
 #process-variants .item .process.checked .process-inputs {
     background: var(--overactive-bg);
+}
+
+#process-variants .item .process.error .process-inputs {
+    background: inherit;
 }
 
 #process-variants .item .process:not(:hover) .process-inputs {

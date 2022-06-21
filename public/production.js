@@ -1143,6 +1143,10 @@ on('change', '.process input', el => {
      * otherwise the re-enabled process-variant will not have its sub-chain rendered correctly;
      * e.g. select "Neodymium" > set tier-limit 4 > disable one of the process-variants > set tier-limit 3
      * or lower > re-enable that process-variant => only its inputs rendered, without their sub-chains
+     * ---
+     * known glitch: if an item's process-variants have different sub-chain-lengths, and the shorter one
+     * is below the current tier-limit, then disabling the longer process-variant will lead to the shorter
+     * process-variant's sub-chain also becoming hidden, so that entire item from process-variants is hidden
      */
     updateProductionChainForTierLimit(tierSliderRange.value);
     updateRequiredSpectralsAndRawMaterials();
@@ -1204,6 +1208,18 @@ on('mouseleave', '.process.checked', el => {
     resetFadedItemsAndConnections();
 });
 
+window.addEventListener('keydown', event => {
+    // pressing "Enter" while the product-search input is focused, selects the first matching product
+    if (event.key === 'Enter') {
+        const productSearchInput = document.querySelector('#products-list-wrapper input');
+        const firstSearchMatch = productsListContainer.querySelector('*:not(.not-matching-search)');
+        if (productSearchInput === document.activeElement && productSearchInput.value.length && firstSearchMatch) {
+            productSearchInput.blur();
+            firstSearchMatch.click();
+        }
+    }
+});
+
 // auto-select item on #Hash-change (including on e.g. history-back navigation)
 window.addEventListener('hashchange', () => {
     resetFadedItemsAndConnections();
@@ -1220,9 +1236,6 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
-
-//// TO DO: SELECT FIRST-MATCHING product, if pressing "Enter" while the search-input is focused
-////        - only if there are search-results in the products-list
 
 //// TO DO: TOGGLE between showing the full chain (tier-limit = 0), and the minimal chain (tier-limit = selectedItemTier - 1)
 ////        https://discord.com/channels/814990637178290177/814990637664305214/985534132538978304
