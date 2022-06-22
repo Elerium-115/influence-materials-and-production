@@ -695,7 +695,7 @@ function connectContainers(parentContainer, childContainer, color, thickness, fa
     const line = document.createElement('div');
     line.dataset.parentContainerId = parentContainer.dataset.containerId;
     line.dataset.childContainerId = childContainer.dataset.containerId;
-    line.setAttribute('style', `padding: 0px; margin: 0px; height: ${thickness}px; background-color: ${color}; line-height: 1px; position: absolute; left: ${cx}px; top: ${cy}px; width: ${length}px; -moz-transform: rotate(${angle}deg); -webkit-transform: rotate(${angle}deg); -o-transform: rotate(${angle}deg); -ms-transform: rotate(${angle}deg); transform: rotate(${angle}deg);`);
+    line.setAttribute('style', `height: ${thickness}px; background-color: ${color}; left: ${cx}px; top: ${cy}px; width: ${length}px; -moz-transform: rotate(${angle}deg); -webkit-transform: rotate(${angle}deg); -o-transform: rotate(${angle}deg); -ms-transform: rotate(${angle}deg); transform: rotate(${angle}deg);`);
     if (faded) {
         line.classList.add('faded');
     }
@@ -1237,19 +1237,19 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
-//// TO DO: TOGGLE between showing the full chain (tier-limit = 0), and the minimal chain (tier-limit = selectedItemTier - 1)
-////        https://discord.com/channels/814990637178290177/814990637664305214/985534132538978304
-
-//// TO DO: PROCESS TOOLTIP (on hover over process-item) showing the "ingredients" required to build the process module itself
-////        https://discord.com/channels/814990637178290177/814990637664305214/985533297629212753
-
-//// TO DO: PER-ITEM TOOLTIP on hover over item that has process-variants (e.g. Iron)
-////        => tooltip with show/hide toggles for each of its process-variants
-
 //// TO DO: PER-ITEM TOGGLE for that item's sub-chain (e.g. a "(+)" shown instead of its "input-connector")
 ////        - [v1] toggle only its process+inputs
 ////        - [v2] toggle its entire sub-chain
 ////        - e.g. give the item's "input side" a thick border, and hovering on it slides a "(+)" into view
+
+//// TO DO: TOGGLE between showing the full chain (tier-limit = 0), and the minimal chain (tier-limit = selectedItemTier - 1)
+////        https://discord.com/channels/814990637178290177/814990637664305214/985534132538978304
+
+//// TO DO: PROCESS TOOLTIP (on hover over process-item) showing the "ingredients" required to build the process MODULE itself
+////        https://discord.com/channels/814990637178290177/814990637664305214/985533297629212753
+
+//// TO DO: PER-ITEM TOOLTIP on hover over item that has process-variants (e.g. Iron)
+////        => tooltip with show/hide toggles for each of its process-variants
 
 //// TO DO: DYNAMIC "required materials", based on the currently-displayed tiers in the chart - e.g.:
 ////        - if the chart is fully expanded => all required materials would be raw materials
