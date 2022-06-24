@@ -125,7 +125,7 @@ const processes = [
     { "output": "Acetylene",                "process": "Huels Process",                         "inputs": [ "Methane" ]                                                     },
     { "output": "Acrylonitrile",            "process": "Ammoxidation",                          "inputs": [ "Ammonia", "Oxygen", "Propylene" ]                              },
     { "output": "Alumina",                  "process": "Feldspar Bayer Process",                "inputs": [ "Ammonia", "Feldspar", "Sulfuric Acid" ]                        },
-    { "output": "Alumina Ceramic",          "process": "Calcination",                           "inputs": [ "Alumina" ]                                                     },
+    { "output": "Alumina Ceramic",          "process": "Forming and Sintering",                 "inputs": [ "Alumina" ]                                                     },
     { "output": "Aluminium",                "process": "Hall-Héroult Process",                  "inputs": [ "Alumina", "Graphite" ]                                         },
     { "output": "Ammonium Carbonate",       "process": "Carbonation",                           "inputs": [ "Ammonia", "Carbon Dioxide" ]                                   },
     { "output": "Ammonium Chloride",        "process": "Chlorination",                          "inputs": [ "Ammonia", "Hydrochloric Acid" ]                                },
@@ -136,7 +136,7 @@ const processes = [
     { "output": "Chromia",                  "process": "Carbothermic Reduction",                "inputs": [ "Graphite", "Sodium Dichromate" ]                               },
     { "output": "Chromium",                 "process": "Aluminothermic Reduction",              "inputs": [ "Aluminium", "Chromia" ]                                        },
     { "output": "Concrete",                 "process": "Concrete Mixing Process",               "inputs": [ "Quicklime", "Silica", "Water" ]                                },
-    { "output": "Deionized Water",          "process": "Desalination",                          "inputs": [ "Water" ]                                                       },
+    { "output": "Deionized Water",          "process": "Desalination",                          "inputs": [ "Water" ],                                                      "parts": [ "Condensor", "Evaporator" ]  },
     { "output": "Epichlorohydrin",          "process": "Epichlorohydrin Process",               "inputs": [ "Chlorine", "Propylene", "Sodium Hydroxide" ]                   },
     { "output": "Fertilizer",               "process": "Chemical Granulation Process",          "inputs": [ "Apatite", "Nitric Acid", "Potassium Chloride" ]                },
     { "output": "Hydrogen Chloride",        "process": "Hydrogen Chloride Process",             "inputs": [ "Apatite", "Sulfuric Acid" ]                                    },
@@ -168,7 +168,7 @@ const processes = [
     { "output": "Quicklime",                "process": "Calcination Process",                   "inputs": [ "Calcite" ]                                                     },
     { "output": "Rare Earth Oxides",        "process": "Oxalation and Annealing",               "inputs": [ "Ammonium Oxalate", "Rare Earth Sulfates" ]                     },
     { "output": "Rare Earth Sulfates",      "process": "Hot Acid Leaching",                     "inputs": [ "Sulfuric Acid", "Xenotime" ]                                   },
-    { "output": "Salts",                    "process": "Desalination",                          "inputs": [ "Water" ]                                                       },
+    { "output": "Salts",                    "process": "Desalination",                          "inputs": [ "Water" ],                                                      "parts": [ "Condensor", "Evaporator" ]  },
     { "output": "Silica",                   "process": "Enhanced Weathering Process",           "inputs": [ "Carbon Dioxide", "Olivine", "Water" ]                          },
     { "output": "Sodium Carbonate",         "process": "Solvay Process",                        "inputs": [ "Calcite", "Sodium Chloride", "Water" ]                         },
     { "output": "Sodium Chloride",          "process": "Selective Crystallization",             "inputs": [ "Salts" ]                                                       },
@@ -464,6 +464,20 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     processHexagon.innerHTML = `<span class="process-name">${getItemNameWithSmartLinebreaks(processName)}</span>`;
     processHexagon.classList.add('hexagon');
     processContainer.appendChild(processHexagon);
+    // tooltip for process-module parts
+    const processTooltipWrapper = document.createElement('div');
+    processTooltipWrapper.classList.add('process-tooltip-wrapper');
+    const processTooltip = document.createElement('div');
+    processTooltip.classList.add('process-tooltip');
+    processTooltipWrapper.appendChild(processTooltip);
+    processContainer.appendChild(processTooltipWrapper);
+    // inject process-module parts into tooltip
+    let processModulePartsHtml = '';
+    const parts = processData.parts || ['[redacted]'];
+    parts.forEach(part => {
+        processModulePartsHtml += `<li>${part}</li>`;
+    });
+    processTooltip.innerHTML = `<ul>${processModulePartsHtml}</ul>`;
     return processContainer;
 }
 
@@ -1237,16 +1251,15 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
-//// TO DO: PER-ITEM TOGGLE for that item's sub-chain (e.g. a "(+)" shown instead of its "input-connector")
-////        - [v1] toggle only its process+inputs
-////        - [v2] toggle its entire sub-chain
-////        - e.g. give the item's "input side" a thick border, and hovering on it slides a "(+)" into view
+//// TO DO: REPOSITION process-tooltip on vertical layout, to the right side of each process (not below it)
 
 //// TO DO: TOGGLE between showing the full chain (tier-limit = 0), and the minimal chain (tier-limit = selectedItemTier - 1)
 ////        https://discord.com/channels/814990637178290177/814990637664305214/985534132538978304
 
-//// TO DO: PROCESS TOOLTIP (on hover over process-item) showing the "ingredients" required to build the process MODULE itself
-////        https://discord.com/channels/814990637178290177/814990637664305214/985533297629212753
+//// TO DO: PER-ITEM TOGGLE for that item's sub-chain (e.g. a "(+)" shown instead of its "input-connector")
+////        - [v1] toggle only its process+inputs
+////        - [v2] toggle its entire sub-chain
+////        - e.g. give the item's "input side" a thick border, and hovering on it slides a "(+)" into view
 
 //// TO DO: PER-ITEM TOOLTIP on hover over item that has process-variants (e.g. Iron)
 ////        => tooltip with show/hide toggles for each of its process-variants
