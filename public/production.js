@@ -136,7 +136,7 @@ const processes = [
     { "output": "Chromia",                  "process": "Carbothermic Reduction",                "inputs": [ "Graphite", "Sodium Dichromate" ]                               },
     { "output": "Chromium",                 "process": "Aluminothermic Reduction",              "inputs": [ "Aluminium", "Chromia" ]                                        },
     { "output": "Concrete",                 "process": "Concrete Mixing Process",               "inputs": [ "Quicklime", "Silica", "Water" ]                                },
-    { "output": "Deionized Water",          "process": "Desalination",                          "inputs": [ "Water" ],                                                      "parts": [ "Condensor", "Evaporator" ]  },
+    { "output": "Deionized Water",          "process": "Desalination",                          "inputs": [ "Water" ],                                                      "parts": [ "Condenser", "Evaporator" ]  },
     { "output": "Epichlorohydrin",          "process": "Epichlorohydrin Process",               "inputs": [ "Chlorine", "Propylene", "Sodium Hydroxide" ]                   },
     { "output": "Fertilizer",               "process": "Chemical Granulation Process",          "inputs": [ "Apatite", "Nitric Acid", "Potassium Chloride" ]                },
     { "output": "Hydrogen Chloride",        "process": "Hydrogen Chloride Process",             "inputs": [ "Apatite", "Sulfuric Acid" ]                                    },
@@ -168,7 +168,7 @@ const processes = [
     { "output": "Quicklime",                "process": "Calcination Process",                   "inputs": [ "Calcite" ]                                                     },
     { "output": "Rare Earth Oxides",        "process": "Oxalation and Annealing",               "inputs": [ "Ammonium Oxalate", "Rare Earth Sulfates" ]                     },
     { "output": "Rare Earth Sulfates",      "process": "Hot Acid Leaching",                     "inputs": [ "Sulfuric Acid", "Xenotime" ]                                   },
-    { "output": "Salts",                    "process": "Desalination",                          "inputs": [ "Water" ],                                                      "parts": [ "Condensor", "Evaporator" ]  },
+    { "output": "Salts",                    "process": "Desalination",                          "inputs": [ "Water" ],                                                      "parts": [ "Condenser", "Evaporator" ]  },
     { "output": "Silica",                   "process": "Enhanced Weathering Process",           "inputs": [ "Carbon Dioxide", "Olivine", "Water" ]                          },
     { "output": "Sodium Carbonate",         "process": "Solvay Process",                        "inputs": [ "Calcite", "Sodium Chloride", "Water" ]                         },
     { "output": "Sodium Chloride",          "process": "Selective Crystallization",             "inputs": [ "Salts" ]                                                       },
@@ -1243,14 +1243,18 @@ on('mouseleave', '[data-container-id]:not(.derivative-item)', el => {
 
 // highlight + activate fullchain (subchain and ancestors), on hover over checked process variant
 on('mouseenter', '.process.checked', el => {
-    const processCode = el.getAttribute('for');
     // fake "mouseenter" on all occurrences of this process in the production chain
+    const processCode = el.getAttribute('for');
     productChainItemsContainer.querySelectorAll(`[data-process-code='${processCode}']`).forEach(processContainer => {
         processContainer.dispatchEvent(new Event('mouseenter'));
     });
 });
 on('mouseleave', '.process.checked', el => {
-    resetFadedItemsAndConnections();
+    // fake "mouseleave" on all occurrences of this process in the production chain
+    const processCode = el.getAttribute('for');
+    productChainItemsContainer.querySelectorAll(`[data-process-code='${processCode}']`).forEach(processContainer => {
+        processContainer.dispatchEvent(new Event('mouseleave'));
+    });
 });
 
 // toggle required-content via required-tabs
