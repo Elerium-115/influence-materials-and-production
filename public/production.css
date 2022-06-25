@@ -545,7 +545,6 @@
 
 #production-chain-items .process-tooltip-wrapper {
     position: absolute;
-    left: 50%;
     display: none;
 }
 
@@ -553,25 +552,47 @@
     display: block;
 }
 
+#production-chain-items .process-tooltip-wrapper::before {
+    content: '⮕';
+    position: absolute;
+    width: 1rem;
+    font-size: 1.1rem;
+    line-height: 1.1rem;
+}
+
 #production-chain-items .process-tooltip {
     position: relative;
-    left: -50%;
     background: var(--process);
     text-align: left;
-    margin-top: 1rem;
     padding: 0.75rem;
     border: 1px solid gray;
     border-radius: 0.5rem;
 }
 
-#production-chain-items .process-tooltip-wrapper::before {
-    content: '⮕';
-    position: absolute;
+#production-chain-items.horizontal-layout .process-tooltip-wrapper {
+    left: 50%;
+}
+
+#production-chain-items.horizontal-layout .process-tooltip-wrapper::before {
     left: -0.5rem;
-    width: 1rem;
-    font-size: 1.1rem;
-    line-height: 1.1rem;
     transform: rotate(-90deg);
+}
+
+#production-chain-items.horizontal-layout .process-tooltip {
+    left: -50%;
+    margin-top: 1rem;
+}
+
+#production-chain-items.vertical-layout .process-tooltip-wrapper {
+    top: 50%;
+    transform: translateY(-50%);
+    right: -8rem;
+}
+
+#production-chain-items.vertical-layout .process-tooltip-wrapper::before {
+    top: calc(50% - 0.55rem);
+    left: -1rem;
+    transform: scaleX(-1);
 }
 
 #production-chain-items .process-tooltip ul::before {
