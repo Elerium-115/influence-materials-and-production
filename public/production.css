@@ -322,15 +322,22 @@
 #production-chain-items .level {
     display: flex;
     justify-content: space-around;
-    gap: 1rem;
 }
 
 #production-chain-items.horizontal-layout .level {
     flex-direction: column;
+    gap: 2rem;
+}
+
+#production-chain-items.vertical-layout .level {
+    gap: 1rem;
+}
+
+#production-chain-items [data-container-id] {
+    position: relative;
 }
 
 #production-chain-items [data-container-id]:hover {
-    position: relative;
     z-index: 1;
 }
 
@@ -459,6 +466,31 @@
 #production-chain-items [data-container-id] .spectral-type.type-I { background: var(--type-i); }
 #production-chain-items [data-container-id] .spectral-type.type-M { background: var(--type-m); }
 #production-chain-items [data-container-id] .spectral-type.type-S { background: var(--type-s); }
+
+#production-chain-items [data-container-id] .item-qty {
+    position: absolute;
+    top: -1rem;
+    left: calc(50% - 1.5rem);
+    width: 3rem;
+    height: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--process);
+    color: var(--item-name);
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+}
+
+#production-chain-items [data-container-id]:not(.show-qty) .item-qty {
+    display: none;
+}
+
+#production-chain-items [data-container-id] .item-qty::before {
+    content: '✕';
+    font-size: 0.5rem;
+    margin: 0.15rem 0.25rem 0 0;
+}
 
 #production-chain-connections > * {
     position: absolute; 
@@ -765,8 +797,9 @@
 }
 
 #required-raw-materials ul li .counter::before {
-    content: "x ";
-    margin-left: 0.5rem;
+    content: "✕";
+    font-size: 0.5rem;
+    margin-right: 0.25rem;
 }
 
 #required-raw-materials ul li .ratio-cell {
