@@ -443,6 +443,7 @@ function createItemContainer(itemName, itemData, parentContainerId) {
     itemContainer.dataset.longestSubchainLength = 1;
     itemContainer.dataset.itemName = itemName;
     itemContainer.innerHTML = `<a href="#${getCompactName(itemName)}" class="item-name">${itemName}</a>`;
+    itemContainer.innerHTML += `<div class="item-qty">1</div>`;
     itemContainer.classList.add(getItemTypeClass(itemData.itemType));
     return itemContainer;
 }
@@ -1223,9 +1224,21 @@ on('mouseenter', '[data-container-id]:not(.derivative-item)', el => {
     });
     productChainItemsContainer.classList.add('faded');
     updateAllConnections();
+    // show quantities for inputs and outputs, if this is a process
+    if (el.classList.contains('item-type-process')) {
+        document.querySelectorAll(`[data-parent-container-id="${itemContainerId}"], [data-container-id="${el.dataset.parentContainerId}"]`).forEach(itemWithQty => {
+            itemWithQty.classList.add('show-qty');
+        });
+    }
 });
 on('mouseleave', '[data-container-id]:not(.derivative-item)', el => {
     resetFadedItemsAndConnections();
+    // hide quantities for inputs and outputs, if this is a process
+    if (el.classList.contains('item-type-process')) {
+        document.querySelectorAll(`.show-qty`).forEach(itemWithQty => {
+            itemWithQty.classList.remove('show-qty');
+        });
+    }
 });
 
 // highlight + activate fullchain (subchain and ancestors), on hover over checked process variant
@@ -1276,9 +1289,6 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
-
-//// TO DO: OVERLAY QTYS for inputs and output, when hovering over a process
-////        (NOT when hovering over an output, b/c it may have process variants)
 
 //// TO DO: DYNAMIC "required products", based on the currently-displayed tiers in the chart - e.g.:
 ////        - tier limit == 0 - i.e. chart fully expanded
