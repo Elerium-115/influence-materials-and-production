@@ -473,7 +473,7 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     processContainer.appendChild(processTooltipWrapper);
     // inject process-module parts into tooltip
     let processModulePartsHtml = '';
-    const parts = processData.parts || ['[redacted]'];
+    const parts = processData.parts || ['[redacted]', '[redacted]'];
     parts.forEach(part => {
         processModulePartsHtml += `<li>${part}</li>`;
     });
@@ -1250,8 +1250,6 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
-
-//// TO DO: REPOSITION process-tooltip on vertical layout, to the right side of each process (not below it)
 
 //// TO DO: TOGGLE between showing the full chain (tier-limit = 0), and the minimal chain (tier-limit = selectedItemTier - 1)
 ////        https://discord.com/channels/814990637178290177/814990637664305214/985534132538978304
