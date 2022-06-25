@@ -200,6 +200,7 @@ const tierSliderValue = document.getElementById('tier-slider-value');
 const tierSliderRange = document.getElementById('tier-slider-range');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const productChainConnectionsContainer = document.getElementById('production-chain-connections');
+const processVariantsWrapper = document.getElementById('process-variants-wrapper');
 const processVariantsContainer = document.getElementById('process-variants');
 const requiredSpectralsContainer = document.getElementById('required-spectrals');
 const requiredTextContainer = document.getElementById('required-text');
@@ -363,6 +364,7 @@ function getFullchainForItemId(itemContainerId) {
 
 function resetProductionChain() {
     productionWrapper.classList.remove('has-process-variants');
+    requiredTextContainer.querySelector('.variants').classList.remove('active');
     requiredRawMaterialsContainer.textContent = '';
     requiredSpectralsContainer.textContent = '';
     // remove only ".level" elements from "productChainItemsContainer" (keep "#required-spectrals")
@@ -905,13 +907,29 @@ function updateRequiredSpectralsAndRawMaterials() {
     });
 }
 
+function filterProductsList() {
+    document.querySelectorAll('#filter-item-types input').forEach(elInput => {
+        // e.g. "filter-raw-materials" => "item-type-raw-material"
+        const itemTypeClass = 'item-type-' + elInput.id.replace(/^filter-(.+)s$/, '$1');
+        productsListContainer.querySelectorAll(`.${itemTypeClass}`).forEach(elListItem => {
+            if (elInput.checked) {
+                elListItem.classList.remove('hidden');
+            } else {
+                elListItem.classList.add('hidden');
+            }
+        });
+    });
+}
+
 function hideAndResetProductsList() {
     productsListWrapper.classList.add('list-hidden');
     productsListWrapper.querySelector('input').value = '';
-    // show the list-items which did not match the last search
+    // re-show the list-items which did not match the previous search
     productsListContainer.querySelectorAll('.not-matching-search').forEach(elListItem => {
         elListItem.classList.remove('not-matching-search');
     });
+    // re-filter the products list, required after a SOFT-reload which preserves the disabled filters
+    filterProductsList();
 }
 
 function updateProductionChainForTierLimit(tierLimit) {
@@ -958,6 +976,14 @@ function updateProductionChainForTierLimit(tierLimit) {
             elItem.classList.remove('low-tier-hidden');
         }
     });
+    if (productionWrapper.classList.contains('has-process-variants')) {
+        if (processVariantsContainer.querySelector('.item:not(.low-tier-hidden)')) {
+            processVariantsWrapper.classList.remove('no-visible-variants');
+        } else {
+            // hide the entire "processVariantsWrapper", if all process-variants are hidden
+            processVariantsWrapper.classList.add('no-visible-variants');
+        }
+    }
     updateAllConnections();
 }
 
@@ -1098,15 +1124,7 @@ on('input', '#products-list-wrapper input', el => {
 
 // filter item-types in the products-list
 on('change', '#filter-item-types input', el => {
-    // e.g. "filter-raw-materials" => "item-type-raw-material"
-    const itemTypeClass = 'item-type-' + el.id.replace(/^filter-(.+)s$/, '$1');
-    productsListContainer.querySelectorAll(`.${itemTypeClass}`).forEach(elListItem => {
-        if (el.checked) {
-            elListItem.classList.remove('hidden');
-        } else {
-            elListItem.classList.add('hidden');
-        }
-    });
+    filterProductsList();
 });
 
 // toggle production chain vs. derivatives chain vs. combined chain
@@ -1222,6 +1240,14 @@ on('mouseleave', '.process.checked', el => {
     resetFadedItemsAndConnections();
 });
 
+// toggle required-content via required-tabs
+on('click', '#required-tabs a', el => {
+    document.querySelector('#required-tabs .selected').classList.remove('selected');
+    document.querySelector('#required-content .selected').classList.remove('selected');
+    el.classList.add('selected');
+    document.getElementById(el.dataset.contentId).classList.add('selected');
+});
+
 window.addEventListener('keydown', event => {
     // pressing "Enter" while the product-search input is focused, selects the first matching product
     if (event.key === 'Enter') {
@@ -1251,6 +1277,19 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
+//// TO DO: OVERLAY QTYS for inputs and output, when hovering over a process
+////        (NOT when hovering over an output, b/c it may have process variants)
+
+//// TO DO: DYNAMIC "required products", based on the currently-displayed tiers in the chart - e.g.:
+////        - tier limit == 0 - i.e. chart fully expanded
+////          => all required products would be raw materials
+////          => AUTO-SELECT "#required-spectrals-and-raw-materials"?
+////        - tier limit >= 1
+////          => required products a mix raw materials / refined materials / components
+////          => AUTO-SELECT "#required-tier-products-and-parts"?
+////        - tier limit == [max_selectable] - i.e. the chart is fully contracted (e.g. showing only the 3 inputs for LiPo Battery)
+////          => required products = Lithium + Polyacrylonitrile + Graphite
+
 //// TO DO: TOGGLE between showing the full chain (tier-limit = 0), and the minimal chain (tier-limit = selectedItemTier - 1)
 ////        https://discord.com/channels/814990637178290177/814990637664305214/985534132538978304
 
@@ -1261,12 +1300,6 @@ setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
 //// TO DO: PER-ITEM TOOLTIP on hover over item that has process-variants (e.g. Iron)
 ////        => tooltip with show/hide toggles for each of its process-variants
-
-//// TO DO: DYNAMIC "required materials", based on the currently-displayed tiers in the chart - e.g.:
-////        - if the chart is fully expanded => all required materials would be raw materials
-////        - if the chart is fully contracted (e.g. showing only the 3 inputs for LiPo Battery)
-////          => required materials = Lithium + Polyacrylonitrile + Graphite
-////        - KEEP the current "required raw materials and spectral types" panel, adding a new tab to it for these "ingredients"
 
 //// TO DO: HOW TO inform when C / I types are optional?
 ////        - Chlorine requires only Water (C/I) => C and I both optional

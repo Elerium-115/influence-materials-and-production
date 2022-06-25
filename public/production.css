@@ -219,6 +219,10 @@
     display: block;
 }
 
+.has-process-variants #process-variants-wrapper.no-visible-variants {
+    display: none;
+}
+
 #process-variants {
     display: flex;
     flex-wrap: wrap;
@@ -618,14 +622,43 @@
     left: 0.86rem;
 }
 
-/* required spectral types and raw materials */
+/* required stuff */
 
-#required-spectrals-and-raw-materials {
+#required-stuff-wrapper {
     display: inline-block;
-    background: var(--active-bg);
-    margin-top: 2rem;
-    padding: 1rem;
+    width: 50rem;
+    background: var(--dark-bg);
+    margin-top: 2.5rem;
     border-radius: 0.5rem;
+}
+
+#required-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#required-tabs a {
+    text-align: center;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+#required-tabs .selected {
+    background: var(--active-bg);
+}
+
+#required-content > * {
+    background: var(--active-bg);
+    padding: 1rem;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    display: none;
+}
+
+#required-content .selected {
+    display: block;
 }
 
 .chain-type-derivatives #required-spectrals-and-raw-materials {
@@ -665,6 +698,12 @@
 #required-spectrals .spectral-type.type-I { background: var(--type-i); }
 #required-spectrals .spectral-type.type-M { background: var(--type-m); }
 #required-spectrals .spectral-type.type-S { background: var(--type-s); }
+
+#required-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
 #required-text .variants {
     display: none;
