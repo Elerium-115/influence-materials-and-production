@@ -470,7 +470,7 @@
 
 #production-chain-items [data-container-id] .item-qty {
     position: absolute;
-    top: -1rem;
+    top: -1.25rem;
     left: calc(50% - 1.5rem);
     width: 3rem;
     height: 1.5rem;
@@ -491,6 +491,21 @@
     content: '✕';
     font-size: 0.5rem;
     margin: 0.15rem 0.25rem 0 0;
+}
+
+#production-chain-items [data-container-id] .thumb {
+    position: absolute;
+    top: -2.75rem;
+    left: calc(50% - 1.5rem);
+    width: 3rem;
+    height: 3rem;
+    background: black;
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+}
+
+#production-chain-items [data-container-id]:not(:hover) .thumb {
+    display: none;
 }
 
 #production-chain-connections > * {

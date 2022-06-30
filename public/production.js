@@ -544,6 +544,7 @@ function renderItem(itemName, parentContainerId, renderOnLevel, isSelectedItem =
     levelContainer.appendChild(itemContainer);
     if (itemData.itemType === "Raw Material") {
         itemContainer.innerHTML += getBaseSpectralsHtmlForRawMaterial(itemData);
+        itemContainer.innerHTML += `<img class="thumb" src="./img/icons/${getItemNameSafe(itemName)}.png" alt="">`;
         if (!isSelectedItem) {
             // after rendering a raw material which is NOT the selected item, trace back its upchain until the top-level item
             generateUpchainFromRawMaterial(itemContainer);
@@ -1293,6 +1294,9 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
+
+//// TO DO: THUMBS on hover over all non-process items, not just raw-materials
+////        DO NOT show missing thumbs, e.g. by setting a "hasThumb" flag in "items"
 
 //// TO DO: DYNAMIC "required products", based on the currently-displayed tiers in the chart - e.g.:
 ////        - tier limit == 0 - i.e. chart fully expanded
