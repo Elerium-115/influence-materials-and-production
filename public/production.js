@@ -205,6 +205,7 @@ const processVariantsContainer = document.getElementById('process-variants');
 const requiredSpectralsContainer = document.getElementById('required-spectrals');
 const requiredTextContainer = document.getElementById('required-text');
 const requiredRawMaterialsContainer = document.getElementById('required-raw-materials');
+const requiredProductImage = document.getElementById('required-product-image');
 
 let chainType = document.querySelector('input[name="chain-type"][checked]').value; // 'production' / 'derivatives' / 'combined'
 
@@ -444,6 +445,7 @@ function createItemContainer(itemName, itemData, parentContainerId) {
     itemContainer.dataset.itemName = itemName;
     itemContainer.innerHTML = `<a href="#${getCompactName(itemName)}" class="item-name">${itemName}</a>`;
     itemContainer.innerHTML += `<div class="item-qty">1</div>`;
+    itemContainer.innerHTML += `<img class="thumb" src="./img/thumbs/${getItemNameSafe(itemName)}.png" alt="" onerror="this.classList.add('hidden');">`;
     itemContainer.classList.add(getItemTypeClass(itemData.itemType));
     return itemContainer;
 }
@@ -544,7 +546,6 @@ function renderItem(itemName, parentContainerId, renderOnLevel, isSelectedItem =
     levelContainer.appendChild(itemContainer);
     if (itemData.itemType === "Raw Material") {
         itemContainer.innerHTML += getBaseSpectralsHtmlForRawMaterial(itemData);
-        itemContainer.innerHTML += `<img class="thumb" src="./img/icons/${getItemNameSafe(itemName)}.png" alt="">`;
         if (!isSelectedItem) {
             // after rendering a raw material which is NOT the selected item, trace back its upchain until the top-level item
             generateUpchainFromRawMaterial(itemContainer);
@@ -1042,6 +1043,8 @@ function selectItemByName(itemName) {
     updateTierSlider();
     // default tier-limit such that only the minimal sub-chain is shown for the selected item (i.e. only its direct inputs)
     updateProductionChainForTierLimit(Math.max(0, selectedItemTier - 1));
+    requiredProductImage.classList.remove('hidden');
+    requiredProductImage.src = `./img/products/${getItemNameSafe(itemName)}.png`;
     const itemNameCompact = getCompactName(itemName);
     window.location.hash = `#${itemNameCompact}`;
 }
@@ -1289,14 +1292,13 @@ window.addEventListener('hashchange', () => {
 // pre-select the item from #Hash on page-load
 let hashToPreselect = window.location.hash.replace(/^#/, '');
 if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
-    // pre-select "Neodymium(III) Chloride" by default, if invalid / empty #Hash given
-    hashToPreselect = 'Neodymium(III)Chloride';
+    // pre-select "Steel" by default, if invalid / empty #Hash given
+    hashToPreselect = 'Steel';
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
-//// TO DO: THUMBS on hover over all non-process items, not just raw-materials
-////        DO NOT show missing thumbs, e.g. by setting a "hasThumb" flag in "items"
+//// TO DO: BYPASS missing images via JS, to avoid 404 errors in console
 
 //// TO DO: DYNAMIC "required products", based on the currently-displayed tiers in the chart - e.g.:
 ////        - tier limit == 0 - i.e. chart fully expanded
