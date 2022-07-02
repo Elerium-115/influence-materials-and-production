@@ -1,6 +1,7 @@
 
 // raw materials sorted by material-type (Volatiles > Organics > Metals > Rare-Earth > Fissiles)
 const rawMaterialsSorted = [
+    // Volatiles
     "Ammonia",
     "Carbon Dioxide",
     "Carbon Monoxide",
@@ -9,9 +10,12 @@ const rawMaterialsSorted = [
     "Nitrogen",
     "Sulfur Dioxide",
     "Water",
+    // Organics
     "Apatite",
     "Bitumen",
     "Calcite",
+    "Magnesite",
+    // Metals
     "Feldspar",
     "Graphite",
     "Olivine",
@@ -19,8 +23,10 @@ const rawMaterialsSorted = [
     "Rhabdite",
     "Taenite",
     "Troilite",
+    // Rare-Earth
     "Merrillite",
     "Xenotime",
+    // Fissiles
     "Coffinite",
     "Uranite",
 ];
@@ -37,6 +43,7 @@ const items = {
     "Apatite":                  { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Organics",     "baseSpectrals": ["C"]          },
     "Bitumen":                  { "itemType": "Raw Material",       "label": "Hydrocarbon", "materialType": "Organics",     "baseSpectrals": ["C"]          },
     "Calcite":                  { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Organics",     "baseSpectrals": ["C"]          },
+    "Magnesite":                { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Organics",     "baseSpectrals": ["C"]          },
     "Feldspar":                 { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["S"]          },
     "Graphite":                 { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["M"]          },
     "Olivine":                  { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["S"]          },
@@ -53,6 +60,7 @@ const items = {
     "Acetone":                  { "itemType": "Refined Material"    },
     "Acetylene":                { "itemType": "Refined Material"    },
     "Acrylonitrile":            { "itemType": "Refined Material"    },
+    "Alkene":                   { "itemType": "Refined Material"    },
     "Alumina":                  { "itemType": "Refined Material"    },
     "Alumina Ceramic":          { "itemType": "Refined Material"    },
     "Aluminium":                { "itemType": "Refined Material"    },
@@ -61,21 +69,36 @@ const items = {
     "Ammonium Oxalate":         { "itemType": "Refined Material"    },
     "Benzene":                  { "itemType": "Refined Material"    },
     "Bisphenol A":              { "itemType": "Refined Material"    },
+    "Borax":                    { "itemType": "Refined Material"    },
+    "Boric Acid":               { "itemType": "Refined Material"    },
+    "Boron Trioxide":           { "itemType": "Refined Material"    },
+    "Calcium Chloride":         { "itemType": "Refined Material"    },
     "Chlorine":                 { "itemType": "Refined Material"    },
     "Chromia":                  { "itemType": "Refined Material"    },
     "Chromium":                 { "itemType": "Refined Material"    },
     "Concrete":                 { "itemType": "Refined Material"    },
+    "Copper":                   { "itemType": "Refined Material"    },
     "Deionized Water":          { "itemType": "Refined Material"    },
     "Epichlorohydrin":          { "itemType": "Refined Material"    },
+    "Ethylene":                 { "itemType": "Refined Material"    },
+    "Ferrosilicon":             { "itemType": "Refined Material"    },
     "Fertilizer":               { "itemType": "Refined Material",   "label": "Mixture"  },
+    "Fused Quartz":             { "itemType": "Refined Material"    },
     "Hydrogen Chloride":        { "itemType": "Refined Material",   "label": "HCl"      },
+    "Hydrogen Cyanide":         { "itemType": "Refined Material"    },
     "Hydrochloric Acid":        { "itemType": "Refined Material"    },
+    "Hydrofluoric Acid":        { "itemType": "Refined Material"    },
+    "Hydrolox Fuel":            { "itemType": "Refined Material"    },
     "Iron":                     { "itemType": "Refined Material"    },
     "Iron Oxide":               { "itemType": "Refined Material"    },
     "Lithium":                  { "itemType": "Refined Material"    },
     "Lithium Carbonate":        { "itemType": "Refined Material"    },
     "Lithium Chloride":         { "itemType": "Refined Material"    },
     "Lithium Sulfate":          { "itemType": "Refined Material"    },
+    "Magnesium":                { "itemType": "Refined Material"    },
+    "Magnesium Chloride":       { "itemType": "Refined Material"    },
+    "Magnesium Oxide":          { "itemType": "Refined Material"    },
+    "Methanol":                 { "itemType": "Refined Material"    },
     "Naphtha":                  { "itemType": "Refined Material"    },
     "Neodymium Oxide":          { "itemType": "Refined Material"    },
     "Neodymium(III) Chloride":  { "itemType": "Refined Material"    },
@@ -86,9 +109,12 @@ const items = {
     "Oxalic Acid":              { "itemType": "Refined Material"    },
     "Oxygen":                   { "itemType": "Refined Material"    },
     "Phenol":                   { "itemType": "Refined Material"    },
+    "Phosphoric Acid":          { "itemType": "Refined Material"    },
+    "Platinum":                 { "itemType": "Refined Material"    },
     "Polyacrylonitrile":        { "itemType": "Refined Material"    },
     "Polypropylene":            { "itemType": "Refined Material"    },
     "Potassium Chloride":       { "itemType": "Refined Material",   "label": "KCl"      },
+    "Potassium Hydroxide":      { "itemType": "Refined Material"    },
     "Propylene":                { "itemType": "Refined Material"    },
     // "Propylene Glycol":      { "itemType": "Refined Material"    }, // unused material for Mission 7 (Epoxy production chain)
     "Quicklime":                { "itemType": "Refined Material"    },
@@ -96,6 +122,8 @@ const items = {
     "Rare Earth Sulfates":      { "itemType": "Refined Material"    },
     "Salts":                    { "itemType": "Refined Material"    },
     "Silica":                   { "itemType": "Refined Material"    },
+    "Silicon":                  { "itemType": "Refined Material"    },
+    "Silicone":                 { "itemType": "Refined Material"    },
     // "Sodium Benzoate":       { "itemType": "Refined Material"    }, // unused material for Mission 7 (Epoxy production chain)
     "Sodium Carbonate":         { "itemType": "Refined Material"    },
     "Sodium Chloride":          { "itemType": "Refined Material"    },
@@ -104,11 +132,28 @@ const items = {
     "Sodium Hydroxide":         { "itemType": "Refined Material"    },
     "Soil":                     { "itemType": "Refined Material",   "label": "Mixture"  },
     "Steel":                    { "itemType": "Refined Material"    },
+    "Stainless Steel":          { "itemType": "Refined Material"    },
+    "Sulfur":                   { "itemType": "Refined Material"    },
     "Sulfuric Acid":            { "itemType": "Refined Material",   "label": "H2SO4"    },
+    "Vanadium Oxide":           { "itemType": "Refined Material"    },
+    "Zinc":                     { "itemType": "Refined Material"    },
+    "Zinc Oxide":               { "itemType": "Refined Material"    },
 
     // Components
+    "Aluminium Beam":           { "itemType": "Component"           },
+    "Aluminium Pipe":           { "itemType": "Component"           },
+    "Aluminium Sheet":          { "itemType": "Component"           },
+    "Bare Copperwire":          { "itemType": "Component"           },
+    "Copper Wire":              { "itemType": "Component"           },
+    "Fiber Optic Cable":        { "itemType": "Component"           },
+    "Fiberglass":               { "itemType": "Component"           },
+    "Stainless Steel Pipe":     { "itemType": "Component"           },
+    "Stainless Steel Sheet":    { "itemType": "Component"           },
     "Steel Beam":               { "itemType": "Component"           },
+    "Steel Cable":              { "itemType": "Component"           },
+    "Steel Pipe":               { "itemType": "Component"           },
     "Steel Sheet":              { "itemType": "Component"           },
+    "Steel Wire":               { "itemType": "Component"           },
 
     // Finished Goods
     "Epoxy":                    { "itemType": "Finished Good"       },
@@ -411,7 +456,7 @@ function updateRequiredRawMaterialsHtml() {
         const counter = requiredRawMaterials[rawMaterial];
         const percent = 100 * counter / requiredRawMaterialsMaxCounter;
         requiredRawMaterialsHtml += `<li class="${getItemNameSafe(items[rawMaterial].materialType)} active" data-value="${getItemNameSafe(rawMaterial)}">
-                <div class="label">${rawMaterial}</div>
+                <div class="label"><a href="#${getCompactName(rawMaterial)}">${rawMaterial}</a></div>
                 <div class="counter">${counter}</div>
                 <div class="ratio-cell">
                     <div class="ratio-bar" style="width: ${percent}%;"></div>
