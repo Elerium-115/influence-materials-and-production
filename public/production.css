@@ -678,8 +678,9 @@
 /* required stuff */
 
 #required-stuff-wrapper {
+    position: relative;
     display: inline-block;
-    width: 50rem;
+    width: 60rem;
     background: var(--dark-bg);
     margin-top: 2.5rem;
     border-radius: 0.5rem;
@@ -703,8 +704,9 @@
 }
 
 #required-content > * {
+    min-height: 13rem;
     background: var(--active-bg);
-    padding: 1rem;
+    padding: 1rem 14rem 1rem 1rem;
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
     display: none;
@@ -712,6 +714,14 @@
 
 #required-content .selected {
     display: block;
+}
+
+#required-product-image {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 1rem;
+    width: 12rem;
+    height: 12rem;
 }
 
 .chain-type-derivatives #required-spectrals-and-raw-materials {
