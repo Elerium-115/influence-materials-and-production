@@ -27,6 +27,7 @@
 /* options */
 
 .options label {
+    white-space: nowrap;
     margin-right: 0.5rem;
     padding: 0.5rem;
     border: 1px solid transparent;
@@ -821,6 +822,14 @@
 #required-raw-materials ul li:not(.active) .label,
 #required-raw-materials ul li:not(.active) .counter {
     color:var(--default-text_faded);
+}
+
+#required-raw-materials ul li .label a {
+    color: inherit;
+}
+
+#required-raw-materials ul li .label a:hover {
+    color: var(--item-name);
 }
 
 #required-raw-materials ul li .counter {
