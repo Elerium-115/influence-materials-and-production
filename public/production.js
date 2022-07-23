@@ -238,6 +238,12 @@ const processesOld = [
     { "output": "Warehouse",                "process": "Construction",                          "inputs": [ "Concrete", "Steel Beam", "Steel Sheet" ]                       },
 ];
 
+// parse buildings from official JSON
+const buildingNamesById = {};
+InfluenceProductionChainsJSON.buildings.forEach(building => {
+    buildingNamesById[building.id] = building.name;
+});
+
 // generate "items" from official JSON, and map "itemId" to "itemName"
 const items = {};
 const itemNamesById = {};
@@ -266,7 +272,8 @@ InfluenceProductionChainsJSON.processes.forEach(process => {
             output: itemNamesById[output.productId],
             process: process.name,
             inputs: process.inputs.map(input => itemNamesById[input.productId]),
-            parts: [], // future format: [ "Condenser", "Evaporator" ]
+            parts: null, // future format: [ "Condenser", "Evaporator" ]
+            building: buildingNamesById[process.buildingId],
         };
         processes.push(processData);
     });
@@ -531,8 +538,7 @@ function createItemContainer(itemName, itemData, parentContainerId) {
     itemContainer.dataset.itemName = itemName;
     itemContainer.innerHTML = `<a href="#${getCompactName(itemName)}" class="item-name">${itemName}</a>`;
     itemContainer.innerHTML += `<div class="item-qty">1</div>`;
-    //// RE-ENABLE thumbs after implementing a fix to avoid 404 errors for missing images
-    // itemContainer.innerHTML += `<img class="thumb" src="./img/thumbs/${getItemNameSafe(itemName)}.png" alt="" onerror="this.classList.add('hidden');">`;
+    itemContainer.innerHTML += `<img class="thumb" src="./img/thumbs/${getItemNameSafe(itemName)}.png" alt="" onerror="this.classList.add('hidden');">`;
     itemContainer.classList.add(getItemTypeClass(itemData.itemType));
     return itemContainer;
 }
@@ -563,13 +569,16 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     processTooltip.classList.add('process-tooltip');
     processTooltipWrapper.appendChild(processTooltip);
     processContainer.appendChild(processTooltipWrapper);
-    // inject process-module parts into tooltip
-    let processModulePartsHtml = '';
+    // inject building and process-module parts into tooltip
+    let processTooltipHtml = '';
+    processTooltipHtml += `<div class="building">${processData.building}</div>`;
+    processTooltipHtml += '<ul>';
     const parts = processData.parts || ['[redacted]', '[redacted]'];
     parts.forEach(part => {
-        processModulePartsHtml += `<li>${part}</li>`;
+        processTooltipHtml += `<li>${part}</li>`;
     });
-    processTooltip.innerHTML = `<ul>${processModulePartsHtml}</ul>`;
+    processTooltipHtml += '</ul>';
+    processTooltip.innerHTML = processTooltipHtml;
     return processContainer;
 }
 
@@ -1121,6 +1130,7 @@ function updateTierSlider() {
 
 async function selectItemByName(itemName) {
     resetProductionChain();
+    const tsStart = (new Date()).getTime();
     if (chainType === 'production') {
         // render production chain
         await renderItem(itemName, 0, 1, true);
@@ -1129,6 +1139,8 @@ async function selectItemByName(itemName) {
         await renderItemDerivatives(itemName);
     }
     // done rendering all items recursively
+    const tsEnd = (new Date()).getTime();
+    console.log(`--- finished rendering ${uniqueContainerId} items in ${(tsEnd - tsStart)/1000} seconds`); //// TEST
     requiredSpectrals.sort();
     updateRequiredSpectralsHtml();
     updateRequiredRawMaterialsHtml();
@@ -1403,7 +1415,7 @@ setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 ////        - see also class "item-type-unknown" => add + style new classes, for new item-types?
 ////        - alternatively, REDUCE the item-type classes, to use only 3 stylings: raw materials / intermediate products / finished goods
 
-//// TO DO: RE-ENABLE images IFF possible to BYPASS missing images via JS, to avoid 404 errors in console
+//// TO DO: BYPASS missing images via JS, to avoid 404 errors in console
 
 //// TO DO: DYNAMIC "required products", based on the currently-displayed tiers in the chart - e.g.:
 ////        - tier limit == 0 - i.e. chart fully expanded
