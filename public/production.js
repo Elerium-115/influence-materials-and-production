@@ -330,8 +330,15 @@ const itemNamesByHash = {};
 const connectionDefaultColor = 'gray';
 const connectionDefaultThickness = 1;
 
-let requestedConfirmationToRenderMassiveChain = false;
-let userAgreedToRenderMassiveChain = false;
+let requestedConfirmationToTruncateMassiveChain = false;
+let userAgreedToTruncaterMassiveChain = true;
+const truncateMassiveChainLimit = 1000; // max number of items to render by default
+const truncateMassiveChainConfirmLines = [
+    'Please note: this looks like a massive production chain.',
+    `An incomplete chain will be shown by default (max. ${truncateMassiveChainLimit} items).`,
+    'Press "Cancel" to bypass this limitation, and try to show it in full.',
+    'WARNING: That may be very slow, or even crash your browser!',
+];
 
 // populate "itemNamesByHash" and the products-list
 const itemNamesSorted = [];
@@ -475,8 +482,8 @@ function resetProductionChain() {
     tierSliderRange.value = 0;
     upchainsFromRawMaterials = {};
     connectedItemPairs = [];
-    requestedConfirmationToRenderMassiveChain = false;
-    userAgreedToRenderMassiveChain = false;
+    requestedConfirmationToTruncateMassiveChain = false;
+    userAgreedToTruncateMassiveChain = true;
 }
 
 function resetFadedItemsAndConnections() {
@@ -637,16 +644,16 @@ function renderItem(itemName, parentContainerId, renderOnLevel, isSelectedItem =
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
     const itemContainer = createItemContainer(itemName, itemData, parentContainerId);
     // do not render massinve production chains, unless the user explicitly agrees
-    if (itemContainer.dataset.containerId > 1000) {
-        if (!requestedConfirmationToRenderMassiveChain) {
+    if (itemContainer.dataset.containerId > truncateMassiveChainLimit) {
+        if (!requestedConfirmationToTruncateMassiveChain) {
             productionWrapper.classList.add('incomplete-chain');
-            userAgreedToRenderMassiveChain = confirm(`WARNING: This looks like a massive production chain.\nShowing it may be very slow, or even crash your browser!\nAre you sure you want to continue?`);
-            requestedConfirmationToRenderMassiveChain = true;
-            if (userAgreedToRenderMassiveChain) {
+            userAgreedToTruncateMassiveChain = confirm(truncateMassiveChainConfirmLines.join('\n'));
+            requestedConfirmationToTruncateMassiveChain = true;
+            if (!userAgreedToTruncateMassiveChain) {
                 productionWrapper.classList.remove('incomplete-chain');
             }
         }
-        if (!userAgreedToRenderMassiveChain) {
+        if (userAgreedToTruncateMassiveChain) {
             return;
         }
     }
@@ -1130,7 +1137,6 @@ function updateTierSlider() {
 
 async function selectItemByName(itemName) {
     resetProductionChain();
-    const tsStart = (new Date()).getTime();
     if (chainType === 'production') {
         // render production chain
         await renderItem(itemName, 0, 1, true);
@@ -1139,8 +1145,6 @@ async function selectItemByName(itemName) {
         await renderItemDerivatives(itemName);
     }
     // done rendering all items recursively
-    const tsEnd = (new Date()).getTime();
-    console.log(`--- finished rendering ${uniqueContainerId} items in ${(tsEnd - tsStart)/1000} seconds`); //// TEST
     requiredSpectrals.sort();
     updateRequiredSpectralsHtml();
     updateRequiredRawMaterialsHtml();
@@ -1410,6 +1414,15 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
+
+//// TO DO: PRODUCTION v2 ("Production Planner", same as Daharius' tool name)
+////        - clicking on items in the chain toggles them for products that you want to make yourself
+////          - the production chain will thus "expand" only 1 item at a time, and will only show the products immediately-reqiored for making your selected products
+////          - allow toggling specific process variants, for products that can be made in multiple ways
+////        - make it possible to select a process variant for each individual item
+////          - instead of applying that process variant selection to ALL occurrences of that item in the chain
+////          - do NOT allow multiple process variants enabled for the same item
+////        - save the entire state of selections (items + process variants for each item) in the URL, for easy sharing
 
 //// TO DO: Add new item-types to filters
 ////        - see also class "item-type-unknown" => add + style new classes, for new item-types?
