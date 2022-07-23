@@ -665,6 +665,15 @@
     filter: drop-shadow(0.25rem 0 0.25rem var(--default-bg));
 }
 
+#production-chain-items .process-tooltip .building {
+    background: var(--default-text);
+    color: var(--process);
+    text-align: center;
+    margin-bottom: 1rem;
+    padding: 0.4rem;
+    border-radius: 0.4rem;
+}
+
 #production-chain-items .process-tooltip ul::before {
     content: 'Module parts:';
     display: block;
