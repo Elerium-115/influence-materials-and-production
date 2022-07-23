@@ -3,7 +3,7 @@ const spectralTypes = ['c', 'ci', 'cis', 'cm', 'cms', 'cs', 'i', 'm', 's', 'si',
 const rawMaterialsByBaseSpectralType = {
     'c': ['carbon-dioxide', 'carbon-monoxide', 'methane', 'water', 'apatite', 'bitumen', 'calcite'],
     'i': ['ammonia', 'carbon-dioxide', 'carbon-monoxide', 'hydrogen', 'methane', 'nitrogen', 'sulfur-dioxide', 'water'],
-    'm': ['graphite', 'rhabdite', 'taenite', 'troilite', 'uranite'],
+    'm': ['graphite', 'rhabdite', 'taenite', 'troilite', 'uraninite'],
     's': ['feldspar', 'olivine', 'pyroxene', 'merrillite', 'xenotime', 'coffinite'],
 };
 
@@ -31,7 +31,7 @@ const rawMaterialsByMaterialType = {
     'organics': ['apatite', 'bitumen', 'calcite'],
     'metals': ['feldspar', 'graphite', 'olivine', 'pyroxene', 'rhabdite', 'taenite', 'troilite'],
     'rare-earth': ['merrillite', 'xenotime'],
-    'fissiles': ['coffinite', 'uranite'],
+    'fissiles': ['coffinite', 'uraninite'],
 };
 
 // determine the material-type of each raw-material

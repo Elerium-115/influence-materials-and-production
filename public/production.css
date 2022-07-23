@@ -133,6 +133,14 @@
     margin-top: 2rem;
 }
 
+#production-wrapper.incomplete-chain #selected-production-chain {
+    background: rgba(255, 0, 0, 0.25);
+}
+
+#production-wrapper.incomplete-chain #selected-production-chain::after {
+    content: ' - INCOMPLETE';
+}
+
 /* tier slider */
 
 #tier-slider-wrapper {
@@ -318,6 +326,10 @@
     display: inline-block;
     /* compensate for the margin of the top-most and bottom-most "#production-chain-items.vertical-layout [data-container-id]" */
     margin: -1.5rem 0;
+}
+
+#production-wrapper.incomplete-chain #production-chain-items {
+    background: rgba(255, 0, 0, 0.25);
 }
 
 #production-chain-items .level {
