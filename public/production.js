@@ -28,10 +28,10 @@ const rawMaterialsSorted = [
     "Xenotime",
     // Fissiles
     "Coffinite",
-    "Uranite",
+    "Uraninite", // ex-"Uranite"
 ];
 
-const items = {
+const itemsOld = {
     "Ammonia":                  { "itemType": "Raw Material",       "label": "NH3",         "materialType": "Volatiles",    "baseSpectrals": ["I"]          },
     "Carbon Dioxide":           { "itemType": "Raw Material",       "label": "CO2",         "materialType": "Volatiles",    "baseSpectrals": ["C", "I"]     },
     "Carbon Monoxide":          { "itemType": "Raw Material",       "label": "CO",          "materialType": "Volatiles",    "baseSpectrals": ["C", "I"]     },
@@ -54,7 +54,7 @@ const items = {
     "Merrillite":               { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Rare-Earth",   "baseSpectrals": ["S"]          },
     "Xenotime":                 { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Rare-Earth",   "baseSpectrals": ["S"]          },
     "Coffinite":                { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Fissiles",     "baseSpectrals": ["S"]          },
-    "Uranite":                  { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Fissiles",     "baseSpectrals": ["M"]          },
+    "Uraninite":                { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Fissiles",     "baseSpectrals": ["M"]          },
 
     // Refined Materials
     "Acetone":                  { "itemType": "Refined Material"    },
@@ -164,7 +164,7 @@ const items = {
     "Warehouse":                { "itemType": "Finished Good"       },
 };
 
-const processes = [
+const processesOld = [
     // Refined Materials
     { "output": "Acetone",                  "process": "Cumene Process",                        "inputs": [ "Benzene", "Propylene", "Oxygen" ]                              },
     { "output": "Acetylene",                "process": "Huels Process",                         "inputs": [ "Methane" ]                                                     },
@@ -238,6 +238,40 @@ const processes = [
     { "output": "Warehouse",                "process": "Construction",                          "inputs": [ "Concrete", "Steel Beam", "Steel Sheet" ]                       },
 ];
 
+// generate "items" from official JSON, and map "itemId" to "itemName"
+const items = {};
+const itemNamesById = {};
+InfluenceProductionChainsJSON.products.forEach(product => {
+    const itemName = product.name;
+    items[itemName] = {
+        itemId: product.id,
+        itemType: product.type,
+        label: itemsOld[itemName]?.label,
+        materialType: itemsOld[itemName]?.materialType,
+        baseSpectrals: itemsOld[itemName]?.baseSpectrals,
+    };
+    itemNamesById[product.id] = itemName;
+});
+
+// generate "processes" from official JSON
+const processes = [];
+InfluenceProductionChainsJSON.processes.forEach(process => {
+    if (!process.inputs.length) {
+        // skip processes without any inputs, for now
+        // return; //// DO NOT SKIP YET
+    }
+    // parse each output from the JSON, as a distinct process
+    process.outputs.forEach(output => {
+        const processData = {
+            output: itemNamesById[output.productId],
+            process: process.name,
+            inputs: process.inputs.map(input => itemNamesById[input.productId]),
+            parts: [], // future format: [ "Condenser", "Evaporator" ]
+        };
+        processes.push(processData);
+    });
+});
+
 const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
 const productsListContainer = document.getElementById('products-list');
@@ -288,6 +322,9 @@ const itemNamesByHash = {};
 
 const connectionDefaultColor = 'gray';
 const connectionDefaultThickness = 1;
+
+let requestedConfirmationToRenderMassiveChain = false;
+let userAgreedToRenderMassiveChain = false;
 
 // populate "itemNamesByHash" and the products-list
 const itemNamesSorted = [];
@@ -354,6 +391,7 @@ function getItemTypeClass(itemType) {
         case 'Refined Material': itemTypeClass = 'item-type-refined-material'; break;
         case 'Component': itemTypeClass = 'item-type-component'; break;
         case 'Finished Good': itemTypeClass = 'item-type-finished-good'; break;
+        default: itemTypeClass = 'item-type-unknown'; break;
     }
     return itemTypeClass;
 }
@@ -409,6 +447,7 @@ function getFullchainForItemId(itemContainerId) {
 }
 
 function resetProductionChain() {
+    productionWrapper.classList.remove('incomplete-chain');
     productionWrapper.classList.remove('has-process-variants');
     requiredTextContainer.querySelector('.variants').classList.remove('active');
     requiredRawMaterialsContainer.textContent = '';
@@ -429,6 +468,8 @@ function resetProductionChain() {
     tierSliderRange.value = 0;
     upchainsFromRawMaterials = {};
     connectedItemPairs = [];
+    requestedConfirmationToRenderMassiveChain = false;
+    userAgreedToRenderMassiveChain = false;
 }
 
 function resetFadedItemsAndConnections() {
@@ -490,7 +531,8 @@ function createItemContainer(itemName, itemData, parentContainerId) {
     itemContainer.dataset.itemName = itemName;
     itemContainer.innerHTML = `<a href="#${getCompactName(itemName)}" class="item-name">${itemName}</a>`;
     itemContainer.innerHTML += `<div class="item-qty">1</div>`;
-    itemContainer.innerHTML += `<img class="thumb" src="./img/thumbs/${getItemNameSafe(itemName)}.png" alt="" onerror="this.classList.add('hidden');">`;
+    //// RE-ENABLE thumbs after implementing a fix to avoid 404 errors for missing images
+    // itemContainer.innerHTML += `<img class="thumb" src="./img/thumbs/${getItemNameSafe(itemName)}.png" alt="" onerror="this.classList.add('hidden');">`;
     itemContainer.classList.add(getItemTypeClass(itemData.itemType));
     return itemContainer;
 }
@@ -585,6 +627,17 @@ function renderItem(itemName, parentContainerId, renderOnLevel, isSelectedItem =
     maxLevel = Math.max(maxLevel, renderOnLevel);
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
     const itemContainer = createItemContainer(itemName, itemData, parentContainerId);
+    // do not render massinve production chains, unless the user explicitly agrees
+    if (itemContainer.dataset.containerId > 1000) {
+        if (!requestedConfirmationToRenderMassiveChain) {
+            userAgreedToRenderMassiveChain = confirm(`WARNING: This looks like a massive production chain.\nShowing it may be very slow, or even crash your browser!\nAre you sure you want to continue?`);
+            requestedConfirmationToRenderMassiveChain = true;
+        }
+        if (!userAgreedToRenderMassiveChain) {
+            productionWrapper.classList.add('incomplete-chain');
+            return;
+        }
+    }
     if (isSelectedItem) {
         itemContainer.classList.add('selected-item');
     }
@@ -614,8 +667,8 @@ function renderItem(itemName, parentContainerId, renderOnLevel, isSelectedItem =
             const processLevelContainer = injectLevelContainerIfNeeded(renderOnLevel + 1);
             const processContainer = createProcessContainer(processData, itemContainer.dataset.containerId);
             processLevelContainer.appendChild(processContainer);
-            processData.inputs.forEach(inputItemName => {
-                renderItem(inputItemName, processContainer.dataset.containerId, renderOnLevel + 2);
+            processData.inputs.forEach(async inputItemName => {
+                await renderItem(inputItemName, processContainer.dataset.containerId, renderOnLevel + 2);
             });
         });
         if (processVariants.length >= 2 && !itemsWithProcessVariants[itemName]) {
@@ -624,7 +677,7 @@ function renderItem(itemName, parentContainerId, renderOnLevel, isSelectedItem =
     }
 }
 
-function renderItemDerivatives(itemName) {
+async function renderItemDerivatives(itemName) {
     const itemData = items[itemName];
     if (!itemData) {
         throw Error(`--- renderItemDerivatives ERROR: itemName not found (${itemName})`);
@@ -667,7 +720,7 @@ function renderItemDerivatives(itemName) {
     }
     if (chainType === 'combined') {
         // render both the selected item, and its production chain
-        renderItem(itemName, parentProcessContainerIds, itemLevel, true);
+        await renderItem(itemName, parentProcessContainerIds, itemLevel, true);
     }
 }
 
@@ -1063,14 +1116,14 @@ function updateTierSlider() {
     }
 }
 
-function selectItemByName(itemName) {
+async function selectItemByName(itemName) {
     resetProductionChain();
     if (chainType === 'production') {
         // render production chain
-        renderItem(itemName, 0, 1, true);
+        await renderItem(itemName, 0, 1, true);
     } else {
         // render derivatives chain / combined chain
-        renderItemDerivatives(itemName);
+        await renderItemDerivatives(itemName);
     }
     // done rendering all items recursively
     requiredSpectrals.sort();
@@ -1343,7 +1396,11 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
-//// TO DO: BYPASS missing images via JS, to avoid 404 errors in console
+//// TO DO: Add new item-types to filters
+////        - see also class "item-type-unknown" => add + style new classes, for new item-types?
+////        - alternatively, REDUCE the item-type classes, to use only 3 stylings: raw materials / intermediate products / finished goods
+
+//// TO DO: RE-ENABLE images IFF possible to BYPASS missing images via JS, to avoid 404 errors in console
 
 //// TO DO: DYNAMIC "required products", based on the currently-displayed tiers in the chart - e.g.:
 ////        - tier limit == 0 - i.e. chart fully expanded
@@ -1373,9 +1430,20 @@ setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 ////        - Acetone requires Water (C/I), but also other raws which require BOTH C+I => C/I NOT optional
 
 //// TO DO: rework visuals using a third-party tool
-////        - google "Neo4j" / "Sankey"
+////        - Neo4j / D3.js
 ////            https://neo4j.com/product/bloom/
+////                https://github.com/neo4j-contrib/neovis.js/
+////            https://observablehq.com/@d3/gallery
+////                https://observablehq.com/@d3/tree
+////                https://observablehq.com/@d3/cluster
+////                https://observablehq.com/@nitaku/tangled-tree-visualization-ii
+////                https://observablehq.com/@d3/mobile-patent-suits
+////                https://observablehq.com/@d3/indented-tree?collection=@d3/d3-hierarchy
 ////            https://www.mssqltips.com/sqlservertip/5288/analyze-entity-data-flow-in-power-bi-desktop-using-sankey-charts/
+////        - visualize Neo4j with D3.js
+////            https://github.com/eisman/neo4jd3
+////                https://www.npmjs.com/package/neo4jd3
+////            
 
 //// TO DO: visualize the flow of materials through the production chain?
 ////        https://machinations.io/
