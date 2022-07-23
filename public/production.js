@@ -630,11 +630,14 @@ function renderItem(itemName, parentContainerId, renderOnLevel, isSelectedItem =
     // do not render massinve production chains, unless the user explicitly agrees
     if (itemContainer.dataset.containerId > 1000) {
         if (!requestedConfirmationToRenderMassiveChain) {
+            productionWrapper.classList.add('incomplete-chain');
             userAgreedToRenderMassiveChain = confirm(`WARNING: This looks like a massive production chain.\nShowing it may be very slow, or even crash your browser!\nAre you sure you want to continue?`);
             requestedConfirmationToRenderMassiveChain = true;
+            if (userAgreedToRenderMassiveChain) {
+                productionWrapper.classList.remove('incomplete-chain');
+            }
         }
         if (!userAgreedToRenderMassiveChain) {
-            productionWrapper.classList.add('incomplete-chain');
             return;
         }
     }
