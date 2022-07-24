@@ -334,7 +334,7 @@ let requestedConfirmationToTruncateMassiveChain = false;
 let userAgreedToTruncaterMassiveChain = true;
 const truncateMassiveChainLimit = 1000; // max number of items to render by default
 const truncateMassiveChainConfirmLines = [
-    'Please note: this looks like a massive production chain.',
+    'This looks like a massive production chain.',
     `An incomplete chain will be shown by default (max. ${truncateMassiveChainLimit} items).`,
     'Press "Cancel" to bypass this limitation, and try to show it in full.',
     'WARNING: That may be very slow, or even crash your browser!',
@@ -545,7 +545,7 @@ function createItemContainer(itemName, itemData, parentContainerId) {
     itemContainer.dataset.itemName = itemName;
     itemContainer.innerHTML = `<a href="#${getCompactName(itemName)}" class="item-name">${itemName}</a>`;
     itemContainer.innerHTML += `<div class="item-qty">1</div>`;
-    itemContainer.innerHTML += `<img class="thumb" src="./img/thumbs/${getItemNameSafe(itemName)}.png" alt="" onerror="this.classList.add('hidden');">`;
+    itemContainer.innerHTML += `<img class="thumb" src="./img/thumbs/${getItemNameSafe(itemName)}.png" alt="" onerror="this.src='./img/site-icon.png';">`;
     itemContainer.classList.add(getItemTypeClass(itemData.itemType));
     return itemContainer;
 }
