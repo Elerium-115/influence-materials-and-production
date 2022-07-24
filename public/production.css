@@ -725,25 +725,25 @@
     background: var(--active-bg);
 }
 
-#required-content > * {
-    min-height: 13rem;
+#required-content-wrapper {
+    display: flex;
+    gap: 1rem;
     background: var(--active-bg);
-    padding: 1rem 14rem 1rem 1rem;
+    padding: 1rem;
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
+}
+
+#required-content {
+    flex-grow: 1;
+}
+
+#required-content > * {
     display: none;
 }
 
 #required-content .selected {
     display: block;
-}
-
-#required-product-image {
-    position: absolute;
-    bottom: 0.5rem;
-    right: 1rem;
-    width: 12rem;
-    height: 12rem;
 }
 
 .chain-type-derivatives #required-spectrals-and-raw-materials {
@@ -800,10 +800,6 @@
 
 #required-raw-materials {
     margin-top: 1rem;
-}
-
-#required-raw-materials > div {
-    font-size: 0.9rem;
 }
 
 #required-raw-materials ul {
@@ -908,4 +904,14 @@
 
 #required-tier-details {
     margin-top: 0.5rem;
+}
+
+#required-product-image-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+#required-product-image {
+    width: 12rem;
+    height: 12rem;
 }

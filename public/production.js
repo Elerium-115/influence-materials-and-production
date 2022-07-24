@@ -291,7 +291,6 @@ const processVariantsContainer = document.getElementById('process-variants');
 const requiredSpectralsContainer = document.getElementById('required-spectrals');
 const requiredTextContainer = document.getElementById('required-text');
 const requiredRawMaterialsContainer = document.getElementById('required-raw-materials');
-const requiredProductImage = document.getElementById('required-product-image');
 
 let chainType = document.querySelector('input[name="chain-type"][checked]').value; // 'production' / 'derivatives' / 'combined'
 
@@ -331,7 +330,7 @@ const connectionDefaultColor = 'gray';
 const connectionDefaultThickness = 1;
 
 let requestedConfirmationToTruncateMassiveChain = false;
-let userAgreedToTruncaterMassiveChain = true;
+let userAgreedToTruncateMassiveChain = true;
 const truncateMassiveChainLimit = 1000; // max number of items to render by default
 const truncateMassiveChainConfirmLines = [
     'This looks like a massive production chain.',
@@ -1160,8 +1159,7 @@ async function selectItemByName(itemName) {
     updateTierSlider();
     // default tier-limit such that only the minimal sub-chain is shown for the selected item (i.e. only its direct inputs)
     updateProductionChainForTierLimit(Math.max(0, selectedItemTier - 1));
-    requiredProductImage.classList.remove('hidden');
-    requiredProductImage.src = `./img/products/${getItemNameSafe(itemName)}.png`;
+    document.getElementById('required-product-image').src = `./img/products/${getItemNameSafe(itemName)}.png`;
     const itemNameCompact = getCompactName(itemName);
     window.location.hash = `#${itemNameCompact}`;
 }
