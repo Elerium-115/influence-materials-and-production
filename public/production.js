@@ -273,7 +273,7 @@ InfluenceProductionChainsJSON.processes.forEach(process => {
             process: process.name,
             inputs: process.inputs.map(input => itemNamesById[input.productId]),
             parts: null, // future format: [ "Condenser", "Evaporator" ]
-            building: buildingNamesById[process.buildingId],
+            buildingId: process.buildingId,
         };
         processes.push(processData);
     });
@@ -577,13 +577,16 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     processContainer.appendChild(processTooltipWrapper);
     // inject building and process-module parts into tooltip
     let processTooltipHtml = '';
-    processTooltipHtml += `<div class="building">${processData.building}</div>`;
-    processTooltipHtml += '<ul>';
-    const parts = processData.parts || ['[redacted]', '[redacted]'];
-    parts.forEach(part => {
-        processTooltipHtml += `<li>${part}</li>`;
-    });
-    processTooltipHtml += '</ul>';
+    processTooltipHtml += `<div class="building">${buildingNamesById[processData.buildingId]}</div>`;
+    // show process-module parts only for actual buildings, not for Empty Lot (buildingId '0')
+    if (processData.buildingId !== '0') {
+        processTooltipHtml += '<ul>';
+        const parts = processData.parts || ['[redacted]', '[redacted]'];
+        parts.forEach(part => {
+            processTooltipHtml += `<li>${part}</li>`;
+        });
+        processTooltipHtml += '</ul>';
+    }
     processTooltip.innerHTML = processTooltipHtml;
     return processContainer;
 }
@@ -1412,15 +1415,6 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
-
-//// TO DO: PRODUCTION v2 ("Production Planner", same as Daharius' tool name)
-////        - clicking on items in the chain toggles them for products that you want to make yourself
-////          - the production chain will thus "expand" only 1 item at a time, and will only show the products immediately-reqiored for making your selected products
-////          - allow toggling specific process variants, for products that can be made in multiple ways
-////        - make it possible to select a process variant for each individual item
-////          - instead of applying that process variant selection to ALL occurrences of that item in the chain
-////          - do NOT allow multiple process variants enabled for the same item
-////        - save the entire state of selections (items + process variants for each item) in the URL, for easy sharing
 
 //// TO DO: Add new item-types to filters
 ////        - see also class "item-type-unknown" => add + style new classes, for new item-types?

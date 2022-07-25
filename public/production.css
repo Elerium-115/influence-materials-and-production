@@ -349,6 +349,7 @@
 
 #production-chain-items [data-container-id] {
     position: relative;
+    min-width: 4rem; /* ensure some space remains around ".item-qty" overlays, e.g. for "Iron" */
 }
 
 #production-chain-items [data-container-id]:hover {
@@ -611,6 +612,7 @@
 #production-chain-items .process-tooltip-wrapper {
     position: absolute;
     display: none;
+    width: 7rem;
 }
 
 #production-chain-items .item-type-process[data-container-id]:hover .process-tooltip-wrapper {
@@ -669,9 +671,12 @@
     background: var(--default-text);
     color: var(--process);
     text-align: center;
-    margin-bottom: 1rem;
     padding: 0.4rem;
     border-radius: 0.4rem;
+}
+
+#production-chain-items .process-tooltip ul {
+    margin-top: 1rem;
 }
 
 #production-chain-items .process-tooltip ul::before {
