@@ -27,6 +27,33 @@
             <a href="./production-planner.html" class="active">Production Planner</a>
         </nav>
 
+        <div id="production-wrapper" class="chain-type-combined">
+            <div class="options">
+                <span>Select product:</span>
+                <div id="products-list-wrapper" class="list-hidden">
+                    <input type="text">
+                    <div id="products-list"></div>
+                    <div id="filters-list">
+                        <span class="header">Filter</span>
+                        <span id="filter-raw-materials" class="option checked">Raw Materials</span>
+                        <span id="filter-refined-materials" class="option checked">Refined Materials</span>
+                        <span id="filter-components" class="option checked">Components</span>
+                        <span id="filter-ship-components" class="option checked">Ship Components</span>
+                        <span id="filter-finished-goods" class="option checked">Finished Goods</span>
+                    </div>
+                </div>
+                <span class="separator"></span>
+                <label for="toggle-horizontal-layout" class="checked"><input type="checkbox" id="toggle-horizontal-layout" checked>Horizontal Layout</label>
+            </div>
+            <h2 id="selected-production-chain">
+                <span id="selected-item-name"></span> - Production Planner
+            </h2>
+            <div id="production-chain-wrapper">
+                <div id="production-chain-items" class="horizontal-layout"></div>
+                <div id="production-chain-connections"></div>
+            </div>
+        </div>
+
         <div id="production-planner-wrapper"></div>
 
         <div class="footer-about">
