@@ -5,8 +5,20 @@ const productDataById = {};
 const processDataById = {};
 const processVariantIdsByProductId = {};
 InfluenceProductionChainsJSON.buildings.forEach(building => buildingDataById[building.id] = building);
-InfluenceProductionChainsJSON.products.forEach(product => productDataById[product.id] = product);
+InfluenceProductionChainsJSON.products.forEach(product => {
+    productDataById[product.id] = product;
+});
 InfluenceProductionChainsJSON.processes.forEach(process => {
+    // set qty for each input
+    process.inputs = process.inputs.map(input => {
+        input.qty = 2; //// PLACEHOLDER
+        return input;
+    });
+    // set qty for each output
+    process.outputs = process.outputs.map(output => {
+        output.qty = 1; //// PLACEHOLDER
+        return output;
+    });
     processDataById[process.id] = process;
     process.outputs.forEach(output => {
         const productId = output.productId;
@@ -16,6 +28,7 @@ InfluenceProductionChainsJSON.processes.forEach(process => {
         processVariantIdsByProductId[productId].push(process.id);
     });
 });
+// const productTypesSorted = ["Raw Material", "Refined Material", "Component", "Ship Component", "Finished Good"];
 
 /*
 Terminology:
@@ -106,6 +119,7 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
     }
     if (processVariantItemIds.length === 1) {
         // Single process variant => auto-select it
+        console.log(`--- AUTO-SELECT single process variant`); //// TEST
         selectProcessItemId(processVariantItemIds[0]);
     }
     if (processVariantItemIds.length > 1) {
@@ -115,13 +129,6 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
         itemIdsForProcessVariantsWaitingSelection = processVariantItemIds;
         //// TO DO: do NOT allow any other chain-interactions, until the user select a process variant for this "outputItemId"?
     }
-    /*
-    TO DO:
-    - if there is a single process variant, auto-select it
-        _
-    - if there are multiple process variants, prompt the user to select one of them
-        - do NOT allow any other interaction with the chain, until this action is completed?
-    */
 }
 
 /**
@@ -155,6 +162,7 @@ function selectProductItemId(itemId) {
     TO DO:
     ...
     */
+    refreshProductionChain();
 }
 
 /**
@@ -198,6 +206,7 @@ function selectProcessItemId(itemId) {
     TO DO:
     - ...
     */
+    refreshProductionChain();
 }
 
 function deselectProcessItemId(itemId) {
@@ -210,11 +219,45 @@ function deselectProcessItemId(itemId) {
     TO DO:
     - ...
     */
+    refreshProductionChain();
+}
+
+/**
+ * Get input-qty required for an input of a process
+ */
+function getInputQtyForProcess(processId, inputProductId) {
+    const processData = processDataById[processId];
+    let inputQty = 0;
+    processData.inputs.forEach(inputData => {
+        if (inputData.productId === inputProductId) {
+            inputQty = inputData.qty;
+        }
+    });
+    return inputQty;
+}
+
+/**
+ * Get total-qty required for a product-item from the production chain,
+ * by recursively multiplying each input-qty from that sub-chain, up to the planned-product
+ */
+function getTotalQtyForItemId(itemId) {
+    let totalQty = 1;
+    const inputItemData = itemDataById[itemId];
+    const inputProductId = inputItemData.productId;
+    const processItemId = inputItemData.parentItemId;
+    if (processItemId) {
+        const processItemData = itemDataById[processItemId];
+        const processId = processItemData.processId;
+        const inputQty = getInputQtyForProcess(processId, inputProductId);
+        totalQty = inputQty;
+        totalQty *= getTotalQtyForItemId(processItemData.parentItemId);
+    }
+    return totalQty;
 }
 
 function refreshShoppingList() {
     console.log(`--- refreshShoppingList`); //// TEST
-    const shoppingList = [];
+    const shoppingList = {};
     if (itemIdsForProcessVariantsWaitingSelection.length) {
         // Waiting for user to select a required process variant => NO shopping list
         console.log(`--- NO shoppingList, waiting for user to select a required process variant`); //// TEST
@@ -223,14 +266,26 @@ function refreshShoppingList() {
     for (const [itemId, itemData] of Object.entries(itemDataById)) {
         // Parse only inputs (i.e. non-selected product-items) of process variants which are selected
         if (!itemData.isSelected && itemData.productId !== null && itemDataById[itemData.parentItemId].isSelected) {
-            shoppingList.push(productDataById[itemData.productId].name);
+            const shoppingProductId = itemData.productId;
+            // Shopping data for the current occurrence of this product
+            const shoppingProductData = {
+                name: productDataById[shoppingProductId].name,
+                qty: getTotalQtyForItemId(itemId),
+            };
+            if (!shoppingList[shoppingProductId]) {
+                shoppingList[shoppingProductId] = shoppingProductData;
+            } else {
+                // Add qtys of all occurrences of this product
+                shoppingList[shoppingProductId].qty += shoppingProductData.qty;
+            }
         }
     }
+    //// TO DO: sort alphabetically?
     console.log(`--- shoppingList:`, shoppingList); //// TEST
     //// TEST -- START
-    shoppingList.forEach(productName => {
-        document.getElementById('shopping-list').innerHTML += `<li>${productName}</li>`;
-    });
+    for (productId in shoppingList) {
+        document.getElementById('shopping-list').innerHTML += `<li>x${shoppingList[productId].qty} ${shoppingList[productId].name}</li>`;
+    }
     //// TEST -- END
     /*
     TO DO:
@@ -252,15 +307,14 @@ function refreshProductionChain() {
     */
    const plannedProductId = itemDataById[1].productId;
     document.getElementById('production-planner-wrapper').innerHTML = `
-        <h2>Production Planner for</h2>
-        <h1>${productDataById[plannedProductId].name}</h1>
         <h3>Shopping List:</h3>
         <ul id="shopping-list" style="list-style: disc;"></ul>
     `;
     //// TEST -- END
     /*
     TO DO:
-    - ...
+    - try to avoid refreshing the entire chain
+        - instead, try to inject / delete / update individual items
     */
     refreshShoppingList();
     console.log(`------------------------------`); //// TEST
@@ -282,15 +336,18 @@ function selectPlannedProductId(plannedProductId) {
     const plannedProductItemId = addItemToChain(plannedProductItemData);
     selectProductItemId(plannedProductItemId);
     refreshProductionChain();
+    document.getElementById('selected-item-name').textContent = productDataById[plannedProductId].name;
 }
 
 //// SIMULATE initial user actions -- START
 // step 1
 selectPlannedProductId(52); // select planned-product 'Steel'
 // step 2
+console.log(`--- SIMULATE user selecting to also produce Iron (input for Steel)`); //// TEST
 selectProductItemId(3); // select product 'Iron'
 refreshProductionChain();
 // step 3
+console.log(`--- SIMULATE user selecting Iron Direct Reduction (process variant for Steel)`); //// TEST
 selectProcessItemId(7); // select process-item corresponding to "processId" 93 for 'Iron' (process name 'Iron Direct Reduction')
 refreshProductionChain();
 // outcome
@@ -305,7 +362,13 @@ NOTES:
 
 /*
 TO DO:
+- shopping list should also include buildings and modules
+    - include required spectral types IFF the user will select to produce raw materials
+- click on thumb = navigate to that planned-product, vs. click on item-name = toggle selection as "to be produced by the user"
 - test what happens if the user also selects a raw material
+    - a non-selected raw material means that the user will BUY it
+    - a selected raw material means that the user will MINE it
+        - in this state, the chain needs to show the mining process (input = empty plot?)
 - for products that can be made using multiple processes:
     - ALL items for those process variants will initially have "isSelected: false"
         - i.e. do NOT auto-select any process variant, when those items are initially rendered
@@ -316,6 +379,16 @@ TO DO:
             - i.e. call "deselectProductItemId(itemId_for_selectedInputOfOldProcessVariant)"
             - this will automatically clean-up any selections from the sub-chains of those inputs + remove the sub-chains themselves
         - if the sub-chain of the "old" process variant contained selected product-items
+- Estimate surface area required for the currently-selected production chain (i.e. count "active" process-varaints?)
+    When user connected, show which of their asteroids meet the requirements of surface + spectral type (prioritize single asteroids, over combos of asteroids)
+    ^^ implement for both v1 + v2
+    - Discord #general
+        me: Another idea I had today for the production chains:
+            Would it be safe'ish to estimate the surface area required for a production chain (in its currently-selected state), by simply counting how many processes it contains? @protoplanetary#6428 
+            Basically assuming 1 process (incl. mining processes) = 1 km2.
+            EDIT: ignoring warehouses
+            Then, once a user is connected to the tool with their wallet, we can even highlight which of their asteroids (or a combo of asteroids) could fully support that chain - also taking into account the required spectral-types.
+            Going even further, a user could select one-or-more asteroids that they want to use for a production chain, and the tool would automatically try to expand the sub-chains, up to the available surface of those asteroid(s). The user would then see how much of that chain they can produce themselves, vs. what else they need to procure from market/alliance etc.
 Old notes:
 - clicking on items in the chain toggles them for products that you want to make yourself
   - the production chain will thus "expand" only 1 item at a time, and will only show the products immediately-reqiored for making your selected products
@@ -324,6 +397,7 @@ Old notes:
   - instead of applying that process variant selection to ALL occurrences of that item in the chain
   - do NOT allow multiple process variants enabled for the same item
 - de-selecting an item will automatically de-select all its ancestors
+- add text-inputs for unit-price of each item from the "shopping list" => calculate total = sum(item_qty * unit_price)
 - save the entire state of selections (items + process variants for each item) in the URL, for easy sharing
     - e.g. via base64-encoded "itemDataById" => derive "selectedProductItemIds" and "selectedProcessItemIds" based on the "isSelected" flag
 */

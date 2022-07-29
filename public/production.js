@@ -292,7 +292,8 @@ const requiredSpectralsContainer = document.getElementById('required-spectrals')
 const requiredTextContainer = document.getElementById('required-text');
 const requiredRawMaterialsContainer = document.getElementById('required-raw-materials');
 
-let chainType = document.querySelector('input[name="chain-type"][checked]').value; // 'production' / 'derivatives' / 'combined'
+// let chainType = document.querySelector('input[name="chain-type"][checked]').value; // 'production' / 'derivatives' / 'combined'
+let chainType = 'combined'; // 'production' / 'derivatives' / 'combined'
 
 let horizontalLayout = document.getElementById('toggle-horizontal-layout').checked; // true vs. false
 
@@ -403,6 +404,7 @@ function getItemTypeClass(itemType) {
         case 'Raw Material': itemTypeClass = 'item-type-raw-material'; break;
         case 'Refined Material': itemTypeClass = 'item-type-refined-material'; break;
         case 'Component': itemTypeClass = 'item-type-component'; break;
+        case 'Ship Component': itemTypeClass = 'item-type-ship-component'; break;
         case 'Finished Good': itemTypeClass = 'item-type-finished-good'; break;
         default: itemTypeClass = 'item-type-unknown'; break;
     }
@@ -1030,11 +1032,11 @@ function updateRequiredSpectralsAndRawMaterials() {
 }
 
 function filterProductsList() {
-    document.querySelectorAll('#filter-item-types input').forEach(elInput => {
+    document.querySelectorAll('#filters-list .option').forEach(elFilter => {
         // e.g. "filter-raw-materials" => "item-type-raw-material"
-        const itemTypeClass = 'item-type-' + elInput.id.replace(/^filter-(.+)s$/, '$1');
+        const itemTypeClass = 'item-type-' + elFilter.id.replace(/^filter-(.+)s$/, '$1');
         productsListContainer.querySelectorAll(`.${itemTypeClass}`).forEach(elListItem => {
-            if (elInput.checked) {
+            if (elFilter.classList.contains('checked')) {
                 elListItem.classList.remove('hidden');
             } else {
                 elListItem.classList.add('hidden');
@@ -1246,11 +1248,13 @@ on('input', '#products-list-wrapper input', el => {
 });
 
 // filter item-types in the products-list
-on('change', '#filter-item-types input', el => {
+on('click', '#filters-list .option', el => {
+    el.classList.toggle('checked');
     filterProductsList();
 });
 
 // toggle production chain vs. derivatives chain vs. combined chain
+/* DISABLED
 on('change', 'input[name="chain-type"]', el => {
     document.querySelectorAll('label[for^="radio-chain-]').forEach(elLabel => {
         elLabel.classList.remove('checked');
@@ -1274,6 +1278,7 @@ on('change', 'input[name="chain-type"]', el => {
     const hashToSelect = window.location.hash.replace(/^#/, '');
     selectItemByName(itemNamesByHash[hashToSelect]);
 });
+*/
 
 // toggle horizontal vs. vertical layout for the production chain
 on('change', '#toggle-horizontal-layout', el => {

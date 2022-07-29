@@ -17,6 +17,7 @@
     --process: #482066;
     --refined-material: #1c323d;
     --component: #315a6e;
+    --ship-component: #315a6e;
     --finished-good: #47819e;
 }
 
@@ -66,7 +67,7 @@
 
 #products-list-wrapper input {
     width: 14rem;
-    height: 2rem;
+    line-height: 2rem;
     padding: 0 2rem 0 1rem;
     border: 1px solid var(--item-name);
 }
@@ -96,7 +97,8 @@
     border-top: none;
 }
 
-#products-list-wrapper.list-hidden #products-list {
+#products-list-wrapper.list-hidden #products-list,
+#products-list-wrapper.list-hidden #filters-list {
     display: none;
 }
 
@@ -116,17 +118,56 @@
     display: none;
 }
 
-#filter-item-types label {
+#products-list a.item-type-finished-good {
+    color: white;
+}
+
+#filters-list {
+    position: absolute;
+    top: 0;
+    right: -11rem;
+    z-index: 1;
+    width: 11rem;
+    background: white;
+    color: black;
+    border: 1px solid var(--item-name);
+    border-left: none;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+#filters-list > * {
+    display: block;
+    line-height: 2rem;
+    padding: 0 2rem 0 1rem;
+}
+
+#filters-list .header {
+    border-bottom: 1px solid var(--item-name);
+}
+
+#filters-list .option {
+    cursor: pointer;
+}
+
+#filters-list .option:last-child {
+    border-bottom-right-radius: 0.5rem;
+}
+
+#filters-list .option:hover {
+    background: var(--dark-bg) !important;
     color: var(--item-name);
 }
 
-#filter-item-types .groupText {
-    margin-right: 0.5rem;
+#filters-list .checked {
+    position: relative;
+    color: var(--item-name);
 }
 
-#products-list a.item-type-finished-good,
-#filter-item-types label.checked[for='filter-finished-goods'] {
-    color: white;
+#filters-list .checked::after {
+    content: '✅';
+    position: absolute;
+    right: 1rem;
 }
 
 #selected-production-chain {
@@ -139,6 +180,10 @@
 
 #production-wrapper.incomplete-chain #selected-production-chain::after {
     content: ' - INCOMPLETE';
+}
+
+#selected-item-name {
+    color: var(--brand-text);
 }
 
 /* tier slider */
@@ -388,8 +433,8 @@
 }
 
 #production-chain-items .selected-item[data-container-id] {
-    border-color: var(--item-name);
-    border-width: 0.2rem;
+    background: var(--dark-bg) !important;
+    border-color: var(--brand-text);
 }
 
 #production-chain-items .tier-limit-highlight[data-container-id]::before {
@@ -452,7 +497,7 @@
 }
 
 #production-chain-items .selected-item[data-container-id] .item-name {
-    color: white;
+    color: var(--brand-text);
 }
 
 #production-chain-items [data-container-id] .process-name {
@@ -518,6 +563,10 @@
     border-radius: 0.5rem;
 }
 
+#production-chain-items .selected-item[data-container-id] .thumb {
+    border-color: var(--brand-text);
+}
+
 #production-chain-items [data-container-id]:not(:hover) .thumb {
     display: none;
 }
@@ -554,25 +603,31 @@
 /* item-type backgrounds */
 
 #products-list .item-type-raw-material,
-#filter-item-types label.checked[for='filter-raw-materials'],
+#filters-list #filter-raw-materials.checked,
 #production-chain-items [data-container-id].item-type-raw-material {
     background: var(--raw-material);
 }
 
 #products-list .item-type-refined-material,
-#filter-item-types label.checked[for='filter-refined-materials'],
+#filters-list #filter-refined-materials.checked,
 #production-chain-items [data-container-id].item-type-refined-material {
     background: var(--refined-material);
 }
 
 #products-list .item-type-component,
-#filter-item-types label.checked[for='filter-components'],
+#filters-list #filter-components.checked,
 #production-chain-items [data-container-id].item-type-component {
     background: var(--component);
 }
 
+#products-list .item-type-ship-component,
+#filters-list #filter-ship-components.checked,
+#production-chain-items [data-container-id].item-type-ship-component {
+    background: var(--ship-component);
+}
+
 #products-list .item-type-finished-good,
-#filter-item-types label.checked[for='filter-finished-goods'],
+#filters-list #filter-finished-goods.checked,
 #production-chain-items [data-container-id].item-type-finished-good {
     background: var(--finished-good);
 }
