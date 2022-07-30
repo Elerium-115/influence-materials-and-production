@@ -19,6 +19,8 @@ InfluenceProductionChainsJSON.processes.forEach(process => {
         output.qty = 1; //// PLACEHOLDER
         return output;
     });
+    // set module parts
+    process.parts = null, // future format: [ "Condenser", "Evaporator" ]
     processDataById[process.id] = process;
     process.outputs.forEach(output => {
         const productId = output.productId;
@@ -71,11 +73,262 @@ let selectedProcessItemIds = [];
  */
 let itemIdsForProcessVariantsWaitingSelection = [];
 
+let maxLevel = 0;
+
+const productChainItemsContainer = document.getElementById('production-chain-items');
+
+let horizontalLayout = document.getElementById('toggle-horizontal-layout').checked; // true vs. false
+
+const leaderLineOptionsDefault = {
+    path: 'straight',
+    size: 1,
+    color: 'gray',
+    endPlug: 'behind',
+};
+
+// e.g. "Carbon Dioxide" => "CarbonDioxide"
+function getCompactName(name) {
+    return name.replace(/\s+/g, '');
+}
+
+// e.g. "Carbon Dioxide" => "carbon-dioxide"
+function getItemNameSafe(itemName) {
+    return itemName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
+}
+
+// e.g. "Raw Material" => "item-type-raw-material"
+function getItemTypeClass(itemType) {
+    return `item-type-${getItemNameSafe(itemType)}`;
+}
+
+function getItemContainerById(itemContainerId) {
+    return productChainItemsContainer.querySelector(`[data-container-id='${itemContainerId}']`);
+}
+
+// smart-split process-names on multiple lines, to avoid excessive linebreaks
+function getItemNameWithSmartLinebreaks(itemName) {
+    let nameWithLinebreaks = '';
+    let charsSinceLinebreak = 0;
+    const words = itemName.split(/\s+/);
+    for (let i = 0; i < words.length; i++) {
+        const thisWord = words[i];
+        nameWithLinebreaks += thisWord;
+        charsSinceLinebreak += thisWord.length;
+        const nextWord = words[i+1];
+        if (!nextWord) {
+            break;
+        }
+        /**
+         * do NOT split pairs of words that have a combined length of max. 12 chars
+         * e.g. "Hot Acid Leaching and Crystallization" => "Hot Acid<br>Leaching and<br>Crystallization"
+         */
+        if (charsSinceLinebreak + 1 + nextWord.length <= 14) {
+            // do not add linebreak between short words
+            nameWithLinebreaks += ' ';
+            charsSinceLinebreak += 1;
+        }
+        else {
+            // add linebreak between long words
+            nameWithLinebreaks += '<br>';
+            charsSinceLinebreak = 0;
+        }
+    }
+    return nameWithLinebreaks;
+}
+
 function resetEverything() {
     /*
     TO DO:
     - ...
     */
+}
+
+function connectItemIds(startItemId, endItemId) {
+    /**
+     * LeaderLine is automatically re-positioned when the window is resized
+     * https://anseki.github.io/leader-line/#start-end
+     */
+    const line = new LeaderLine(getItemContainerById(startItemId), getItemContainerById(endItemId));
+    const leaderLineOptions = {...leaderLineOptionsDefault};
+    //// TO DO: might need to set "startSocket", "endSocket" options when switching between horizontal-layout and vertical-layout
+    if (horizontalLayout) {
+        leaderLineOptions.startSocket = 'right';
+        leaderLineOptions.endSocket = 'left';
+    } else {
+        leaderLineOptions.startSocket = 'top';
+        leaderLineOptions.endSocket = 'bottom';
+    }
+    // Show arrow only when connecting the planned product
+    if (startItemId === 1 || endItemId === 1) {
+        leaderLineOptions.endPlug = 'arrow1';
+        leaderLineOptions.endPlugSize = 3;
+        leaderLineOptions.endPlugColor = '#a9acb3';
+    }
+    line.setOptions(leaderLineOptions);
+    return line;
+}
+
+function injectLevelContainerIfNeeded(renderOnLevel) {
+    const levelId = `level_${renderOnLevel}`;
+    let levelContainer = document.getElementById(levelId);
+    if (!levelContainer) {
+        levelContainer = document.createElement('div');
+        levelContainer.id = levelId;
+        levelContainer.classList.add('level');
+        productChainItemsContainer.appendChild(levelContainer);
+    }
+    return levelContainer;
+}
+
+function getItemPriorityOnLevel(itemContainer) {
+    const levelContainer = itemContainer.parentElement;
+    const itemContainersOnLevel = [...levelContainer.querySelectorAll('[data-container-id]')];
+    return itemContainersOnLevel.indexOf(itemContainer);
+}
+
+function compareItemContainers(el1, el2) {
+    /**
+     * #1 - prioritize item whose parent has the highest priority
+     * ("priority" = index among items from the same level, lower value is more prioritary)
+     */
+    const el1ParentContainerId = el1.dataset.parentContainerId;
+    const el2ParentContainerId = el2.dataset.parentContainerId;
+    if (el1ParentContainerId !== el2ParentContainerId) {
+        const el1ParentContainer = getItemContainerById(el1ParentContainerId);
+        const el2ParentContainer = getItemContainerById(el2ParentContainerId);
+        const el1ParentPriority = getItemPriorityOnLevel(el1ParentContainer);
+        const el2ParentPriority = getItemPriorityOnLevel(el2ParentContainer);
+        return el1ParentPriority - el2ParentPriority;
+    }
+
+    //// DISABLE this if optimizing for performance
+    /**
+     * #2 - prioritize alphabetically, among inputs of the same process,
+     * or process variants having the same output
+     */
+    const el1ItemName = el1.dataset.itemName || el1.dataset.processName;
+    const el2ItemName = el2.dataset.itemName || el2.dataset.processName;
+    if (el1ItemName !== el2ItemName) {
+        return el1ItemName.localeCompare(el2ItemName);
+    }
+
+    return 0;
+}
+
+/**
+ * Re-arrange items on the same level, to avoid connections crossing each other
+ */
+function sortLevels(startLevel = 1) {
+    for (let i = startLevel; i <= maxLevel; i++) {
+        const levelContainer = document.getElementById(`level_${i}`);
+        const itemContainersOnLevel = [...levelContainer.querySelectorAll('[data-container-id]')];
+        itemContainersOnLevel.sort(compareItemContainers);
+        levelContainer.textContent = '';
+        itemContainersOnLevel.forEach(el => {
+            levelContainer.appendChild(el);
+        });
+    }
+}
+
+function createProductContainer(itemId) {
+    const itemData = itemDataById[itemId];
+    const productData = productDataById[itemData.productId];
+    const itemName = productData.name;
+    const productContainer = document.createElement('div');
+    productContainer.dataset.containerId = itemId;
+    // if "parentItemId" is an array [1, 2, 4] => this will be set as string "1,2,4"
+    productContainer.dataset.parentContainerId = itemData.parentItemId;
+    productContainer.dataset.longestSubchainLength = 1;
+    productContainer.dataset.itemName = itemName;
+    productContainer.innerHTML = `<a href="#${getCompactName(itemName)}" class="item-name">${itemName}</a>`;
+    productContainer.innerHTML += `<div class="item-qty"></div>`;
+    productContainer.innerHTML += `<img class="thumb" src="./img/thumbs/${getItemNameSafe(itemName)}.png" alt="" onerror="this.src='./img/site-icon.png';">`;
+    productContainer.classList.add(getItemTypeClass(productData.type));
+    productContainer.addEventListener('click', event => {
+        selectProductItemId(itemId);
+    });
+    return productContainer;
+}
+
+// function createProcessContainer(processData, parentContainerId, processNameOverwrite = '') {
+function createProcessContainer(itemId, processNameOverwrite = '') {
+    const itemData = itemDataById[itemId];
+    const processData = processDataById[itemData.processId];
+    const processName = processNameOverwrite || processData.name;
+    const outputName = productDataById[itemData.parentItemId].name;
+    const processContainer = document.createElement('div');
+    processContainer.dataset.containerId = itemId;
+    processContainer.dataset.parentContainerId = itemData.parentItemId;
+    // processContainer.dataset.inputsCount =  processData.inputs.length;
+    processContainer.dataset.longestSubchainLength = 1;
+    processContainer.dataset.processName = processName;
+    processContainer.dataset.processCode = getCompactName(outputName) + '-' + getCompactName(processName);
+    processContainer.classList.add('item-type-process');
+    /**
+     * inner-container required for styling the outer-container with "filter: drop-shadow",
+     * such that the shadow follows the ".hexagon" shape
+     */
+    const processHexagon = document.createElement('div');
+    processHexagon.innerHTML = `<span class="process-name">${getItemNameWithSmartLinebreaks(processName)}</span>`;
+    processHexagon.classList.add('hexagon');
+    processContainer.appendChild(processHexagon);
+    // tooltip for process-module parts
+    const processTooltipWrapper = document.createElement('div');
+    processTooltipWrapper.classList.add('process-tooltip-wrapper');
+    const processTooltip = document.createElement('div');
+    processTooltip.classList.add('process-tooltip');
+    processTooltipWrapper.appendChild(processTooltip);
+    processContainer.appendChild(processTooltipWrapper);
+    // inject building and process-module parts into tooltip
+    let processTooltipHtml = '';
+    processTooltipHtml += `<div class="building">${buildingDataById[processData.buildingId].name}</div>`;
+    // show process-module parts only for actual buildings, not for Empty Lot (buildingId '0')
+    if (processData.buildingId !== '0') {
+        processTooltipHtml += '<ul>';
+        const parts = processData.parts || ['[redacted]', '[redacted]'];
+        parts.forEach(part => {
+            processTooltipHtml += `<li>${part}</li>`;
+        });
+        processTooltipHtml += '</ul>';
+    }
+    processTooltip.innerHTML = processTooltipHtml;
+    processContainer.addEventListener('click', event => {
+        selectProcessItemId(itemId);
+    });
+    return processContainer;
+}
+
+/**
+ * TO BE DESCRIBED
+ * 
+ * @param {*} itemData 
+ * @returns "itemId" of the newly added item
+ */
+ function addItemToChain(itemData) {
+    const itemId = Object.keys(itemDataById).length + 1;
+    itemDataById[itemId] = itemData;
+    // Render the newly added item
+    const renderOnLevel = itemData.level;
+    maxLevel = Math.max(maxLevel, renderOnLevel);
+    const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
+    const itemContainer = itemData.productId ? createProductContainer(itemId) : createProcessContainer(itemId);
+    if (itemData.isSelected) {
+        itemContainer.classList.add('selected-item');
+    }
+    levelContainer.appendChild(itemContainer);
+    sortLevels(renderOnLevel);
+    // Connect to parent (if any), and assign the outgoing "LeaderLine" object to "itemData"
+    if (itemData.parentItemId) {
+        itemData.line = connectItemIds(itemId, itemData.parentItemId);
+    }
+    // Re-position all lines
+    for (const itemId in itemDataById) {
+        const line = itemDataById[itemId].line;
+        if (line) {
+            line.position();
+        }
+    }
+    return itemId;
 }
 
 /**
@@ -132,18 +385,6 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
 }
 
 /**
- * TO BE DESCRIBED
- * 
- * @param {*} itemData 
- * @returns "itemId" of the newly added item
- */
-function addItemToChain(itemData) {
-    const itemId = Object.keys(itemDataById).length + 1;
-    itemDataById[itemId] = itemData;
-   return itemId;
-}
-
-/**
  * NOTE: This function should only be called for input-products, NOT for processes.
  * Select an input-product item from the production chain, to be produced by the user.
  * This adds the process(es) + input(s) for the selected input-item (now an output).
@@ -157,12 +398,13 @@ function selectProductItemId(itemId) {
     }
     selectedProductItemIds.push(itemId);
     itemDataById[itemId].isSelected = true;
+    getItemContainerById(itemId).classList.add('selected-item');
     addProcessesAndInputsForOutputItemId(itemId);
     /*
     TO DO:
     ...
     */
-    refreshProductionChain();
+    refreshShoppingList();
 }
 
 /**
@@ -184,6 +426,7 @@ function deselectProductItemId(itemId) {
                 ^^ calls "deselectProductItemId" for any selected input of that process
                     ^^ calls "deselectProcessItemId" ...
     */
+    refreshShoppingList();
 }
 
 function selectProcessItemId(itemId) {
@@ -206,7 +449,7 @@ function selectProcessItemId(itemId) {
     TO DO:
     - ...
     */
-    refreshProductionChain();
+    refreshShoppingList();
 }
 
 function deselectProcessItemId(itemId) {
@@ -219,7 +462,7 @@ function deselectProcessItemId(itemId) {
     TO DO:
     - ...
     */
-    refreshProductionChain();
+    refreshShoppingList();
 }
 
 /**
@@ -282,42 +525,17 @@ function refreshShoppingList() {
     }
     //// TO DO: sort alphabetically?
     console.log(`--- shoppingList:`, shoppingList); //// TEST
+    console.log(`------------------------------`); //// TEST
     //// TEST -- START
-    for (productId in shoppingList) {
-        document.getElementById('shopping-list').innerHTML += `<li>x${shoppingList[productId].qty} ${shoppingList[productId].name}</li>`;
-    }
+    // for (productId in shoppingList) {
+    //     document.getElementById('shopping-list').innerHTML += `<li>x${shoppingList[productId].qty} ${shoppingList[productId].name}</li>`;
+    // }
     //// TEST -- END
     /*
     TO DO:
+    - include Extractors in shopping list (when user selects to produce a raw material)
     - ...
     */
-}
-
-/**
- * Re-render the production chain.
- * Also re-renders the shopping list.
- */
-function refreshProductionChain() {
-    console.log(`--- refreshProductionChain`); //// TEST
-    //// TEST -- START
-    /*
-    const pre = document.createElement('pre');
-    pre.innerHTML = JSON.stringify(itemDataById, null, '\t') + '<hr>';
-    document.getElementById('production-planner-wrapper').appendChild(pre);
-    */
-   const plannedProductId = itemDataById[1].productId;
-    document.getElementById('production-planner-wrapper').innerHTML = `
-        <h3>Shopping List:</h3>
-        <ul id="shopping-list" style="list-style: disc;"></ul>
-    `;
-    //// TEST -- END
-    /*
-    TO DO:
-    - try to avoid refreshing the entire chain
-        - instead, try to inject / delete / update individual items
-    */
-    refreshShoppingList();
-    console.log(`------------------------------`); //// TEST
 }
 
 /**
@@ -335,23 +553,32 @@ function selectPlannedProductId(plannedProductId) {
     };
     const plannedProductItemId = addItemToChain(plannedProductItemData);
     selectProductItemId(plannedProductItemId);
-    refreshProductionChain();
     document.getElementById('selected-item-name').textContent = productDataById[plannedProductId].name;
 }
 
 //// SIMULATE initial user actions -- START
+
 // step 1
-selectPlannedProductId(52); // select planned-product 'Steel'
-// step 2
-console.log(`--- SIMULATE user selecting to also produce Iron (input for Steel)`); //// TEST
-selectProductItemId(3); // select product 'Iron'
-refreshProductionChain();
-// step 3
-console.log(`--- SIMULATE user selecting Iron Direct Reduction (process variant for Steel)`); //// TEST
-selectProcessItemId(7); // select process-item corresponding to "processId" 93 for 'Iron' (process name 'Iron Direct Reduction')
-refreshProductionChain();
-// outcome
-console.log(`--- [PRODUCTION CHAIN] itemDataById:`, itemDataById); //// TEST
+// selectPlannedProductId(52); // select planned-product 'Steel'
+selectPlannedProductId(248); // select planned-product 'Heavy Transport'
+//// TO DO: fix bug re: some DOM changes still occurring AFTER the initial connections are rendered
+
+// // step 2
+// console.log(`--- SIMULATE user selecting to also produce Iron (input for Steel)`); //// TEST
+// setTimeout(() => {
+//     selectProductItemId(3); // select product 'Iron'
+// }, 1000);
+
+// // step 3
+// console.log(`--- SIMULATE user selecting Iron Direct Reduction (process variant for Steel)`); //// TEST
+// setTimeout(() => {
+//     selectProcessItemId(7); // select process-item corresponding to "processId" 93 for 'Iron' (process name 'Iron Direct Reduction')
+//     // update connections
+//     // updateAllConnections();
+//     // outcome
+//     console.log(`--- [PRODUCTION CHAIN] itemDataById:`, itemDataById); //// TEST
+// }, 2000);
+
 //// SIMULATE initial user actions -- END
 
 /*
@@ -362,6 +589,11 @@ NOTES:
 
 /*
 TO DO:
+- layout:
+    - vertical shopping list (aligned to the left of the chain)
+    - horizontal selected products (above the chain)
+- try to avoid refreshing the entire chain
+    - instead, try to inject / delete / update individual items
 - shopping list should also include buildings and modules
     - include required spectral types IFF the user will select to produce raw materials
 - click on thumb = navigate to that planned-product, vs. click on item-name = toggle selection as "to be produced by the user"
