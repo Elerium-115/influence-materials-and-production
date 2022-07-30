@@ -367,6 +367,15 @@ function getItemNameSafe(itemName) {
     return itemName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
 }
 
+// e.g. "Raw Material" => "item-type-raw-material"
+function getItemTypeClass(itemType) {
+    return `item-type-${getItemNameSafe(itemType)}`;
+}
+
+function getItemContainerById(itemContainerId) {
+    return productChainItemsContainer.querySelector(`[data-container-id='${itemContainerId}']`);
+}
+
 // smart-split process-names on multiple lines, to avoid excessive linebreaks
 function getItemNameWithSmartLinebreaks(itemName) {
     let nameWithLinebreaks = '';
@@ -396,23 +405,6 @@ function getItemNameWithSmartLinebreaks(itemName) {
         }
     }
     return nameWithLinebreaks;
-}
-
-function getItemTypeClass(itemType) {
-    let itemTypeClass = '';
-    switch (itemType) {
-        case 'Raw Material': itemTypeClass = 'item-type-raw-material'; break;
-        case 'Refined Material': itemTypeClass = 'item-type-refined-material'; break;
-        case 'Component': itemTypeClass = 'item-type-component'; break;
-        case 'Ship Component': itemTypeClass = 'item-type-ship-component'; break;
-        case 'Finished Good': itemTypeClass = 'item-type-finished-good'; break;
-        default: itemTypeClass = 'item-type-unknown'; break;
-    }
-    return itemTypeClass;
-}
-
-function getItemContainerById(itemContainerId) {
-    return productChainItemsContainer.querySelector(`[data-container-id='${itemContainerId}']`);
 }
 
 /**
@@ -536,7 +528,7 @@ function injectLevelContainerIfNeeded(renderOnLevel) {
     return levelContainer;
 }
 
-function createItemContainer(itemName, itemData, parentContainerId) {
+function createProductContainer(itemName, itemData, parentContainerId) {
     uniqueContainerId++;
     const itemContainer = document.createElement('div');
     itemContainer.dataset.containerId = uniqueContainerId;
@@ -646,7 +638,7 @@ function renderItem(itemName, parentContainerId, renderOnLevel, isSelectedItem =
     }
     maxLevel = Math.max(maxLevel, renderOnLevel);
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
-    const itemContainer = createItemContainer(itemName, itemData, parentContainerId);
+    const itemContainer = createProductContainer(itemName, itemData, parentContainerId);
     // do not render massinve production chains, unless the user explicitly agrees
     if (itemContainer.dataset.containerId > truncateMassiveChainLimit) {
         if (!requestedConfirmationToTruncateMassiveChain) {
@@ -712,7 +704,7 @@ async function renderItemDerivatives(itemName) {
             const outputName = processData.output;
             const outputData = items[outputName];
             const outputsLevelContainer = injectLevelContainerIfNeeded(1);
-            const outputContainer = createItemContainer(outputName, outputData, 0);
+            const outputContainer = createProductContainer(outputName, outputData, 0);
             outputContainer.classList.add('derivative-item');
             outputsLevelContainer.appendChild(outputContainer);
             // then render the processes, on level 2
@@ -734,7 +726,7 @@ async function renderItemDerivatives(itemName) {
     if (chainType === 'derivatives') {
         // only render the selected item, without its production chain
         const itemLevelContainer = injectLevelContainerIfNeeded(itemLevel);
-        const itemContainer = createItemContainer(itemName, itemData, parentProcessContainerIds);
+        const itemContainer = createProductContainer(itemName, itemData, parentProcessContainerIds);
         itemContainer.classList.add('selected-item');
         itemLevelContainer.appendChild(itemContainer);
         if (itemData.itemType === "Raw Material") {
@@ -1421,9 +1413,8 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 
-//// TO DO: Add new item-types to filters
-////        - see also class "item-type-unknown" => add + style new classes, for new item-types?
-////        - alternatively, REDUCE the item-type classes, to use only 3 stylings: raw materials / intermediate products / finished goods
+//// TO DO: IMPLEMENT "LeaderLine" in v1 chains, from v2 chains
+////        - TEST performance vs. old system
 
 //// TO DO: BYPASS missing images via JS, to avoid 404 errors in console
 
@@ -1454,21 +1445,31 @@ setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
 ////        - Iron (v1) requires e.g. Water (C/I), and only I is required for other raws => only C optional
 ////        - Acetone requires Water (C/I), but also other raws which require BOTH C+I => C/I NOT optional
 
-//// TO DO: rework visuals using a third-party tool
-////        - Neo4j / D3.js
-////            https://neo4j.com/product/bloom/
-////                https://github.com/neo4j-contrib/neovis.js/
-////            https://observablehq.com/@d3/gallery
-////                https://observablehq.com/@d3/tree
-////                https://observablehq.com/@d3/cluster
-////                https://observablehq.com/@nitaku/tangled-tree-visualization-ii
-////                https://observablehq.com/@d3/mobile-patent-suits
-////                https://observablehq.com/@d3/indented-tree?collection=@d3/d3-hierarchy
-////            https://www.mssqltips.com/sqlservertip/5288/analyze-entity-data-flow-in-power-bi-desktop-using-sankey-charts/
-////        - visualize Neo4j with D3.js
-////            https://github.com/eisman/neo4jd3
-////                https://www.npmjs.com/package/neo4jd3
-////            
-
-//// TO DO: visualize the flow of materials through the production chain?
-////        https://machinations.io/
+/*
+TO DO: rework visuals using a third-party tool
+- Neo4j / D3.js
+    https://neo4j.com/product/bloom/
+        https://github.com/neo4j-contrib/neovis.js/
+    https://observablehq.com/@d3/gallery
+        https://observablehq.com/@d3/tree
+        https://observablehq.com/@d3/cluster
+        https://observablehq.com/@nitaku/tangled-tree-visualization-ii
+        https://observablehq.com/@d3/mobile-patent-suits
+        https://observablehq.com/@d3/indented-tree?collection=@d3/d3-hierarchy
+    https://www.mssqltips.com/sqlservertip/5288/analyze-entity-data-flow-in-power-bi-desktop-using-sankey-charts/
+- visualize Neo4j with D3.js
+    https://github.com/eisman/neo4jd3
+        https://www.npmjs.com/package/neo4jd3
+- jsPlumb
+    https://jsplumbtoolkit.com/
+- PlainDraggable
+    https://anseki.github.io/plain-draggable/
+- LeaderLine
+    https://anseki.github.io/leader-line/
+        https://github.com/anseki/leader-line
+- etc.
+    https://stackoverflow.com/questions/6278152/draw-a-connecting-line-between-two-elements
+- visualize the flow of materials through the production chain?
+    https://machinations.io/
+    https://demo.jsplumbtoolkit.com/paths/
+*/

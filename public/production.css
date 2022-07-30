@@ -757,6 +757,20 @@
     left: 0.86rem;
 }
 
+/* user selected products */
+#user-selected-products {
+    margin-top: 2rem;
+}
+
+#user-selected-products .info {
+    font-size: 0.9rem;
+    line-height: 1.5rem;
+}
+
+#user-selected-products .info .highlight {
+    color: var(--brand-text);
+}
+
 /* required stuff */
 
 #required-stuff-wrapper {
