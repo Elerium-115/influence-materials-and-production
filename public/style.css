@@ -3,8 +3,14 @@
     src: url("font/Jura-Regular.ttf");
 }
 
+@font-face {
+    font-family: Jura-Bold;
+    src: url("font/Jura-Bold.ttf");
+}
+
 :root {
     --default-bg: #202634;
+    --default-overlay-bg: rgba(32, 38, 52, 0.95);
     --dark-bg: #10131a;
 
     --default-text: #a9acb3;
@@ -107,6 +113,10 @@ h2 {
     font-size: 1.5rem;
 }
 
+h3 {
+    font-size: 1.1rem;
+}
+
 a {
     color: var(--link);
     text-decoration: none;
@@ -127,6 +137,10 @@ label {
 
 .hidden {
     display: none !important;
+}
+
+.brand-text {
+    color: var(--brand-text);
 }
 
 body {
