@@ -295,7 +295,16 @@ const requiredRawMaterialsContainer = document.getElementById('required-raw-mate
 // let chainType = document.querySelector('input[name="chain-type"][checked]').value; // 'production' / 'derivatives' / 'combined'
 let chainType = 'combined'; // 'production' / 'derivatives' / 'combined'
 
-let horizontalLayout = document.getElementById('toggle-horizontal-layout').checked; // true vs. false
+/**
+ * Fix for Firefox bug re: "toggle-horizontal-layout" input
+ * keeping the "checked" PROPERTY cached after a SOFT-reload.
+ * e.g. if deselecting this input, and then doing a soft-reload,
+ * the input will keep its "checked" property = false,
+ * even though the DOM elements are marked as checked.
+ */
+const toggleHorizontalLayoutInput = document.getElementById('toggle-horizontal-layout');
+toggleHorizontalLayoutInput.checked = toggleHorizontalLayoutInput.parentElement.classList.contains('checked');
+let horizontalLayout = toggleHorizontalLayoutInput.checked; // true vs. false
 
 let itemsWithProcessVariants = {};
 
@@ -947,10 +956,10 @@ function initializeProcessVariants() {
                 // this is the only remaining process variant for the current item
                 event.preventDefault(); // prevent the descendants from capturing this event ("stopPropagation" does not work here)
                 // flash error
-                elProcess.classList.add('error');
+                elProcess.classList.add('flash-error');
                 setTimeout(() => {
-                    elProcess.classList.remove('error');
-                }, 150); // match the animation duration for "flash-error"
+                    elProcess.classList.remove('flash-error');
+                }, 250); // match the animation duration for "flash-error"
             }
         }, true); // capture event before propagation (seems irrelevant though)
     });
@@ -1305,10 +1314,18 @@ on('change', '.process input', el => {
     updateAllConnections();
     if (el.checked) {
         // fake "mousenter" on label, to highlight items in the production chain for this process variant
-        el.closest('label').dispatchEvent(new Event('mouseenter'));
+        el.closest('.process').dispatchEvent(new Event('mouseenter'));
     } else {
         // stop highlighting items in the production chain for this process variant
         resetFadedItemsAndConnections();
+        /**
+         * fake "mouseleave" on all occurrences of this process in the production chain
+         * (otherwise the qty-overlay remains visible on output of this process variant)
+         */
+        const processCode = el.closest('.process').getAttribute('for');
+        productChainItemsContainer.querySelectorAll(`[data-process-code='${processCode}']`).forEach(processContainer => {
+            processContainer.dispatchEvent(new Event('mouseleave'));
+        });
     }
 });
 

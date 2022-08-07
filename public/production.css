@@ -21,6 +21,12 @@
     --finished-good: #47819e;
 }
 
+.flash-error { animation: flash-error 250ms; }
+.flash-error-glow { animation: flash-error-glow 250ms; }
+
+@keyframes flash-error { 50% { background: var(--flash-error); } }
+@keyframes flash-error-glow { 50% { filter: drop-shadow(0 0 0.8rem var(--flash-error)); opacity: 1; } }
+
 #production-wrapper {
     font-size: 0.8rem;
 }
@@ -104,10 +110,10 @@
 
 #products-list a {
     display: block;
-    line-height: 2rem;
     color: var(--item-name);
     text-decoration: none;
-    padding: 0 1rem;
+    padding: 0.5rem 1rem;
+    /* do NOT use "line-height" instead of "padding", b/c multi-line product names should be compact */
 }
 
 #products-list a:hover {
@@ -138,8 +144,7 @@
 
 #filters-list > * {
     display: block;
-    line-height: 2rem;
-    padding: 0 2rem 0 1rem;
+    padding: 0.5rem 2rem 0.5rem 1rem;
 }
 
 #filters-list .header {
@@ -317,14 +322,6 @@
     background: var(--overactive-bg);
 }
 
-#process-variants .item .process.error {
-    animation: flash-error 150ms;
-}
-
-@keyframes flash-error {
-    50% { background: var(--flash-error); }
-}
-
 #process-variants .item .process-inputs {
     position: absolute;
     top: -1px; /* compensate for border */
@@ -345,7 +342,7 @@
     background: var(--overactive-bg);
 }
 
-#process-variants .item .process.error .process-inputs {
+#process-variants .item .process.flash-error .process-inputs {
     background: inherit;
 }
 
@@ -358,6 +355,12 @@
 #production-chain-wrapper {
     text-align: center;
     margin-top: 2rem;
+}
+
+.production-planner #production-chain-wrapper {
+    display: grid;
+    grid-template-columns: 13rem 1fr;
+    gap: 1.5rem;
 }
 
 #production-chain-items.horizontal-layout {
@@ -394,7 +397,9 @@
 
 #production-chain-items [data-container-id] {
     position: relative;
-    min-width: 4rem; /* ensure some space remains around ".item-qty" overlays, e.g. for "Iron" */
+    /* ensure some space remains around ".item-qty" overlays, e.g. for "Iron" */
+    /* also ensure most words fit in their container on a vertical-layout, e.g. "Computer" */
+    min-width: 5rem;
 }
 
 #production-chain-items [data-container-id]:hover {
@@ -429,6 +434,8 @@
 }
 
 #production-chain-items .disabled[data-container-id] {
+    /* disabled items in v1 production chains are NOT visible */
+    /* for disabled items in v2 production chains, see ".disabled-item" */
     display: none;
 }
 
@@ -493,7 +500,12 @@
     justify-content: center;
     color: var(--item-name);
     font-size: 0.9rem;
+    cursor: pointer;
     padding: 0.5rem;
+}
+
+#production-chain-items .item-type-finished-good[data-container-id] .item-name {
+    color: white;
 }
 
 #production-chain-items .selected-item[data-container-id] .item-name {
@@ -506,11 +518,15 @@
     padding: 0.5rem;
 }
 
+.production-planner #production-chain-items [data-container-id] .process-name {
+    cursor: pointer;
+}
+
 #production-chain-items [data-container-id] .spectral-types {
     display: flex;
     justify-content: center;
-    gap: 0.2rem;
-    margin: 0.2rem 0;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 #production-chain-items [data-container-id] .spectral-type {
@@ -540,6 +556,7 @@
     color: var(--item-name);
     border: 1px solid gray;
     border-radius: 0.5rem;
+    filter: drop-shadow(0 -0.25rem 0.25rem var(--dark-bg));
 }
 
 #production-chain-items [data-container-id]:not(.show-qty) .item-qty {
@@ -561,6 +578,7 @@
     background: black;
     border: 1px solid gray;
     border-radius: 0.5rem;
+    filter: drop-shadow(0 -0.25rem 0.25rem var(--dark-bg));
 }
 
 #production-chain-items .selected-item[data-container-id] .thumb {
@@ -703,7 +721,7 @@
 #production-chain-items.horizontal-layout .process-tooltip {
     left: -50%;
     margin-top: 1rem;
-    filter: drop-shadow(0 0.25rem 0.25rem var(--default-bg));
+    filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
 }
 
 #production-chain-items.vertical-layout .process-tooltip-wrapper {
@@ -719,7 +737,7 @@
 }
 
 #production-chain-items.vertical-layout .process-tooltip {
-    filter: drop-shadow(0.25rem 0 0.25rem var(--default-bg));
+    filter: drop-shadow(0.25rem 0 0.25rem var(--dark-bg));
 }
 
 #production-chain-items .process-tooltip .building {
@@ -755,20 +773,6 @@
 #production-chain-items .process-tooltip ul li:hover::before {
     transform: scaleX(-1);
     left: 0.86rem;
-}
-
-/* user selected products */
-#user-selected-products {
-    margin-top: 2rem;
-}
-
-#user-selected-products .info {
-    font-size: 0.9rem;
-    line-height: 1.5rem;
-}
-
-#user-selected-products .info .highlight {
-    color: var(--brand-text);
 }
 
 /* required stuff */
@@ -988,4 +992,188 @@
 #required-product-image {
     width: 12rem;
     height: 12rem;
+}
+
+/* production planner - user selected products list */
+#user-selected-products-wrapper {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5rem;
+}
+
+#user-selected-products-list {
+    display: flex;
+    margin: 0.5rem 0 0 -0.5rem;
+}
+
+#user-selected-products-list > * {
+    padding: 0 0.5rem;
+    border-radius: 0.4rem;
+}
+
+#user-selected-products-list > *:hover {
+    background: var(--overactive-bg);
+}
+
+#user-selected-products-list > *:not(:last-child)::after {
+    content: ',';
+    color: var(--default-text);
+}
+
+#user-selected-products-list .qty {
+    color: var(--default-text);
+}
+
+#user-selected-products-list .qty::before {
+    content: "✕";
+    font-size: 0.5rem;
+    margin-left: 0.4rem;
+    margin-right: 0.2rem;
+}
+
+/* production planner - shopping list */
+#shopping-list-wrapper {
+    position: relative;
+    background: var(--active-bg);
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+#shopping-list {
+    text-align: left;
+    margin-top: 1rem;
+}
+
+#shopping-list .line-title {
+    text-align: left;
+    color: var(--link);
+}
+
+#shopping-list .line {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 -0.5rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.4rem;
+}
+
+#shopping-list .line:not(.line-title):hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+#shopping-list .line .qty::before {
+    content: "✕";
+    font-size: 0.5rem;
+    margin-right: 0.25rem;
+}
+
+#shopping-list hr {
+    margin: 0.5rem;
+    border: none;
+    border-top: 1px solid var(--default-text_faded);
+}
+
+/* production planner - production chain overlay */
+#production-chain-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--default-overlay-bg);
+    font-size: 1rem;
+    line-height: 1.5rem;
+    text-shadow: 0.2rem 0.2rem 0.4rem black;
+    padding: 1.5rem;
+    z-index: 1;
+}
+
+#production-chain-overlay .overlay-question {
+    margin: 1rem 0;
+}
+
+#production-chain-overlay input {
+    filter: drop-shadow(0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.5));
+}
+
+#production-chain-overlay .overlay-responses {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 1rem;
+    filter: drop-shadow(0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.25));
+}
+
+#production-chain-overlay .overlay-responses .overlay-response {
+    cursor: pointer;
+    background: var(--overactive-bg);
+    text-shadow: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+#production-chain-overlay .overlay-responses .overlay-response:hover {
+    background: var(--brand-text);
+    color: black;
+}
+
+/* production planner - user selected products info */
+#user-selected-products-info {
+    clear: both;
+    font-size: 0.9rem;
+    line-height: 1.5rem;
+    padding-top: 2rem;
+}
+
+/* production planner - inactive / waiting selection */
+#production-chain-items .disabled-item {
+    /* disabled items in v2 production chains are faded, but visible */
+    /* for disabled items in v1 production chains, see ".disabled" */
+    opacity: 0.25;
+}
+
+#production-chain-items .disabled-item:hover {
+    opacity: 1;
+}
+
+#production-chain-items .item-type-process.waiting-selection:not(:hover) {
+    animation: pulse 2s infinite;
+}
+
+#production-chain-items .item-type-process.selected-process .hexagon {
+    background: var(--brand-text);
+    border-color: var(--brand-text);
+}
+
+/* production planner - prompt for selecting a process variant */
+#production-chain-items .prompt-process-variant::after {
+    content: 'Select one of the\Aprocess variants';
+    white-space: pre;
+    background: var(--brand-text);
+    color: black;
+    font-family: Jura-Bold;
+    padding: 0.5rem;
+    border-bottom-left-radius: 0.4rem;
+    border-bottom-right-radius: 0.4rem;
+}
+
+/* debug */
+#debug {
+    position: absolute;
+    top: 0;
+    right: 0;
+    max-width: 20rem;
+    white-space: pre;
+    background: black;
+    color: white;
+    font-size: 0.8rem;
+    padding: 1rem;
+    border: 1px solid white;
+    border-radius: 0.5rem;
+    z-index: 1;
 }

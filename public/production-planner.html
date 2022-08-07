@@ -15,7 +15,7 @@
     <meta name="twitter:description" content="Plan your production chain for a specific product.">
 </head>
 <body>
-    <div class="main">
+    <div class="main production-planner">
         <nav id="topbar">
             <a href="https://my.adalia.id/" target="_blank" id="dalia-id-logo" title="my.adalia.id">
                 <img src="./img/adalia-id-logo.png" alt="my.adalia.id" class="logo-small">
@@ -48,16 +48,21 @@
             <h2 id="selected-production-chain">
                 <span id="selected-item-name"></span> - Production Planner
             </h2>
-            <div id="production-chain-wrapper">
-                <div id="production-chain-items" class="horizontal-layout"></div>
-                <div id="production-chain-connections"></div>
+            <div id="user-selected-products-wrapper" class="hidden-NOT">
+                <div>Intermediate products that you also plan to produce:</div>
+                <div id="user-selected-products-list" class="brand-text">N/A</div>
             </div>
-            <div id="user-selected-products">
-                <p class="info">
-                    <span class="highlight">Select any other items</span> from the chain, that you intend to produce yourself.<br>
-                    All the remaining items will need to be obtained from a marketplace or other players.<br>
-                    They will also need to be delivered to the buildings where you intend to produce the selected items.
-                </p>
+            <div id="production-chain-wrapper">
+                <div id="shopping-list-wrapper">
+                    <h3>Shopping List</h3>
+                    <div id="shopping-list"></div>
+                </div>
+                <div id="production-chain-items" class="horizontal-layout"></div>
+            </div>
+            <div id="user-selected-products-info">
+                <span class="brand-text">Select any other products</span> from the chain, that you also plan to produce.<br>
+                All the remaining items will need to be obtained from a marketplace or other players.<br>
+                They will also need to be delivered to the buildings where you plan to produce the selected items.
             </div>
         </div>
 
@@ -83,10 +88,29 @@
                 </a>
             </div>
         </div>
+
+        <div id="production-chain-overlay" class="hidden">
+            <div>
+                <div>
+                    Selecting this process variant will deselect the entire sub-chain<br>
+                    of the currently-selected process - "<span id="overlay-selected-process-name"></span>".
+                </div>
+                <div class="overlay-question brand-text">Are you sure?</div>
+                <div class="options">
+                    <label for="toggle-always-confirm"><input type="checkbox" id="toggle-always-confirm">Always confirm automatically</label>
+                </div>
+                <div class="overlay-responses">
+                    <span id="overlay-response-no" class="overlay-response" onclick="handleOverlayResponse(false)">No</span>
+                    <span id="overlay-response-yes" class="overlay-response" onclick="handleOverlayResponse(true)">Yes</span>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="./influence-production-chains.js"></script>
+    <div id="debug" class="hidden"></div>
+
     <script src="./leader-line.min.js"></script>
+    <script src="./influence-production-chains.js"></script>
     <script src="./production-planner.js"></script>
 </body>
 </html>
