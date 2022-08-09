@@ -71,14 +71,35 @@ Terminology:
 
 Format of "itemData":
 {
-    productId: null if process-item
-    processId: null if product-item
-    parentItemId
-    level: the level on which this item is rendered (e.g. level = 1 for the planned-product)
-    isSelected: true / false (whether this product-or-process is selected to be produced by the user)
     isDisabled: true / false (whether this product-or-process belongs to the sub-chain of a disabled process variant)
+    isSelected: true / false (whether this product-or-process is selected to be produced by the user)
+    level: the level on which this item is rendered (e.g. level = 1 for the planned-product)
+    line: SVG connection from this item, to its parent item, using "leader-line" (set dynamically AFTER "itemData" is initialized)
+    parentItemId
+    processId: null if product-item
+    productId: null if process-item
+    processVariantItemIds: array of itemIds for all process variants having the same "parentItemId" (NOT set for single process variant)
 }
 */
+
+const itemDataKeyEncodeDecode = {
+    // encode
+    isDisabled: 'a',
+    isSelected: 'b',
+    level: 'c',
+    parentItemId: 'd',
+    processId: 'e',
+    processVariantItemIds: 'f',
+    productId: 'g',
+    // decode
+    a: 'isDisabled', // minified value 1 / 0 => decode to true / false
+    b: 'isSelected', // minified value 1 / 0 => decode to true / false
+    c: 'level',
+    d: 'parentItemId',
+    e: 'processId', // if minified property not defined => decode to null
+    f: 'processVariantItemIds',
+    g: 'productId', // if minified property not defined => decode to null
+};
 
 /**
  * "itemDataById" will effectively contain the production chain for the planned-product,
@@ -104,6 +125,7 @@ let maxLevel = 0;
 const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
 const productsListContainer = document.getElementById('products-list');
+const selectedItemNameContainer = document.getElementById('selected-item-name');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const shoppingListContainer = document.getElementById('shopping-list');
 const productionChainOverlayContainer = document.getElementById('production-chain-overlay');
@@ -144,12 +166,12 @@ const leaderLineOptionsDefault = {
     endPlug: 'behind',
 };
 
-// e.g. "Carbon Dioxide" => "CarbonDioxide"
+// e.g. "Thin-film Resistor" => "Thin-filmResistor"
 function getCompactName(name) {
     return name.replace(/\s+/g, '');
 }
 
-// e.g. "Carbon Dioxide" => "carbon-dioxide"
+// e.g. "Thin-film Resistor" => "thin-film-resistor"
 function getItemNameSafe(itemName) {
     return itemName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
 }
@@ -204,6 +226,31 @@ function getChildContainersOfItemId(itemId, onlySelectedContainers = false) {
 
 function isAlwaysConfirmChecked() {
     return document.getElementById('toggle-always-confirm').checked;
+}
+
+function filterProductsList() {
+    document.querySelectorAll('#filters-list .option').forEach(elFilter => {
+        // e.g. "filter-raw-materials" => "item-type-raw-material"
+        const itemTypeClass = 'item-type-' + elFilter.id.replace(/^filter-(.+)s$/, '$1');
+        productsListContainer.querySelectorAll(`.${itemTypeClass}`).forEach(elListItem => {
+            if (elFilter.classList.contains('checked')) {
+                elListItem.classList.remove('hidden');
+            } else {
+                elListItem.classList.add('hidden');
+            }
+        });
+    });
+}
+
+function hideAndResetProductsList() {
+    productsListWrapper.classList.add('list-hidden');
+    productsListWrapper.querySelector('input').value = '';
+    // Re-show the list-items which did not match the previous search
+    productsListContainer.querySelectorAll('.not-matching-search').forEach(elListItem => {
+        elListItem.classList.remove('not-matching-search');
+    });
+    // Re-filter the products list, required after a SOFT-reload which preserves the disabled filters
+    filterProductsList();
 }
 
 function resetEverything() {
@@ -327,22 +374,19 @@ function createProductContainer(itemId) {
     // productContainer.innerHTML += `<img class="thumb" src="./img/thumbs/${getItemNameSafe(itemName)}.png" alt="" onerror="this.src='./img/site-icon.png';">`;
     productContainer.classList.add(getItemTypeClass(productData.type));
     productContainer.addEventListener('click', event => {
-        toggleProductItemId(itemId);
+        toggleProductItemId(itemId); // the user may either select or deselect a product
     });
     return productContainer;
 }
 
-function createProcessContainer(itemId, processNameOverwrite = '') {
+function createProcessContainer(itemId) {
     const itemData = itemDataById[itemId];
     const processData = processDataById[itemData.processId];
-    const processName = processNameOverwrite || processData.name;
-    const outputProductId = itemDataById[itemData.parentItemId].productId;
-    // const outputName = productDataById[outputProductId].name; //// DELME?
+    const processName = processData.name;
     const processContainer = document.createElement('div');
     processContainer.dataset.containerId = itemId;
     processContainer.dataset.parentContainerId = itemData.parentItemId;
     processContainer.dataset.processName = processName;
-    // processContainer.dataset.processCode = getCompactName(outputName) + '-' + getCompactName(processName); //// DELME?
     processContainer.classList.add('item-type-process');
     /**
      * inner-container required for styling the outer-container with "filter: drop-shadow",
@@ -363,7 +407,7 @@ function createProcessContainer(itemId, processNameOverwrite = '') {
     let processTooltipHtml = '';
     processTooltipHtml += `<div class="building">${buildingDataById[processData.buildingId].name}</div>`;
     // show process-module parts only for actual buildings, not for Empty Lot (buildingId '0')
-    if (processData.buildingId !== '0') {
+    if (Number(processData.buildingId) !== 0) {
         processTooltipHtml += '<ul>';
         const parts = processData.parts || ['[redacted]', '[redacted]'];
         parts.forEach(part => {
@@ -373,7 +417,7 @@ function createProcessContainer(itemId, processNameOverwrite = '') {
     }
     processTooltip.innerHTML = processTooltipHtml;
     processContainer.addEventListener('click', event => {
-        selectProcessItemId(itemId);
+        selectProcessItemId(itemId); // the user may only select a process, not deselect it
     });
     return processContainer;
 }
@@ -390,17 +434,22 @@ function getBaseSpectralsHtmlForRawMaterial(rawMaterialData) {
 /**
  * Returns "itemId" of the newly added item
  */
- function addItemToChain(itemData) {
-    // Increment the last (highest) key b/c some intermediary keys may have been deleted during a "purge"
-    const itemId = Object.keys(itemDataById).length ? Number(Object.keys(itemDataById).pop()) + 1 : 1;
+ function addItemToChain(itemData, overwriteItemId = null) {
+    let itemId;
+    if (overwriteItemId !== null) {
+        itemId = Number(overwriteItemId)
+    } else {
+        // Increment the last (highest) key b/c some intermediary keys may have been deleted during a "purge"
+        itemId = Object.keys(itemDataById).length ? Number(Object.keys(itemDataById).pop()) + 1 : 1;
+    }
     itemDataById[itemId] = itemData;
     // Render the newly added item
     const renderOnLevel = itemData.level;
     maxLevel = Math.max(maxLevel, renderOnLevel);
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
-    const itemContainer = itemData.productId ? createProductContainer(itemId) : createProcessContainer(itemId);
+    const itemContainer = itemData.productId !== null ? createProductContainer(itemId) : createProcessContainer(itemId);
     if (itemData.isSelected) {
-        itemContainer.classList.add('selected-item');
+        itemContainer.classList.add(itemData.productId !== null ? 'selected-item' : 'selected-process');
     }
     if (itemData.isDisabled) {
         itemContainer.classList.add('disabled-item');
@@ -434,12 +483,12 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
     const processVariantItemIds = [];
     processVariantIds.forEach(processId => {
         const processItemData = {
-            productId: null,
-            processId: processId,
-            parentItemId: outputItemId,
-            level: outputItemData.level + 1,
-            isSelected: false,
             isDisabled: false,
+            isSelected: false,
+            level: outputItemData.level + 1,
+            parentItemId: Number(outputItemId),
+            processId: Number(processId),
+            productId: null,
         };
         const processItemId = addItemToChain(processItemData);
         processVariantItemIds.push(processItemId);
@@ -447,12 +496,12 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
         processData.inputs.forEach(inputData => {
             const inputProductId = inputData.productId;
             const inputItemData = {
-                productId: inputProductId,
-                processId: null,
-                parentItemId: processItemId,
-                level: processItemData.level + 1,
-                isSelected: false,
                 isDisabled: false,
+                isSelected: false,
+                level: processItemData.level + 1,
+                parentItemId: Number(processItemId),
+                processId: null,
+                productId: Number(inputProductId),
             };
             addItemToChain(inputItemData); // not using the return value, in this context
         });
@@ -509,7 +558,7 @@ function purgeItemId(itemId) {
     const itemData = itemDataById[itemId];
     itemData.line.remove();
     // #3 - if [self] is a product => remove [self] from "selectedProductItemIds"
-    if (itemData.productId) {
+    if (itemData.productId !== null) {
         removeItemIdFromSelectedProductItemIds(itemId);
     }
     // #4 - if [self] is a process variant waiting selection => remove [self] from "itemIdsForProcessVariantsWaitingSelection"
@@ -729,7 +778,7 @@ function deselectProcessItemId(itemId, forceDeselectProcessVariant = false) {
              */
             deselectProductItemId(selectedInputContainer.dataset.containerId, true); // skip "refreshDetailsAndConnections" in that function
         });
-        // Re-render the chain IFF it this process variant had any selected inputs
+        // Re-render the chain IFF this process variant had any selected inputs
         if (selectedInputsCount) {
             refreshDetailsAndConnections();
         }
@@ -739,6 +788,7 @@ function deselectProcessItemId(itemId, forceDeselectProcessVariant = false) {
 }
 
 function markProcessDisabled(itemId) {
+    itemDataById[itemId].isDisabled = true;
     getItemContainerById(itemId).classList.add('disabled-item');
     // Also mark the inputs of this process as disabled
     getChildContainersOfItemId(itemId).forEach(inputContainer => {
@@ -754,6 +804,7 @@ function markProcessDisabled(itemId) {
 }
 
 function markProcessNotDisabled(itemId) {
+    itemDataById[itemId].isDisabled = false;
     getItemContainerById(itemId).classList.remove('disabled-item');
     // Also mark the inputs of this process as NOT disabled
     getChildContainersOfItemId(itemId).forEach(inputContainer => {
@@ -791,7 +842,7 @@ function getInputQtyForProcess(processId, inputProductId) {
     const processData = processDataById[processId];
     let inputQty = 0;
     processData.inputs.forEach(inputData => {
-        if (inputData.productId === inputProductId) {
+        if (Number(inputData.productId) === inputProductId) {
             inputQty = inputData.qty;
         }
     });
@@ -817,10 +868,107 @@ function getTotalQtyForItemId(itemId) {
     return totalQty;
 }
 
+function getCurrentHash() {
+    return window.location.hash.replace(/^#/, '');
+}
+
+function setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById) {
+    let hash = plannedProductCompactName;
+    if (hashEncodedFromItemDataById) {
+        hash += `__${hashEncodedFromItemDataById}`;
+    }
+    console.log(`--- [setCurrentHash] hash = ${hash}`); //// TEST
+    window.location.hash = `#${hash}`;
+}
+
+/**
+ * Minify "itemDataById" by optimizing its keys and values,
+ * then deflate it (compress via "js-deflate" library).
+ */
+function getHashEncodedFromItemDataById() {
+    // Do NOT encode a hash, if the planned product is the only selected product, and it has a single process variant
+    if (selectedProductItemIds.length === 1 && document.querySelectorAll('#level_2 .item-type-process').length === 1) {
+        return null;
+    }
+    // console.log(`--- itemDataById (stringified) = ${JSON.stringify(itemDataById)}`); //// TEST
+    // console.log(`---> length = ${JSON.stringify(itemDataById).length}`); //// TEST
+    const itemDataByIdWithoutLines = {};
+    for (const [itemId, itemData] of Object.entries(itemDataById)) {
+        const itemDataWithoutLine = {};
+        Object.keys(itemData).forEach(key => {
+            /**
+             * Copy each non-line property, instead of deleting the "line"
+             * property, b/c that would break the rendering of lines.
+             */
+            if (key === 'line') {
+                return;
+            }
+            // Minify keys and values
+            const encodedKey = itemDataKeyEncodeDecode[key];
+            itemDataWithoutLine[encodedKey] = itemData[key];
+            if (typeof itemDataWithoutLine[encodedKey] === 'boolean') {
+                // Convert true / false to 1 / 0
+                itemDataWithoutLine[encodedKey] = + itemDataWithoutLine[encodedKey];
+            }
+            if (itemDataWithoutLine[encodedKey] === null) {
+                // Delete null properties
+                delete itemDataWithoutLine[encodedKey];
+            }
+        });
+        itemDataByIdWithoutLines[itemId] = itemDataWithoutLine;
+    }
+    // Remove quotes from stringified JSON
+    const itemDataByIdMinified = JSON.stringify(itemDataByIdWithoutLines).replace(/"(\w+)":/g, '$1:');
+    // console.log(`--- itemDataByIdMinified = ${itemDataByIdMinified}`); //// TEST
+    // console.log(`---> length = ${itemDataByIdMinified.length}`); //// TEST
+    /**
+     * Deflate the data into the hash.
+     * Source: https://github.com/dankogai/js-deflate/blob/master/test/demo.html
+     */
+    const hashEncodedFromItemDataById = Base64.toBase64(RawDeflate.deflate(Base64.utob(itemDataByIdMinified)));
+    // console.log(`--- ENCODED hashEncodedFromItemDataById = ${hashEncodedFromItemDataById}`); //// TEST
+    // console.log(`---> length = ${hashEncodedFromItemDataById.length}`); //// TEST
+    return hashEncodedFromItemDataById;
+}
+
+/**
+ * Inflate "itemDataById" WITHOUT lines (decompress via "js-deflate" library).
+ */
+function setItemDataByIdDecodedFromHash(hashEncodedFromItemDataById) {
+    itemDataById = {};
+    /**
+     * Inflate the data from the hash.
+     * Source: https://github.com/dankogai/js-deflate/blob/master/test/demo.html
+     */
+    const itemDataByIdMinified = Base64.btou(RawDeflate.inflate(Base64.fromBase64(hashEncodedFromItemDataById)));
+    const itemDataByIdWithoutLines = JSON.parse(itemDataByIdMinified.replace(/(\w+):/g, '"$1":'));
+    for (const [itemId, itemDataWithoutLine] of Object.entries(itemDataByIdWithoutLines)) {
+        const itemData = {};
+        Object.keys(itemDataWithoutLine).forEach(key => {
+            const decodedKey = itemDataKeyEncodeDecode[key];
+            itemData[decodedKey] = itemDataWithoutLine[key];
+            if (decodedKey === 'isDisabled' || decodedKey === 'isSelected') {
+                // Convert 1 / 0 to true / false
+                itemData[decodedKey] = Boolean(itemData[decodedKey]);
+            }
+        });
+        if (!itemData.processId) {
+            // Restore undefined property as null
+            itemData.processId = null;
+        }
+        if (!itemData.productId) {
+            // Restore undefined property as null
+            itemData.productId = null;
+        }
+        itemDataById[itemId] = itemData;
+    };
+    return itemDataById;
+}
+
 function refreshConnections(hasChangedLayout = false, action = 'reposition') {
     const leaderLineOptions = hasChangedLayout ? getOptionsForCurrentLayout() : null; // used only if "hasChangedLayout" true
-    for (const itemId in itemDataById) {
-        const line = itemDataById[itemId].line;
+    for (const [itemId, itemData] of Object.entries(itemDataById)) {
+        const line = itemData.line;
         if (line) {
             switch (action) {
                 case 'delete':
@@ -830,6 +978,9 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
                     if (hasChangedLayout) {
                         line.startSocket = leaderLineOptions.startSocket;
                         line.endSocket = leaderLineOptions.endSocket;
+                    }
+                    if (itemData.isDisabled) {
+                        line.color = leaderLineColorDisabled;
                     }
                     line.position();
                     break;
@@ -888,6 +1039,7 @@ function renderShoppingList(shoppingList) {
         shoppingListContainer.innerHTML = '<p class="brand-text">Please select a<br>required process variant.</p>';
         return;
     }
+    // #1 - required inputs
     let shoppingListHtml = '';
     // Convert "shoppingList" to sorted array
     const shoppingListArray = [];
@@ -905,19 +1057,24 @@ function renderShoppingList(shoppingList) {
     } else {
         // The planned product is a raw material or has no process (e.g. Food as of Jul 2022) => NO inputs
     }
+    // #2 - required buildings
+    //// TO BE IMPLEMENTED
+    shoppingListHtml += `<div class="line line-title">Buildings</div>`; // including extractors and empty lots
+    shoppingListHtml += `<div class="line">[redacted]</div>`;
+    shoppingListHtml += `<hr>`;
+    // #3 - required process modules, for the required buildings
+    //// TO BE IMPLEMENTED
     shoppingListHtml += `<div class="line line-title">Modules</div>`;
     shoppingListHtml += `<div class="line">[redacted]</div>`;
     shoppingListHtml += `<hr>`;
-    shoppingListHtml += `<div class="line line-title">Extractors</div>`;
-    shoppingListHtml += `<div class="line">[redacted]</div>`;
-    shoppingListHtml += `<hr>`;
+    // #4 - required spectral types, only if the user selected to produce at least one raw material
+    //// TO BE IMPLEMENTED
     shoppingListHtml += `<div class="line line-title">Spectral Types</div>`;
     shoppingListHtml += `<div class="line">[redacted]</div>`;
     shoppingListContainer.innerHTML = shoppingListHtml;
-    //// TO DO: click-to-pin the shopping list in expanded state (also expand on hover), otherwise show only a cart icon?
 }
 
-function refreshDetailsAndConnections() {
+function refreshDetailsAndConnections(skipHashEncoding = false) {
     console.log(`--- refreshDetailsAndConnections`); //// TEST
     const shoppingList = {};
     if (itemIdsForProcessVariantsWaitingSelection.length) {
@@ -948,39 +1105,24 @@ function refreshDetailsAndConnections() {
     renderSelectedProductsList();
     renderShoppingList(shoppingList);
     refreshConnections(); // NO logic that changes the DOM should be executed after this
-    //// TO DO
-    /*
-    - define separate shopping lists for inputs, for process modules, for required spectrals
-        - when user selects to produce at least one raw material:
-            - include Extractors in shopping list for process modules
-            - update shopping list for required spectrals
-    - ...
-    */
+    //// TO DO: avoid executing the rest of this function, if the chain state has not changed since the last execution
+    //// -- e.g. when toggling between horizontal / vertical layout
+    if (!skipHashEncoding) {
+        /**
+         * Encode the current state of the chain into the URL hash,
+         * in this format: "Thin-filmResistor___hashEncodedFromItemDataById".
+         */
+        const plannedProductId = itemDataById[1].productId;
+        const plannedProductCompactName = getCompactName(productDataById[plannedProductId].name);
+        const hashEncodedFromItemDataById = getHashEncodedFromItemDataById();
+        setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById);
+    }
 }
 
-function filterProductsList() {
-    document.querySelectorAll('#filters-list .option').forEach(elFilter => {
-        // e.g. "filter-raw-materials" => "item-type-raw-material"
-        const itemTypeClass = 'item-type-' + elFilter.id.replace(/^filter-(.+)s$/, '$1');
-        productsListContainer.querySelectorAll(`.${itemTypeClass}`).forEach(elListItem => {
-            if (elFilter.classList.contains('checked')) {
-                elListItem.classList.remove('hidden');
-            } else {
-                elListItem.classList.add('hidden');
-            }
-        });
-    });
-}
-
-function hideAndResetProductsList() {
-    productsListWrapper.classList.add('list-hidden');
-    productsListWrapper.querySelector('input').value = '';
-    // Re-show the list-items which did not match the previous search
-    productsListContainer.querySelectorAll('.not-matching-search').forEach(elListItem => {
-        elListItem.classList.remove('not-matching-search');
-    });
-    // Re-filter the products list, required after a SOFT-reload which preserves the disabled filters
-    filterProductsList();
+function injectPlannedProductName(plannedProductId) {
+    const productName = productDataById[plannedProductId].name;
+    productsListWrapper.querySelector('input').placeholder = productName;
+    selectedItemNameContainer.textContent = productName;
 }
 
 /**
@@ -989,28 +1131,75 @@ function hideAndResetProductsList() {
 function selectPlannedProductId(plannedProductId) {
     console.log(`--- SELECTING planned product ${plannedProductId} (${productDataById[plannedProductId].name})`); //// TEST
     resetEverything();
-    productName = productDataById[plannedProductId].name;
-    productsListWrapper.querySelector('input').placeholder = productName;
-    document.getElementById('selected-item-name').textContent = productName;
+    injectPlannedProductName(plannedProductId);
     const plannedProductItemData = {
-        productId: plannedProductId,
-        processId: null,
-        parentItemId: 0, // top-level item (i.e. no parent)
-        level: 1,
-        isSelected: false,
         isDisabled: false,
+        isSelected: false,
+        level: 1,
+        parentItemId: 0, // top-level item (i.e. no parent)
+        processId: null,
+        productId: Number(plannedProductId),
     };
     const plannedProductItemId = addItemToChain(plannedProductItemData);
     selectProductItemId(plannedProductItemId);
 }
 
+function renderItemFromDecodedHash(itemId, itemData) {
+    itemId = Number(itemId);
+    if (itemId === 1) {
+        injectPlannedProductName(itemData.productId);
+    }
+    /**
+     * Inject item container with "overwriteItemId" argument.
+     * Calling "addItemToChain" also achieves the following:
+     * - inject the level container if needed
+     * - style the item container based on "isSelected" and "isDisabled"
+     * - connect to parent (if any), and set the "line" property into "itemData" (passed by reference => preserved globally in "itemDataById")
+     * (no need to mark a process as "waiting selection", b/c the hash is ONLY generated if NO process variant waiting selection)
+     */
+    addItemToChain(itemData, itemId);
+    // Add selected product items to "selectedProductItemIds"
+    if (itemData.productId !== null && itemData.isSelected) {
+        selectedProductItemIds.push(itemId);
+    }
+}
+
+/**
+ * The "hash" can be either a single product, generated via "getCompactName"
+ * (e.g. "Thin-filmResistor"), or it can also include the entire (encoded) state
+ * of the production chain, in this format: "Thin-filmResistor___hashEncodedFromItemDataById".
+ */
 function selectPlannedProductHash(hash) {
-    const productName = productNamesByHash[hash];
-    if (productName) {
-        selectPlannedProductId(productDataByName[productName].id);
-    } else {
-        // Decode "itemDataById" from "hash" => render the entire planned chain
-        console.log(`%c--- [TO DO] DECODE "itemDataById" from "hash" => RENDER the entire planned chain`, 'background: blue'); //// TEST
+    const [plannedProductCompactName, hashEncodedFromItemDataById] = hash.split('__');
+    /**
+     * Re-render the entire planned chain, from the decoded hash,
+     * only on the initial page load - i.e. "itemDataById" empty object.
+     */
+    if (hashEncodedFromItemDataById && !Object.keys(itemDataById).length) {
+        console.log(`%c--- RENDER the entire planned chain, from the decoded hash`, 'background: blue'); //// TEST
+        resetEverything();
+        /**
+         * Decode partial "itemDataById" (without "line" properties), and use it to render the planned chain.
+         * During this process, the "line" property will automatically be injected into each item.
+         */
+        setItemDataByIdDecodedFromHash(hashEncodedFromItemDataById);
+        for (const [itemId, itemData] of Object.entries(itemDataById)) {
+            renderItemFromDecodedHash(itemId, itemData);
+        }
+        refreshDetailsAndConnections(true);
+        return;
+    }
+    /**
+     * Select the planned product only on the initial page load,
+     * or when clicking on a different result from the products-list.
+     * This avoids e.g. re-selecting the same product whenever the hash changes,
+     * due to user actions within the production chain of the currently-planned product.
+     */
+    const productName = productNamesByHash[plannedProductCompactName];
+    if (productName && productName !== selectedItemNameContainer.textContent) {
+        console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue'); //// TEST
+        const plannedProductId = Number(productDataByName[productName].id);
+        selectPlannedProductId(plannedProductId);
     }
 }
 
@@ -1115,12 +1304,13 @@ window.addEventListener('keydown', event => {
 
 // Auto-select product (or encoded planned chain) on #Hash-change (including on e.g. history-back navigation)
 window.addEventListener('hashchange', () => {
-    const hashToSelect = window.location.hash.replace(/^#/, '');
+    const hashToSelect = getCurrentHash();
+    console.log(`--- TRIGGERED hashchange w/ hashToSelect = ${hashToSelect}`); //// TEST
     selectPlannedProductHash(hashToSelect);
 });
 
 // Pre-select the product (or encoded planned chain) from #Hash on page-load
-let hashToPreselect = window.location.hash.replace(/^#/, '');
+let hashToPreselect = getCurrentHash();
 if (!hashToPreselect) {
     // Pre-select "Steel" by default, if empty #Hash given
     hashToPreselect = 'Steel';
@@ -1147,20 +1337,28 @@ if (true) {
 //// FIX BUGS
 /*
 - BUG:
+    - open the products-list and click on any product
+        > BUG = the dropdown remains open (it should auto-hide like in v1 production chains)
+- BUG:
     - start with Warehouse
     - select Concrete + Steel Beam + Steel Sheet > hover over Steel Sheet
         => BUG = weird yellow highlight above the item-name, below the thumb (see Desktop > "Aug-06-2022 01-51-17")
             ^^ only when thumbs are enabled
 */
 
-//// TO DO: implement features from v1 production chains:
+//// TO DO PRIO
 /*
-- hover on item => highlight all occurrences of that product / process
-- hover on process => show qtys on inputs + output
-    - also highlight inputs + output, WITHOUT fading the rest of the chain? (e.g. purple glow on inputs + output)
-        ^^ b/c they may not be obvious in complex chains
-- NOT implementing:
-    - thumbs (b/c it makes it annoying to hover between products in the chain)
+- implement features from v1 production chains:
+    - hover on item => highlight all occurrences of that product / process
+    - hover on process => show qtys on inputs + output
+        - also highlight inputs + output, WITHOUT fading the rest of the chain? (e.g. purple glow on inputs + output)
+            ^^ b/c they may not be obvious in complex chains
+    - NOT implementing:
+        - thumbs (b/c it makes it annoying to hover between products in the chain)
+- add link in the page for sharing the chain state + "click to copy" the URL
+    - async generate short link via cutt.ly, making sure to encode "#" => "%23"
+        https://cutt.ly/api/api.php?key=29bc819a8e874eac383cabf9f8121494ba0fd&short=http://127.0.0.1:5500/public/production-planner.html%23HeavyTransport
+=> PUBLIC LAUNCH ^_^
 */
 
 //// TO DO
@@ -1172,31 +1370,9 @@ if (true) {
     - do NOT inject ".thumb" into each item container (also reduces the HTML)
     - insteaad, use a single thumb-container (e.g. toggled in the top-right?), with a curved leader-line towards the hovered item
 - optimize item-containers by removing useless "dataset" properties (if any)
-- layout:
-    - vertical shopping list (aligned to the left of the chain)
-    - horizontal selected products (above the chain)
-- try to avoid refreshing the entire chain
-    - instead, try to inject / delete / update individual items
-- shopping list should also include buildings and modules
-    - include required spectral types IFF the user will select to produce raw materials
-- click on thumb = navigate to that planned-product, vs. click on item-name = toggle selection as "to be produced by the user"
-- test what happens if the user also selects a raw material
-    - a non-selected raw material means that the user will BUY it
-    - a selected raw material means that the user will MINE it
-        - in this state, the chain needs to show the mining process (input = empty plot?)
-- for products that can be made using multiple processes:
-    - ALL items for those process variants will initially have "isSelected: false"
-        - i.e. do NOT auto-select any process variant, when those items are initially rendered
-    - visually-mark those process variants (e.g. red glow) and/or prompt the user to select one of them
-    - the selected process variant can be changed on-the-fly, but only 1 process variant can be selected at any time
-    - when changing the selected process variant:
-        - for the "old" process variant, deselect each of its inputs that have "isSelected: true" (if any)
-            - i.e. call "deselectProductItemId(itemId_for_selectedInputOfOldProcessVariant)"
-            - this will automatically clean-up any selections from the sub-chains of those inputs + remove the sub-chains themselves
-        - if the sub-chain of the "old" process variant contained selected product-items
-- Estimate surface area required for the currently-selected production chain (i.e. count "active" process-varaints?)
-    When user connected, show which of their asteroids meet the requirements of surface + spectral type (prioritize single asteroids, over combos of asteroids)
-    ^^ implement for both v1 + v2
+- estimate surface area required for the currently-selected production chain (i.e. count "active" process-varaints?)
+    - when user connected, show which of their asteroids meet the requirements of surface + spectral type (prioritize single asteroids, over combos of asteroids)
+        ^^ implement for both v1 + v2
     - Discord #general
         me: Another idea I had today for the production chains:
             Would it be safe'ish to estimate the surface area required for a production chain (in its currently-selected state), by simply counting how many processes it contains? @protoplanetary#6428 
@@ -1204,18 +1380,6 @@ if (true) {
             EDIT: ignoring warehouses
             Then, once a user is connected to the tool with their wallet, we can even highlight which of their asteroids (or a combo of asteroids) could fully support that chain - also taking into account the required spectral-types.
             Going even further, a user could select one-or-more asteroids that they want to use for a production chain, and the tool would automatically try to expand the sub-chains, up to the available surface of those asteroid(s). The user would then see how much of that chain they can produce themselves, vs. what else they need to procure from market/alliance etc.
-Old notes:
-- clicking on items in the chain toggles them for products that you want to make yourself
-  - the production chain will thus "expand" only 1 item at a time, and will only show the products immediately-reqiored for making your selected products
-  - allow toggling specific process variants, for products that can be made in multiple ways
-- make it possible to select a process variant for each individual item
-  - instead of applying that process variant selection to ALL occurrences of that item in the chain
-  - do NOT allow multiple process variants enabled for the same item
-- deselecting an item will automatically deselect all its ancestors
 - add text-inputs for unit-price of each item from the "shopping list" => calculate total = sum(item_qty * unit_price)
-- save the entire state of selections (items + process variants for each item) in the URL, for easy sharing
-    - e.g. via base64-encoded "itemDataById" => derive "selectedProductItemIds" based on the "isSelected" flag
-    - do NOT include the "line" objects (LeaderLines) in the encoded data, but re-draw them when decoding the data
-    - ensure that reloading a page with such a URL re-renders the production chain
-    - add some hint in the page re: this feature + "click to copy" the URL
+- add link to reset the selections for the current planned product (hover-overlay @ its item in the chain)
 */

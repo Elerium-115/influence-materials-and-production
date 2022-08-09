@@ -366,12 +366,12 @@ itemNamesSorted.forEach(itemName => {
     productsListContainer.appendChild(listItem);
 });
 
-// e.g. "Carbon Dioxide" => "CarbonDioxide"
+// e.g. "Thin-film Resistor" => "Thin-filmResistor"
 function getCompactName(name) {
     return name.replace(/\s+/g, '');
 }
 
-// e.g. "Carbon Dioxide" => "carbon-dioxide"
+// e.g. "Thin-film Resistor" => "thin-film-resistor"
 function getItemNameSafe(itemName) {
     return itemName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
 }
