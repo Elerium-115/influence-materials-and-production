@@ -582,7 +582,7 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     let processTooltipHtml = '';
     processTooltipHtml += `<div class="building">${buildingNamesById[processData.buildingId]}</div>`;
     // show process-module parts only for actual buildings, not for Empty Lot (buildingId '0')
-    if (processData.buildingId !== '0') {
+    if (Number(processData.buildingId) !== 0) {
         processTooltipHtml += '<ul>';
         const parts = processData.parts || ['[redacted]', '[redacted]'];
         parts.forEach(part => {
@@ -1362,7 +1362,8 @@ on('mouseenter', '[data-container-id]:not(.derivative-item)', el => {
     updateAllConnections();
     // show quantities for inputs and outputs, if this is a process
     if (el.classList.contains('item-type-process')) {
-        document.querySelectorAll(`[data-parent-container-id="${itemContainerId}"], [data-container-id="${el.dataset.parentContainerId}"]`).forEach(itemWithQty => {
+        const selectorInputsAndOutput = `[data-parent-container-id="${itemContainerId}"], [data-container-id="${el.dataset.parentContainerId}"]`;
+        document.querySelectorAll(selectorInputsAndOutput).forEach(itemWithQty => {
             itemWithQty.classList.add('show-qty');
         });
     }

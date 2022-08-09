@@ -122,6 +122,8 @@ let itemIdsForProcessVariantsWaitingSelection = [];
 
 let maxLevel = 0;
 
+let shouldHandleHashchange = true;
+
 const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
 const productsListContainer = document.getElementById('products-list');
@@ -224,6 +226,33 @@ function getChildContainersOfItemId(itemId, onlySelectedContainers = false) {
     return productChainItemsContainer.querySelectorAll(selector);
 }
 
+function getAllAncestorsOfItemId(itemId) {
+    let ancestors = [];
+    const parentItemId = Number(itemDataById[itemId].parentItemId);
+    if (parentItemId) {
+        ancestors = getAllAncestorsOfItemId(parentItemId).concat(parentItemId);
+    }
+    return ancestors;
+}
+
+function getAllDescendantsOfItemId(itemId) {
+    let descendants = [];
+    getChildContainersOfItemId(itemId).forEach(childContainer => {
+        const childItemId = Number(childContainer.dataset.containerId);
+        descendants.push(childItemId);
+        descendants = descendants.concat(getAllDescendantsOfItemId(childItemId));
+    });
+    return descendants;
+}
+
+/**
+ * Return an array of item IDs covering the entire subchain of an item,
+ * and all its ancestors, up to the planned product, including the item itself.
+ */
+function getFullchainForItemId(itemId) {
+    return getAllAncestorsOfItemId(itemId).concat(itemId).concat(getAllDescendantsOfItemId(itemId));
+}
+
 function isAlwaysConfirmChecked() {
     return document.getElementById('toggle-always-confirm').checked;
 }
@@ -260,6 +289,13 @@ function resetEverything() {
     itemIdsForProcessVariantsWaitingSelection = [];
     maxLevel = 0;
     productChainItemsContainer.textContent = '';
+}
+
+function resetFadedItemsAndConnections() {
+    productChainItemsContainer.querySelectorAll('.active[data-container-id]').forEach(el => el.classList.remove('active'));
+    productChainItemsContainer.querySelectorAll('.hover[data-container-id]').forEach(el => el.classList.remove('hover'));
+    productChainItemsContainer.classList.remove('faded');
+    refreshConnections();
 }
 
 function getOptionsForCurrentLayout() {
@@ -383,10 +419,13 @@ function createProcessContainer(itemId) {
     const itemData = itemDataById[itemId];
     const processData = processDataById[itemData.processId];
     const processName = processData.name;
+    const outputItemData = itemDataById[itemData.parentItemId];
+    const outputProductData = productDataById[outputItemData.productId];
     const processContainer = document.createElement('div');
     processContainer.dataset.containerId = itemId;
     processContainer.dataset.parentContainerId = itemData.parentItemId;
     processContainer.dataset.processName = processName;
+    processContainer.dataset.processCode = getCompactName(outputProductData.name) + '-' + getCompactName(processName);
     processContainer.classList.add('item-type-process');
     /**
      * inner-container required for styling the outer-container with "filter: drop-shadow",
@@ -877,8 +916,19 @@ function setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById) 
     if (hashEncodedFromItemDataById) {
         hash += `__${hashEncodedFromItemDataById}`;
     }
-    console.log(`--- [setCurrentHash] hash = ${hash}`); //// TEST
+    /**
+     * Pause the handler for "hashchange", before changing the hash
+     * as a result of a user selection / deselection in the current chain.
+     */
+    shouldHandleHashchange = false;
     window.location.hash = `#${hash}`;
+    setTimeout(() => {
+        /**
+         * Resume the handler for "hashchange" with a small delay,
+         * i.e. after the "hashchange" event has fired.
+         */
+        shouldHandleHashchange = true;
+    }, 100);
 }
 
 /**
@@ -979,7 +1029,18 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
                         line.startSocket = leaderLineOptions.startSocket;
                         line.endSocket = leaderLineOptions.endSocket;
                     }
-                    if (itemData.isDisabled) {
+                    line.color = leaderLineColorEnabled;
+                    // Fade connections from disabled items (re: disabled process variant), and to/from faded items
+                    let isFaded = false;
+                    if (productChainItemsContainer.classList.contains('faded')) {
+                        const itemIsActive = getItemContainerById(itemId).classList.contains('active');
+                        // No need to check if the parent item exists, b/c the planned product (i.e. no parent) does NOT have a "line"
+                        const parentItemIsActive = getItemContainerById(itemData.parentItemId).classList.contains('active');
+                        if (!itemIsActive || !parentItemIsActive) {
+                            isFaded = true;
+                        }
+                    }
+                    if (itemData.isDisabled || isFaded) {
                         line.color = leaderLineColorDisabled;
                     }
                     line.position();
@@ -1170,13 +1231,11 @@ function renderItemFromDecodedHash(itemId, itemData) {
  * of the production chain, in this format: "Thin-filmResistor___hashEncodedFromItemDataById".
  */
 function selectPlannedProductHash(hash) {
+    hideAndResetProductsList();
     const [plannedProductCompactName, hashEncodedFromItemDataById] = hash.split('__');
-    /**
-     * Re-render the entire planned chain, from the decoded hash,
-     * only on the initial page load - i.e. "itemDataById" empty object.
-     */
-    if (hashEncodedFromItemDataById && !Object.keys(itemDataById).length) {
-        console.log(`%c--- RENDER the entire planned chain, from the decoded hash`, 'background: blue'); //// TEST
+    // Re-render the entire planned chain on page-load, based on the decoded hash, if any
+    if (hashEncodedFromItemDataById) {
+        console.log(`%c--- RENDER the entire planned chain, based on the decoded hash`, 'background: blue'); //// TEST
         resetEverything();
         /**
          * Decode partial "itemDataById" (without "line" properties), and use it to render the planned chain.
@@ -1189,14 +1248,9 @@ function selectPlannedProductHash(hash) {
         refreshDetailsAndConnections(true);
         return;
     }
-    /**
-     * Select the planned product only on the initial page load,
-     * or when clicking on a different result from the products-list.
-     * This avoids e.g. re-selecting the same product whenever the hash changes,
-     * due to user actions within the production chain of the currently-planned product.
-     */
+    // Select the planned product from the hash
     const productName = productNamesByHash[plannedProductCompactName];
-    if (productName && productName !== selectedItemNameContainer.textContent) {
+    if (productName) {
         console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue'); //// TEST
         const plannedProductId = Number(productDataByName[productName].id);
         selectPlannedProductId(plannedProductId);
@@ -1281,6 +1335,55 @@ on('change', '#toggle-horizontal-layout', el => {
 });
 
 /**
+ * Highlight + activate fullchain (subchain and ancestors), on hover over item / process.
+ * Use "mouseenter" instead of "mouseover", and "mouseleave" instead of "mouseout" (to avoid triggering on children).
+ */
+ on('mouseenter', '[data-container-id]', el => {
+    // Highlight all occurrences of this item / process in the production chain
+    const itemName = el.dataset.itemName;
+    const processCode = el.dataset.processCode;
+    let selector = '';
+    if (itemName) {
+        selector = `[data-item-name='${itemName}']`;
+    }
+    if (processCode) {
+        /**
+         * Selecting based on process-code, instead of process-name,
+         * to highlight only same-name processes that have the same inputs-and-outputs
+         * (as opposed to e.g. "Chlorination", which can have different inputs-and-outputs).
+         */
+        selector = `[data-process-code='${processCode}']`;
+    }
+    productChainItemsContainer.querySelectorAll(selector).forEach(itemContainer => {
+        itemContainer.classList.add('active', 'hover');
+    });
+    // Activate fullchain only for the currently-hovered item
+    const itemId = Number(el.dataset.containerId);
+    const fullchain = getFullchainForItemId(itemId);
+    fullchain.forEach(itemId => {
+        getItemContainerById(itemId).classList.add('active');
+    });
+    productChainItemsContainer.classList.add('faded');
+    refreshConnections();
+    // Show quantities for inputs and outputs, if this is a process
+    if (el.classList.contains('item-type-process')) {
+        const selectorInputsAndOutput = `[data-parent-container-id="${itemId}"], [data-container-id="${el.dataset.parentContainerId}"]`;
+        document.querySelectorAll(selectorInputsAndOutput).forEach(itemWithQty => {
+            itemWithQty.classList.add('show-qty');
+        });
+    }
+});
+on('mouseleave', '[data-container-id]', el => {
+    resetFadedItemsAndConnections();
+    // Hide quantities for inputs and outputs, if this is a process
+    if (el.classList.contains('item-type-process')) {
+        document.querySelectorAll(`.show-qty`).forEach(itemWithQty => {
+            itemWithQty.classList.remove('show-qty');
+        });
+    }
+});
+
+/**
  * Refresh connections whenever a new font has finished loading,
  * b/c the position of items in the production chain changes:
  * - "Jura" during the initial page-load
@@ -1304,6 +1407,9 @@ window.addEventListener('keydown', event => {
 
 // Auto-select product (or encoded planned chain) on #Hash-change (including on e.g. history-back navigation)
 window.addEventListener('hashchange', () => {
+    if (!shouldHandleHashchange) {
+        return;
+    }
     const hashToSelect = getCurrentHash();
     console.log(`--- TRIGGERED hashchange w/ hashToSelect = ${hashToSelect}`); //// TEST
     selectPlannedProductHash(hashToSelect);
@@ -1318,7 +1424,7 @@ if (!hashToPreselect) {
 selectPlannedProductHash(hashToPreselect);
 
 // Debug itemData on hover
-if (true) {
+if (false) {
     on('mouseenter', '[data-container-id]', el => {
         const debugContainer = document.getElementById('debug');
         let debugHtml = '';
@@ -1336,37 +1442,11 @@ if (true) {
 
 //// FIX BUGS
 /*
-- BUG:
-    - load hash #1:
-        http://127.0.0.1:5500/public/production-planner.html#Acetone__bcONwrsJw4BADAPDkMKFVMOYwr4fw7E2w7nCkSEOw68ewqVIcMKRw4IgeEjCnsOqc3XDgcOmworCnXcwX8K+aMOAMhhBccO6w6jCgcOywoIQCsOBw5jCsBHCqH/DkCTDkMOyw5TDl8KwQMOPUAnCjT8eGHnCqhE6GxJxAw==
-    - in the same tab, load hash #2 for the SAME product:
-        http://127.0.0.1:5500/public/production-planner.html#Acetone__bcOOw4kJw4AwDETDkcKGw6Ygw4lbwqxuwrLCkSLCjHrDj8OkEDAhB8KDw6DDsSUPw7XCscK6YHPDhcOOd3DCvsK8a8OAZjDCgsOiw7RWA8OpBSEkwoLCscKwFsOIc8OxQsKRQMO5A8KzQMKdIRMyb2QWbcK+UQjDtSlSYMO5BcO+wqp/VxXCrnpuwqh8wpPDjkQibg==
-    => BUG = only the planned product is rendered, not the entire chain state from hash
-        - fix by migrating to query-params instead of hash?
-        - test fix w/ hash #1 and hash #2 for different products:
-            - #1
-                http://127.0.0.1:5500/public/production-planner.html#Acetone__bcONwrsJw4BADAPDkMKFVMOYwr4fw7E2w7nCkSEOw68ewqVIcMKRw4IgeEjCnsOqc3XDgcOmworCnXcwX8K+aMOAMhhBccO6w6jCgcOywoIQCsOBw5jCsBHCqH/DkCTDkMOyw5TDl8KwQMOPUAnCjT8eGHnCqhE6GxJxAw==
-            - #2
-                http://127.0.0.1:5500/public/production-planner.html#Steel__bcKRSQ7DgzAIRS/DhMOCQMOwdMKVwqrCi8OOwofCiMK4ez9Rw5MSwqnCi0hWHsOvY8Oww4pzwr3DjELDl8OJdMODd8OHw7k1TcKcJAMBYHrDjMKFwp00AwUQGMOSwp3Clh3ClAQYw4ACw7AHLADCiihpw7TCnCfCo3Z2wqrCucOAUGBhDsKnwpZ7w63DpsOQwp/DmXPDjzAbw4zDqjTCssO4w73Cr05cMsKpIAPCkcOGEcOJwoVYEcOKwofCpcK0wpg9wrYiw5gKS27DuEXDmsKANE/CsSc3OSQvwrlmw5M1RsKNZMO7wovDjMKAasK+Tw8Uwo/CscOdw6fCsMKhEcKow4IqIMO9w7DCsiVQwoNVw5zDnw==
-- BUG:
-    - open the products-list and click on any product
-        > BUG = the dropdown remains open (it should auto-hide like in v1 production chains)
-- BUG:
-    - start with Warehouse
-    - select Concrete + Steel Beam + Steel Sheet > hover over Steel Sheet
-        => BUG = weird yellow highlight above the item-name, below the thumb (see Desktop > "Aug-06-2022 01-51-17")
-            ^^ only when thumbs are enabled
+- FIX hover-qtys
 */
 
 //// TO DO PRIO
 /*
-- implement features from v1 production chains:
-    - hover on item => highlight all occurrences of that product / process
-    - hover on process => show qtys on inputs + output
-        - also highlight inputs + output, WITHOUT fading the rest of the chain? (e.g. purple glow on inputs + output)
-            ^^ b/c they may not be obvious in complex chains
-    - NOT implementing:
-        - thumbs (b/c it makes it annoying to hover between products in the chain)
 - add link in the page for sharing the chain state + "click to copy" the URL
     - async generate short link via cutt.ly, making sure to encode "#" => "%23"
         https://cutt.ly/api/api.php?key=29bc819a8e874eac383cabf9f8121494ba0fd&short=http://127.0.0.1:5500/public/production-planner.html%23HeavyTransport
@@ -1375,12 +1455,24 @@ if (true) {
 
 //// TO DO
 /*
+- add icons on hover over products in the chain
+    - "+" / "-" icons, to make it more clear that products can be selected / deselected
+    - "X" icon if the product is disabled (i.e. input for disabled process variant)
+    - [reset] icon if it's the planned product => reset the selections for the current planned product
 - extract common JS from v1+v2 production chains, into a separate script - e.g. "production-common.js"
 - hover over products from either list ("user-selected-products-list" / "shopping-list") => highlight all occurrences in the chain
     - also implement this in the v1 production chains @ hover over required raw materials?
 - rework thumbs for v1+v2 prodction chains:
     - do NOT inject ".thumb" into each item container (also reduces the HTML)
     - insteaad, use a single thumb-container (e.g. toggled in the top-right?), with a curved leader-line towards the hovered item
+    - try to avoid the 404 error for missing images
+        - if all else fails, define a list of all images (dynamic folder parsing?), and use that list to avoid loading a missing image
+    - if NOT reworking thumbs (i.e. distinct thumb injected for each item), then watch out:
+        - BUG:
+            - enable the code from "createProductContainer" that injects a thumb
+            - start with Warehouse
+            - select Concrete + Steel Beam + Steel Sheet > hover over Steel Sheet
+                => BUG = weird yellow highlight above the item-name, below the thumb (see Desktop > "Aug-06-2022 01-51-17")
 - optimize item-containers by removing useless "dataset" properties (if any)
 - estimate surface area required for the currently-selected production chain (i.e. count "active" process-varaints?)
     - when user connected, show which of their asteroids meet the requirements of surface + spectral type (prioritize single asteroids, over combos of asteroids)
@@ -1393,5 +1485,4 @@ if (true) {
             Then, once a user is connected to the tool with their wallet, we can even highlight which of their asteroids (or a combo of asteroids) could fully support that chain - also taking into account the required spectral-types.
             Going even further, a user could select one-or-more asteroids that they want to use for a production chain, and the tool would automatically try to expand the sub-chains, up to the available surface of those asteroid(s). The user would then see how much of that chain they can produce themselves, vs. what else they need to procure from market/alliance etc.
 - add text-inputs for unit-price of each item from the "shopping list" => calculate total = sum(item_qty * unit_price)
-- add link to reset the selections for the current planned product (hover-overlay @ its item in the chain)
 */
