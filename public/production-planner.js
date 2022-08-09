@@ -952,12 +952,12 @@ function setItemDataByIdDecodedFromHash(hashEncodedFromItemDataById) {
                 itemData[decodedKey] = Boolean(itemData[decodedKey]);
             }
         });
-        if (!itemData.processId) {
-            // Restore undefined property as null
+        if (itemData.processId === undefined) {
+            // Restore undefined property as null (keep 0 value as valid "processId")
             itemData.processId = null;
         }
-        if (!itemData.productId) {
-            // Restore undefined property as null
+        if (itemData.productId === undefined) {
+            // Restore undefined property as null (keep 0 value as valid "productId")
             itemData.productId = null;
         }
         itemDataById[itemId] = itemData;
@@ -1336,6 +1336,18 @@ if (true) {
 
 //// FIX BUGS
 /*
+- BUG:
+    - load hash #1:
+        http://127.0.0.1:5500/public/production-planner.html#Acetone__bcONwrsJw4BADAPDkMKFVMOYwr4fw7E2w7nCkSEOw68ewqVIcMKRw4IgeEjCnsOqc3XDgcOmworCnXcwX8K+aMOAMhhBccO6w6jCgcOywoIQCsOBw5jCsBHCqH/DkCTDkMOyw5TDl8KwQMOPUAnCjT8eGHnCqhE6GxJxAw==
+    - in the same tab, load hash #2 for the SAME product:
+        http://127.0.0.1:5500/public/production-planner.html#Acetone__bcOOw4kJw4AwDETDkcKGw6Ygw4lbwqxuwrLCkSLCjHrDj8OkEDAhB8KDw6DDsSUPw7XCscK6YHPDhcOOd3DCvsK8a8OAZjDCgsOiw7RWA8OpBSEkwoLCscKwFsOIc8OxQsKRQMO5A8KzQMKdIRMyb2QWbcK+UQjDtSlSYMO5BcO+wqp/VxXCrnpuwqh8wpPDjkQibg==
+    => BUG = only the planned product is rendered, not the entire chain state from hash
+        - fix by migrating to query-params instead of hash?
+        - test fix w/ hash #1 and hash #2 for different products:
+            - #1
+                http://127.0.0.1:5500/public/production-planner.html#Acetone__bcONwrsJw4BADAPDkMKFVMOYwr4fw7E2w7nCkSEOw68ewqVIcMKRw4IgeEjCnsOqc3XDgcOmworCnXcwX8K+aMOAMhhBccO6w6jCgcOywoIQCsOBw5jCsBHCqH/DkCTDkMOyw5TDl8KwQMOPUAnCjT8eGHnCqhE6GxJxAw==
+            - #2
+                http://127.0.0.1:5500/public/production-planner.html#Steel__bcKRSQ7DgzAIRS/DhMOCQMOwdMKVwqrCi8OOwofCiMK4ez9Rw5MSwqnCi0hWHsOvY8Oww4pzwr3DjELDl8OJdMODd8OHw7k1TcKcJAMBYHrDjMKFwp00AwUQGMOSwp3Clh3ClAQYw4ACw7AHLADCiihpw7TCnCfCo3Z2wqrCucOAUGBhDsKnwpZ7w63DpsOQwp/DmXPDjzAbw4zDqjTCssO4w73Cr05cMsKpIAPCkcOGEcOJwoVYEcOKwofCpcK0wpg9wrYiw5gKS27DuEXDmsKANE/CsSc3OSQvwrlmw5M1RsKNZMO7wovDjMKAasK+Tw8Uwo/CscOdw6fCsMKhEcKow4IqIMO9w7DCsiVQwoNVw5zDnw==
 - BUG:
     - open the products-list and click on any product
         > BUG = the dropdown remains open (it should auto-hide like in v1 production chains)
