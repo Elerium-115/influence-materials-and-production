@@ -928,7 +928,7 @@ function setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById) 
          * i.e. after the "hashchange" event has fired.
          */
         shouldHandleHashchange = true;
-    }, 100);
+    }, 100); // 10 is too low
 }
 
 /**
@@ -1257,6 +1257,37 @@ function selectPlannedProductHash(hash) {
     }
 }
 
+function fetchShareLink() {
+    //// TO DO: EXIT if calling this function again for the same URL (e.g. via global "lastSharedUrl")
+    const shareTextContainer = document.querySelector('#share-link .share-text');
+    shareTextContainer.textContent = 'Generating short link...';
+    const url = location.href;
+    // Encode URL special characters, e.g. "#" => "%23"
+    const urlEncoded = encodeURIComponent(url);
+    const urlCuttly = `https://cutt.ly/api/api.php?key=29bc819a8e874eac383cabf9f8121494ba0fd&short=${urlEncoded}`;
+    //// TO DO: setup my own CORS proxy? + hide my client key there
+    /*
+    https://cors-anywhere.herokuapp.com/
+        Demo          :   https://robwu.nl/cors-anywhere.html
+        Source code   :   https://github.com/Rob--W/cors-anywhere/
+        Documentation :   https://github.com/Rob--W/cors-anywhere/#documentation
+    */
+    const urlCorsProxy = `https://cors-anywhere.herokuapp.com/${urlCuttly}`; //// TEST
+    fetch(urlCorsProxy)
+        .then(response => {
+            console.log(`--- cuttly RESPONSE (via CORS proxy):`, response); //// TEST
+            return response.json();
+        })
+        .then(json => {
+            console.log(`--- cuttly JSON:`, json); //// TEST
+            const urlShort = json.url.shortLink;
+            shareTextContainer.innerHTML = `<a href="${urlShort}" target="_blank">${urlShort}</a>`;
+        })
+        .catch(error => {
+            console.log(`--- cuttly ERROR:`, error); //// TEST
+        });
+}
+
 // Source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
 function on(eventType, selector, callback) {
     productionWrapper.addEventListener(eventType, event => {
@@ -1440,21 +1471,10 @@ if (false) {
     });
 }
 
-//// FIX BUGS
-/*
-- FIX hover-qtys
-*/
-
-//// TO DO PRIO
-/*
-- add link in the page for sharing the chain state + "click to copy" the URL
-    - async generate short link via cutt.ly, making sure to encode "#" => "%23"
-        https://cutt.ly/api/api.php?key=29bc819a8e874eac383cabf9f8121494ba0fd&short=http://127.0.0.1:5500/public/production-planner.html%23HeavyTransport
-=> PUBLIC LAUNCH ^_^
-*/
-
 //// TO DO
 /*
+- FIX hover-qtys
+    => PUBLIC LAUNCH ^_^
 - add icons on hover over products in the chain
     - "+" / "-" icons, to make it more clear that products can be selected / deselected
     - "X" icon if the product is disabled (i.e. input for disabled process variant)
