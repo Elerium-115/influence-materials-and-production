@@ -1499,6 +1499,7 @@ if (false) {
 
 //// TO DO
 /*
+- show planned-product images - where?
 - hover over products from either list ("user-selected-products-list" / "shopping-list") => highlight all occurrences in the chain
     - also implement this in the v1 production chains @ hover over required raw materials?
 - add icons on hover over products in the chain
