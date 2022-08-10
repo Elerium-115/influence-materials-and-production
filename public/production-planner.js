@@ -128,6 +128,7 @@ const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
 const productsListContainer = document.getElementById('products-list');
 const selectedItemNameContainer = document.getElementById('selected-item-name');
+const shareLinkContainer = document.getElementById('share-link');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const shoppingListContainer = document.getElementById('shopping-list');
 const productionChainOverlayContainer = document.getElementById('production-chain-overlay');
@@ -922,6 +923,9 @@ function setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById) 
      */
     shouldHandleHashchange = false;
     window.location.hash = `#${hash}`;
+    // Reset the state of the "Share link" container
+    shareLinkContainer.classList.remove('is-showing-url');
+    shareLinkContainer.querySelector('.share-text').textContent = 'Share link';
     setTimeout(() => {
         /**
          * Resume the handler for "hashchange" with a small delay,
@@ -940,7 +944,7 @@ function getHashEncodedFromItemDataById() {
     if (selectedProductItemIds.length === 1 && document.querySelectorAll('#level_2 .item-type-process').length === 1) {
         return null;
     }
-    // console.log(`--- itemDataById (stringified) = ${JSON.stringify(itemDataById)}`); //// TEST
+    // console.log(`--- RAW itemDataById (stringified) = ${JSON.stringify(itemDataById)}`); //// TEST
     // console.log(`---> length = ${JSON.stringify(itemDataById).length}`); //// TEST
     const itemDataByIdWithoutLines = {};
     for (const [itemId, itemData] of Object.entries(itemDataById)) {
@@ -969,14 +973,14 @@ function getHashEncodedFromItemDataById() {
     }
     // Remove quotes from stringified JSON
     const itemDataByIdMinified = JSON.stringify(itemDataByIdWithoutLines).replace(/"(\w+)":/g, '$1:');
-    // console.log(`--- itemDataByIdMinified = ${itemDataByIdMinified}`); //// TEST
+    // console.log(`--- MINIFIED itemDataByIdMinified = ${itemDataByIdMinified}`); //// TEST
     // console.log(`---> length = ${itemDataByIdMinified.length}`); //// TEST
     /**
      * Deflate the data into the hash.
      * Source: https://github.com/dankogai/js-deflate/blob/master/test/demo.html
      */
     const hashEncodedFromItemDataById = Base64.toBase64(RawDeflate.deflate(Base64.utob(itemDataByIdMinified)));
-    // console.log(`--- ENCODED hashEncodedFromItemDataById = ${hashEncodedFromItemDataById}`); //// TEST
+    // console.log(`--- COMPRESSED hashEncodedFromItemDataById = ${hashEncodedFromItemDataById}`); //// TEST
     // console.log(`---> length = ${hashEncodedFromItemDataById.length}`); //// TEST
     return hashEncodedFromItemDataById;
 }
@@ -1048,7 +1052,7 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
             }
         }
     }
-    console.log(`------------------------------`); //// TEST
+    // console.log(`------------------------------`); //// TEST
 }
 
 function renderSelectedProductsList() {
@@ -1258,33 +1262,50 @@ function selectPlannedProductHash(hash) {
 }
 
 function fetchShareLink() {
-    //// TO DO: EXIT if calling this function again for the same URL (e.g. via global "lastSharedUrl")
-    const shareTextContainer = document.querySelector('#share-link .share-text');
-    shareTextContainer.textContent = 'Generating short link...';
+    if (shareLinkContainer.classList.contains('is-showing-url')) {
+        // A short URL was already generated for the current state of the chain
+        return;
+    }
+    const shareTextContainer = shareLinkContainer.querySelector('.share-text');
+    shareTextContainer.textContent = 'Generating short URL...';
     const url = location.href;
     // Encode URL special characters, e.g. "#" => "%23"
     const urlEncoded = encodeURIComponent(url);
     const urlCuttly = `https://cutt.ly/api/api.php?key=29bc819a8e874eac383cabf9f8121494ba0fd&short=${urlEncoded}`;
-    //// TO DO: setup my own CORS proxy? + hide my client key there
-    /*
-    https://cors-anywhere.herokuapp.com/
-        Demo          :   https://robwu.nl/cors-anywhere.html
-        Source code   :   https://github.com/Rob--W/cors-anywhere/
-        Documentation :   https://github.com/Rob--W/cors-anywhere/#documentation
-    */
-    const urlCorsProxy = `https://cors-anywhere.herokuapp.com/${urlCuttly}`; //// TEST
+    // const urlCorsProxy = `https://cors-anywhere.herokuapp.com/${urlCuttly}`; // works only after manually enabling it @ "/corsdemo"
+    // const urlCorsProxy = `https://crossorigin.me/${urlCuttly}`; // not working
+    // const urlCorsProxy = `https://cors-proxy.htmldriven.com/?url=${urlCuttly}`; // not working
+    // const urlCorsProxy = `https://thingproxy.freeboard.io/fetch/${urlCuttly}`; // not working
+    // const urlCorsProxy = `http://www.whateverorigin.org/get?url=${encodeURIComponent(urlCuttly)}`; // often gives 503 error
+    // const urlCorsProxy = `http://alloworigin.com/get?url=${encodeURIComponent(urlCuttly)}`; // not working / trying to return some JS?!
+    // const urlCorsProxy = `http://gobetween.oklabs.org/${encodeURIComponent(urlCuttly)}`; // not working
+    const urlCorsProxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(urlCuttly)}`; // ok
     fetch(urlCorsProxy)
         .then(response => {
-            console.log(`--- cuttly RESPONSE (via CORS proxy):`, response); //// TEST
-            return response.json();
+            // console.log(`--- cuttly RESPONSE (via CORS proxy):`, response); //// TEST
+            if (response.ok === true) {
+                return response.json();
+            } else {
+                throw 'Cuttly response (via CORS proxy) NOT ok';
+            }
         })
         .then(json => {
-            console.log(`--- cuttly JSON:`, json); //// TEST
+            // console.log(`--- cuttly JSON:`, json); //// TEST
+            if (json.contents) {
+                // Some CORS proxies may stringify the actual JSON into a "contents" property
+                json = JSON.parse(json.contents);
+            }
             const urlShort = json.url.shortLink;
-            shareTextContainer.innerHTML = `<a href="${urlShort}" target="_blank">${urlShort}</a>`;
+            if (urlShort) {
+                shareTextContainer.innerHTML = `<a href="${urlShort}" target="_blank">${urlShort}</a>`;
+                shareTextContainer.parentElement.classList.add('is-showing-url');
+            } else {
+                throw `Error parsing JSON`;
+            }
         })
         .catch(error => {
-            console.log(`--- cuttly ERROR:`, error); //// TEST
+            // console.log(`--- cuttly ERROR:`, error); //// TEST
+            shareTextContainer.textContent = `ERROR`;
         });
 }
 
