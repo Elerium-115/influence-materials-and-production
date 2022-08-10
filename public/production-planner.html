@@ -45,9 +45,16 @@
                 <span class="separator"></span>
                 <label for="toggle-horizontal-layout" class="checked"><input type="checkbox" id="toggle-horizontal-layout" checked>Horizontal Layout</label>
             </div>
-            <h2 id="selected-production-chain">
-                <span id="selected-item-name"></span> - Production Planner
-            </h2>
+            <div id="selected-production-chain">
+                <h2><span id="selected-item-name"></span> - Production Planner</h2>
+                <div id="share-link" onclick="fetchShareLink()">
+                    <span class="share-icon-wrapper">
+                        <!-- Source: https://www.iconfinder.com/icons/352893/share_icon -->
+                        <svg id="share-icon"><g transform="translate(0,-1036.3622)"><path d="m -22.410713,-3.3303571 a 2.3660715,2.3660715 0 1 1 -4.732143,0 2.3660715,2.3660715 0 1 1 4.732143,0 z" style="fill:#000000;fill-opacity:1;stroke:none" transform="matrix(0.84528301,0,0,0.84528301,33.943395,1042.1773)"/><path d="m -22.410713,-3.3303571 a 2.3660715,2.3660715 0 1 1 -4.732143,0 2.3660715,2.3660715 0 1 1 4.732143,0 z" style="fill:#000000;fill-opacity:1;stroke:none" transform="matrix(0.84528301,0,0,0.84528301,33.943395,1052.1773)"/><path d="m -22.410713,-3.3303571 a 2.3660715,2.3660715 0 1 1 -4.732143,0 2.3660715,2.3660715 0 1 1 4.732143,0 z" style="fill:#000000;fill-opacity:1;stroke:none" transform="matrix(0.84528301,0,0,0.84528301,23.943395,1047.1773)"/><path d="M 13,3 3,8 13,13" style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" transform="translate(0,1036.3622)"/></g></svg>
+                    </span>
+                    <span class="share-text">Share link</span>
+                </div>
+            </div>
             <div id="user-selected-products-wrapper" class="hidden-NOT">
                 <div>Intermediate products that you also plan to produce:</div>
                 <div id="user-selected-products-list" class="brand-text">N/A</div>
