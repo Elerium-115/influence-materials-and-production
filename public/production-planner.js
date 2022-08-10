@@ -41,17 +41,17 @@ InfluenceProductionChainsJSON.products.forEach(product => {
 });
 productNamesSorted.sort();
 InfluenceProductionChainsJSON.processes.forEach(process => {
-    // set qty for each input
+    // Set qty for each input
     process.inputs = process.inputs.map(input => {
         input.qty = 2; //// PLACEHOLDER
         return input;
     });
-    // set qty for each output
+    // Set qty for each output
     process.outputs = process.outputs.map(output => {
         output.qty = 1; //// PLACEHOLDER
         return output;
     });
-    // set module parts
+    // Set module parts
     process.parts = null, // future format: [ "Condenser", "Evaporator" ]
     processDataById[process.id] = process;
     process.outputs.forEach(output => {
@@ -516,7 +516,7 @@ function getBaseSpectralsHtmlForRawMaterial(rawMaterialData) {
 function addProcessesAndInputsForOutputItemId(outputItemId) {
     const outputItemData = itemDataById[outputItemId];
     if (outputItemData.productId === null) {
-        console.log(`--- ERROR: addProcessesAndInputsForOutputItemId called for non-product outputItemId ${outputItemId}`); //// TEST
+        console.log(`%c--- ERROR: addProcessesAndInputsForOutputItemId called for non-product outputItemId ${outputItemId}`, 'background: maroon'); //// TEST
         return;
     }
     const processVariantIds = processVariantIdsByProductId[outputItemData.productId] || []; // e.g. "Food" has no process as of 2022-07-21
@@ -552,12 +552,12 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
     }
     if (processVariantItemIds.length === 1) {
         // Single process variant => auto-select it
-        console.log(`--- AUTO-SELECT single process variant`); //// TEST
+        // console.log(`--- AUTO-SELECT single process variant`); //// TEST
         selectProcessItemId(processVariantItemIds[0]);
     }
     if (processVariantItemIds.length > 1) {
         // Multiple process variants => prompt the user to select one
-        console.log(`%c--- PROMPT the user to select one of the processVariantItemIds: [${processVariantItemIds.toString()}]`, 'background: yellow; color: black;'); //// TEST
+        // console.log(`%c--- PROMPT the user to select one of the processVariantItemIds: [${processVariantItemIds.toString()}]`, 'background: yellow; color: black;'); //// TEST
         // Append new process variants waiting selection - i.e. allow multiple products to feature the prompt for selecting a process variant
         itemIdsForProcessVariantsWaitingSelection = itemIdsForProcessVariantsWaitingSelection.concat(processVariantItemIds);
         processVariantItemIds.forEach(itemId => {
@@ -590,7 +590,7 @@ function removeArrayFromItemIdsForProcessVariantsWaitingSelection(itemIdsArray) 
  * - #7 - remove [self] from "itemDataByIds"
  */
 function purgeItemId(itemId) {
-    console.log(`%c--- purgeItemId(${itemId})`, 'background: maroon'); //// TEST
+    // console.log(`%c--- purgeItemId(${itemId})`, 'background: maroon'); //// TEST
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     // #1 - call "purgeItemId" on each child recursively, until no more children left
     getChildContainersOfItemId(itemId).forEach(childContainer => purgeItemId(childContainer.dataset.containerId));
@@ -619,7 +619,6 @@ function purgeItemId(itemId) {
 }
 
 function toggleProductItemId(itemId) {
-    console.log(`------ toggleProductItemId(${itemId})`); //// TEST
     if (itemDataById[itemId].isSelected) {
         deselectProductItemId(itemId);
     } else {
@@ -634,17 +633,17 @@ function toggleProductItemId(itemId) {
  * The production chain is then re-rendered, and the "shopping list" is also updated.
  */
 function selectProductItemId(itemId) {
-    console.log(`--- selectProductItemId(${itemId})`); //// TEST
+    // console.log(`--- selectProductItemId(${itemId})`); //// TEST
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     if (selectedProductItemIds.includes(itemId)) {
-        console.log(`--- WARNING: itemId ${itemId} is already selected`); //// TEST
+        console.log(`%c--- WARNING: itemId ${itemId} is already selected`, 'background: brown'); //// TEST
         return;
     }
     const itemData = itemDataById[itemId];
     const itemContainer = getItemContainerById(itemId);
     // Prevent selection of items from sub-chains of disabled process variants
     if (itemData.isDisabled) {
-        console.log(`--- WARNING: itemId ${itemId} is disabled`); //// TEST
+        // console.log(`--- WARNING: itemId ${itemId} is disabled`); //// TEST
         const parentItemContainer = getItemContainerById(itemData.parentItemId);
         // flash error
         itemContainer.classList.add('flash-error');
@@ -657,7 +656,7 @@ function selectProductItemId(itemId) {
     }
     if (itemContainer.classList.contains('waiting-selection')) {
         // Auto-select this input's parent process variant, if they are both waiting selection.
-        console.log(`--- AUTO-SELECT parent process variant`); //// TEST
+        // console.log(`--- AUTO-SELECT parent process variant`); //// TEST
         selectProcessItemId(itemData.parentItemId);
     }
     selectedProductItemIds.push(itemId);
@@ -671,15 +670,14 @@ function selectProductItemId(itemId) {
  * NOTE: This function should only be called for input-products, NOT for processes.
  */
 function deselectProductItemId(itemId, skipRefreshDetailsAndConnections = false) {
-    console.log(`--- deselectProductItemId(${itemId})`); //// TEST
+    // console.log(`--- deselectProductItemId(${itemId})`); //// TEST
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     if (itemId === 1) {
-        console.log(`--- WARNING: product-itemId ${itemId} is the planned product`); //// TEST
+        // console.log(`--- WARNING: product-itemId ${itemId} is the planned product`); //// TEST
         return;
     }
     if (!selectedProductItemIds.includes(itemId)) {
-        console.log(`--- WARNING: product-itemId ${itemId} is not selected`); //// TEST
-        console.log(`---> selectedProductItemIds:`, selectedProductItemIds); //// TEST DELME
+        console.log(`%c--- WARNING: product-itemId ${itemId} is not selected`, 'background: brown'); //// TEST
         return;
     }
     // Delete the sub-chain of this "itemId", WITHOUT prompting the user to confirm.
@@ -706,7 +704,7 @@ function handleOverlayResponse(isConfirmed = false) {
 }
 
 function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
-    console.log(`--- selectProcessItemId(${itemId}, ${forceSelectProcessVariant})`); //// TEST
+    // console.log(`--- selectProcessItemId(${itemId}, ${forceSelectProcessVariant})`); //// TEST
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     const itemData = itemDataById[itemId];
     /**
@@ -717,7 +715,7 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
      */
     if (!forceSelectProcessVariant) {
         if (itemData.isSelected) {
-            console.log(`--- NOTE: process-itemId ${itemId} is already selected`); //// TEST
+            // console.log(`--- WARNING: process-itemId ${itemId} is already selected`); //// TEST
             return;
         }
         /**
@@ -738,11 +736,11 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
                     overlaySelectedProcessNameContainer.textContent = processDataById[itemData.processId].name;
                     overlaySelectedProcessNameContainer.dataset.pendingProcessItemId = itemId;
                     overlaySelectedProcessNameContainer.dataset.currentlySelectedProcessItemId = processVariantItemId;
-                    console.log(`--- PREPARE pendingProcessItemId = ${itemId}, currentlySelectedProcessItemId = ${processVariantItemId}`); //// TEST
+                    // console.log(`--- PREPARE pendingProcessItemId = ${itemId}, currentlySelectedProcessItemId = ${processVariantItemId}`); //// TEST
                     if (isAlwaysConfirmChecked()) {
                         handleOverlayResponse(true);
                     } else {
-                        console.log(`%c--- PROMPT the user to confirm the deselection of an entire sub-chain`, 'background: yellow; color: black;'); //// TEST
+                        // console.log(`%c--- PROMPT the user to confirm the deselection of an entire sub-chain`, 'background: yellow; color: black;'); //// TEST
                         // Show overlay, then wait for user confirmation - see "handleOverlayResponse"
                         productionChainOverlayContainer.classList.remove('hidden');
                     }
@@ -768,7 +766,6 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
              * The user selected one of the required process variants
              * => remove only this set of process variants from "itemIdsForProcessVariantsWaitingSelection"
              */
-            console.log(`--- DONE selecting a required process variant`);
             removeArrayFromItemIdsForProcessVariantsWaitingSelection(itemData.processVariantItemIds);
         }
         itemData.processVariantItemIds.forEach(processVariantItemId => {
@@ -786,7 +783,7 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
 }
 
 function deselectProcessItemId(itemId, forceDeselectProcessVariant = false) {
-    console.log(`--- deselectProcessItemId(${itemId}, ${forceDeselectProcessVariant})`); //// TEST
+    // console.log(`--- deselectProcessItemId(${itemId}, ${forceDeselectProcessVariant})`); //// TEST
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     const itemData = itemDataById[itemId];
     /**
@@ -796,7 +793,7 @@ function deselectProcessItemId(itemId, forceDeselectProcessVariant = false) {
      */
     if (!forceDeselectProcessVariant) {
         if (!itemData.isSelected) {
-            console.log(`--- WARNING: process-itemId ${itemId} is not selected`); //// TEST
+            console.log(`%c--- WARNING: process-itemId ${itemId} is not selected`, 'background: brown'); //// TEST
             return;
         }
     }
@@ -1140,11 +1137,11 @@ function renderShoppingList(shoppingList) {
 }
 
 function refreshDetailsAndConnections(skipHashEncoding = false) {
-    console.log(`--- refreshDetailsAndConnections`); //// TEST
+    // console.log(`--- refreshDetailsAndConnections`); //// TEST
     const shoppingList = {};
     if (itemIdsForProcessVariantsWaitingSelection.length) {
         // Waiting for user to select a required process variant => NO shopping list
-        console.log(`--- NO shoppingList, waiting for user to select a required process variant`); //// TEST
+        // console.log(`--- NO shoppingList, waiting for user to select a required process variant`); //// TEST
         renderSelectedProductsList(); // DO render the selected products, even if the shopping list will be empty
         renderShoppingList(shoppingList);
         refreshConnections(); // NO logic that changes the DOM should be executed after this
@@ -1194,7 +1191,7 @@ function injectPlannedProductName(plannedProductId) {
  * Selecting a new planned-product will reset everything and re-generate its production chain, "shopping list" etc.
  */
 function selectPlannedProductId(plannedProductId) {
-    console.log(`--- SELECTING planned product ${plannedProductId} (${productDataById[plannedProductId].name})`); //// TEST
+    // console.log(`--- SELECTING planned product ${plannedProductId} (${productDataById[plannedProductId].name})`); //// TEST
     resetEverything();
     injectPlannedProductName(plannedProductId);
     const plannedProductItemData = {
@@ -1239,7 +1236,7 @@ function selectPlannedProductHash(hash) {
     const [plannedProductCompactName, hashEncodedFromItemDataById] = hash.split('__');
     // Re-render the entire planned chain on page-load, based on the decoded hash, if any
     if (hashEncodedFromItemDataById) {
-        console.log(`%c--- RENDER the entire planned chain, based on the decoded hash`, 'background: blue'); //// TEST
+        // console.log(`%c--- RENDER the entire planned chain, based on the decoded hash`, 'background: blue'); //// TEST
         resetEverything();
         /**
          * Decode partial "itemDataById" (without "line" properties), and use it to render the planned chain.
@@ -1255,7 +1252,7 @@ function selectPlannedProductHash(hash) {
     // Select the planned product from the hash
     const productName = productNamesByHash[plannedProductCompactName];
     if (productName) {
-        console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue'); //// TEST
+        // console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue'); //// TEST
         const plannedProductId = Number(productDataByName[productName].id);
         selectPlannedProductId(plannedProductId);
     }
@@ -1419,8 +1416,15 @@ on('change', '#toggle-horizontal-layout', el => {
     refreshConnections();
     // Show quantities for inputs and outputs, if this is a process
     if (el.classList.contains('item-type-process')) {
+        const processQtyByProductId = {};
+        const processData = processDataById[itemDataById[itemId].processId];
+        processData.inputs.concat(processData.outputs).forEach(productQtyData => {
+            processQtyByProductId[productQtyData.productId] = productQtyData.qty;
+        });
         const selectorInputsAndOutput = `[data-parent-container-id="${itemId}"], [data-container-id="${el.dataset.parentContainerId}"]`;
         document.querySelectorAll(selectorInputsAndOutput).forEach(itemWithQty => {
+            const productId = itemDataById[itemWithQty.dataset.containerId].productId;
+            itemWithQty.querySelector('.item-qty').textContent = processQtyByProductId[productId];
             itemWithQty.classList.add('show-qty');
         });
     }
@@ -1431,6 +1435,7 @@ on('mouseleave', '[data-container-id]', el => {
     if (el.classList.contains('item-type-process')) {
         document.querySelectorAll(`.show-qty`).forEach(itemWithQty => {
             itemWithQty.classList.remove('show-qty');
+            itemWithQty.querySelector('.item-qty').textContent = '';
         });
     }
 });
@@ -1463,7 +1468,7 @@ window.addEventListener('hashchange', () => {
         return;
     }
     const hashToSelect = getCurrentHash();
-    console.log(`--- TRIGGERED hashchange w/ hashToSelect = ${hashToSelect}`); //// TEST
+    // console.log(`--- TRIGGERED hashchange w/ hashToSelect = ${hashToSelect}`); //// TEST
     selectPlannedProductHash(hashToSelect);
 });
 
@@ -1494,15 +1499,13 @@ if (false) {
 
 //// TO DO
 /*
-- FIX hover-qtys
-    => PUBLIC LAUNCH ^_^
+- hover over products from either list ("user-selected-products-list" / "shopping-list") => highlight all occurrences in the chain
+    - also implement this in the v1 production chains @ hover over required raw materials?
 - add icons on hover over products in the chain
     - "+" / "-" icons, to make it more clear that products can be selected / deselected
     - "X" icon if the product is disabled (i.e. input for disabled process variant)
     - [reset] icon if it's the planned product => reset the selections for the current planned product
 - extract common JS from v1+v2 production chains, into a separate script - e.g. "production-common.js"
-- hover over products from either list ("user-selected-products-list" / "shopping-list") => highlight all occurrences in the chain
-    - also implement this in the v1 production chains @ hover over required raw materials?
 - rework thumbs for v1+v2 prodction chains:
     - do NOT inject ".thumb" into each item container (also reduces the HTML)
     - insteaad, use a single thumb-container (e.g. toggled in the top-right?), with a curved leader-line towards the hovered item
@@ -1514,7 +1517,6 @@ if (false) {
             - start with Warehouse
             - select Concrete + Steel Beam + Steel Sheet > hover over Steel Sheet
                 => BUG = weird yellow highlight above the item-name, below the thumb (see Desktop > "Aug-06-2022 01-51-17")
-- optimize item-containers by removing useless "dataset" properties (if any)
 - estimate surface area required for the currently-selected production chain (i.e. count "active" process-varaints?)
     - when user connected, show which of their asteroids meet the requirements of surface + spectral type (prioritize single asteroids, over combos of asteroids)
         ^^ implement for both v1 + v2
