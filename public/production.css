@@ -225,10 +225,14 @@
     background: var(--link-hover);
 }
 
-#selected-production-chain #share-link .share-icon {
-    /* SVG */
-    width: 1rem;
-    height: 1rem;
+#selected-production-chain #share-link.is-showing-url .share-icon-wrapper,
+#selected-production-chain #share-link.is-showing-url:hover .share-icon-wrapper {
+    background: var(--brand-text);
+}
+
+#selected-production-chain #share-link.is-showing-url:hover,
+#selected-production-chain #share-link.is-showing-url a {
+    color: var(--brand-text);
 }
 
 /* tier slider */
