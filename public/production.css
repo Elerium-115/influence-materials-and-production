@@ -63,6 +63,11 @@
     padding-bottom: 0.5rem; /* compensate for padding of options */
 }
 
+.missing-image {
+    /* If completely hiding this image, make sure lines are re-rendered ok */
+    opacity: 0.25;
+}
+
 /* products list and filters */
 
 #products-list-wrapper {
@@ -1066,6 +1071,10 @@
     color: var(--default-text);
 }
 
+#user-selected-products-list a {
+    color: inherit;
+}
+
 #user-selected-products-list .qty {
     color: var(--default-text);
 }
@@ -1108,6 +1117,14 @@
     background: rgba(255, 255, 255, 0.05);
 }
 
+#shopping-list .line a {
+    color: inherit;
+}
+
+#shopping-list .line a:hover {
+    color: var(--item-name);
+}
+
 #shopping-list .line .qty::before {
     content: "✕";
     font-size: 0.5rem;
@@ -1118,6 +1135,11 @@
     margin: 0.5rem;
     border: none;
     border-top: 1px solid var(--default-text_faded);
+}
+
+#shopping-list-product-image {
+    width: 100%;
+    margin-top: 1rem;
 }
 
 /* production planner - production chain overlay */

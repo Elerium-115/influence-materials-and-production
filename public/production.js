@@ -291,6 +291,7 @@ const processVariantsContainer = document.getElementById('process-variants');
 const requiredSpectralsContainer = document.getElementById('required-spectrals');
 const requiredTextContainer = document.getElementById('required-text');
 const requiredRawMaterialsContainer = document.getElementById('required-raw-materials');
+const requiredProductImage = document.getElementById('required-product-image');
 
 // let chainType = document.querySelector('input[name="chain-type"][checked]').value; // 'production' / 'derivatives' / 'combined'
 let chainType = 'combined'; // 'production' / 'derivatives' / 'combined'
@@ -362,7 +363,7 @@ itemNamesSorted.forEach(itemName => {
     const listItem = document.createElement('a');
     listItem.href = `#${itemNameCompact}`;
     listItem.textContent = itemName;
-    listItem.classList.add(getItemTypeClass(itemData.itemType));
+    listItem.classList.add(getItemTypeClass(itemData.itemType), 'list-product-name');
     productsListContainer.appendChild(listItem);
 });
 
@@ -513,7 +514,7 @@ function updateRequiredRawMaterialsHtml() {
         const counter = requiredRawMaterials[rawMaterial];
         const percent = 100 * counter / requiredRawMaterialsMaxCounter;
         requiredRawMaterialsHtml += `<li class="${getItemNameSafe(items[rawMaterial].materialType)} active" data-value="${getItemNameSafe(rawMaterial)}">
-                <div class="label"><a href="#${getCompactName(rawMaterial)}">${rawMaterial}</a></div>
+                <div class="label"><a href="#${getCompactName(rawMaterial)}" class="list-product-name">${rawMaterial}</a></div>
                 <div class="counter">${counter}</div>
                 <div class="ratio-cell">
                     <div class="ratio-bar" style="width: ${percent}%;"></div>
@@ -1165,7 +1166,8 @@ async function selectItemByName(itemName) {
     updateTierSlider();
     // default tier-limit such that only the minimal sub-chain is shown for the selected item (i.e. only its direct inputs)
     updateProductionChainForTierLimit(Math.max(0, selectedItemTier - 1));
-    document.getElementById('required-product-image').src = `./img/products/${getItemNameSafe(itemName)}.png`;
+    requiredProductImage.classList.remove('missing-image');
+    requiredProductImage.src = `./img/products/${getItemNameSafe(itemName)}.png`;
     const itemNameCompact = getCompactName(itemName);
     window.location.hash = `#${itemNameCompact}`;
 }
@@ -1378,6 +1380,18 @@ on('mouseleave', '[data-container-id]:not(.derivative-item)', el => {
     }
 });
 
+// Highlight all occurrences of a product, on hover over a product name from any list
+on('mouseenter', '.list-product-name', el => {
+    productChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
+        itemContainer.classList.add('hover');
+    });
+});
+on('mouseleave', '.list-product-name', el => {
+    productChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
+        itemContainer.classList.remove('hover');
+    });
+});
+
 // highlight + activate fullchain (subchain and ancestors), on hover over checked process variant
 on('mouseenter', '.process.checked', el => {
     // fake "mouseenter" on all occurrences of this process in the production chain
@@ -1480,6 +1494,7 @@ TO DO: rework visuals using a third-party tool
         https://www.npmjs.com/package/neo4jd3
 - jsPlumb
     https://jsplumbtoolkit.com/
+        ^^ minimap
 - PlainDraggable
     https://anseki.github.io/plain-draggable/
 - LeaderLine

@@ -131,6 +131,7 @@ const selectedItemNameContainer = document.getElementById('selected-item-name');
 const shareLinkContainer = document.getElementById('share-link');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const shoppingListContainer = document.getElementById('shopping-list');
+const shoppingListProductImage = document.getElementById('shopping-list-product-image');
 const productionChainOverlayContainer = document.getElementById('production-chain-overlay');
 const overlaySelectedProcessNameContainer = document.getElementById('overlay-selected-process-name');
 
@@ -141,7 +142,7 @@ productNamesSorted.forEach(productName => {
     const listItem = document.createElement('a');
     listItem.href = `#${productNameCompact}`;
     listItem.textContent = productName;
-    listItem.classList.add(getItemTypeClass(productDataByName[productName].type));
+    listItem.classList.add(getItemTypeClass(productDataByName[productName].type), 'list-product-name');
     productsListContainer.appendChild(listItem);
 });
 
@@ -185,7 +186,7 @@ function getItemTypeClass(itemType) {
 }
 
 function getItemContainerById(itemContainerId) {
-    return productChainItemsContainer.querySelector(`[data-container-id='${itemContainerId}']`);
+    return productChainItemsContainer.querySelector(`[data-container-id="${itemContainerId}"]`);
 }
 
 // smart-split process-names on multiple lines, to avoid excessive linebreaks
@@ -664,6 +665,15 @@ function selectProductItemId(itemId) {
     itemContainer.classList.add('selected-item');
     addProcessesAndInputsForOutputItemId(itemId);
     refreshDetailsAndConnections();
+    /**
+     * If, after a short delay, the mouse is still over the newly selected item,
+     * trigger "mouseenter" to ensure that its sub-chain does NOT remain "faded".
+     */
+    setTimeout(() => {
+        if (productChainItemsContainer.querySelector(`[data-container-id="${itemId}"]:hover`)) {
+            itemContainer.dispatchEvent(new Event('mouseenter'));
+        }
+    }, 10);
 }
 
 /**
@@ -938,7 +948,7 @@ function setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById) 
  */
 function getHashEncodedFromItemDataById() {
     // Do NOT encode a hash, if the planned product is the only selected product, and it has a single process variant
-    if (selectedProductItemIds.length === 1 && document.querySelectorAll('#level_2 .item-type-process').length === 1) {
+    if (selectedProductItemIds.length === 1 && productChainItemsContainer.querySelectorAll('#level_2 .item-type-process').length === 1) {
         return null;
     }
     // console.log(`--- RAW itemDataById (stringified) = ${JSON.stringify(itemDataById)}`); //// TEST
@@ -1081,7 +1091,7 @@ function renderSelectedProductsList() {
     if (intermediateProductsListArray.length) {
         intermediateProductsListArray.sort(compareListElementsByName);
         intermediateProductsListArray.forEach(intermediateProductData => {
-            intermediateProductsListHtml += `<span>${intermediateProductData.name}`;
+            intermediateProductsListHtml += `<span><a href="#${getCompactName(intermediateProductData.name)}" class="list-product-name">${intermediateProductData.name}</a>`;
             if (intermediateProductData.qty > 1) {
                 intermediateProductsListHtml += `<span class="qty">${intermediateProductData.qty}</span>`;
             }
@@ -1113,7 +1123,10 @@ function renderShoppingList(shoppingList) {
         // console.log(`--- shoppingListArray:`, shoppingListArray); //// TEST
         shoppingListHtml += '<div class="line line-title"><div>Inputs</div><div>Qty</div></div>';
         shoppingListArray.forEach(shoppingData => {
-            shoppingListHtml += `<div class="line"><div>${shoppingData.name}</div><div class="qty">${shoppingData.qty}</div></div>`;
+            shoppingListHtml += `<div class="line">
+                    <div><a href="#${getCompactName(shoppingData.name)}" class="list-product-name">${shoppingData.name}</a></div>
+                    <div class="qty">${shoppingData.qty}</div>
+                </div>`;
         });
         shoppingListHtml += `<hr>`;
     } else {
@@ -1181,10 +1194,12 @@ function refreshDetailsAndConnections(skipHashEncoding = false) {
     }
 }
 
-function injectPlannedProductName(plannedProductId) {
+function injectPlannedProductNameAndImage(plannedProductId) {
     const productName = productDataById[plannedProductId].name;
     productsListWrapper.querySelector('input').placeholder = productName;
     selectedItemNameContainer.textContent = productName;
+    shoppingListProductImage.classList.remove('missing-image');
+    shoppingListProductImage.src = `./img/products/${getItemNameSafe(productName)}.png`;
 }
 
 /**
@@ -1193,7 +1208,7 @@ function injectPlannedProductName(plannedProductId) {
 function selectPlannedProductId(plannedProductId) {
     // console.log(`--- SELECTING planned product ${plannedProductId} (${productDataById[plannedProductId].name})`); //// TEST
     resetEverything();
-    injectPlannedProductName(plannedProductId);
+    injectPlannedProductNameAndImage(plannedProductId);
     const plannedProductItemData = {
         isDisabled: false,
         isSelected: false,
@@ -1209,7 +1224,7 @@ function selectPlannedProductId(plannedProductId) {
 function renderItemFromDecodedHash(itemId, itemData) {
     itemId = Number(itemId);
     if (itemId === 1) {
-        injectPlannedProductName(itemData.productId);
+        injectPlannedProductNameAndImage(itemData.productId);
     }
     /**
      * Inject item container with "overwriteItemId" argument.
@@ -1336,7 +1351,7 @@ on('click', '#products-list-wrapper input', el => {
 
 // Hide-and-reset products-list if the input loses focus
 on('focusout', '#products-list-wrapper input', el => {
-    // prevent hiding the products-list, before triggering a click on a list-item
+    // Prevent hiding the products-list, before triggering a click on a list-item
     if (document.querySelector('#products-list-wrapper:hover')) {
         return;
     }
@@ -1345,7 +1360,7 @@ on('focusout', '#products-list-wrapper input', el => {
 
 // Hide-and-reset products-list on mouse-out
 on('mouseleave', '#products-list-wrapper', el => {
-    // prevent hiding the products-list, if the input has focus
+    // Prevent hiding the products-list, if the input has focus
     if (productsListWrapper.querySelector('input:focus')) {
         return;
     }
@@ -1393,7 +1408,7 @@ on('change', '#toggle-horizontal-layout', el => {
     const processCode = el.dataset.processCode;
     let selector = '';
     if (itemName) {
-        selector = `[data-item-name='${itemName}']`;
+        selector = `[data-item-name="${itemName}"]`;
     }
     if (processCode) {
         /**
@@ -1401,7 +1416,7 @@ on('change', '#toggle-horizontal-layout', el => {
          * to highlight only same-name processes that have the same inputs-and-outputs
          * (as opposed to e.g. "Chlorination", which can have different inputs-and-outputs).
          */
-        selector = `[data-process-code='${processCode}']`;
+        selector = `[data-process-code="${processCode}"]`;
     }
     productChainItemsContainer.querySelectorAll(selector).forEach(itemContainer => {
         itemContainer.classList.add('active', 'hover');
@@ -1422,7 +1437,7 @@ on('change', '#toggle-horizontal-layout', el => {
             processQtyByProductId[productQtyData.productId] = productQtyData.qty;
         });
         const selectorInputsAndOutput = `[data-parent-container-id="${itemId}"], [data-container-id="${el.dataset.parentContainerId}"]`;
-        document.querySelectorAll(selectorInputsAndOutput).forEach(itemWithQty => {
+        productChainItemsContainer.querySelectorAll(selectorInputsAndOutput).forEach(itemWithQty => {
             const productId = itemDataById[itemWithQty.dataset.containerId].productId;
             itemWithQty.querySelector('.item-qty').textContent = processQtyByProductId[productId];
             itemWithQty.classList.add('show-qty');
@@ -1433,11 +1448,23 @@ on('mouseleave', '[data-container-id]', el => {
     resetFadedItemsAndConnections();
     // Hide quantities for inputs and outputs, if this is a process
     if (el.classList.contains('item-type-process')) {
-        document.querySelectorAll(`.show-qty`).forEach(itemWithQty => {
+        productChainItemsContainer.querySelectorAll(`.show-qty`).forEach(itemWithQty => {
             itemWithQty.classList.remove('show-qty');
             itemWithQty.querySelector('.item-qty').textContent = '';
         });
     }
+});
+
+// Highlight all occurrences of a product, on hover over a product name from any list
+on('mouseenter', '.list-product-name', el => {
+    productChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
+        itemContainer.classList.add('hover');
+    });
+});
+on('mouseleave', '.list-product-name', el => {
+    productChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
+        itemContainer.classList.remove('hover');
+    });
 });
 
 /**
@@ -1499,9 +1526,6 @@ if (false) {
 
 //// TO DO
 /*
-- show planned-product images - where?
-- hover over products from either list ("user-selected-products-list" / "shopping-list") => highlight all occurrences in the chain
-    - also implement this in the v1 production chains @ hover over required raw materials?
 - add icons on hover over products in the chain
     - "+" / "-" icons, to make it more clear that products can be selected / deselected
     - "X" icon if the product is disabled (i.e. input for disabled process variant)
@@ -1518,6 +1542,10 @@ if (false) {
             - start with Warehouse
             - select Concrete + Steel Beam + Steel Sheet > hover over Steel Sheet
                 => BUG = weird yellow highlight above the item-name, below the thumb (see Desktop > "Aug-06-2022 01-51-17")
+- minimap?
+    - render a duplicate chain with super-simplified nodes (no interaction), scale it down, and make it a translucent overlay in a corner?
+    - example:
+        https://demo.jsplumbtoolkit.com/paths/
 - estimate surface area required for the currently-selected production chain (i.e. count "active" process-varaints?)
     - when user connected, show which of their asteroids meet the requirements of surface + spectral type (prioritize single asteroids, over combos of asteroids)
         ^^ implement for both v1 + v2
