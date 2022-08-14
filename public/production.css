@@ -1147,8 +1147,9 @@
     position: fixed;
     top: 0;
     right: 0;
+    min-width: 10rem;
+    min-height: 3rem; /* match the height of the "#topbar" links */
     background: var(--dark-bg); /* NOT using "-moz-element" re: only supported in Firefox */
-    padding: 1rem;
     border-bottom-left-radius: 1rem;
     z-index: 1;
     opacity: 0.75;
@@ -1156,6 +1157,23 @@
 
 #minimap-wrapper:hover {
     opacity: 1;
+}
+
+#minimap-toggle {
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    font-size: 0.9rem;
+    line-height: 3rem; /* match the height of the "#topbar" links */
+    cursor: pointer;
+}
+
+#minimap-canvas {
+    margin: 3rem 1rem 1rem 1rem; /* top-margin should match the height of the "#topbar" links */
+}
+
+#minimap-wrapper.minimized #minimap-canvas {
+    display: none;
 }
 
 /* production planner - production chain overlay */

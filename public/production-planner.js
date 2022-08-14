@@ -1342,6 +1342,10 @@ function initializeMinimap() {
     });
 }
 
+function toggleMinimap() {
+    document.getElementById('minimap-wrapper').classList.toggle('minimized');
+}
+
 // Source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
 function on(eventType, selector, callback) {
     productionWrapper.addEventListener(eventType, event => {
@@ -1549,9 +1553,6 @@ if (false) {
 
 //// TO DO
 /*
-- minimap
-    - icon/link to toggle the minimap, in both v1+v2 chains
-    - WHY is the performance degrading with time, until the page is reloaded?
 - add icons on hover over products in the chain
     - "+" / "-" icons, to make it more clear that products can be selected / deselected
     - "X" icon if the product is disabled (i.e. input for disabled process variant)
