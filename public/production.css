@@ -547,7 +547,7 @@
     align-items: center;
     background: var(--brand-text);
     color: black;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     border: 1px solid var(--brand-text);
 }
 .production-planner #production-chain-items.horizontal-layout [data-container-id]:not(.item-type-process, [data-container-id='1'], .selected-item):hover {
@@ -564,15 +564,14 @@
     height: 100%;
 }
 .production-planner #production-chain-items.horizontal-layout [data-container-id]:not(.item-type-process, [data-container-id='1'], .selected-item):hover::before {
-    content: '◀';
+    content: '✚';
     left: 0;
-    font-size: 0.6rem;
     margin-left: calc(-1rem - 1px); /* compensate for width and border */
     border-top-left-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
 }
 .production-planner #production-chain-items.horizontal-layout [data-container-id].selected-item:not(.item-type-process, [data-container-id='1']):hover::before {
-    content: '▶';
+    content: '✖';
     right: 0;
     margin-right: calc(-1rem - 1px); /* compensate for width and border */
     border-top-right-radius: 0.5rem;
@@ -592,14 +591,14 @@
     height: 1rem;
 }
 .production-planner #production-chain-items.vertical-layout [data-container-id]:not(.item-type-process, [data-container-id='1'], .selected-item):hover::before {
-    content: '▼';
+    content: '✚';
     bottom: 0;
     margin-bottom: calc(-1rem - 1px); /* compensate for height and border */
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
 }
 .production-planner #production-chain-items.vertical-layout [data-container-id].selected-item:not(.item-type-process, [data-container-id='1']):hover::before {
-    content: '▲';
+    content: '✖';
     top: 0;
     margin-top: calc(-1rem - 1px); /* compensate for height and border */
     border-top-left-radius: 0.5rem;

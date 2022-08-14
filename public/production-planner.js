@@ -1554,7 +1554,6 @@ if (false) {
 //// TO DO
 /*
 - add icons on hover over products in the chain
-    - "X" icon if the product is disabled (i.e. input for disabled process variant)
     - [reset] icon if it's the planned product => reset the selections for the current planned product
 - extract common JS from v1+v2 production chains, into a separate script - e.g. "production-common.js"
 - rework thumbs for v1+v2 prodction chains:
