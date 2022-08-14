@@ -1193,6 +1193,10 @@ function initializeMinimap() {
     });
 }
 
+function toggleMinimap() {
+    document.getElementById('minimap-wrapper').classList.toggle('minimized');
+}
+
 // update production chain (and text-input), based on tier-limit from range-input
 tierSliderRange.oninput = function() {
     // stop pulse animation on range-slider
