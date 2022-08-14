@@ -1142,6 +1142,22 @@
     margin-top: 1rem;
 }
 
+/* production planner - minimap */
+#minimap-wrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background: var(--dark-bg); /* NOT using "-moz-element" re: only supported in Firefox */
+    padding: 1rem;
+    border-bottom-left-radius: 1rem;
+    z-index: 1;
+    opacity: 0.75;
+}
+
+#minimap-wrapper:hover {
+    opacity: 1;
+}
+
 /* production planner - production chain overlay */
 #production-chain-overlay {
     position: fixed;
