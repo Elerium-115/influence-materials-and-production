@@ -134,7 +134,6 @@ const shoppingListContainer = document.getElementById('shopping-list');
 const shoppingListProductImage = document.getElementById('shopping-list-product-image');
 const productionChainOverlayContainer = document.getElementById('production-chain-overlay');
 const overlaySelectedProcessNameContainer = document.getElementById('overlay-selected-process-name');
-const minimapWrapper = document.getElementById('minimap-wrapper');
 
 // Ppopulate "productNamesByHash" and the products-list
 productNamesSorted.forEach(productName => {
@@ -286,7 +285,7 @@ function hideAndResetProductsList() {
 }
 
 function resetEverything() {
-    refreshConnectionsAndMinimap(false, 'delete'); // delete connections
+    refreshConnections(false, 'delete'); // delete connections
     itemDataById = {};
     selectedProductItemIds = [];
     itemIdsForProcessVariantsWaitingSelection = [];
@@ -298,7 +297,7 @@ function resetFadedItemsAndConnections() {
     productChainItemsContainer.querySelectorAll('.active[data-container-id]').forEach(el => el.classList.remove('active'));
     productChainItemsContainer.querySelectorAll('.hover[data-container-id]').forEach(el => el.classList.remove('hover'));
     productChainItemsContainer.classList.remove('faded');
-    refreshConnectionsAndMinimap();
+    refreshConnections();
 }
 
 function getOptionsForCurrentLayout() {
@@ -1063,35 +1062,6 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
     // console.log(`------------------------------`); //// TEST
 }
 
-function refreshMinimap() {
-    minimapWrapper.innerHTML = '';
-    const minimapCanvas = document.createElement('canvas');
-    minimapWrapper.appendChild(minimapCanvas);
-    // Source: https://larsjung.de/pagemap/
-    pagemap(minimapCanvas, {
-        // viewport: productChainItemsContainer,
-        styles: {
-            'div.item-type-raw-material': 'rgba(55, 55, 55, 1)', // var(--raw-material) + alpha
-            'div.item-type-refined-material': 'rgba(28, 50, 61, 1)', // var(--refined-material) + alpha
-            'div.item-type-component': 'rgba(49, 90, 110, 1)', // var(--component) + alpha
-            'div.item-type-ship-component': 'rgba(49, 90, 110, 1)', // var(--component) + alpha
-            'div.item-type-finished-good': 'rgba(71, 129, 158, 1)', // var(--finished-good) + alpha
-            'div.item-type-process': 'rgba(72, 32, 102, 1)', // var(--process) + alpha
-            'div.selected-item': 'rgba(255, 214, 0, 0.3)', // var(--brand-text) + alpha
-            '.disabled-item:not(.hover, .active), .faded [data-container-id]:not(.active)': 'rgba(0, 0, 0, 0.75)',
-        },
-        // back: '#10131a', // var(--dark-bg)
-        view: 'rgba(63, 128, 234, 0.25)', // var(--link) + alpha
-        drag: 'rgba(101, 153, 238, 0.5)',// var(--link-hover) + alpha
-        interval: null,
-    });
-}
-
-function refreshConnectionsAndMinimap(hasChangedLayout = false, action = 'reposition') {
-    refreshConnections(hasChangedLayout, action);
-    refreshMinimap();
-}
-
 function renderSelectedProductsList() {
     const intermediateProductsList = {};
     selectedProductItemIds.forEach(itemId => {
@@ -1187,7 +1157,7 @@ function refreshDetailsAndConnections(skipHashEncoding = false) {
         // console.log(`--- NO shoppingList, waiting for user to select a required process variant`); //// TEST
         renderSelectedProductsList(); // DO render the selected products, even if the shopping list will be empty
         renderShoppingList(shoppingList);
-        refreshConnectionsAndMinimap();
+        refreshConnections();
         return;
     }
     for (const [itemId, itemData] of Object.entries(itemDataById)) {
@@ -1209,7 +1179,7 @@ function refreshDetailsAndConnections(skipHashEncoding = false) {
     }
     renderSelectedProductsList();
     renderShoppingList(shoppingList);
-    refreshConnectionsAndMinimap();
+    refreshConnections();
     //// TO DO: avoid executing the rest of this function, if the chain state has not changed since the last execution
     //// -- e.g. when toggling between horizontal / vertical layout
     if (!skipHashEncoding) {
@@ -1351,6 +1321,27 @@ function fetchShareLink() {
         });
 }
 
+function initializeMinimap() {
+    // Source: https://larsjung.de/pagemap/
+    pagemap(document.getElementById('minimap-canvas'), {
+        // viewport: productChainItemsContainer,
+        styles: {
+            'div.item-type-raw-material': 'rgba(55, 55, 55, 1)', // var(--raw-material) + alpha
+            'div.item-type-refined-material': 'rgba(28, 50, 61, 1)', // var(--refined-material) + alpha
+            'div.item-type-component': 'rgba(49, 90, 110, 1)', // var(--component) + alpha
+            'div.item-type-ship-component': 'rgba(49, 90, 110, 1)', // var(--component) + alpha
+            'div.item-type-finished-good': 'rgba(71, 129, 158, 1)', // var(--finished-good) + alpha
+            'div.item-type-process': 'rgba(72, 32, 102, 1)', // var(--process) + alpha
+            'div.selected-item': 'rgba(255, 214, 0, 0.3)', // var(--brand-text) + alpha
+            '.disabled-item:not(.hover, .active), .faded [data-container-id]:not(.active)': 'rgba(0, 0, 0, 0.75)',
+        },
+        // back: '#10131a', // var(--dark-bg)
+        view: 'rgba(63, 128, 234, 0.25)', // var(--link) + alpha
+        drag: 'rgba(101, 153, 238, 0.5)',// var(--link-hover) + alpha
+        interval: 50,
+    });
+}
+
 // Source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
 function on(eventType, selector, callback) {
     productionWrapper.addEventListener(eventType, event => {
@@ -1425,7 +1416,7 @@ on('change', '#toggle-horizontal-layout', el => {
         productChainItemsContainer.classList.remove('horizontal-layout');
         productChainItemsContainer.classList.add('vertical-layout');
     }
-    refreshConnectionsAndMinimap(true);
+    refreshConnections(true);
 });
 
 /**
@@ -1458,7 +1449,7 @@ on('change', '#toggle-horizontal-layout', el => {
         getItemContainerById(itemId).classList.add('active');
     });
     productChainItemsContainer.classList.add('faded');
-    refreshConnectionsAndMinimap();
+    refreshConnections();
     // Show quantities for inputs and outputs, if this is a process
     if (el.classList.contains('item-type-process')) {
         const processQtyByProductId = {};
@@ -1504,7 +1495,7 @@ on('mouseleave', '.list-product-name', el => {
  * - "Jura-Bold" when selecting a product with process variants
  */
 document.fonts.onloadingdone = function(fontFaceSetEvent) {
-    refreshConnectionsAndMinimap();
+    refreshConnections();
 };
 
 window.addEventListener('keydown', event => {
@@ -1537,6 +1528,8 @@ if (!hashToPreselect) {
 }
 selectPlannedProductHash(hashToPreselect);
 
+initializeMinimap();
+
 // Debug itemData on hover
 if (false) {
     on('mouseenter', '[data-container-id]', el => {
@@ -1556,6 +1549,9 @@ if (false) {
 
 //// TO DO
 /*
+- minimap
+    - icon/link to toggle the minimap, in both v1+v2 chains
+    - WHY is the performance degrading with time, until the page is reloaded?
 - add icons on hover over products in the chain
     - "+" / "-" icons, to make it more clear that products can be selected / deselected
     - "X" icon if the product is disabled (i.e. input for disabled process variant)
