@@ -493,6 +493,7 @@
     border-color: var(--brand-text);
 }
 
+/* hover over products marked as ".tier-limit-highlight" */
 #production-chain-items .tier-limit-highlight[data-container-id]::before {
     position: absolute;
     display: flex;
@@ -500,15 +501,13 @@
     align-items: center;
     background: var(--tier-limit-highlight);
     color: black;
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     border: 1px solid var(--item-name);
 }
-
 #production-chain-items.horizontal-layout .tier-limit-highlight[data-container-id]:hover {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
-
 #production-chain-items.horizontal-layout .tier-limit-highlight[data-container-id]:hover::before {
     content: '►';
     left: 0;
@@ -522,12 +521,10 @@
     /* filter: drop-shadow(-0.25rem 0 0.25rem var(--tier-limit-highlight)); */
     opacity: 0.6;
 }
-
 #production-chain-items.vertical-layout .tier-limit-highlight[data-container-id]:hover {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
-
 #production-chain-items.vertical-layout .tier-limit-highlight[data-container-id]:hover::before {
     content: '▲';
     bottom: 0;
@@ -540,6 +537,72 @@
     border-bottom-right-radius: 0.5rem;
     /* filter: drop-shadow(0 0.25rem 0.25rem var(--tier-limit-highlight)); */
     opacity: 0.5;
+}
+
+/* hover over products in the production planner */
+.production-planner #production-chain-items [data-container-id]:not(.item-type-process, [data-container-id='1'])::before {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--brand-text);
+    color: black;
+    font-size: 0.7rem;
+    border: 1px solid var(--brand-text);
+}
+.production-planner #production-chain-items.horizontal-layout [data-container-id]:not(.item-type-process, [data-container-id='1'], .selected-item):hover {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.production-planner #production-chain-items.horizontal-layout [data-container-id].selected-item:not(.item-type-process, [data-container-id='1']):hover {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.production-planner #production-chain-items.horizontal-layout [data-container-id]:not(.item-type-process, [data-container-id='1']):hover::before {
+    top: -1px;
+    width: 1rem;
+    height: 100%;
+}
+.production-planner #production-chain-items.horizontal-layout [data-container-id]:not(.item-type-process, [data-container-id='1'], .selected-item):hover::before {
+    content: '◄';
+    left: 0;
+    margin-left: calc(-1rem - 1px); /* compensate for width and border */
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+.production-planner #production-chain-items.horizontal-layout [data-container-id].selected-item:not(.item-type-process, [data-container-id='1']):hover::before {
+    content: '►';
+    right: 0;
+    margin-right: calc(-1rem - 1px); /* compensate for width and border */
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+.production-planner #production-chain-items.vertical-layout [data-container-id]:not(.item-type-process, [data-container-id='1'], .selected-item):hover {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.production-planner #production-chain-items.vertical-layout [data-container-id].selected-item:not(.item-type-process, [data-container-id='1']):hover {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.production-planner #production-chain-items.vertical-layout [data-container-id]:not(.item-type-process, [data-container-id='1']):hover::before {
+    left: -1px;
+    width: 100%;
+    height: 1rem;
+}
+.production-planner #production-chain-items.vertical-layout [data-container-id]:not(.item-type-process, [data-container-id='1'], .selected-item):hover::before {
+    content: '▼';
+    bottom: 0;
+    margin-bottom: calc(-1rem - 1px); /* compensate for height and border */
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+.production-planner #production-chain-items.vertical-layout [data-container-id].selected-item:not(.item-type-process, [data-container-id='1']):hover::before {
+    content: '▲';
+    top: 0;
+    margin-top: calc(-1rem - 1px); /* compensate for height and border */
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
 }
 
 #production-chain-items [data-container-id] .item-name {
@@ -1150,6 +1213,7 @@
     min-width: 10rem;
     min-height: 3rem; /* match the height of the "#topbar" links */
     background: var(--dark-bg); /* NOT using "-moz-element" re: only supported in Firefox */
+    padding: 0 1rem;
     border-bottom-left-radius: 1rem;
     z-index: 1;
     opacity: 0.75;
@@ -1163,13 +1227,28 @@
     position: absolute;
     top: 0;
     right: 1rem;
+    color: var(--link);
     font-size: 0.9rem;
     line-height: 3rem; /* match the height of the "#topbar" links */
     cursor: pointer;
 }
 
+#minimap-toggle:hover {
+    color: var(--link-hover);
+}
+
+#minimap-toggle::before {
+    content: '▲';
+    margin-right: 0.25rem;
+}
+
+#minimap-wrapper.minimized #minimap-toggle::before {
+    content: '▼';
+}
+
 #minimap-canvas {
-    margin: 3rem 1rem 1rem 1rem; /* top-margin should match the height of the "#topbar" links */
+    display: block;
+    margin: 3rem auto 1rem auto; /* top-margin should match the height of the "#topbar" links */
 }
 
 #minimap-wrapper.minimized #minimap-canvas {
