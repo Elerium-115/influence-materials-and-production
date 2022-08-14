@@ -1172,6 +1172,27 @@ async function selectItemByName(itemName) {
     window.location.hash = `#${itemNameCompact}`;
 }
 
+function initializeMinimap() {
+    // Source: https://larsjung.de/pagemap/
+    pagemap(document.getElementById('minimap-canvas'), {
+        // viewport: productChainItemsContainer,
+        styles: {
+            'div.item-type-raw-material': 'rgba(55, 55, 55, 1)', // var(--raw-material) + alpha
+            'div.item-type-refined-material': 'rgba(28, 50, 61, 1)', // var(--refined-material) + alpha
+            'div.item-type-component': 'rgba(49, 90, 110, 1)', // var(--component) + alpha
+            'div.item-type-ship-component': 'rgba(49, 90, 110, 1)', // var(--component) + alpha
+            'div.item-type-finished-good': 'rgba(71, 129, 158, 1)', // var(--finished-good) + alpha
+            'div.item-type-process': 'rgba(72, 32, 102, 1)', // var(--process) + alpha
+            'div.selected-item': 'rgba(255, 214, 0, 0.3)', // var(--brand-text) + alpha
+            '.disabled-item:not(.hover, .active), .faded [data-container-id]:not(.active)': 'rgba(0, 0, 0, 0.75)',
+        },
+        // back: '#10131a', // var(--dark-bg)
+        view: 'rgba(63, 128, 234, 0.25)', // var(--link) + alpha
+        drag: 'rgba(101, 153, 238, 0.5)',// var(--link-hover) + alpha
+        interval: 50,
+    });
+}
+
 // update production chain (and text-input), based on tier-limit from range-input
 tierSliderRange.oninput = function() {
     // stop pulse animation on range-slider
@@ -1443,7 +1464,10 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
     hashToPreselect = 'Steel';
 }
 // pre-select via small delay, to avoid buggy connections between items
-setTimeout(() => selectItemByName(itemNamesByHash[hashToPreselect]), 10);
+setTimeout(() => {
+    selectItemByName(itemNamesByHash[hashToPreselect]);
+    initializeMinimap();
+}, 10);
 
 //// TO DO: IMPLEMENT "LeaderLine" in v1 chains, from v2 chains
 ////        - TEST performance vs. old system
