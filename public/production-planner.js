@@ -683,7 +683,7 @@ function deselectProductItemId(itemId, skipRefreshDetailsAndConnections = false)
     // console.log(`--- deselectProductItemId(${itemId})`); //// TEST
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     if (itemId === 1) {
-        // console.log(`--- WARNING: product-itemId ${itemId} is the planned product`); //// TEST
+        resetPlannedProduct();
         return;
     }
     if (!selectedProductItemIds.includes(itemId)) {
@@ -1221,6 +1221,11 @@ function selectPlannedProductId(plannedProductId) {
     selectProductItemId(plannedProductItemId);
 }
 
+function resetPlannedProduct() {
+    getItemContainerById(1).dispatchEvent(new Event('mouseleave'));
+    selectPlannedProductId(itemDataById[1].productId);
+}
+
 function renderItemFromDecodedHash(itemId, itemData) {
     itemId = Number(itemId);
     if (itemId === 1) {
@@ -1496,7 +1501,7 @@ on('mouseleave', '.list-product-name', el => {
  * Refresh connections whenever a new font has finished loading,
  * b/c the position of items in the production chain changes:
  * - "Jura" during the initial page-load
- * - "Jura-Bold" when selecting a product with process variants
+ * - "Jura-Bold" when selecting a product with process variants (if that style is enabled)
  */
 document.fonts.onloadingdone = function(fontFaceSetEvent) {
     refreshConnections();
@@ -1553,8 +1558,6 @@ if (false) {
 
 //// TO DO
 /*
-- add icons on hover over products in the chain
-    - [reset] icon if it's the planned product => reset the selections for the current planned product
 - extract common JS from v1+v2 production chains, into a separate script - e.g. "production-common.js"
 - rework thumbs for v1+v2 prodction chains:
     - do NOT inject ".thumb" into each item container (also reduces the HTML)
