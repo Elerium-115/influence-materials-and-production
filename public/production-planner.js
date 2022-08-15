@@ -1570,7 +1570,6 @@ if (false) {
             - start with Warehouse
             - select Concrete + Steel Beam + Steel Sheet > hover over Steel Sheet
                 => BUG = weird yellow highlight above the item-name, below the thumb (see Desktop > "Aug-06-2022 01-51-17")
-
 - estimate surface area required for the currently-selected production chain (i.e. count "active" process-varaints?)
     - when user connected, show which of their asteroids meet the requirements of surface + spectral type (prioritize single asteroids, over combos of asteroids)
         ^^ implement for both v1 + v2
