@@ -255,6 +255,11 @@ function getFullchainForItemId(itemId) {
     return getAllAncestorsOfItemId(itemId).concat(itemId).concat(getAllDescendantsOfItemId(itemId));
 }
 
+function getBuildingNameForProcessId(processId) {
+    const processData = processDataById[processId];
+    return buildingDataById[processData.buildingId].name;
+}
+
 function isAlwaysConfirmChecked() {
     return document.getElementById('toggle-always-confirm').checked;
 }
@@ -446,7 +451,7 @@ function createProcessContainer(itemId) {
     processContainer.appendChild(processTooltipWrapper);
     // inject building and process-module parts into tooltip
     let processTooltipHtml = '';
-    processTooltipHtml += `<div class="building">${buildingDataById[processData.buildingId].name}</div>`;
+    processTooltipHtml += `<div class="building">${getBuildingNameForProcessId(itemData.processId)}</div>`;
     // show process-module parts only for actual buildings, not for Empty Lot (buildingId '0')
     if (Number(processData.buildingId) !== 0) {
         processTooltipHtml += '<ul>';
@@ -1082,10 +1087,7 @@ function renderSelectedProductsList() {
     });
     // console.log(`--- intermediateProductsList:`, intermediateProductsList); //// TEST
     // Convert "intermediateProductsList" to sorted array
-    const intermediateProductsListArray = [];
-    for (productId in intermediateProductsList) {
-        intermediateProductsListArray.push(intermediateProductsList[productId]);
-    }
+    const intermediateProductsListArray = Object.values(intermediateProductsList);
     // console.log(`--- intermediateProductsListArray:`, intermediateProductsListArray); //// TEST
     let intermediateProductsListHtml = '';
     if (intermediateProductsListArray.length) {
@@ -1114,10 +1116,7 @@ function renderShoppingList(shoppingList) {
     // #1 - required inputs
     let shoppingListHtml = '';
     // Convert "shoppingList" to sorted array
-    const shoppingListArray = [];
-    for (productId in shoppingList) {
-        shoppingListArray.push(shoppingList[productId]);
-    }
+    const shoppingListArray = Object.values(shoppingList);
     if (shoppingListArray.length) {
         shoppingListArray.sort(compareListElementsByName);
         // console.log(`--- shoppingListArray:`, shoppingListArray); //// TEST
@@ -1133,9 +1132,30 @@ function renderShoppingList(shoppingList) {
         // The planned product is a raw material or has no process (e.g. Food as of Jul 2022) => NO inputs
     }
     // #2 - required buildings
-    //// TO BE IMPLEMENTED
     shoppingListHtml += `<div class="line line-title">Buildings</div>`; // including extractors and empty lots
-    shoppingListHtml += `<div class="line">[redacted]</div>`;
+    const buildingsList = {};
+    for (const itemData of Object.values(itemDataById)) {
+        const processId = itemData.processId;
+        if (processId !== null && itemData.isSelected) {
+            const buildingName = getBuildingNameForProcessId(processId);
+            const buildingData = {name: buildingName, qty: 1};
+            if (!buildingsList[buildingName]) {
+                buildingsList[buildingName] = buildingData;
+            } else {
+                buildingsList[buildingName].qty++;
+            }
+        }
+    }
+    // Convert "buildingsList" to sorted array
+    const buildingsListArray = Object.values(buildingsList);
+    buildingsListArray.sort(compareListElementsByName);
+    buildingsListArray.forEach(buildingData => {
+        const hrefHtml = buildingData.name === 'Empty Lot' ? '' : `href="#${getCompactName(buildingData.name)}"`;
+        shoppingListHtml += `<div class="line">
+                <div><a ${hrefHtml} class="list-product-name">${buildingData.name}</a></div>
+                <div class="qty">${buildingData.qty}</div>
+            </div>`;
+    });
     shoppingListHtml += `<hr>`;
     // #3 - required process modules, for the required buildings
     //// TO BE IMPLEMENTED
@@ -1558,6 +1578,7 @@ if (false) {
 
 //// TO DO
 /*
+- add link in v1 chains for "incomplete" chains, recommending to view it in the v2 planner
 - extract common JS from v1+v2 production chains, into a separate script - e.g. "production-common.js"
 - rework thumbs for v1+v2 prodction chains:
     - do NOT inject ".thumb" into each item container (also reduces the HTML)
