@@ -223,7 +223,7 @@ function getItemNameWithSmartLinebreaks(itemName) {
 function getChildContainersOfItemId(itemId, onlySelectedContainers = false) {
     let selector = `[data-parent-container-id="${itemId}"]`;
     if (onlySelectedContainers) {
-        selector = `.selected-item${selector}`;
+        selector = `.selected-item${selector}, .selected-process${selector}`;
     }
     return productChainItemsContainer.querySelectorAll(selector);
 }
@@ -452,7 +452,7 @@ function createProcessContainer(itemId) {
     // inject building and process-module parts into tooltip
     let processTooltipHtml = '';
     processTooltipHtml += `<div class="building">${getBuildingNameForProcessId(itemData.processId)}</div>`;
-    // show process-module parts only for actual buildings, not for Empty Lot (buildingId '0')
+    // show process-module parts only for actual buildings, not for "Empty Lot" (buildingId "0")
     if (Number(processData.buildingId) !== 0) {
         processTooltipHtml += '<ul>';
         const parts = processData.parts || ['[redacted]', '[redacted]'];
@@ -500,7 +500,7 @@ function getBaseSpectralsHtmlForRawMaterial(rawMaterialData) {
     if (itemData.isDisabled) {
         itemContainer.classList.add('disabled-item');
     }
-    if (itemData.productId) {
+    if (itemData.productId !== null) {
         const productData = productDataById[itemData.productId];
         if (productData.type === 'Raw Material') {
             itemContainer.innerHTML += getBaseSpectralsHtmlForRawMaterial(rawMaterialDataByName[productData.name]);
@@ -1138,18 +1138,21 @@ function renderShoppingList(shoppingList) {
         const processId = itemData.processId;
         if (processId !== null && itemData.isSelected) {
             const buildingName = getBuildingNameForProcessId(processId);
-            const buildingData = {name: buildingName, qty: 1};
+            const buildingData = {
+                name: buildingName,
+                qty: 0,
+            };
             if (!buildingsList[buildingName]) {
                 buildingsList[buildingName] = buildingData;
-            } else {
-                buildingsList[buildingName].qty++;
             }
+            buildingsList[buildingName].qty++;
         }
     }
     // Convert "buildingsList" to sorted array
     const buildingsListArray = Object.values(buildingsList);
     buildingsListArray.sort(compareListElementsByName);
     buildingsListArray.forEach(buildingData => {
+        // Do not link "#EmptyLot" (not a product)
         const hrefHtml = buildingData.name === 'Empty Lot' ? '' : `href="#${getCompactName(buildingData.name)}"`;
         shoppingListHtml += `<div class="line">
                 <div><a ${hrefHtml} class="list-product-name">${buildingData.name}</a></div>
@@ -1163,9 +1166,60 @@ function renderShoppingList(shoppingList) {
     shoppingListHtml += `<div class="line">[redacted]</div>`;
     shoppingListHtml += `<hr>`;
     // #4 - required spectral types, only if the user selected to produce at least one raw material
-    //// TO BE IMPLEMENTED
     shoppingListHtml += `<div class="line line-title">Spectral Types</div>`;
-    shoppingListHtml += `<div class="line">[redacted]</div>`;
+    const spectralTypesList = {};
+    const optionalSpectrals = [];
+    productChainItemsContainer.querySelectorAll(`.item-type-raw-material.selected-item`).forEach(itemContainer => {
+        const selectedProcessContainer = getChildContainersOfItemId(itemContainer.dataset.containerId, true)[0];
+        /**
+         * Skip this selected raw material, if it has no selected process
+         * (i.e. user switching between process variants - e.g. for "Hydrogen")
+         */
+        if (!selectedProcessContainer) {
+            return;
+        }
+        /**
+         * Skip this selected raw material, if its selected process has inputs
+         * (i.e. refined from another raw material - e.g. "Hydrogen" from "Water")
+         */
+        const itemData = itemDataById[selectedProcessContainer.dataset.containerId];
+        if (processDataById[itemData.processId].inputs.length) {
+            return;
+        }
+        const baseSpectrals = rawMaterialDataByName[itemContainer.dataset.itemName].baseSpectrals;
+        baseSpectrals.forEach(baseSpectral => {
+            const spectralTypeData = {
+                isOptional: true,
+                name: baseSpectral,
+            };
+            if (!spectralTypesList[baseSpectral]) {
+                spectralTypesList[baseSpectral] = spectralTypeData;
+            }
+            if (baseSpectrals.length === 1) {
+                spectralTypesList[baseSpectral].isOptional = false;
+            }
+        });
+    });
+    const spectralTypesListArray = Object.values(spectralTypesList);
+    spectralTypesListArray.sort(compareListElementsByName);
+    shoppingListHtml += `<div class="line line-spectral-types">`;
+    spectralTypesListArray.forEach(spectralTypeData => {
+        const baseSpectral = spectralTypeData.name;
+        let isOptionalClass = '';
+        if (spectralTypeData.isOptional) {
+            isOptionalClass = 'is-optional';
+            optionalSpectrals.push(baseSpectral);
+        }
+        shoppingListHtml += `<span class="spectral-type type-${baseSpectral} ${isOptionalClass}">${baseSpectral}</span>`;
+    });
+    shoppingListHtml += `</div>`;
+    if (optionalSpectrals.length) {
+        let optionalSpectralsText = `Types ${optionalSpectrals.join(', ')} are optional`;
+        if (optionalSpectrals.length === 1) {
+            optionalSpectralsText = `Type ${optionalSpectrals[0]} is optional`;
+        }
+        shoppingListHtml += `<div class="line line-spectral-types">${optionalSpectralsText}</div>`;
+    }
     shoppingListContainer.innerHTML = shoppingListHtml;
 }
 
@@ -1575,6 +1629,9 @@ if (false) {
         debugContainer.classList.remove('hidden');
     });
 }
+
+//// BUG when selecting the other process for Hydrogen:
+//// http://127.0.0.1:5500/public/production-planner.html#Propylene__bcOOOw7Dg0AIBMOQC1EswrDDv8KrRCnDsj/ChMOFw50zOCnDsMOKwoXCpcKVH8ODwrDDscOcbjPDkX0yPcOwPcOxw77DjMKSwowkwoIAwpheMwM0woICBAlRwqN8CsOVwqhEw4jCgMKMVQ41QgEUJMOYwqjCncO9H0bCrMOrJsO1TcOow6bCvEZYwpHDgcK5fGjCry5ew69SV2kAwq/DmcO7GcKQw75QAUzDr3nDoUbDnMKvGMOpa8OWR0QOMyPDjjRvw67Cv8KbJEXDqS5jwr/DicK+
 
 //// TO DO
 /*
