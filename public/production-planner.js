@@ -120,16 +120,10 @@ let selectedProductItemIds = [];
  */
 let itemIdsForProcessVariantsWaitingSelection = [];
 
-let maxLevel = 0;
-
 let shouldHandleHashchange = true;
 
-const productionWrapper = document.getElementById('production-wrapper');
-const productsListWrapper = document.getElementById('products-list-wrapper');
-const productsListContainer = document.getElementById('products-list');
 const selectedItemNameContainer = document.getElementById('selected-item-name');
 const shareLinkContainer = document.getElementById('share-link');
-const productChainItemsContainer = document.getElementById('production-chain-items');
 const shoppingListContainer = document.getElementById('shopping-list');
 const shoppingListProductImage = document.getElementById('shopping-list-product-image');
 const productionChainOverlayContainer = document.getElementById('production-chain-overlay');
@@ -147,17 +141,6 @@ productNamesSorted.forEach(productName => {
 });
 
 /**
- * Fix for Firefox bug re: "toggle-horizontal-layout" input
- * keeping the "checked" PROPERTY cached after a SOFT-reload.
- * e.g. if deselecting this input, and then doing a soft-reload,
- * the input will keep its "checked" property = false,
- * even though the DOM elements are marked as checked.
- */
-const toggleHorizontalLayoutInput = document.getElementById('toggle-horizontal-layout');
-toggleHorizontalLayoutInput.checked = toggleHorizontalLayoutInput.parentElement.classList.contains('checked');
-let horizontalLayout = toggleHorizontalLayoutInput.checked; // true vs. false
-
-/**
  * Leader Line settings
  * https://anseki.github.io/leader-line/
  */
@@ -169,56 +152,6 @@ const leaderLineOptionsDefault = {
     color: leaderLineColorEnabled,
     endPlug: 'behind',
 };
-
-// e.g. "Thin-film Resistor" => "Thin-filmResistor"
-function getCompactName(name) {
-    return name.replace(/\s+/g, '');
-}
-
-// e.g. "Thin-film Resistor" => "thin-film-resistor"
-function getItemNameSafe(itemName) {
-    return itemName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
-}
-
-// e.g. "Raw Material" => "item-type-raw-material"
-function getItemTypeClass(itemType) {
-    return `item-type-${getItemNameSafe(itemType)}`;
-}
-
-function getItemContainerById(itemContainerId) {
-    return productChainItemsContainer.querySelector(`[data-container-id="${itemContainerId}"]`);
-}
-
-// smart-split process-names on multiple lines, to avoid excessive linebreaks
-function getItemNameWithSmartLinebreaks(itemName) {
-    let nameWithLinebreaks = '';
-    let charsSinceLinebreak = 0;
-    const words = itemName.split(/\s+/);
-    for (let i = 0; i < words.length; i++) {
-        const thisWord = words[i];
-        nameWithLinebreaks += thisWord;
-        charsSinceLinebreak += thisWord.length;
-        const nextWord = words[i+1];
-        if (!nextWord) {
-            break;
-        }
-        /**
-         * do NOT split pairs of words that have a combined length of max. 12 chars
-         * e.g. "Hot Acid Leaching and Crystallization" => "Hot Acid<br>Leaching and<br>Crystallization"
-         */
-        if (charsSinceLinebreak + 1 + nextWord.length <= 14) {
-            // do not add linebreak between short words
-            nameWithLinebreaks += ' ';
-            charsSinceLinebreak += 1;
-        }
-        else {
-            // add linebreak between long words
-            nameWithLinebreaks += '<br>';
-            charsSinceLinebreak = 0;
-        }
-    }
-    return nameWithLinebreaks;
-}
 
 function getChildContainersOfItemId(itemId, onlySelectedContainers = false) {
     let selector = `[data-parent-container-id="${itemId}"]`;
@@ -264,31 +197,6 @@ function isAlwaysConfirmChecked() {
     return document.getElementById('toggle-always-confirm').checked;
 }
 
-function filterProductsList() {
-    document.querySelectorAll('#filters-list .option').forEach(elFilter => {
-        // e.g. "filter-raw-materials" => "item-type-raw-material"
-        const itemTypeClass = 'item-type-' + elFilter.id.replace(/^filter-(.+)s$/, '$1');
-        productsListContainer.querySelectorAll(`.${itemTypeClass}`).forEach(elListItem => {
-            if (elFilter.classList.contains('checked')) {
-                elListItem.classList.remove('hidden');
-            } else {
-                elListItem.classList.add('hidden');
-            }
-        });
-    });
-}
-
-function hideAndResetProductsList() {
-    productsListWrapper.classList.add('list-hidden');
-    productsListWrapper.querySelector('input').value = '';
-    // Re-show the list-items which did not match the previous search
-    productsListContainer.querySelectorAll('.not-matching-search').forEach(elListItem => {
-        elListItem.classList.remove('not-matching-search');
-    });
-    // Re-filter the products list, required after a SOFT-reload which preserves the disabled filters
-    filterProductsList();
-}
-
 function resetEverything() {
     refreshConnections(false, 'delete'); // delete connections
     itemDataById = {};
@@ -299,9 +207,7 @@ function resetEverything() {
 }
 
 function resetFadedItemsAndConnections() {
-    productChainItemsContainer.querySelectorAll('.active[data-container-id]').forEach(el => el.classList.remove('active'));
-    productChainItemsContainer.querySelectorAll('.hover[data-container-id]').forEach(el => el.classList.remove('hover'));
-    productChainItemsContainer.classList.remove('faded');
+    resetFadedItemsAndConnectionsCore();
     refreshConnections();
 }
 
@@ -332,24 +238,6 @@ function connectItemIds(startItemId, endItemId) {
     }
     line.setOptions(leaderLineOptions);
     return line;
-}
-
-function injectLevelContainerIfNeeded(renderOnLevel) {
-    const levelId = `level_${renderOnLevel}`;
-    let levelContainer = document.getElementById(levelId);
-    if (!levelContainer) {
-        levelContainer = document.createElement('div');
-        levelContainer.id = levelId;
-        levelContainer.classList.add('level');
-        productChainItemsContainer.appendChild(levelContainer);
-    }
-    return levelContainer;
-}
-
-function getItemPriorityOnLevel(itemContainer) {
-    const levelContainer = itemContainer.parentElement;
-    const itemContainersOnLevel = [...levelContainer.querySelectorAll('[data-container-id]')];
-    return itemContainersOnLevel.indexOf(itemContainer);
 }
 
 function compareItemContainers(el1, el2) {
@@ -386,21 +274,6 @@ function compareItemContainers(el1, el2) {
  */
 function compareListElementsByName(el1, el2) {
     return el1.name.localeCompare(el2.name);
-}
-
-/**
- * Re-arrange items on the same level, to avoid connections crossing each other
- */
-function sortLevels(startLevel = 1) {
-    for (let i = startLevel; i <= maxLevel; i++) {
-        const levelContainer = document.getElementById(`level_${i}`);
-        const itemContainersOnLevel = [...levelContainer.querySelectorAll('[data-container-id]')];
-        itemContainersOnLevel.sort(compareItemContainers);
-        levelContainer.textContent = '';
-        itemContainersOnLevel.forEach(el => {
-            levelContainer.appendChild(el);
-        });
-    }
 }
 
 function createProductContainer(itemId) {
@@ -468,19 +341,10 @@ function createProcessContainer(itemId) {
     return processContainer;
 }
 
-function getBaseSpectralsHtmlForRawMaterial(rawMaterialData) {
-    let baseSpectralsHtml = `<div class="spectral-types">`;
-    rawMaterialData.baseSpectrals.forEach(baseSpectral => {
-        baseSpectralsHtml += `<span class="spectral-type type-${baseSpectral}">${baseSpectral}</span>`;
-    });
-    baseSpectralsHtml += `</div>`;
-    return baseSpectralsHtml;
-}
-
 /**
  * Returns "itemId" of the newly added item
  */
- function addItemToChain(itemData, overwriteItemId = null) {
+function addItemToChain(itemData, overwriteItemId = null) {
     let itemId;
     if (overwriteItemId !== null) {
         itemId = Number(overwriteItemId)
@@ -522,7 +386,7 @@ function getBaseSpectralsHtmlForRawMaterial(rawMaterialData) {
 function addProcessesAndInputsForOutputItemId(outputItemId) {
     const outputItemData = itemDataById[outputItemId];
     if (outputItemData.productId === null) {
-        console.log(`%c--- ERROR: addProcessesAndInputsForOutputItemId called for non-product outputItemId ${outputItemId}`, 'background: maroon'); //// TEST
+        if (doDebug) console.log(`%c--- ERROR: addProcessesAndInputsForOutputItemId called for non-product outputItemId ${outputItemId}`, 'background: maroon');
         return;
     }
     const processVariantIds = processVariantIdsByProductId[outputItemData.productId] || []; // e.g. "Food" has no process as of 2022-07-21
@@ -554,16 +418,16 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
     });
     if (!processVariantItemIds.length) {
         // e.g. "Food" has no process as of 2022-07-21
-        console.log(`%c--- WARNING: NO processVariantIds found for output productId ${outputItemData.productId}`, 'background: brown'); //// TEST
+        if (doDebug) console.log(`%c--- WARNING: NO processVariantIds found for output productId ${outputItemData.productId}`, 'background: brown');
     }
     if (processVariantItemIds.length === 1) {
         // Single process variant => auto-select it
-        // console.log(`--- AUTO-SELECT single process variant`); //// TEST
+        // if (doDebug) console.log(`--- AUTO-SELECT single process variant`);
         selectProcessItemId(processVariantItemIds[0]);
     }
     if (processVariantItemIds.length > 1) {
         // Multiple process variants => prompt the user to select one
-        // console.log(`%c--- PROMPT the user to select one of the processVariantItemIds: [${processVariantItemIds.toString()}]`, 'background: yellow; color: black;'); //// TEST
+        // if (doDebug) console.log(`%c--- PROMPT the user to select one of the processVariantItemIds: [${processVariantItemIds.toString()}]`, 'background: yellow; color: black;');
         // Append new process variants waiting selection - i.e. allow multiple products to feature the prompt for selecting a process variant
         itemIdsForProcessVariantsWaitingSelection = itemIdsForProcessVariantsWaitingSelection.concat(processVariantItemIds);
         processVariantItemIds.forEach(itemId => {
@@ -596,7 +460,7 @@ function removeArrayFromItemIdsForProcessVariantsWaitingSelection(itemIdsArray) 
  * - #7 - remove [self] from "itemDataByIds"
  */
 function purgeItemId(itemId) {
-    // console.log(`%c--- purgeItemId(${itemId})`, 'background: maroon'); //// TEST
+    // if (doDebug) console.log(`%c--- purgeItemId(${itemId})`, 'background: maroon');
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     // #1 - call "purgeItemId" on each child recursively, until no more children left
     getChildContainersOfItemId(itemId).forEach(childContainer => purgeItemId(childContainer.dataset.containerId));
@@ -639,17 +503,17 @@ function toggleProductItemId(itemId) {
  * The production chain is then re-rendered, and the "shopping list" is also updated.
  */
 function selectProductItemId(itemId) {
-    // console.log(`--- selectProductItemId(${itemId})`); //// TEST
+    // if (doDebug) console.log(`--- selectProductItemId(${itemId})`);
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     if (selectedProductItemIds.includes(itemId)) {
-        console.log(`%c--- WARNING: itemId ${itemId} is already selected`, 'background: brown'); //// TEST
+        if (doDebug) console.log(`%c--- WARNING: itemId ${itemId} is already selected`, 'background: brown');
         return;
     }
     const itemData = itemDataById[itemId];
     const itemContainer = getItemContainerById(itemId);
     // Prevent selection of items from sub-chains of disabled process variants
     if (itemData.isDisabled) {
-        // console.log(`--- WARNING: itemId ${itemId} is disabled`); //// TEST
+        // if (doDebug) console.log(`--- WARNING: itemId ${itemId} is disabled`);
         const parentItemContainer = getItemContainerById(itemData.parentItemId);
         // flash error
         itemContainer.classList.add('flash-error');
@@ -662,7 +526,7 @@ function selectProductItemId(itemId) {
     }
     if (itemContainer.classList.contains('waiting-selection')) {
         // Auto-select this input's parent process variant, if they are both waiting selection.
-        // console.log(`--- AUTO-SELECT parent process variant`); //// TEST
+        // if (doDebug) console.log(`--- AUTO-SELECT parent process variant`);
         selectProcessItemId(itemData.parentItemId);
     }
     selectedProductItemIds.push(itemId);
@@ -685,14 +549,14 @@ function selectProductItemId(itemId) {
  * NOTE: This function should only be called for input-products, NOT for processes.
  */
 function deselectProductItemId(itemId, skipRefreshDetailsAndConnections = false) {
-    // console.log(`--- deselectProductItemId(${itemId})`); //// TEST
+    // if (doDebug) console.log(`--- deselectProductItemId(${itemId})`);
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     if (itemId === 1) {
         resetPlannedProduct();
         return;
     }
     if (!selectedProductItemIds.includes(itemId)) {
-        console.log(`%c--- WARNING: product-itemId ${itemId} is not selected`, 'background: brown'); //// TEST
+        if (doDebug) console.log(`%c--- WARNING: product-itemId ${itemId} is not selected`, 'background: brown');
         return;
     }
     // Delete the sub-chain of this "itemId", WITHOUT prompting the user to confirm.
@@ -719,7 +583,7 @@ function handleOverlayResponse(isConfirmed = false) {
 }
 
 function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
-    // console.log(`--- selectProcessItemId(${itemId}, ${forceSelectProcessVariant})`); //// TEST
+    // if (doDebug) console.log(`--- selectProcessItemId(${itemId}, ${forceSelectProcessVariant})`);
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     const itemData = itemDataById[itemId];
     /**
@@ -730,7 +594,7 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
      */
     if (!forceSelectProcessVariant) {
         if (itemData.isSelected) {
-            // console.log(`--- WARNING: process-itemId ${itemId} is already selected`); //// TEST
+            // if (doDebug) console.log(`--- WARNING: process-itemId ${itemId} is already selected`);
             return;
         }
         /**
@@ -751,11 +615,11 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
                     overlaySelectedProcessNameContainer.textContent = processDataById[itemData.processId].name;
                     overlaySelectedProcessNameContainer.dataset.pendingProcessItemId = itemId;
                     overlaySelectedProcessNameContainer.dataset.currentlySelectedProcessItemId = processVariantItemId;
-                    // console.log(`--- PREPARE pendingProcessItemId = ${itemId}, currentlySelectedProcessItemId = ${processVariantItemId}`); //// TEST
+                    // if (doDebug) console.log(`--- PREPARE pendingProcessItemId = ${itemId}, currentlySelectedProcessItemId = ${processVariantItemId}`);
                     if (isAlwaysConfirmChecked()) {
                         handleOverlayResponse(true);
                     } else {
-                        // console.log(`%c--- PROMPT the user to confirm the deselection of an entire sub-chain`, 'background: yellow; color: black;'); //// TEST
+                        // if (doDebug) console.log(`%c--- PROMPT the user to confirm the deselection of an entire sub-chain`, 'background: yellow; color: black;');
                         // Show overlay, then wait for user confirmation - see "handleOverlayResponse"
                         productionChainOverlayContainer.classList.remove('hidden');
                     }
@@ -798,7 +662,7 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
 }
 
 function deselectProcessItemId(itemId, forceDeselectProcessVariant = false) {
-    // console.log(`--- deselectProcessItemId(${itemId}, ${forceDeselectProcessVariant})`); //// TEST
+    // if (doDebug) console.log(`--- deselectProcessItemId(${itemId}, ${forceDeselectProcessVariant})`);
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     const itemData = itemDataById[itemId];
     /**
@@ -808,7 +672,7 @@ function deselectProcessItemId(itemId, forceDeselectProcessVariant = false) {
      */
     if (!forceDeselectProcessVariant) {
         if (!itemData.isSelected) {
-            console.log(`%c--- WARNING: process-itemId ${itemId} is not selected`, 'background: brown'); //// TEST
+            if (doDebug) console.log(`%c--- WARNING: process-itemId ${itemId} is not selected`, 'background: brown');
             return;
         }
     }
@@ -920,10 +784,6 @@ function getTotalQtyForItemId(itemId) {
     return totalQty;
 }
 
-function getCurrentHash() {
-    return window.location.hash.replace(/^#/, '');
-}
-
 function setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById) {
     let hash = plannedProductCompactName;
     if (hashEncodedFromItemDataById) {
@@ -956,8 +816,8 @@ function getHashEncodedFromItemDataById() {
     if (selectedProductItemIds.length === 1 && productChainItemsContainer.querySelectorAll('#level_2 .item-type-process').length === 1) {
         return null;
     }
-    // console.log(`--- RAW itemDataById (stringified) = ${JSON.stringify(itemDataById)}`); //// TEST
-    // console.log(`---> length = ${JSON.stringify(itemDataById).length}`); //// TEST
+    // if (doDebug) console.log(`--- RAW itemDataById (stringified) = ${JSON.stringify(itemDataById)}`);
+    // if (doDebug) console.log(`---> length = ${JSON.stringify(itemDataById).length}`);
     const itemDataByIdWithoutLines = {};
     for (const [itemId, itemData] of Object.entries(itemDataById)) {
         const itemDataWithoutLine = {};
@@ -985,15 +845,15 @@ function getHashEncodedFromItemDataById() {
     }
     // Remove quotes from stringified JSON
     const itemDataByIdMinified = JSON.stringify(itemDataByIdWithoutLines).replace(/"(\w+)":/g, '$1:');
-    // console.log(`--- MINIFIED itemDataByIdMinified = ${itemDataByIdMinified}`); //// TEST
-    // console.log(`---> length = ${itemDataByIdMinified.length}`); //// TEST
+    // if (doDebug) console.log(`--- MINIFIED itemDataByIdMinified = ${itemDataByIdMinified}`);
+    // if (doDebug) console.log(`---> length = ${itemDataByIdMinified.length}`);
     /**
      * Deflate the data into the hash.
      * Source: https://github.com/dankogai/js-deflate/blob/master/test/demo.html
      */
     const hashEncodedFromItemDataById = Base64.toBase64(RawDeflate.deflate(Base64.utob(itemDataByIdMinified)));
-    // console.log(`--- COMPRESSED hashEncodedFromItemDataById = ${hashEncodedFromItemDataById}`); //// TEST
-    // console.log(`---> length = ${hashEncodedFromItemDataById.length}`); //// TEST
+    // if (doDebug) console.log(`--- COMPRESSED hashEncodedFromItemDataById = ${hashEncodedFromItemDataById}`);
+    // if (doDebug) console.log(`---> length = ${hashEncodedFromItemDataById.length}`);
     return hashEncodedFromItemDataById;
 }
 
@@ -1064,7 +924,7 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
             }
         }
     }
-    // console.log(`------------------------------`); //// TEST
+    // if (doDebug) console.log(`------------------------------`);
 }
 
 function renderSelectedProductsList() {
@@ -1085,10 +945,10 @@ function renderSelectedProductsList() {
         // Increment qty for each occurrence of this product
         intermediateProductsList[productId].qty++;
     });
-    // console.log(`--- intermediateProductsList:`, intermediateProductsList); //// TEST
+    // if (doDebug) console.log(`--- intermediateProductsList:`, intermediateProductsList);
     // Convert "intermediateProductsList" to sorted array
     const intermediateProductsListArray = Object.values(intermediateProductsList);
-    // console.log(`--- intermediateProductsListArray:`, intermediateProductsListArray); //// TEST
+    // if (doDebug) console.log(`--- intermediateProductsListArray:`, intermediateProductsListArray);
     let intermediateProductsListHtml = '';
     if (intermediateProductsListArray.length) {
         intermediateProductsListArray.sort(compareListElementsByName);
@@ -1107,7 +967,7 @@ function renderSelectedProductsList() {
 }
 
 function renderShoppingList(shoppingList) {
-    // console.log(`--- shoppingList:`, shoppingList); //// TEST
+    // if (doDebug) console.log(`--- shoppingList:`, shoppingList);
     if (itemIdsForProcessVariantsWaitingSelection.length) {
         // Waiting for user to select a required process variant => NO shopping list
         shoppingListContainer.innerHTML = '<p class="brand-text">Please select a<br>required process variant.</p>';
@@ -1119,7 +979,7 @@ function renderShoppingList(shoppingList) {
     const shoppingListArray = Object.values(shoppingList);
     if (shoppingListArray.length) {
         shoppingListArray.sort(compareListElementsByName);
-        // console.log(`--- shoppingListArray:`, shoppingListArray); //// TEST
+        // if (doDebug) console.log(`--- shoppingListArray:`, shoppingListArray);
         shoppingListHtml += '<div class="line line-title"><div>Inputs</div><div>Qty</div></div>';
         shoppingListArray.forEach(shoppingData => {
             shoppingListHtml += `<div class="line">
@@ -1224,11 +1084,11 @@ function renderShoppingList(shoppingList) {
 }
 
 function refreshDetailsAndConnections(skipHashEncoding = false) {
-    // console.log(`--- refreshDetailsAndConnections`); //// TEST
+    // if (doDebug) console.log(`--- refreshDetailsAndConnections`);
     const shoppingList = {};
     if (itemIdsForProcessVariantsWaitingSelection.length) {
         // Waiting for user to select a required process variant => NO shopping list
-        // console.log(`--- NO shoppingList, waiting for user to select a required process variant`); //// TEST
+        // if (doDebug) console.log(`--- NO shoppingList, waiting for user to select a required process variant`);
         renderSelectedProductsList(); // DO render the selected products, even if the shopping list will be empty
         renderShoppingList(shoppingList);
         refreshConnections();
@@ -1254,8 +1114,6 @@ function refreshDetailsAndConnections(skipHashEncoding = false) {
     renderSelectedProductsList();
     renderShoppingList(shoppingList);
     refreshConnections();
-    //// TO DO: avoid executing the rest of this function, if the chain state has not changed since the last execution
-    //// -- e.g. when toggling between horizontal / vertical layout
     if (!skipHashEncoding) {
         /**
          * Encode the current state of the chain into the URL hash,
@@ -1280,7 +1138,7 @@ function injectPlannedProductNameAndImage(plannedProductId) {
  * Selecting a new planned-product will reset everything and re-generate its production chain, "shopping list" etc.
  */
 function selectPlannedProductId(plannedProductId) {
-    // console.log(`--- SELECTING planned product ${plannedProductId} (${productDataById[plannedProductId].name})`); //// TEST
+    // if (doDebug) console.log(`--- SELECTING planned product ${plannedProductId} (${productDataById[plannedProductId].name})`);
     resetEverything();
     injectPlannedProductNameAndImage(plannedProductId);
     const plannedProductItemData = {
@@ -1330,7 +1188,7 @@ function selectPlannedProductHash(hash) {
     const [plannedProductCompactName, hashEncodedFromItemDataById] = hash.split('__');
     // Re-render the entire planned chain on page-load, based on the decoded hash, if any
     if (hashEncodedFromItemDataById) {
-        // console.log(`%c--- RENDER the entire planned chain, based on the decoded hash`, 'background: blue'); //// TEST
+        // if (doDebug) console.log(`%c--- RENDER the entire planned chain, based on the decoded hash`, 'background: blue');
         resetEverything();
         /**
          * Decode partial "itemDataById" (without "line" properties), and use it to render the planned chain.
@@ -1346,7 +1204,7 @@ function selectPlannedProductHash(hash) {
     // Select the planned product from the hash
     const productName = productNamesByHash[plannedProductCompactName];
     if (productName) {
-        // console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue'); //// TEST
+        // if (doDebug) console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue');
         const plannedProductId = Number(productDataByName[productName].id);
         selectPlannedProductId(plannedProductId);
     }
@@ -1373,7 +1231,7 @@ function fetchShareLink() {
     const urlCorsProxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(urlCuttly)}`; // ok
     fetch(urlCorsProxy)
         .then(response => {
-            // console.log(`--- cuttly RESPONSE (via CORS proxy):`, response); //// TEST
+            // if (doDebug) console.log(`--- cuttly RESPONSE (via CORS proxy):`, response);
             if (response.ok === true) {
                 return response.json();
             } else {
@@ -1381,7 +1239,7 @@ function fetchShareLink() {
             }
         })
         .then(json => {
-            // console.log(`--- cuttly JSON:`, json); //// TEST
+            // if (doDebug) console.log(`--- cuttly JSON:`, json);
             if (json.contents) {
                 // Some CORS proxies may stringify the actual JSON into a "contents" property
                 json = JSON.parse(json.contents);
@@ -1395,110 +1253,14 @@ function fetchShareLink() {
             }
         })
         .catch(error => {
-            // console.log(`--- cuttly ERROR:`, error); //// TEST
+            // if (doDebug) console.log(`--- cuttly ERROR:`, error);
             shareTextContainer.textContent = `ERROR`;
         });
 }
 
-function initializeMinimap() {
-    // Source: https://larsjung.de/pagemap/
-    pagemap(document.getElementById('minimap-canvas'), {
-        // viewport: productChainItemsContainer,
-        styles: {
-            'div.item-type-raw-material': 'rgba(55, 55, 55, 1)', // var(--raw-material) + alpha
-            'div.item-type-refined-material': 'rgba(28, 50, 61, 1)', // var(--refined-material) + alpha
-            'div.item-type-component': 'rgba(49, 90, 110, 1)', // var(--component) + alpha
-            'div.item-type-ship-component': 'rgba(49, 90, 110, 1)', // var(--component) + alpha
-            'div.item-type-finished-good': 'rgba(71, 129, 158, 1)', // var(--finished-good) + alpha
-            'div.item-type-process': 'rgba(72, 32, 102, 1)', // var(--process) + alpha
-            'div.selected-item': 'rgba(255, 214, 0, 0.3)', // var(--brand-text) + alpha
-            '.disabled-item:not(.hover, .active), .faded [data-container-id]:not(.active)': 'rgba(0, 0, 0, 0.75)',
-        },
-        // back: '#10131a', // var(--dark-bg)
-        view: 'rgba(63, 128, 234, 0.25)', // var(--link) + alpha
-        drag: 'rgba(101, 153, 238, 0.5)',// var(--link-hover) + alpha
-        interval: 50,
-    });
-}
-
-function toggleMinimap() {
-    document.getElementById('minimap-wrapper').classList.toggle('minimized');
-}
-
-// Source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
-function on(eventType, selector, callback) {
-    productionWrapper.addEventListener(eventType, event => {
-        if (event.target.matches(selector)) {
-            callback(event.target);
-        }
-    }, true); // "true" required for correct behaviour of e.g. "mouseenter" / "mouseleave" attached to elements that have children
-}
-
-// Toggle option checked
-on('change', 'label > input', el => {
-    if (el.checked) {
-        el.parentElement.classList.add('checked');
-    } else {
-        el.parentElement.classList.remove('checked');
-    }
-});
-
-// Toggle products-list when clicking on "▼" / "✕"
-on('click', '#products-list-wrapper', el => {
-    productsListWrapper.classList.toggle('list-hidden');
-});
-
-// Show products-list when clicking on input
-on('click', '#products-list-wrapper input', el => {
-    productsListWrapper.classList.remove('list-hidden');
-});
-
-// Hide-and-reset products-list if the input loses focus
-on('focusout', '#products-list-wrapper input', el => {
-    // Prevent hiding the products-list, before triggering a click on a list-item
-    if (document.querySelector('#products-list-wrapper:hover')) {
-        return;
-    }
-    hideAndResetProductsList();
-});
-
-// Hide-and-reset products-list on mouse-out
-on('mouseleave', '#products-list-wrapper', el => {
-    // Prevent hiding the products-list, if the input has focus
-    if (productsListWrapper.querySelector('input:focus')) {
-        return;
-    }
-    hideAndResetProductsList();
-});
-
-// Search in products-list
-on('input', '#products-list-wrapper input', el => {
-    productsListContainer.querySelectorAll('*').forEach(elListItem => {
-        if (elListItem.textContent.toLowerCase().includes(el.value.toLowerCase())) {
-            elListItem.classList.remove('not-matching-search');
-        } else {
-            elListItem.classList.add('not-matching-search');
-        }
-    });
-});
-
-// Filter item-types in the products-list
-on('click', '#filters-list .option', el => {
-    el.classList.toggle('checked');
-    filterProductsList();
-});
-
 // Toggle horizontal vs. vertical layout for the production chain
 on('change', '#toggle-horizontal-layout', el => {
-    if (el.checked) {
-        horizontalLayout = true;
-        productChainItemsContainer.classList.remove('vertical-layout');
-        productChainItemsContainer.classList.add('horizontal-layout');
-    } else {
-        horizontalLayout = false;
-        productChainItemsContainer.classList.remove('horizontal-layout');
-        productChainItemsContainer.classList.add('vertical-layout');
-    }
+    toggleHorizontalLayout(el);
     refreshConnections(true);
 });
 
@@ -1506,7 +1268,7 @@ on('change', '#toggle-horizontal-layout', el => {
  * Highlight + activate fullchain (subchain and ancestors), on hover over item / process.
  * Use "mouseenter" instead of "mouseover", and "mouseleave" instead of "mouseout" (to avoid triggering on children).
  */
- on('mouseenter', '[data-container-id]', el => {
+on('mouseenter', '[data-container-id]', el => {
     // Highlight all occurrences of this item / process in the production chain
     const itemName = el.dataset.itemName;
     const processCode = el.dataset.processCode;
@@ -1559,18 +1321,6 @@ on('mouseleave', '[data-container-id]', el => {
     }
 });
 
-// Highlight all occurrences of a product, on hover over a product name from any list
-on('mouseenter', '.list-product-name', el => {
-    productChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
-        itemContainer.classList.add('hover');
-    });
-});
-on('mouseleave', '.list-product-name', el => {
-    productChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
-        itemContainer.classList.remove('hover');
-    });
-});
-
 /**
  * Refresh connections whenever a new font has finished loading,
  * b/c the position of items in the production chain changes:
@@ -1581,25 +1331,13 @@ document.fonts.onloadingdone = function(fontFaceSetEvent) {
     refreshConnections();
 };
 
-window.addEventListener('keydown', event => {
-    // Pressing "Enter" while the product-search input is focused, selects the first matching product
-    if (event.key === 'Enter') {
-        const productSearchInput = document.querySelector('#products-list-wrapper input');
-        const firstSearchMatch = productsListContainer.querySelector('*:not(.not-matching-search)');
-        if (productSearchInput === document.activeElement && productSearchInput.value.length && firstSearchMatch) {
-            productSearchInput.blur();
-            firstSearchMatch.click();
-        }
-    }
-});
-
 // Auto-select product (or encoded planned chain) on #Hash-change (including on e.g. history-back navigation)
 window.addEventListener('hashchange', () => {
     if (!shouldHandleHashchange) {
         return;
     }
     const hashToSelect = getCurrentHash();
-    // console.log(`--- TRIGGERED hashchange w/ hashToSelect = ${hashToSelect}`); //// TEST
+    // if (doDebug) console.log(`--- TRIGGERED hashchange w/ hashToSelect = ${hashToSelect}`);
     selectPlannedProductHash(hashToSelect);
 });
 
@@ -1614,7 +1352,7 @@ selectPlannedProductHash(hashToPreselect);
 initializeMinimap();
 
 // Debug itemData on hover
-if (false) {
+if (doDebug && false) {
     on('mouseenter', '[data-container-id]', el => {
         const debugContainer = document.getElementById('debug');
         let debugHtml = '';
@@ -1630,13 +1368,9 @@ if (false) {
     });
 }
 
-//// BUG when selecting the other process for Hydrogen:
-//// http://127.0.0.1:5500/public/production-planner.html#Propylene__bcOOOw7Dg0AIBMOQC1EswrDDv8KrRCnDsj/ChMOFw50zOCnDsMOKwoXCpcKVH8ODwrDDscOcbjPDkX0yPcOwPcOxw77DjMKSwowkwoIAwpheMwM0woICBAlRwqN8CsOVwqhEw4jCgMKMVQ41QgEUJMOYwqjCncO9H0bCrMOrJsO1TcOow6bCvEZYwpHDgcK5fGjCry5ew69SV2kAwq/DmcO7GcKQw75QAUzDr3nDoUbDnMKvGMOpa8OWR0QOMyPDjjRvw67Cv8KbJEXDqS5jwr/DicK+
-
 //// TO DO
 /*
 - add link in v1 chains for "incomplete" chains, recommending to view it in the v2 planner
-- extract common JS from v1+v2 production chains, into a separate script - e.g. "production-common.js"
 - rework thumbs for v1+v2 prodction chains:
     - do NOT inject ".thumb" into each item container (also reduces the HTML)
     - insteaad, use a single thumb-container (e.g. toggled in the top-right?), with a curved leader-line towards the hovered item
