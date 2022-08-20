@@ -15,9 +15,9 @@ const productChainItemsContainer = document.getElementById('production-chain-ite
  * the input will keep its "checked" property = false,
  * even though the DOM elements are marked as checked.
  */
- const toggleHorizontalLayoutInput = document.getElementById('toggle-horizontal-layout');
- toggleHorizontalLayoutInput.checked = toggleHorizontalLayoutInput.parentElement.classList.contains('checked');
- let horizontalLayout = toggleHorizontalLayoutInput.checked; // true vs. false
+const toggleHorizontalLayoutInput = document.getElementById('toggle-horizontal-layout');
+toggleHorizontalLayoutInput.checked = toggleHorizontalLayoutInput.parentElement.classList.contains('checked');
+let horizontalLayout = toggleHorizontalLayoutInput.checked; // true vs. false
  
 /**
  * e.g. "Thin-film Resistor" => "Thin-filmResistor"
