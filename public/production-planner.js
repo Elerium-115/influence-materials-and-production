@@ -52,7 +52,10 @@ InfluenceProductionChainsJSON.processes.forEach(process => {
         return output;
     });
     // Set module parts
-    process.parts = null, // future format: [ "Condenser", "Evaporator" ]
+    process.parts = null; // future format: [ 'Condenser', 'Evaporator' ]
+    if (process.name === 'Desalination') {
+        process.parts = [ 'Condenser', 'Evaporator' ]; //// PLACEHOLDER
+    }
     processDataById[process.id] = process;
     process.outputs.forEach(output => {
         const productId = output.productId;
