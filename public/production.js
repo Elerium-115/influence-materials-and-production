@@ -481,7 +481,8 @@ function updateUpchainsFromRawMaterialsAndLongestSubchainLengths() {
 function renderItem(itemName, parentContainerId, renderOnLevel, isSelectedItem = false) {
     const itemData = items[itemName];
     if (!itemData) {
-        throw Error(`--- renderItem ERROR: itemName not found (${itemName})`);
+        if (doDebug) console.log(`%c--- ERROR: renderItem > itemName not found (${itemName})`, 'background: maroon');
+        return;
     }
     maxLevel = Math.max(maxLevel, renderOnLevel);
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
@@ -542,7 +543,7 @@ function renderItem(itemName, parentContainerId, renderOnLevel, isSelectedItem =
 async function renderItemDerivatives(itemName) {
     const itemData = items[itemName];
     if (!itemData) {
-        throw Error(`--- renderItemDerivatives ERROR: itemName not found (${itemName})`);
+        if (doDebug) console.log(`%c--- ERROR: renderItemDerivatives > itemName not found (${itemName})`, 'background: maroon');
     }
     const parentProcessContainerIds = [];
     // start by rendering the outputs first, on level 1
@@ -576,7 +577,7 @@ async function renderItemDerivatives(itemName) {
         const itemContainer = createProductContainer(itemName, itemData, parentProcessContainerIds);
         itemContainer.classList.add('selected-item');
         itemLevelContainer.appendChild(itemContainer);
-        if (itemData.itemType === "Raw Material") {
+        if (itemData?.itemType === "Raw Material") {
             itemContainer.innerHTML += getBaseSpectralsHtmlForRawMaterial(itemData);
         }
     }
@@ -935,6 +936,10 @@ function updateTierSlider() {
 }
 
 async function selectItemByName(itemName) {
+    if (!itemName) {
+        if (doDebug) console.log(`%c--- ERROR: selectItemByName > itemName not found (${itemName})`, 'background: maroon');
+        return;
+    }
     resetProductionChain();
     if (chainType === 'production') {
         // render production chain
