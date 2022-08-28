@@ -1151,6 +1151,8 @@ setTimeout(() => {
     initializeMinimap();
 }, 10);
 
+//// FIX BUG re: raw materials should also support process variants (e.g. Hydrogen)
+
 //// TO DO: IMPLEMENT "LeaderLine" in v1 chains, from v2 chains
 ////        - TEST performance vs. old system
 

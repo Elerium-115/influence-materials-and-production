@@ -1,0 +1,440 @@
+.flash-interaction { animation: flash-interaction 1000ms; }
+
+@keyframes flash-interaction { 50% { background: var(--overactive-bg); } }
+
+#asteroids-planner-wrapper {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 5rem;
+}
+
+#asteroids-planner-tree {
+    margin-left: 1rem;
+}
+
+#asteroids-planner-tree h3,
+#shopping-list-tree h3 {
+    line-height: 2rem;
+}
+
+.empty-planner #asteroids-planner-tree h3,
+.empty-planner #shopping-list-tree h3,
+.empty-planner #breadcrumbs-wrapper {
+    display: none;
+}
+
+#asteroids-planner-tree li,
+#shopping-list-tree li {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+#asteroids-planner-tree li:hover,
+#shopping-list-tree li:hover {
+    background: var(--active-bg);
+}
+
+#asteroids-planner-tree li li:hover,
+#shopping-list-tree li li:hover {
+    background: var(--overactive-bg);
+}
+
+#asteroids-planner-tree .tree-label,
+#shopping-list-tree .tree-label {
+    display: block;
+}
+
+#asteroids-planner-tree .tree-list ul > li > ul > li:first-child,
+#shopping-list-tree .tree-list ul > li > ul > li:first-child {
+    margin-top: 0.5rem;
+}
+
+
+/* Asteroids Planner tree */
+
+#asteroids-planner-tree h3 {
+    color: var(--brand-text);
+}
+
+#asteroids-planner-tree .asteroids-tree-item {
+    position: relative;
+    margin-top: 1rem;
+    border-left: 1px solid var(--default-text);
+    border-right: 1px solid transparent;
+}
+
+#asteroids-planner-tree .asteroid-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    margin-top: 0.25rem;
+}
+
+#asteroids-planner-tree .asteroid-info .spectral-types {
+    display: inline-flex;
+}
+
+#asteroids-planner-tree .asteroid-info .spectral-type {
+    display: inline-block;
+    font-size: 0.7rem;
+    line-height: 1rem;
+    width: 1rem;
+    text-align: center;
+}
+
+#asteroids-planner-tree .asteroid-info .spectral-type:first-child {
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+}
+
+#asteroids-planner-tree .asteroid-info .spectral-type:last-child {
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+}
+
+#asteroids-planner-tree .asteroids-tree-item:not(:hover):not(.connected):not(.has-connected-product) .asteroid-info .spectral-type {
+    background: var(--overactive-bg);
+}
+
+#asteroids-planner-tree .asteroid-info .area {
+    font-size: 0.8rem;
+    text-align: right;
+    opacity: 0.5;
+}
+
+#asteroids-planner-tree .asteroid-info .area::after {
+    content: ' km²';
+}
+
+#asteroids-planner-tree .planned-products-tree-item {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+}
+
+#asteroids-planner-tree .intermediate-products-tree {
+    margin: 0 0.5rem;
+}
+
+#asteroids-planner-tree .intermediate-products-tree-item {
+    font-size: 0.8rem;
+    padding: 0;
+    color: var(--default-text_semifaded);
+}
+
+#asteroids-planner-tree .asteroids-tree li:hover > .tree-label,
+#asteroids-planner-tree .tree-label:hover {
+    color: var(--brand-text);
+    cursor: pointer;
+}
+
+#asteroids-planner-tree .tree-label:hover > .asteroid-name,
+#asteroids-planner-tree .planned-products-tree .tree-label:hover {
+    text-decoration: underline;
+}
+
+#asteroids-planner-tree .connected {
+    background: var(--overactive-bg);
+    border-right: 1px solid var(--brand-text) !important;
+}
+
+#asteroids-planner-tree .asteroids-tree-item.connected,
+#asteroids-planner-tree .asteroids-tree-item.has-connected-product {
+    background: var(--active-bg);
+    border-left: 1px solid var(--brand-text);
+}
+
+#asteroids-planner-tree .asteroids-tree-item.connected > .tree-label,
+#asteroids-planner-tree .asteroids-tree-item.has-connected-product > .tree-label,
+#asteroids-planner-tree .planned-products-tree-item.connected > .tree-label {
+    color: var(--brand-text);
+}
+
+
+/* Asteroids Planner tree actions */
+
+#asteroids-planner-tree .asteroids-tree-item .actions {
+    position: absolute;
+    top: calc(50% - 2.25rem);
+    left: -3rem;
+    height: 4.5rem; /* action_heigt * max_actions_count */
+    width: 3rem;
+    border-radius: 0.5rem;
+    opacity: 0;
+}
+
+#asteroids-planner-tree .asteroids-tree-item:hover .actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.25;
+}
+
+#asteroids-planner-tree .asteroids-tree-item .actions:hover {
+    opacity: 1;
+}
+
+#asteroids-planner-tree .asteroids-tree-item .actions > * {
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+#asteroids-planner-tree .asteroids-tree-item .actions .move:hover {
+    background: var(--brand-text);
+    color: black;
+}
+
+#asteroids-planner-tree .asteroids-tree-item .actions .move-up::before {
+    content: '▲';
+    padding-bottom: 0.1rem;
+}
+
+#asteroids-planner-tree .asteroids-tree-item .actions .move-down::before {
+    content: '▼';
+    padding-top: 0.1rem;
+}
+
+#asteroids-planner-tree .asteroids-tree-item:first-child .actions .move-up,
+#asteroids-planner-tree .asteroids-tree-item:last-child .actions .move-down {
+    display: none;
+}
+
+#asteroids-planner-tree .asteroids-tree-item .actions .delete:hover {
+    background: red;
+    color: white;
+}
+
+#asteroids-planner-tree .asteroids-tree-item .actions .delete::before {
+    content: '✕';
+}
+
+
+/* Asteroids Planner tree buttons */
+
+#asteroids-planner-tree .asteroids-tree-button-wrapper {
+    text-align: center;
+}
+
+#asteroids-planner-tree .asteroids-tree-button {
+    display: inline-block;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+}
+
+#asteroids-planner-tree .add-asteroid {
+    background: var(--dark-bg);
+    color: var(--brand-text);
+    margin-top: 2rem;
+}
+
+#asteroids-planner-tree .add-asteroid:hover {
+    background: var(--brand-text);
+    color: black;
+}
+
+.empty-planner #asteroids-planner-tree .add-asteroid {
+    margin-top: 0;
+    filter: drop-shadow(0 0 0 var(--brand-text));
+	animation: pulse-brand 2s infinite;
+}
+
+@keyframes pulse-brand {
+	0% { filter: drop-shadow(0 0 0 var(--brand-text)); }
+	25% { filter: drop-shadow(0 0 0.4rem var(--brand-text)); }
+	50% { filter: drop-shadow(0 0 0 var(--brand-text)); }
+}
+
+#asteroids-planner-tree .toggle-intermediate-products {
+    font-size: 0.8rem;
+    text-align: center;
+    margin-top: 1rem;
+    border-color: var(--default-text_faded);
+}
+
+#asteroids-planner-tree .toggle-intermediate-products::before {
+    content: 'Hide';
+}
+
+#asteroids-planner-tree .toggle-intermediate-products.toggle-off::before {
+    content: 'Show';
+}
+
+#asteroids-planner-tree .toggle-intermediate-products:hover {
+    background: var(--active-bg);
+    color: white;
+}
+
+.empty-planner #asteroids-planner-tree .toggle-intermediate-products {
+    display: none;
+}
+
+
+/* Shopping List tree */
+
+#shopping-list-tree {
+    text-align: right;
+}
+
+#shopping-list-tree h3 {
+    color: var(--link);
+}
+
+#shopping-list-tree .shopping-tree > li {
+    margin-top: 1rem;
+    border-right: 1px solid var(--link);
+}
+
+#shopping-list-tree .shopping-tree > li:hover > .tree-label,
+#shopping-list-tree .tree-label:hover {
+    color: var(--link);
+    cursor: pointer;
+}
+
+#shopping-list-tree li li {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+}
+
+#shopping-list-tree .shopping-tree > li > .tree-label {
+    color: var(--link);
+}
+
+#shopping-list-tree .tree-label:hover {
+    text-decoration: underline;
+}
+
+
+/* Leader Line */
+
+.leader-line-areaAnchor:hover {
+    z-index: -1; /* WARNING: Some area-anchors still remain "on top" during hover? */
+}
+
+
+/* Breadcrumbs */
+
+#breadcrumbs-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumbs {
+    display: flex;
+    gap: 1rem;
+    line-height: 2rem;
+    margin-left: -1rem;
+}
+
+.breadcrumbs .separator::before {
+    content: '⧟';
+    opacity: 0.25;
+}
+
+.breadcrumbs .breadcrumb {
+    border-radius: 0.5rem;
+}
+
+.breadcrumbs .breadcrumb:hover {
+    background: var(--active-bg);
+    cursor: pointer;
+    z-index: 1;
+}
+
+.breadcrumbs .breadcrumb .breadcrumb-name {
+    position: relative;
+    padding: 0 1rem;
+}
+
+.breadcrumbs .breadcrumb .breadcrumb-name:hover {
+    text-decoration: underline;
+}
+
+.breadcrumbs .breadcrumb:last-child .breadcrumb-name {
+    color: var(--brand-text);
+}
+
+.breadcrumbs .breadcrumb ul {
+    position: absolute;
+    background: var(--active-bg);
+    /* color: var(--default-text); */
+    padding-top: 2rem;
+    border-radius: 0.5rem;
+    filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
+}
+
+.breadcrumbs .breadcrumb:not(:hover) ul {
+    display: none;
+}
+
+.breadcrumbs .breadcrumb ul li {
+    padding: 0 1rem;
+}
+
+.breadcrumbs .breadcrumb ul li:last-child {
+    padding-bottom: 0.25rem;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.breadcrumbs .breadcrumb ul li:hover {
+    background: var(--overactive-bg);
+    color: var(--brand-text);
+    text-decoration: underline;
+}
+
+.breadcrumbs .breadcrumb ul li.selected {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.breadcrumbs .breadcrumb ul li.selected:hover {
+    background: transparent;
+    color: var(--default-text);
+    text-decoration: none;
+    cursor: default;
+}
+
+.breadcrumbs .breadcrumb ul li.add-item {
+    background: var(--dark-bg);
+    color: var(--brand-text);
+}
+
+.breadcrumbs .breadcrumb ul li.add-item:hover {
+    background: var(--brand-text);
+    color: black;
+}
+
+
+/* Content */
+
+#start-title {
+    display: inline-block;
+    color: var(--link);
+    margin-top: -1px; /* match border size */
+    margin-left: -0.5rem;
+    padding: 0.5rem;
+    border: 1px dashed var(--link);
+    border-radius: 0.5rem;
+}
+
+.empty-planner #content ul {
+    margin-top: 1rem;
+}
+
+.empty-planner #content ul li {
+    padding: 0.5rem 0;
+}
+
+.empty-planner #content ul li::before {
+    content: '⧟';
+    margin-right: 1.5rem;
+    opacity: 0.25;
+}

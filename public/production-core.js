@@ -18,27 +18,6 @@ const productChainItemsContainer = document.getElementById('production-chain-ite
 const toggleHorizontalLayoutInput = document.getElementById('toggle-horizontal-layout');
 toggleHorizontalLayoutInput.checked = toggleHorizontalLayoutInput.parentElement.classList.contains('checked');
 let horizontalLayout = toggleHorizontalLayoutInput.checked; // true vs. false
- 
-/**
- * e.g. "Thin-film Resistor" => "Thin-filmResistor"
- */
-function getCompactName(name) {
-    return name.replace(/\s+/g, '');
-}
-
-/**
- * e.g. "Thin-film Resistor" => "thin-film-resistor"
- */
-function getItemNameSafe(itemName) {
-    return itemName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
-}
-
-/**
- * e.g. "Raw Material" => "item-type-raw-material"
- */
-function getItemTypeClass(itemType) {
-    return `item-type-${getItemNameSafe(itemType)}`;
-}
 
 function getItemContainerById(itemContainerId) {
     return productChainItemsContainer.querySelector(`[data-container-id='${itemContainerId}']`);
