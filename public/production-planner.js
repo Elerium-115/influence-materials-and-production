@@ -352,7 +352,7 @@ function addItemToChain(itemData, overwriteItemId = null) {
     if (overwriteItemId !== null) {
         itemId = Number(overwriteItemId)
     } else {
-        // Increment the last (highest) key b/c some intermediary keys may have been deleted during a "purge"
+        // Increment the last (highest) key b/c some intermediate keys may have been deleted during a "purge"
         itemId = Object.keys(itemDataById).length ? Number(Object.keys(itemDataById).pop()) + 1 : 1;
     }
     itemDataById[itemId] = itemData;
@@ -518,7 +518,7 @@ function selectProductItemId(itemId) {
     if (itemData.isDisabled) {
         // if (doDebug) console.log(`--- WARNING: itemId ${itemId} is disabled`);
         const parentItemContainer = getItemContainerById(itemData.parentItemId);
-        // flash error
+        // Flash error
         itemContainer.classList.add('flash-error');
         parentItemContainer.classList.add('flash-error-glow');
         setTimeout(() => {
@@ -1371,14 +1371,18 @@ if (doDebug && false) {
     });
 }
 
+//// FIX BUG re: qty of intermediate products should use the same formula as calculating the qty of inputs
+//// -- for each intermediate product, sum the (potentially-different!) qtys of all its selected-occurrences in the chain
+
 //// TO DO
 /*
 - add link in v1 chains for "incomplete" chains, recommending to view it in the v2 planner
+    - show link in both chains, to view the selected / planned product in the "other" chain
 - rework thumbs for v1+v2 prodction chains:
     - do NOT inject ".thumb" into each item container (also reduces the HTML)
     - insteaad, use a single thumb-container (e.g. toggled in the top-right?), with a curved leader-line towards the hovered item
     - try to avoid the 404 error for missing images
-        - if all else fails, define a list of all images (dynamic folder parsing?), and use that list to avoid loading a missing image
+        - if all else fails, hardcode a list of all images (dynamic folder parsing only possible in NodeJS), and use that list to avoid loading a missing image
     - if NOT reworking thumbs (i.e. distinct thumb injected for each item), then watch out:
         - BUG:
             - enable the code from "createProductContainer" that injects a thumb

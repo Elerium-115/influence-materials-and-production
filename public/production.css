@@ -68,6 +68,7 @@
     opacity: 0.25;
 }
 
+.spectral-type { color: white; }
 .spectral-type.type-C { background: var(--type-c); }
 .spectral-type.type-I { background: var(--type-i); }
 .spectral-type.type-M { background: var(--type-m); }
@@ -655,7 +656,6 @@
 
 #production-chain-items [data-container-id] .spectral-type {
     display: inline-block;
-    color: white;
     font-size: 0.7rem;
     line-height: 1rem;
     width: 1rem;
@@ -964,7 +964,6 @@
 }
 
 #required-spectrals .spectral-type {
-    color: white;
     font-weight: bold;
     line-height: 2rem;
     text-align: center;
@@ -1204,7 +1203,6 @@
     width: 2rem;
     line-height: 2rem;
     text-align: center;
-    color: white;
     border-radius: 50%;
 }
 
