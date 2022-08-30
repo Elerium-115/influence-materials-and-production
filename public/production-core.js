@@ -3,21 +3,12 @@ const doDebug = location.href.includes('127.0.0.1');
 
 let maxLevel = 0;
 
+let horizontalLayout = document.getElementById('toggle-horizontal-layout').checked; // true vs. false
+
 const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
 const productsListContainer = document.getElementById('products-list');
 const productChainItemsContainer = document.getElementById('production-chain-items');
-
-/**
- * Fix for Firefox bug re: "toggle-horizontal-layout" input
- * keeping the "checked" PROPERTY cached after a SOFT-reload.
- * e.g. if deselecting this input, and then doing a soft-reload,
- * the input will keep its "checked" property = false,
- * even though the DOM elements are marked as checked.
- */
-const toggleHorizontalLayoutInput = document.getElementById('toggle-horizontal-layout');
-toggleHorizontalLayoutInput.checked = toggleHorizontalLayoutInput.parentElement.classList.contains('checked');
-let horizontalLayout = toggleHorizontalLayoutInput.checked; // true vs. false
 
 function getItemContainerById(itemContainerId) {
     return productChainItemsContainer.querySelector(`[data-container-id='${itemContainerId}']`);
@@ -169,24 +160,6 @@ function toggleHorizontalLayout(el) {
         productChainItemsContainer.classList.add('vertical-layout');
     }
 }
-
-// Source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
-function on(eventType, selector, callback) {
-    productionWrapper.addEventListener(eventType, event => {
-        if (event.target.matches(selector)) {
-            callback(event.target);
-        }
-    }, true); // "true" required for correct behaviour of e.g. "mouseenter" / "mouseleave" attached to elements that have children
-}
-
-// Toggle option checked
-on('change', 'label > input', el => {
-    if (el.checked) {
-        el.parentElement.classList.add('checked');
-    } else {
-        el.parentElement.classList.remove('checked');
-    }
-});
 
 // Toggle products-list when clicking on "▼" / "✕"
 on('click', '#products-list-wrapper', el => {

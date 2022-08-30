@@ -49,6 +49,21 @@
     margin-top: 0.5rem;
 }
 
+#asteroids-planner-tree .options,
+#shopping-list-tree .options {
+    font-size: 0.8rem;
+    margin-top: 2rem;
+}
+
+#asteroids-planner-tree .options label,
+#shopping-list-tree .options label {
+    margin-right: 0; /* override margin-right from "production.css" */
+}
+
+.empty-planner .options {
+    display: none;
+}
+
 
 /* Asteroids Planner tree */
 
@@ -113,6 +128,10 @@
 
 #asteroids-planner-tree .intermediate-products-tree {
     margin: 0 0.5rem;
+}
+
+#asteroids-planner-tree.hide-subproducts .intermediate-products-tree {
+    display: none;
 }
 
 #asteroids-planner-tree .intermediate-products-tree-item {
@@ -215,7 +234,7 @@
 }
 
 
-/* Asteroids Planner tree buttons */
+/* Asteroids Planner tree buttons / options */
 
 #asteroids-planner-tree .asteroids-tree-button-wrapper {
     text-align: center;
@@ -252,30 +271,6 @@
 	50% { filter: drop-shadow(0 0 0 var(--brand-text)); }
 }
 
-#asteroids-planner-tree .toggle-intermediate-products {
-    font-size: 0.8rem;
-    text-align: center;
-    margin-top: 1rem;
-    border-color: var(--default-text_faded);
-}
-
-#asteroids-planner-tree .toggle-intermediate-products::before {
-    content: 'Hide';
-}
-
-#asteroids-planner-tree .toggle-intermediate-products.toggle-off::before {
-    content: 'Show';
-}
-
-#asteroids-planner-tree .toggle-intermediate-products:hover {
-    background: var(--active-bg);
-    color: white;
-}
-
-.empty-planner #asteroids-planner-tree .toggle-intermediate-products {
-    display: none;
-}
-
 
 /* Shopping List tree */
 
@@ -309,6 +304,18 @@
 
 #shopping-list-tree .tree-label:hover {
     text-decoration: underline;
+}
+
+#shopping-list-tree .options {
+    text-align: right;
+}
+
+#shopping-list-tree.hide-unselected.has-connections .shopping-tree ul .tree-label:not(.connected) {
+    display: none;
+}
+
+#shopping-list-tree:not(.has-connections) .options {
+    display: none;
 }
 
 

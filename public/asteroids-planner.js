@@ -26,6 +26,8 @@ let asteroidsPlannerSelection = {
 
 let asteroidsPlannerLines = [];
 
+let onClickAsteroidActionInProgress = false;
+
 /**
  * Leader Line settings
  * https://anseki.github.io/leader-line/
@@ -111,6 +113,11 @@ function onClickAddAsteroid() {
 }
 
 function onClickAsteroidAction(action, el) {
+    if (onClickAsteroidActionInProgress) {
+        console.log(`%c--- ABORT onClickAsteroidAction b/c another action is in progress`, 'background: chocolate'); //// TEST
+        return;
+    }
+    onClickAsteroidActionInProgress = true;
     const elAsteroidTreeItem = el.closest('.asteroids-tree-item');
     const asteroidName = elAsteroidTreeItem.querySelector('.asteroid-name').dataset.asteroidName;
     const asteroidData = asteroidsPlannerTree.find(asteroidData => asteroidData.asteroid_name === asteroidName);
@@ -119,6 +126,7 @@ function onClickAsteroidAction(action, el) {
         case 'delete':
             const textConfirmDeleteProducts = asteroidData.planned_products.length ? ', and all its production chains' : '';
             if (!confirm(`Are you sure you want to remove this asteroid${textConfirmDeleteProducts}?`)) {
+                onClickAsteroidActionInProgress = false;
                 return; // Abort action
             }
             // Flash error
@@ -128,6 +136,7 @@ function onClickAsteroidAction(action, el) {
                 asteroidsPlannerTree = asteroidsPlannerTree.filter(asteroidData => asteroidData.asteroid_name !== asteroidName);
                 // No need to remove the class "flash-error", b/c the entire element will be deleted during "handleAsteroidsPlannerTreeChanged"
                 handleAsteroidsPlannerTreeChanged();
+                onClickAsteroidActionInProgress = false;
             }, 250); // Match the animation duration for "flash-error"
             return; // Bypass all other logic here, after deleting an asteroid
         case 'moveup':
@@ -155,6 +164,7 @@ function onClickAsteroidAction(action, el) {
             elAsteroidTreeItem.classList.remove('flash-interaction');
             // Swap in array (move up or down)
             asteroidsPlannerTree.splice(indexToSwap, 2, asteroidsPlannerTree[indexToSwap + 1], asteroidsPlannerTree[indexToSwap]);
+            onClickAsteroidActionInProgress = false;
         }, 1000); // Match the animation duration for "flash-interaction"
     }
 }
@@ -426,7 +436,7 @@ function disconnectAsteroidsPlannerTree() {
     // Remove lines
     asteroidsPlannerLines.forEach(line => line.remove());
     asteroidsPlannerLines = [];
-    // Unmark previously-connected element, if any
+    // Unmark previously-connected element from the Asteroids Planner tree, if any
     const el = elAsteroidsPlannerTree.querySelector('.connected');
     if (el) {
         el.classList.remove('connected');
@@ -435,6 +445,9 @@ function disconnectAsteroidsPlannerTree() {
             el.closest('.asteroids-tree-item').classList.remove('has-connected-product');
         }
     }
+    elShoppingListTree.classList.remove('has-connections');
+    // Unmark previously-connected elements from the Shopping List tree, if any
+    elShoppingListTree.querySelectorAll('.connected').forEach(el => el.classList.remove('connected'));
 }
 
 /**
@@ -511,12 +524,25 @@ function connectAsteroidsPlannerTree() {
             dash: true,
         });
         asteroidsPlannerLines.push(connectElements(startArea, elToConnect, leaderLineOptionsRightToLeftGradient));
+        origin.classList.add('connected');
     });
     elToConnect.classList.add('connected');
     // Also mark the parent asteroid as having a connected product
     if (!elToConnect.classList.contains('asteroids-tree-item')) {
         // This is a planned product or an intermediate product
         elToConnect.closest('.asteroids-tree-item').classList.add('has-connected-product');
+    }
+    if (originsToConnect.length) {
+        elShoppingListTree.classList.add('has-connections');
+        if (elShoppingListTree.classList.contains('hide-unselected')) {
+            /**
+             * Reposition connections b/c unselected elements
+             * have become hidden via CSS, after rendering the lines.
+             * Note that this would still need to be done,
+             * even if adding the class "has-connections" before rendering the lines.
+             */
+            repositionConnections();
+        }
     }
 }
 
@@ -616,7 +642,7 @@ function updateContent() {
     }
     refreshAsteroidsPlannerBreadcrumbsHtml();
     elContent.innerHTML = '';
-    return; //// TEST
+    /* DISABLED test content
     elContent.innerHTML += `<div style="background: black;">[content for '${asteroidName}' > '${plannedProductName}' > '${intermediateProductName}']</div>`; //// DEBUG
     if (intermediateProductName) {
         // Intermediate product content
@@ -642,6 +668,7 @@ function updateContent() {
         // Home
         //// TO BE IMPLEMENTED
     }
+    */
 }
 
 function goHome() {
@@ -662,21 +689,15 @@ function onClickTreeItem(asteroidName, plannedProductName, intermediateProductNa
     updateContent();
 }
 
-// Source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
-function on(eventType, selector, callback) {
-    elAsteroidsPlannerWrapper.addEventListener(eventType, event => {
-        if (event.target.matches(selector)) {
-            callback(event.target);
-        }
-    }, true); // "true" required for correct behaviour of e.g. "mouseenter" / "mouseleave" attached to elements that have children
-}
+// Toggle hide / show intermediate products in the Shopping List tree
+on('change', '#toggle-hide-subproducts', elInput => {
+    elAsteroidsPlannerTree.classList.toggle('hide-subproducts');
+    repositionConnections();
+});
 
-// Toggle intermediate products in the asteroids planner tree
-on('click', '.toggle-intermediate-products', button => {
-    elAsteroidsPlannerTree.querySelectorAll('.intermediate-products-tree').forEach(el => {
-        el.classList.toggle('hidden');
-    });
-    button.classList.toggle('toggle-off');
+// Toggle hide / show unselected elements in the Shopping List tree
+on('change', '#toggle-hide-unselected', el => {
+    elShoppingListTree.classList.toggle('hide-unselected');
     repositionConnections();
 });
 
@@ -691,15 +712,6 @@ on('click', '.toggle-intermediate-products', button => {
 
 refreshTreesHtml();
 
-
-//// FIX BUG
-/*
-- click ".toggle-intermediate-products" => hides intermediates + button text now "Show intermediate products"
-- remove all asteroids
-- click "Add asteroid"
-=> BUG: ".toggle-intermediate-products" button text still "Show intermediate products", but the intermediates are visible
-    - FIX generating the asteroids-tree HTML, so that the visibility of the intermediates matches the state of this button?
-*/
 
 //// TO TEST
 /*
