@@ -1,9 +1,8 @@
 
 //// TEST
 function setupTest() {
-    asteroidsPlannerTree = mockAsteroidsPlannerTree;
-    regenerateShoppingListTree();
-    refreshTreesHtml();
+    asteroidsPlannerTree = [...mockAsteroidsPlannerTree];
+    handleAsteroidsPlannerTreeChanged();
     goHome();
 }
 
