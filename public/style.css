@@ -101,6 +101,9 @@
         var(--metals) 1.11%, var(--metals) 58.88%, transparent 58.88%, transparent 61.11%,
         var(--rare-earth) 61.11%, var(--rare-earth) 78.88%, transparent 78.88%, transparent 81.11%,
         var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
+
+    /* type X = unknown / undefined */
+    --gradient-type-x: var(--default-text) 0%, var(--default-text) 100%;
 }
 
 * {
@@ -243,7 +246,8 @@ body {
     margin-top: 25px;
 }
 
-.spectral-types ul li {
+.spectral-types ul li,
+.spectral-types-circle {
     aspect-ratio: 1 / 1;
     position: relative;
     display: flex;
@@ -253,7 +257,8 @@ body {
 }
 
 /* source: https://stackoverflow.com/a/51496341 */
-.spectral-types ul li::before {
+.spectral-types ul li::before,
+.spectral-types-circle::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -266,60 +271,79 @@ body {
     opacity: 0.2;
 }
 
-.spectral-types ul li:hover {
+.spectral-types ul li:hover,
+.spectral-types-circle:hover {
     background: rgba(255, 255, 255, 0.05);
     cursor: pointer;
 }
 
-.spectral-types ul li.active {
+.spectral-types ul li.active,
+.spectral-types-circle:hover {
     color: #fff;
 }
 
-.spectral-types ul li.active::before { opacity: 1; }
+.spectral-types ul li.active::before,
+.spectral-types-circle:hover::before {
+    opacity: 1;
+}
 
 .spectral-types ul li[data-value="c"]::before,
-.spectral-types ul li.active[data-value="c"]::before {
+.spectral-types ul li.active[data-value="c"]::before,
+.spectral-types-circle.type-C::before {
     background: conic-gradient(var(--gradient-type-c));
 }
 .spectral-types ul li[data-value="ci"]::before,
-.spectral-types ul li.active[data-value="ci"]::before {
+.spectral-types ul li.active[data-value="ci"]::before,
+.spectral-types-circle.type-CI::before {
     background: conic-gradient(var(--gradient-type-ci));
 }
 .spectral-types ul li[data-value="cis"]::before,
-.spectral-types ul li.active[data-value="cis"]::before {
+.spectral-types ul li.active[data-value="cis"]::before,
+.spectral-types-circle.type-CIS::before {
     background: conic-gradient(var(--gradient-type-cis));
 }
 .spectral-types ul li[data-value="cm"]::before,
-.spectral-types ul li.active[data-value="cm"]::before {
+.spectral-types ul li.active[data-value="cm"]::before,
+.spectral-types-circle.type-CM::before {
     background: conic-gradient(var(--gradient-type-cm));
 }
 .spectral-types ul li[data-value="cms"]::before,
-.spectral-types ul li.active[data-value="cms"]::before {
+.spectral-types ul li.active[data-value="cms"]::before,
+.spectral-types-circle.type-CMS::before {
     background: conic-gradient(var(--gradient-type-cms));
 }
 .spectral-types ul li[data-value="cs"]::before,
-.spectral-types ul li.active[data-value="cs"]::before {
+.spectral-types ul li.active[data-value="cs"]::before,
+.spectral-types-circle.type-CS::before {
     background: conic-gradient(var(--gradient-type-cs));
 }
 .spectral-types ul li[data-value="i"]::before,
-.spectral-types ul li.active[data-value="i"]::before {
+.spectral-types ul li.active[data-value="i"]::before,
+.spectral-types-circle.type-I::before {
     background: conic-gradient(var(--gradient-type-i));
 }
 .spectral-types ul li[data-value="m"]::before,
-.spectral-types ul li.active[data-value="m"]::before {
+.spectral-types ul li.active[data-value="m"]::before,
+.spectral-types-circle.type-M::before {
     background: conic-gradient(var(--gradient-type-m));
 }
 .spectral-types ul li[data-value="s"]::before,
-.spectral-types ul li.active[data-value="s"]::before {
+.spectral-types ul li.active[data-value="s"]::before,
+.spectral-types-circle.type-S::before {
     background: conic-gradient(var(--gradient-type-s));
 }
 .spectral-types ul li[data-value="si"]::before,
-.spectral-types ul li.active[data-value="si"]::before {
+.spectral-types ul li.active[data-value="si"]::before,
+.spectral-types-circle.type-SI::before {
     background: conic-gradient(var(--gradient-type-si));
 }
 .spectral-types ul li[data-value="sm"]::before,
-.spectral-types ul li.active[data-value="sm"]::before {
+.spectral-types ul li.active[data-value="sm"]::before,
+.spectral-types-circle.type-SM::before {
     background: conic-gradient(var(--gradient-type-sm));
+}
+.spectral-types-circle.type-X::before {
+    background: conic-gradient(var(--gradient-type-x));
 }
 
 /* raw materials */

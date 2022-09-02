@@ -1114,6 +1114,12 @@
     line-height: 1.5rem;
 }
 
+#user-selected-products-wrapper .extra-info {
+    font-size: 0.8rem;
+    line-height: 1rem;
+    opacity: 0.5;
+}
+
 #user-selected-products-list {
     display: flex;
     flex-wrap: wrap;
