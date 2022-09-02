@@ -2,6 +2,10 @@
 
 @keyframes flash-interaction { 50% { background: var(--overactive-bg); } }
 
+.asteroid-info .area::after {
+    content: ' km²';
+}
+
 #asteroids-planner-wrapper {
     display: grid;
     grid-template-columns: auto auto 1fr;
@@ -84,11 +88,13 @@
     margin-top: 0.25rem;
 }
 
-#asteroids-planner-tree .asteroid-info .spectral-types {
+#asteroids-planner-tree .asteroid-info .spectral-types,
+.asteroid-cards .asteroid-card .spectral-types-circle .spectral-types {
     display: inline-flex;
 }
 
-#asteroids-planner-tree .asteroid-info .spectral-type {
+#asteroids-planner-tree .asteroid-info .spectral-type,
+.asteroid-cards .asteroid-card .spectral-types-circle .spectral-type {
     display: inline-block;
     font-size: 0.7rem;
     line-height: 1rem;
@@ -96,17 +102,20 @@
     text-align: center;
 }
 
-#asteroids-planner-tree .asteroid-info .spectral-type:first-child {
+#asteroids-planner-tree .asteroid-info .spectral-type:first-child,
+.asteroid-cards .asteroid-card .spectral-types-circle .spectral-type:first-child {
     border-top-left-radius: 50%;
     border-bottom-left-radius: 50%;
 }
 
-#asteroids-planner-tree .asteroid-info .spectral-type:last-child {
+#asteroids-planner-tree .asteroid-info .spectral-type:last-child,
+.asteroid-cards .asteroid-card .spectral-types-circle .spectral-type:last-child {
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
 }
 
-#asteroids-planner-tree .asteroids-tree-item:not(:hover):not(.connected):not(.has-connected-product) .asteroid-info .spectral-type {
+#asteroids-planner-tree .asteroids-tree-item:not(:hover):not(.connected):not(.has-connected-product) .asteroid-info .spectral-type,
+.asteroid-cards .asteroid-card .spectral-types-circle:not(:hover) .spectral-type {
     background: var(--overactive-bg);
 }
 
@@ -114,10 +123,6 @@
     font-size: 0.8rem;
     text-align: right;
     opacity: 0.5;
-}
-
-#asteroids-planner-tree .asteroid-info .area::after {
-    content: ' km²';
 }
 
 #asteroids-planner-tree .planned-products-tree-item {
@@ -444,4 +449,39 @@
     content: '⧟';
     margin-right: 1.5rem;
     opacity: 0.25;
+}
+
+
+/* Content - Home - asteroid cards */
+
+.asteroid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 11rem));
+    gap: 5rem;
+}
+
+.asteroid-cards .asteroid-card .spectral-types-circle::before {
+    padding: 0.4rem;
+}
+
+.asteroid-cards .asteroid-card .spectral-types-circle .asteroid-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.asteroid-cards .asteroid-card .spectral-types-circle .asteroid-name {
+    font-weight: bold;
+}
+
+.asteroid-cards .asteroid-card .spectral-types-circle .asteroid-add {
+    font-size: 8rem;
+    opacity: 0.2;
+}
+
+.asteroid-cards .asteroid-card .spectral-types-circle .asteroid-type,
+.asteroid-cards .asteroid-card .spectral-types-circle .area,
+.asteroid-cards .asteroid-card .spectral-types-circle:hover .asteroid-add {
+    opacity: 0.5;
 }

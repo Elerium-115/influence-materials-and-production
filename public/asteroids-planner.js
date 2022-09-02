@@ -106,6 +106,15 @@ function getAsteroidsPlannerTreeElementToConnect() {
     return elName.closest('li');
 }
 
+function getSpectralTypesHtmlForAsteroidType(asteroidType) {
+    let spectralTypesHtml = '';
+    // Reorder spectral type "MS" as "SM"
+    asteroidType.replace(/^MS$/, 'SM').split('').forEach(baseSpectral => {
+        spectralTypesHtml += `<span class="spectral-type type-${baseSpectral}">${baseSpectral}</span>`;
+    });
+    return spectralTypesHtml;
+}
+
 function onClickAddAsteroid() {
     // console.log(`--- onClickAddAsteroid`); //// TEST
     //// TO BE IMPLEMENTED
@@ -160,10 +169,11 @@ function onClickAsteroidAction(action, el) {
         repositionConnections();
         // Flash interaction
         elAsteroidTreeItem.classList.add('flash-interaction');
+        // Swap in array (move up or down)
+        asteroidsPlannerTree.splice(indexToSwap, 2, asteroidsPlannerTree[indexToSwap + 1], asteroidsPlannerTree[indexToSwap]);
+        updateContent();
         setTimeout(() => {
             elAsteroidTreeItem.classList.remove('flash-interaction');
-            // Swap in array (move up or down)
-            asteroidsPlannerTree.splice(indexToSwap, 2, asteroidsPlannerTree[indexToSwap + 1], asteroidsPlannerTree[indexToSwap]);
             onClickAsteroidActionInProgress = false;
         }, 1000); // Match the animation duration for "flash-interaction"
     }
@@ -174,11 +184,6 @@ function refreshAsteroidsPlannerTreeHtml() {
     let asteroidTreeListHtml = '';
     asteroidsPlannerTree.forEach(asteroidData => {
         const asteroidName = asteroidData.asteroid_name;
-        let spectralTypesHtml = '';
-        // Reorder spectral type "MS" as "SM"
-        asteroidData.asteroid_type.replace(/^MS$/, 'SM').split('').forEach(baseSpectral => {
-            spectralTypesHtml += `<span class="spectral-type type-${baseSpectral}">${baseSpectral}</span>`;
-        });
         let plannedProductsHtml = '';
         asteroidData.planned_products.forEach(plannedProductData => {
             const plannedProductName = plannedProductData.planned_product_name;
@@ -211,7 +216,7 @@ function refreshAsteroidsPlannerTreeHtml() {
                     <div class="asteroid-name" data-asteroid-name="${asteroidName}">${asteroidName}</div>
                     <div class="asteroid-info">
                         <span class="spectral-types">
-                            ${spectralTypesHtml}
+                            ${getSpectralTypesHtmlForAsteroidType(asteroidData.asteroid_type)}
                         </span>
                         <span class="area">${asteroidData.asteroid_area}</span>
                     </div>
@@ -415,7 +420,7 @@ function handleAsteroidsPlannerTreeChanged() {
     refreshAsteroidsPlannerSelection();
     regenerateShoppingListTree();
     refreshTreesHtml();
-    refreshAsteroidsPlannerBreadcrumbsHtml();
+    updateContent();
 }
 
 function connectElements(el1, el2, options = {}) {
@@ -664,11 +669,38 @@ function updateContent() {
             elContent.innerHTML += `<div><img src="./img/products/${getItemNameSafe(plannedProductName)}.png" alt=""></div>`;
         }
     }
+    */
     if (!asteroidName) {
         // Home
-        //// TO BE IMPLEMENTED
+        let asteroidCardsHtml = '';
+        asteroidsPlannerTree.forEach(asteroidData => {
+            asteroidCardsHtml += `
+                <div class="asteroid-card">
+                    <div class="spectral-types-circle type-${asteroidData.asteroid_type}" onclick="onClickTreeItem('${asteroidData.asteroid_name}')">
+                        <div class="asteroid-info">
+                            <div class="asteroid-type">
+                                ${asteroidData.asteroid_type}
+                            </div>
+                            <div class="asteroid-name">${asteroidData.asteroid_name}</div>
+                            <div class="area">${asteroidData.asteroid_area}</div>
+                        </div>
+                    </div>
+                </div>
+                `;
+        });
+        elContent.innerHTML = `
+            <div class="asteroid-cards">
+                <div class="asteroid-card">
+                    <div class="spectral-types-circle type-X" onclick="onClickAddAsteroid()">
+                        <div class="asteroid-info">
+                            <div class="asteroid-add">+</div>
+                        </div>
+                    </div>
+                </div>
+                ${asteroidCardsHtml}
+            </div>
+        `;
     }
-    */
 }
 
 function goHome() {
@@ -712,6 +744,8 @@ on('change', '#toggle-hide-unselected', el => {
 
 refreshTreesHtml();
 
+// onClickAddAsteroid(); //// TEST
+
 
 //// TO TEST
 /*
@@ -753,6 +787,11 @@ refreshTreesHtml();
                 https://observablehq.com/@d3/bubble-chart?collection=@d3/d3-hierarchy
                 https://observablehq.com/@d3/radial-tree?collection=@d3/d3-hierarchy
                 https://observablehq.com/@d3/radial-cluster?collection=@d3/d3-hierarchy
+                https://observablehq.com/@antonlecock/our-solar-system-using-d3-js-and-three-js
+                https://github.com/ofrohn/d3-orrery
+                https://bl.ocks.org/vasturiano/54dd054d22be863da5afe2db02e033e2
+                https://vimeo.com/449618596
+                https://adalia.coorbital.rocks/coorbital-search
         - level 1 = planned asteroids
             - label = asteroid ID (or asteroid name?) / dummy name
                 - also include spectral type and area?
