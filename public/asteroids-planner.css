@@ -145,12 +145,14 @@
     color: var(--default-text_semifaded);
 }
 
+#asteroids-planner-tree h3:hover,
 #asteroids-planner-tree .asteroids-tree li:hover > .tree-label,
 #asteroids-planner-tree .tree-label:hover {
     color: var(--brand-text);
     cursor: pointer;
 }
 
+#asteroids-planner-tree h3:hover,
 #asteroids-planner-tree .tree-label:hover > .asteroid-name,
 #asteroids-planner-tree .planned-products-tree .tree-label:hover {
     text-decoration: underline;
@@ -451,37 +453,96 @@
     opacity: 0.25;
 }
 
+.content-title {
+    margin-bottom: 2rem;
+}
 
-/* Content - Home - asteroid cards */
 
-.asteroid-cards {
+/* Content cards */
+
+.content-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(11rem, 11rem));
-    gap: 5rem;
+    gap: 3rem;
 }
 
-.asteroid-cards .asteroid-card .spectral-types-circle::before {
+.content-cards .asteroid-card .spectral-types-circle::before {
     padding: 0.4rem;
+    opacity: 0.5;
 }
 
-.asteroid-cards .asteroid-card .spectral-types-circle .asteroid-info {
+.content-cards .asteroid-card .spectral-types-circle:hover::before {
+    opacity: 1;
+}
+
+.content-cards .asteroid-card .spectral-types-circle.type-X::before {
+    padding: 1px;
+    opacity: 1;
+}
+
+.content-cards .asteroid-card .spectral-types-circle.type-X:hover::before {
+    background: white;
+}
+
+.content-cards .asteroid-card .spectral-types-circle .asteroid-info {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
     align-items: center;
 }
 
-.asteroid-cards .asteroid-card .spectral-types-circle .asteroid-name {
+.content-cards .asteroid-card .spectral-types-circle .asteroid-name,
+.content-cards .product-card .product-name {
     font-weight: bold;
 }
 
-.asteroid-cards .asteroid-card .spectral-types-circle .asteroid-add {
+.content-cards .asteroid-card .spectral-types-circle .asteroid-add {
     font-size: 8rem;
-    opacity: 0.2;
+    padding-bottom: 0.5rem;
+    opacity: 0.5;
 }
 
-.asteroid-cards .asteroid-card .spectral-types-circle .asteroid-type,
-.asteroid-cards .asteroid-card .spectral-types-circle .area,
-.asteroid-cards .asteroid-card .spectral-types-circle:hover .asteroid-add {
+.content-cards .asteroid-card .spectral-types-circle .asteroid-type,
+.content-cards .asteroid-card .spectral-types-circle .area {
     opacity: 0.5;
+}
+
+.content-cards .asteroid-card .spectral-types-circle:hover .asteroid-add,
+.content-cards .product-card.product-add:hover {
+    color: var(--default-text);
+    opacity: 1;
+}
+
+.content-cards .product-card {
+    min-height: 13rem;
+    text-align: center;
+    border-left: 1px solid var(--default-text);
+    border-right: 1px solid var(--default-text);
+    border-radius: 1rem;
+}
+
+.content-cards .product-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border-color: white;
+    cursor: pointer;
+}
+
+.content-cards .product-card img {
+    width: 100%;
+}
+
+.content-cards .product-card img.missing-image {
+    width: 9rem;
+    margin: 1rem;
+}
+
+.content-cards .product-card .product-name {
+    padding-bottom: 1rem;
+}
+
+.content-cards .product-card.product-add {
+    font-size: 8rem;
+    line-height: 12rem;
+    color: var(--default-text_semifaded);
 }
