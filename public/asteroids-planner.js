@@ -688,7 +688,8 @@ function updateContent() {
                 `;
         });
         elContent.innerHTML = `
-            <div class="asteroid-cards">
+            <h3 class="content-title">Asteroids with planned production chains</h3>
+            <div class="content-cards">
                 <div class="asteroid-card">
                     <div class="spectral-types-circle type-X" onclick="onClickAddAsteroid()">
                         <div class="asteroid-info">
@@ -697,6 +698,25 @@ function updateContent() {
                     </div>
                 </div>
                 ${asteroidCardsHtml}
+            </div>
+        `;
+    } else if (!plannedProductName) {
+        // Asteroid
+        let productCardsHtml = '';
+        getAsteroidData(asteroidName).planned_products.forEach(productData => {
+            const productName = productData.planned_product_name;
+            productCardsHtml += `
+                <div class="product-card" onclick="onClickTreeItem('${asteroidName}', '${productName}')">
+                    <img src="./img/products/${getItemNameSafe(productName)}.png" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
+                    <div class="product-name">${productName}</div>
+                </div>
+                `;
+        });
+        elContent.innerHTML = `
+            <h3 class="content-title">Products planned on this asteroid</h3>
+            <div class="content-cards">
+                <div class="product-card product-add">+</div>
+                ${productCardsHtml}
             </div>
         `;
     }
