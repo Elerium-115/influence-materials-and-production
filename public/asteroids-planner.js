@@ -53,6 +53,18 @@ const leaderLineOptionsRightToLeftGradient = {
     startSocketGravity: 66,
     endSocketGravity: 66,
     gradient: true,
+    dash: {len: 10, gap: 2, animation: true},
+};
+const leaderLineOptionsLeftToRightAnimated = {
+    ...leaderLineOptionsRightToLeftGradient,
+    startSocket: 'right',
+    endSocket: 'left',
+    startPlug: 'disc',
+    endPlug: 'behind',
+    startPlugSize: 2,
+    endPlugColor: leaderLineColors.link,
+    dash: {len: 6, gap: 6, animation: true},
+    size: 0.5,
 };
 
 function getListOfAsteroids() {
@@ -112,6 +124,18 @@ function getSpectralTypesHtmlForAsteroidType(asteroidType) {
         spectralTypesHtml += `<span class="spectral-type type-${baseSpectral}">${baseSpectral}</span>`;
     });
     return spectralTypesHtml;
+}
+
+function getLeaderLineAreaForTreeElement(el) {
+    return LeaderLine.areaAnchor(el, {
+        color: leaderLineColors.link,
+        x: '0%',
+        y: '15%',
+        width: '100%',
+        height: '70%',
+        radius: 8,
+        dash: true,
+    });
 }
 
 function onClickAddAsteroid() {
@@ -440,7 +464,7 @@ function disconnectAsteroidsPlannerTree() {
     // Remove lines
     asteroidsPlannerLines.forEach(line => line.remove());
     asteroidsPlannerLines = [];
-    // Unmark previously-connected element from the Asteroids Planner tree, if any
+    // Unmark previously-connected elements from the Asteroids Planner tree, if any
     const el = elAsteroidsPlannerTree.querySelector('.connected');
     if (el) {
         el.classList.remove('connected');
@@ -449,6 +473,9 @@ function disconnectAsteroidsPlannerTree() {
             el.closest('.asteroids-tree-item').classList.remove('has-connected-product');
         }
     }
+    elAsteroidsPlannerTree.querySelectorAll('.connected-as-origin').forEach(el => {
+        el.classList.remove('connected-as-origin');
+    });
     elShoppingListTree.classList.remove('has-connections');
     // Unmark previously-connected elements from the Shopping List tree, if any
     elShoppingListTree.querySelectorAll('.connected').forEach(el => el.classList.remove('connected'));
@@ -518,17 +545,23 @@ function connectAsteroidsPlannerTree() {
         }
     });
     originsToConnect.forEach(origin => {
-        const startArea = LeaderLine.areaAnchor(origin, {
-            color: leaderLineColors.link,
-            x: '0%',
-            y: '15%',
-            width: '100%',
-            height: '70%',
-            radius: 8,
-            dash: true,
-        });
+        const startArea = getLeaderLineAreaForTreeElement(origin);
         asteroidsPlannerLines.push(connectElements(startArea, elToConnect, leaderLineOptionsRightToLeftGradient));
         origin.classList.add('connected');
+        /**
+         * If this origin (input / building / module) is a planned product from
+         * any other production chain, connect that planned product to this origin.
+         */
+        const originName = origin.dataset.inputName || origin.dataset.buildingName || origin.dataset.moduleName;
+        if (originName) {
+            elAsteroidsPlannerTree.querySelectorAll("[data-planned-product-name]").forEach(elPlannedProduct => {
+                if (elPlannedProduct.dataset.plannedProductName === originName) {
+                    const startArea = getLeaderLineAreaForTreeElement(elPlannedProduct);
+                    asteroidsPlannerLines.push(connectElements(elPlannedProduct, origin, leaderLineOptionsLeftToRightAnimated));
+                    elPlannedProduct.classList.add('connected-as-origin');
+                }
+            });
+        }
     });
     elToConnect.classList.add('connected');
     // Also mark the parent asteroid as having a connected product
@@ -678,7 +711,7 @@ function updateContent() {
                     <div class="spectral-types-circle type-${asteroidData.asteroid_type}" onclick="onClickTreeItem('${asteroidData.asteroid_name}')">
                         <div class="asteroid-info">
                             <div class="asteroid-type">
-                                ${asteroidData.asteroid_type}
+                                ${asteroidData.asteroid_type}-type
                             </div>
                             <div class="asteroid-name">${asteroidData.asteroid_name}</div>
                             <div class="area">${asteroidData.asteroid_area}</div>
@@ -765,6 +798,11 @@ refreshTreesHtml();
 
 // onClickAddAsteroid(); //// TEST
 
+
+//// TO DO PRIO
+/*
+- replace "confirm()" with overlay re: deleting asteroids from the tree?
+*/
 
 //// TO TEST
 /*

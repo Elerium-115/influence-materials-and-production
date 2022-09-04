@@ -128,7 +128,18 @@
 #asteroids-planner-tree .planned-products-tree-item {
     font-size: 0.9rem;
     margin-top: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.5rem 0 0.5rem 0.5rem; /* account for padding-right from child " > .tree-label" */
+}
+
+#asteroids-planner-tree .planned-products-tree-item > .tree-label {
+    padding-right: 0.5rem;
+    border-right: 1px solid transparent;
+}
+
+#asteroids-planner-tree .planned-products-tree-item > .tree-label.connected-as-origin {
+    background: linear-gradient(90deg, transparent 25%, var(--overactive-bg) 100%); 
+    border-right: 1px solid var(--link);
+    border-radius: 0.5em;
 }
 
 #asteroids-planner-tree .intermediate-products-tree {
