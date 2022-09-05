@@ -46,24 +46,25 @@ const leaderLineOptionsRightToLeftGradient = {
     ...leaderLineOptionsDefault,
     startSocket: 'left',
     endSocket: 'right',
+    startPlug: 'disc',
     endPlug: 'disc',
+    startPlugSize: 2,
     endPlugSize: 2,
     startPlugColor: leaderLineColors.link,
     endPlugColor: leaderLineColors.brand,
     startSocketGravity: 66,
     endSocketGravity: 66,
     gradient: true,
-    dash: {len: 10, gap: 2, animation: true},
+    dash: {len: 10, gap: 2, animation: true}, // len + gap = 12
 };
 const leaderLineOptionsLeftToRightAnimated = {
     ...leaderLineOptionsRightToLeftGradient,
     startSocket: 'right',
     endSocket: 'left',
-    startPlug: 'disc',
     endPlug: 'behind',
-    startPlugSize: 2,
+    startPlugSize: 4, // multiplier for line "size" => real plug-size = 2
     endPlugColor: leaderLineColors.link,
-    dash: {len: 6, gap: 6, animation: true},
+    dash: {len: 6, gap: 6, animation: true}, // len + gap = 12 => same speed as "leaderLineOptionsRightToLeftGradient"
     size: 0.5,
 };
 
@@ -126,17 +127,18 @@ function getSpectralTypesHtmlForAsteroidType(asteroidType) {
     return spectralTypesHtml;
 }
 
-function getLeaderLineAreaForTreeElement(el) {
-    return LeaderLine.areaAnchor(el, {
-        color: leaderLineColors.link,
-        x: '0%',
-        y: '15%',
-        width: '100%',
-        height: '70%',
-        radius: 8,
-        dash: true,
-    });
-}
+//// TO BE DELETED?
+// function getLeaderLineAreaForTreeElement(el) {
+//     return LeaderLine.areaAnchor(el, {
+//         color: leaderLineColors.link,
+//         x: '0%',
+//         y: '15%',
+//         width: '100%',
+//         height: '70%',
+//         radius: 8,
+//         dash: true,
+//     });
+// }
 
 function onClickAddAsteroid() {
     // console.log(`--- onClickAddAsteroid`); //// TEST
@@ -545,8 +547,7 @@ function connectAsteroidsPlannerTree() {
         }
     });
     originsToConnect.forEach(origin => {
-        const startArea = getLeaderLineAreaForTreeElement(origin);
-        asteroidsPlannerLines.push(connectElements(startArea, elToConnect, leaderLineOptionsRightToLeftGradient));
+        asteroidsPlannerLines.push(connectElements(origin, elToConnect, leaderLineOptionsRightToLeftGradient));
         origin.classList.add('connected');
         /**
          * If this origin (input / building / module) is a planned product from
@@ -556,7 +557,6 @@ function connectAsteroidsPlannerTree() {
         if (originName) {
             elAsteroidsPlannerTree.querySelectorAll("[data-planned-product-name]").forEach(elPlannedProduct => {
                 if (elPlannedProduct.dataset.plannedProductName === originName) {
-                    const startArea = getLeaderLineAreaForTreeElement(elPlannedProduct);
                     asteroidsPlannerLines.push(connectElements(elPlannedProduct, origin, leaderLineOptionsLeftToRightAnimated));
                     elPlannedProduct.classList.add('connected-as-origin');
                 }

@@ -39,8 +39,8 @@
 }
 
 #asteroids-planner-tree li li:hover,
-#shopping-list-tree li li:hover {
-    background: var(--overactive-bg);
+#shopping-list-tree .shopping-tree ul li:hover {
+    background: var(--overactive-bg) !important; /* overwrite background of ".connected" */
 }
 
 #asteroids-planner-tree .tree-label,
@@ -88,13 +88,11 @@
     margin-top: 0.25rem;
 }
 
-#asteroids-planner-tree .asteroid-info .spectral-types,
-.asteroid-cards .asteroid-card .spectral-types-circle .spectral-types {
+#asteroids-planner-tree .asteroid-info .spectral-types {
     display: inline-flex;
 }
 
-#asteroids-planner-tree .asteroid-info .spectral-type,
-.asteroid-cards .asteroid-card .spectral-types-circle .spectral-type {
+#asteroids-planner-tree .asteroid-info .spectral-type {
     display: inline-block;
     font-size: 0.7rem;
     line-height: 1rem;
@@ -102,20 +100,17 @@
     text-align: center;
 }
 
-#asteroids-planner-tree .asteroid-info .spectral-type:first-child,
-.asteroid-cards .asteroid-card .spectral-types-circle .spectral-type:first-child {
+#asteroids-planner-tree .asteroid-info .spectral-type:first-child {
     border-top-left-radius: 50%;
     border-bottom-left-radius: 50%;
 }
 
-#asteroids-planner-tree .asteroid-info .spectral-type:last-child,
-.asteroid-cards .asteroid-card .spectral-types-circle .spectral-type:last-child {
+#asteroids-planner-tree .asteroid-info .spectral-type:last-child {
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
 }
 
-#asteroids-planner-tree .asteroids-tree-item:not(:hover):not(.connected):not(.has-connected-product) .asteroid-info .spectral-type,
-.asteroid-cards .asteroid-card .spectral-types-circle:not(:hover) .spectral-type {
+#asteroids-planner-tree .asteroids-tree-item:not(:hover):not(.connected):not(.has-connected-product) .asteroid-info .spectral-type {
     background: var(--overactive-bg);
 }
 
@@ -127,19 +122,19 @@
 
 #asteroids-planner-tree .planned-products-tree-item {
     font-size: 0.9rem;
-    margin-top: 0.5rem;
-    padding: 0.5rem 0 0.5rem 0.5rem; /* account for padding-right from child " > .tree-label" */
+    margin-top: 0.8rem;
+    padding: 0 0 0 0.5rem; /* account for padding-right from child " > .tree-label" */
 }
 
 #asteroids-planner-tree .planned-products-tree-item > .tree-label {
-    padding-right: 0.5rem;
+    padding: 0.2rem 0.5rem 0.2rem 0;
     border-right: 1px solid transparent;
 }
 
 #asteroids-planner-tree .planned-products-tree-item > .tree-label.connected-as-origin {
     background: linear-gradient(90deg, transparent 25%, var(--overactive-bg) 100%); 
-    border-right: 1px solid var(--link);
-    border-radius: 0.5em;
+    border-color: var(--link);
+    border-radius: 0.5rem;
 }
 
 #asteroids-planner-tree .intermediate-products-tree {
@@ -154,6 +149,10 @@
     font-size: 0.8rem;
     padding: 0;
     color: var(--default-text_semifaded);
+}
+
+#asteroids-planner-tree .intermediate-products-tree-item:last-child {
+    padding-bottom: 0.3rem;
 }
 
 #asteroids-planner-tree h3:hover,
@@ -305,33 +304,32 @@
     border-right: 1px solid var(--link);
 }
 
-#shopping-list-tree .shopping-tree > li:hover > .tree-label,
-#shopping-list-tree .tree-label:hover {
-    color: var(--link);
-    cursor: pointer;
-}
-
-#shopping-list-tree li li {
-    font-size: 0.8rem;
-    padding: 0.25rem 0.5rem;
-}
-
 #shopping-list-tree .shopping-tree > li > .tree-label {
     color: var(--link);
 }
 
-#shopping-list-tree .tree-label:hover {
+#shopping-list-tree .shopping-tree ul .tree-label {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    border-left: 1px solid transparent;
+}
+
+#shopping-list-tree .shopping-tree ul .tree-label:hover {
+    color: white;
     text-decoration: underline;
+    cursor: pointer;
+}
+
+#shopping-list-tree .shopping-tree ul .tree-label.connected {
+    background: linear-gradient(-90deg, transparent 25%, var(--overactive-bg) 100%); 
+    border-color: var(--link);
 }
 
 #shopping-list-tree .options {
     text-align: right;
 }
 
-#shopping-list-tree.hide-unselected.has-connections .shopping-tree ul .tree-label:not(.connected) {
-    display: none;
-}
-
+#shopping-list-tree.hide-unselected.has-connections .shopping-tree ul .tree-label:not(.connected),
 #shopping-list-tree:not(.has-connections) .options {
     display: none;
 }

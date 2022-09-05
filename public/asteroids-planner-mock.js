@@ -67,7 +67,7 @@ const mockAsteroidsPlannerTree = [
 						},
 						{
 							"input_name": "Oxygen"
-						}
+						},
 					],
 					"buildings": [
 						{
@@ -141,13 +141,14 @@ const mockAsteroidsPlannerTree = [
 					{
 						"intermediate_product_name": "Oxygen"
 					},
-					{
-						"intermediate_product_name": "Water"
-					},
 				],
 				"shopping_list":
 				{
-					"inputs": [],
+					"inputs": [
+						{
+							"input_name": "Water"
+						},
+					],
 					"buildings": [
 						{
 							"building_name": "Extractor"
@@ -157,25 +158,37 @@ const mockAsteroidsPlannerTree = [
 						},
 					],
 					"modules": [],
-					"spectral_types": ["C", "I"],
+					"spectral_types": ["I"],
 				},
 			},
 			{
 				"planned_product_name": "Oxygen",
-				"intermediate_products": [
-					{
-						"intermediate_product_name": "Water"
-					},
-				],
+				"intermediate_products": [],
+				"shopping_list":
+				{
+					"inputs": [
+						{
+							"input_name": "Water"
+						},
+					],
+					"buildings": [
+						{
+							"building_name": "Refinery"
+						},
+					],
+					"modules": [],
+					"spectral_types": [],
+				},
+			},
+			{
+				"planned_product_name": "Water",
+				"intermediate_products": [],
 				"shopping_list":
 				{
 					"inputs": [],
 					"buildings": [
 						{
 							"building_name": "Extractor"
-						},
-						{
-							"building_name": "Refinery"
 						},
 					],
 					"modules": [],
