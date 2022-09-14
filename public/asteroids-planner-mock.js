@@ -1,7 +1,7 @@
 
 const mockAsteroidsPlannerTree = [
 	{
-		"asteroid_name": "Asteroid #1234",
+		"asteroid_name": "Asteroid #39744",
 		"asteroid_type": "M",
 		"asteroid_area": 75,
 		"planned_products": [
@@ -84,7 +84,7 @@ const mockAsteroidsPlannerTree = [
 		],
 	},
 	{
-		"asteroid_name": "Asteroid #5678",
+		"asteroid_name": "Asteroid #60980",
 		"asteroid_type": "CIS",
 		"asteroid_area": 50,
 		"planned_products": [
