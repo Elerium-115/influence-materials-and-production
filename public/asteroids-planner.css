@@ -132,7 +132,7 @@
 }
 
 #asteroids-planner-tree .planned-products-tree-item > .tree-label.connected-as-origin {
-    background: linear-gradient(90deg, transparent 25%, var(--overactive-bg) 100%); 
+    background: linear-gradient(90deg, transparent 50%, var(--overactive-bg) 100%); 
     border-color: var(--link);
     border-radius: 0.5rem;
 }
@@ -321,7 +321,7 @@
 }
 
 #shopping-list-tree .shopping-tree ul .tree-label.connected {
-    background: linear-gradient(-90deg, transparent 25%, var(--overactive-bg) 100%); 
+    background: linear-gradient(-90deg, transparent 50%, var(--overactive-bg) 100%); 
     border-color: var(--link);
 }
 
@@ -440,11 +440,12 @@
 
 #start-title {
     display: inline-block;
+    background: linear-gradient(-90deg, transparent 50%, var(--overactive-bg) 100%); 
     color: var(--link);
     margin-top: -1px; /* match border size */
     margin-left: -0.5rem;
     padding: 0.5rem;
-    border: 1px dashed var(--link);
+    border-left: 1px solid var(--link);
     border-radius: 0.5rem;
 }
 
@@ -554,4 +555,132 @@
     font-size: 8rem;
     line-height: 12rem;
     color: var(--default-text_semifaded);
+}
+
+/* Overlays */
+
+#overlay-wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--default-overlay-bg);
+    z-index: 1;
+}
+
+#ovrelay-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    line-height: 1.6rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--default-text);
+    cursor: pointer;
+    padding: 1rem;
+}
+
+#ovrelay-close:hover {
+    color: white;
+}
+
+#overlay-add-asteroid {
+    min-width: 66%;
+}
+
+#overlay-add-asteroid h3 {
+    margin-bottom: 1rem;
+}
+
+#overlay-add-asteroid hr {
+    position: relative;
+    margin: 2rem 0;
+    border: none;
+    border-top: 1px solid var(--default-text_faded);
+}
+
+#overlay-add-asteroid hr::after {
+    content: 'OR';
+    position: absolute;
+    top: -1rem;
+    left: calc(50% - 1.5rem);
+    line-height: 2rem;
+    text-align: center;
+    background: var(--default-overlay-bg);
+    color: var(--brand-text);
+    padding: 0 1rem;
+    border-radius: 50%;
+}
+
+#overlay-add-asteroid .mock-spectral-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(3.5rem, 3.5rem));
+    gap: 1rem;
+    margin: 0.5rem -0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .mock-spectral-types .spectral-types-circle.selected {
+    color: white;
+}
+
+#overlay-add-asteroid .mock-spectral-types .spectral-types-circle::before {
+    padding: 0.2rem;
+}
+
+#overlay-add-asteroid .mock-spectral-types .spectral-types-circle:hover::before,
+#overlay-add-asteroid .mock-spectral-types .spectral-types-circle.selected::before {
+    opacity: 1;
+}
+
+#overlay-add-asteroid .mock-area-and-cta {
+    display: flex;
+    align-items: center;
+}
+
+#overlay-add-asteroid .mock-area-and-cta .mock-area {
+    margin: 0 -0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .mock-area-and-cta .mock-area input {
+    width: 5rem;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.4);
+    text-align: right;
+    margin: 0 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0.3rem;
+}
+
+#overlay-add-asteroid .mock-area-and-cta .mock-cta {
+    display: inline-block;
+    background: var(--dark-bg);
+    color: var(--brand-text);
+    cursor: pointer;
+    margin-left: 2rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .mock-area-and-cta .mock-cta:hover {
+    background: var(--brand-text);
+    color: black;
+}
+
+/* WIP */
+#wip {
+    background: var(--brand-text);
+    color: black;
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
 }

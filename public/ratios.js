@@ -193,7 +193,7 @@ function on(eventType, selector, callback) {
 // update ratios whenever an input-value changes
 on('change', ".ratios-spectral-types ul li .area input[type='text']", el => {
     const intValue = parseInt(el.value);
-    el.value = isNaN(intValue) ? 0 : intValue;
+    el.value = isNaN(intValue) || intValue < 0 ? 0 : intValue;
     updateRatios();
 });
 

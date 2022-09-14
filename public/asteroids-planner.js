@@ -1,16 +1,13 @@
 
-//// TEST
-function setupTest() {
-    asteroidsPlannerTree = [...mockAsteroidsPlannerTree];
-    handleAsteroidsPlannerTreeChanged();
-    goHome();
-}
-
 const elAsteroidsPlannerWrapper = document.getElementById('asteroids-planner-wrapper');
 const elAsteroidsPlannerTree = document.getElementById('asteroids-planner-tree');
 const elShoppingListTree = document.getElementById('shopping-list-tree');
 const elContentWrapper = document.getElementById('content-wrapper');
 const elContent = document.getElementById('content');
+const elOverlayWrapper = document.getElementById('overlay-wrapper');
+const elOverlayAddAsteroid = document.getElementById('overlay-add-asteroid');
+const elInputMockSpectralType = document.getElementById('input-mock-spectral-type');
+const elInputMockArea = document.getElementById('input-mock-area');
 
 const elButtonAddAsteroid = elAsteroidsPlannerTree.querySelector('#asteroids-planner-tree .add-asteroid');
 
@@ -67,6 +64,13 @@ const leaderLineOptionsLeftToRightAnimated = {
     dash: {len: 6, gap: 6, animation: true}, // len + gap = 12 => same speed as "leaderLineOptionsRightToLeftGradient"
     size: 0.5,
 };
+
+//// TEST
+function setupTest() {
+    asteroidsPlannerTree = [...mockAsteroidsPlannerTree];
+    handleAsteroidsPlannerTreeChanged();
+    goHome();
+}
 
 function getListOfAsteroids() {
     return asteroidsPlannerTree.map(data => data.asteroid_name);
@@ -139,12 +143,6 @@ function getSpectralTypesHtmlForAsteroidType(asteroidType) {
 //         dash: true,
 //     });
 // }
-
-function onClickAddAsteroid() {
-    // console.log(`--- onClickAddAsteroid`); //// TEST
-    //// TO BE IMPLEMENTED
-    setupTest(); //// PLACEHOLDER
-}
 
 function onClickAsteroidAction(action, el) {
     if (onClickAsteroidActionInProgress) {
@@ -555,7 +553,7 @@ function connectAsteroidsPlannerTree() {
          */
         const originName = origin.dataset.inputName || origin.dataset.buildingName || origin.dataset.moduleName;
         if (originName) {
-            elAsteroidsPlannerTree.querySelectorAll("[data-planned-product-name]").forEach(elPlannedProduct => {
+            elAsteroidsPlannerTree.querySelectorAll('[data-planned-product-name]').forEach(elPlannedProduct => {
                 if (elPlannedProduct.dataset.plannedProductName === originName) {
                     asteroidsPlannerLines.push(connectElements(elPlannedProduct, origin, leaderLineOptionsLeftToRightAnimated));
                     elPlannedProduct.classList.add('connected-as-origin');
@@ -653,6 +651,80 @@ function refreshAsteroidsPlannerBreadcrumbsHtml() {
     document.getElementById('breadcrumbs-wrapper').innerHTML = breadcrumbsHtml;
 }
 
+function closeOverlay() {
+    elOverlayWrapper.querySelectorAll('.overlay-panel').forEach(el => {
+        el.classList.add('hidden');
+    });
+    elOverlayWrapper.classList.add('hidden');
+}
+
+function onClickAddAsteroid() {
+    elOverlayWrapper.classList.remove('hidden');
+    elOverlayAddAsteroid.classList.remove('hidden');
+}
+
+function setMockRockSpectralType(el, spectralType) {
+    if (el.classList.contains('selected')) {
+        // De-select the clicked spectral type
+        el.classList.remove('selected');
+        elInputMockSpectralType.value = '';
+    } else {
+        // De-select the currently selected spectral type (if any), and select the clicked spectral type
+        const elSelected = elOverlayAddAsteroid.querySelector('.mock-spectral-types .selected');
+        if (elSelected) {
+            elSelected.classList.remove('selected');
+        }
+        el.classList.add('selected');
+        elInputMockSpectralType.value = spectralType;
+    }
+}
+
+function createMockRock() {
+    const spectralType = elInputMockSpectralType.value;
+    const area = elInputMockArea.value;
+    const elsError = [];
+    if (!spectralType) {
+        elsError.push(document.querySelector('#overlay-add-asteroid .mock-spectral-types'));
+    }
+    if (!area) {
+        elsError.push(document.querySelector('#overlay-add-asteroid .mock-area'));
+    }
+    if (elsError.length) {
+        elsError.forEach(elError => {
+            // Flash error
+            elError.classList.add('flash-error');
+            setTimeout(() => {
+                elError.classList.remove('flash-error');
+            }, 250); // Match the animation duration for "flash-error"
+        });
+        return;
+    }
+    // Add mock rock to "asteroidsPlannerTree"
+    let mockRockIdxMax = 0;
+    asteroidsPlannerTree.forEach(asteroidData => {
+        // Update "mockRockIdxMax" if this asteroid is a "Mock Rock #..." with a higher idx
+        mockRockIdxMax = Math.max(mockRockIdxMax, parseInt('0' + asteroidData.asteroid_name.replace(/Mock Rock #(\d+)/, '$1')));
+    });
+    const mockRockData = {
+        asteroid_name: `Mock Rock #${mockRockIdxMax + 1}`,
+        asteroid_type: spectralType,
+        asteroid_area: Number(area),
+        planned_products: [],
+    };
+    asteroidsPlannerTree.push(mockRockData);
+    // Reset selections in the overlay, close it, and update the Asteroids Planner tree
+    const elSelected = elOverlayAddAsteroid.querySelector('.mock-spectral-types .selected');
+    setMockRockSpectralType(elSelected, spectralType); // De-select the selected spectral type
+    elInputMockArea.value = '';
+    closeOverlay();
+    handleAsteroidsPlannerTreeChanged();
+}
+
+function onClickAddPlannedProduct() {
+    console.log(`--- onClickAddPlannedProduct`); //// TEST
+    //// TO BE IMPLEMENTED
+}
+
 function resetContent() {
     console.log(`--- resetContent`); //// TEST
     elContent.innerHTML = `
@@ -748,7 +820,7 @@ function updateContent() {
         elContent.innerHTML = `
             <h3 class="content-title">Products planned on this asteroid</h3>
             <div class="content-cards">
-                <div class="product-card product-add">+</div>
+                <div class="product-card product-add" onclick="onClickAddPlannedProduct()">+</div>
                 ${productCardsHtml}
             </div>
         `;
@@ -785,6 +857,20 @@ on('change', '#toggle-hide-unselected', el => {
     repositionConnections();
 });
 
+// Validate asteroid area when creating a "mock rock"
+on('change', "#input-mock-area", el => {
+    const intValue = parseInt(el.value);
+    // Min. 13, max. 9999999 (note: Adalia Prime has 1768484 km2)
+    el.value = isNaN(intValue) || intValue < 13 ? 13 : Math.min(intValue, 9999999);
+});
+
+window.addEventListener('keydown', event => {
+    // Pressing "Escape" while the overlay is visible, closes the overlay, without resetting any selections
+    if (event.key === 'Escape') {
+        closeOverlay();
+    }
+});
+
 /**
  * Refresh connections whenever a new font has finished loading,
  * b/c the position of DOM elements changes:
@@ -796,7 +882,7 @@ on('change', '#toggle-hide-unselected', el => {
 
 refreshTreesHtml();
 
-// onClickAddAsteroid(); //// TEST
+// setupTest(); //// TEST
 
 
 //// TO DO PRIO

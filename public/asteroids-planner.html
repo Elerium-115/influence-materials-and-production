@@ -29,6 +29,8 @@
             <a href="./asteroids-planner.html" class="active">Asteroids Planner</a>
         </nav>
 
+        <div id="wip">Work in progress, using mock data</div>
+
         <div id="asteroids-planner-wrapper">
             <div id="asteroids-planner-tree" class="tree-list">
                 <h3 onclick="goHome()">Asteroids Planner</h3>
@@ -37,7 +39,8 @@
                     <label for="toggle-hide-subproducts"><input type="checkbox" id="toggle-hide-subproducts">Hide Sub-products</label>
                 </div>
                 <div class="asteroids-tree-button-wrapper">
-                    <div class="asteroids-tree-button add-asteroid" onclick="onClickAddAsteroid()">Add asteroid</div>
+                    <!-- <div class="asteroids-tree-button add-asteroid" onclick="onClickAddAsteroid()">Add asteroid</div> -->
+                    <div class="asteroids-tree-button add-asteroid" onclick="asteroidsPlannerTree.length ? onClickAddAsteroid() : setupTest()">Add asteroid</div><!-- TEST -->
                 </div>
             </div>
             <div id="shopping-list-tree" class="tree-list">
@@ -74,6 +77,34 @@
                     <img src="./img/adalia-id-logo.png" alt="my.adalia.id" class="footer-logo">
                 </a>
             </div>
+        </div>
+
+        <div id="overlay-wrapper" class="hidden">
+            <div id="overlay-add-asteroid" class="overlay-panel hidden">
+                <h3 class="brand-text">Add an in-game asteroid</h3>
+                <div>Coming soon...</div>
+                <hr>
+                <h3 class="brand-text">Create a "mock rock"</h3>
+                <div>Spectral Type:</div>
+                <div class="mock-spectral-types">
+                    <span class="spectral-types-circle type-C" onclick="setMockRockSpectralType(this, 'C')">C</span>
+                    <span class="spectral-types-circle type-CI" onclick="setMockRockSpectralType(this, 'CI')">CI</span>
+                    <span class="spectral-types-circle type-CIS" onclick="setMockRockSpectralType(this, 'CIS')">CIS</span>
+                    <span class="spectral-types-circle type-CM" onclick="setMockRockSpectralType(this, 'CM')">CM</span>
+                    <span class="spectral-types-circle type-CMS" onclick="setMockRockSpectralType(this, 'CMS')">CMS</span>
+                    <span class="spectral-types-circle type-CS" onclick="setMockRockSpectralType(this, 'CS')">CS</span>
+                    <span class="spectral-types-circle type-I" onclick="setMockRockSpectralType(this, 'I')">I</span>
+                    <span class="spectral-types-circle type-M" onclick="setMockRockSpectralType(this, 'M')">M</span>
+                    <span class="spectral-types-circle type-S" onclick="setMockRockSpectralType(this, 'S')">S</span>
+                    <span class="spectral-types-circle type-SI" onclick="setMockRockSpectralType(this, 'SI')">SI</span>
+                    <span class="spectral-types-circle type-SM" onclick="setMockRockSpectralType(this, 'SM')">SM</span>
+                </div>
+                <div class="mock-area-and-cta">
+                    <div class="mock-area">Area:<input id="input-mock-area" type="text" placeholder="min. 13">km²<input type="hidden" id="input-mock-spectral-type" value=""></div>
+                    <div class="mock-cta" onclick="createMockRock()">Mock it</div>
+                </div>
+            </div>
+            <div id="ovrelay-close" onclick="closeOverlay()">✕</div>
         </div>
     </div>
 
