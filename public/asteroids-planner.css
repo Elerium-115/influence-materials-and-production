@@ -596,24 +596,29 @@
     margin-bottom: 1rem;
 }
 
-#overlay-add-asteroid hr {
+#overlay-add-asteroid .hr {
     position: relative;
+    text-align: center;
+    color: var(--brand-text);
     margin: 2rem 0;
-    border: none;
-    border-top: 1px solid var(--default-text_faded);
 }
 
-#overlay-add-asteroid hr::after {
-    content: 'OR';
+#overlay-add-asteroid .hr::before,
+#overlay-add-asteroid .hr::after {
+    content: '';
+    top: 50%;
     position: absolute;
-    top: -1rem;
-    left: calc(50% - 1.5rem);
-    line-height: 2rem;
-    text-align: center;
-    background: var(--default-overlay-bg);
-    color: var(--brand-text);
-    padding: 0 1rem;
-    border-radius: 50%;
+    height: 1px;
+    background: var(--default-text);
+    opacity: 0.5;
+}
+#overlay-add-asteroid .hr::before {
+    left: 0;
+    right: calc(50% + 1.5rem);
+}
+#overlay-add-asteroid .hr::after {
+    left: calc(50% + 1.5rem);
+    right: 0;
 }
 
 #overlay-add-asteroid .mock-spectral-types {
