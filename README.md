@@ -11,4 +11,10 @@ View the ratios of raw materials from a collection of asteroids, relative to the
 - **Production Chains**  
 View the production chains for each material and finished good.
 
-Created by [@elerium115](https://twitter.com/elerium115) for the play + earn, space strategy sandbox MMO [Influence](https://www.influenceth.io/)
+- **Production Planner**  
+Plan your production chain for a specific product.
+
+- **Asteroids Planner**  
+Plan your production chains across multiple asteroids.
+
+Created by [@elerium115](https://twitter.com/elerium115) for the space strategy sandbox MMO [Influence](https://www.influenceth.io/)
