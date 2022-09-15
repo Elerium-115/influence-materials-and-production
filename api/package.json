@@ -1,0 +1,15 @@
+{
+    "name": "elerium-influence-api",
+    "version": "1.0.0",
+    "description": "API and data storage for Influence tools by Elerium115",
+    "main": "app.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "@elerium115",
+    "license": "ISC",
+    "dependencies": {
+      "express": "^4.18.1"
+    }
+  }
+  

@@ -887,6 +887,21 @@ refreshTreesHtml();
 
 //// TO DO PRIO
 /*
+- decide on a backend solution
+    - NodeJS + file system DB?
+        - how to NodeJS + ".gitlab-ci.yml"
+            https://gist.github.com/Vladislao/daf99dd14031bde38cf5cb529e13b044
+        - DB candidates:
+            https://www.npmjs.com/package/node-persist
+                https://github.com/simonlast/node-persist
+            https://www.npmjs.com/package/file-system-db
+                https://github.com/WillTDA/File-System-DB
+            https://www.npmjs.com/package/node-storage
+                https://github.com/amativos/node-storage
+            https://www.npmjs.com/package/node-json-db
+            https://www.npmjs.com/package/simple-json-db
+            http://expressjs.com/en/guide/database-integration.html
+        - if using a file system DB, use distinct files for each user (regardless if authed or not)
 - replace "confirm()" with overlay re: deleting asteroids from the tree?
 */
 
