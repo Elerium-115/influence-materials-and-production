@@ -621,41 +621,7 @@
     right: 0;
 }
 
-#overlay-add-asteroid .mock-spectral-types {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(3.5rem, 3.5rem));
-    gap: 1rem;
-    margin: 0.5rem -0.5rem;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-}
-
-#overlay-add-asteroid .mock-spectral-types .spectral-types-circle.selected {
-    color: white;
-}
-
-#overlay-add-asteroid .mock-spectral-types .spectral-types-circle::before {
-    padding: 0.2rem;
-}
-
-#overlay-add-asteroid .mock-spectral-types .spectral-types-circle:hover::before,
-#overlay-add-asteroid .mock-spectral-types .spectral-types-circle.selected::before {
-    opacity: 1;
-}
-
-#overlay-add-asteroid .mock-area-and-cta {
-    display: flex;
-    align-items: center;
-}
-
-#overlay-add-asteroid .mock-area-and-cta .mock-area {
-    margin: 0 -0.5rem;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-}
-
-#overlay-add-asteroid .mock-area-and-cta .mock-area input {
-    width: 5rem;
+#overlay-add-asteroid input {
     color: white;
     background-color: rgba(0, 0, 0, 0.4);
     text-align: right;
@@ -665,19 +631,90 @@
     border-radius: 0.3rem;
 }
 
-#overlay-add-asteroid .mock-area-and-cta .mock-cta {
+#overlay-add-asteroid .spectral-types-circle.selected {
+    color: white;
+}
+
+#overlay-add-asteroid .spectral-types-circle::before {
+    padding: 0.2rem;
+}
+
+#overlay-add-asteroid .spectral-types-circle:hover::before,
+#overlay-add-asteroid .spectral-types-circle.selected::before {
+    opacity: 1;
+}
+
+#overlay-add-asteroid .overlay-cta {
     display: inline-block;
     background: var(--dark-bg);
     color: var(--brand-text);
     cursor: pointer;
-    margin-left: 2rem;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
 }
 
-#overlay-add-asteroid .mock-area-and-cta .mock-cta:hover {
+#overlay-add-asteroid .overlay-cta.disabled {
+    color: var(--default-text);
+    cursor: not-allowed;
+}
+
+#overlay-add-asteroid .overlay-cta:not(.disabled):hover {
     background: var(--brand-text);
     color: black;
+}
+
+#overlay-add-asteroid .asteroid-id-and-cta .asteroid-id input,
+#overlay-add-asteroid .mock-area-and-cta .mock-area input {
+    width: 5rem;
+}
+
+#overlay-add-asteroid .asteroid-id-and-cta,
+#overlay-add-asteroid .mock-area-and-cta {
+    display: flex;
+    align-items: center;
+}
+
+#overlay-add-asteroid .asteroid-metadata-wrapper {
+    display: grid;
+    grid-template-columns: 3.5rem auto 1fr; /* 3rd cell for "Add it" button */
+    gap: 2rem;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+#overlay-add-asteroid .overlay-cta.asteroid-details-cta {
+    margin-left: 1.5rem;
+}
+
+#overlay-add-asteroid .asteroid-metadata-details {
+    font-size: 1rem;
+}
+
+#overlay-add-asteroid .asteroid-metadata-details .metadata {
+    color: white;
+}
+
+#overlay-add-asteroid #asteroid-metadata-area::after {
+    content: ' km²';
+}
+
+#overlay-add-asteroid .mock-spectral-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(3.5rem, 3.5rem));
+    gap: 1rem;
+    margin: 0.5rem -0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .mock-area-and-cta .mock-area {
+    margin: 0 -0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .overlay-cta.asteroid-mock-cta {
+    margin-left: 2rem;
 }
 
 /* WIP */
