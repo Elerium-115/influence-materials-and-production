@@ -82,7 +82,11 @@
         <div id="overlay-wrapper" class="hidden">
             <div id="overlay-add-asteroid" class="overlay-panel hidden">
                 <h3 class="brand-text">Add an in-game asteroid</h3>
-                <div>Coming soon...</div>
+                <div class="asteroid-id-and-cta">
+                    <div class="asteroid-id">Asteroid ID:<input id="input-asteroid-id" type="text" oninput="toggleAsteroidMetadataCta(true);"></div>
+                    <div class="overlay-cta asteroid-details-cta disabled" onclick="requestAsteroidDetails()">Get details</div>
+                </div>
+                <div class="asteroid-metadata-wrapper"></div>
                 <div class="hr">OR</div>
                 <h3 class="brand-text">Create a "mock rock"</h3>
                 <div>Spectral Type:</div>
@@ -99,9 +103,10 @@
                     <span class="spectral-types-circle type-SI" onclick="setMockRockSpectralType(this, 'SI')">SI</span>
                     <span class="spectral-types-circle type-SM" onclick="setMockRockSpectralType(this, 'SM')">SM</span>
                 </div>
+                <input type="hidden" id="input-mock-spectral-type" value="">
                 <div class="mock-area-and-cta">
-                    <div class="mock-area">Area:<input id="input-mock-area" type="text" placeholder="min. 13">km²<input type="hidden" id="input-mock-spectral-type" value=""></div>
-                    <div class="mock-cta" onclick="createMockRock()">Mock it</div>
+                    <div class="mock-area">Area:<input id="input-mock-area" type="text" placeholder="min. 13">km²</div>
+                    <div class="overlay-cta asteroid-mock-cta" onclick="createMockRock()">Mock it</div>
                 </div>
             </div>
             <div id="ovrelay-close" onclick="closeOverlay()">✕</div>

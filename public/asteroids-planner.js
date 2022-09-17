@@ -9,6 +9,9 @@ const elInputMockSpectralType = document.getElementById('input-mock-spectral-typ
 const elInputMockArea = document.getElementById('input-mock-area');
 
 const elButtonAddAsteroid = elAsteroidsPlannerTree.querySelector('#asteroids-planner-tree .add-asteroid');
+const elInputAsteroidId = document.getElementById('input-asteroid-id');
+const elAsteroidMetadataWrapper = elOverlayAddAsteroid.querySelector('.asteroid-metadata-wrapper')
+const elAsteroidDetailsCta = elOverlayAddAsteroid.querySelector('.asteroid-id-and-cta .asteroid-details-cta')
 
 let asteroidsPlannerTree = [];
 let shoppingListTree = {};
@@ -22,6 +25,11 @@ let asteroidsPlannerSelection = {
 let asteroidsPlannerLines = [];
 
 let onClickAsteroidActionInProgress = false;
+
+const cacheAsteroidsMetadataById = {};
+
+// Depending on the environment, the API URL will be "http://localhost:3000" or "https://materials.adalia.id:3000"
+const apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
 
 /**
  * Leader Line settings
@@ -131,29 +139,20 @@ function getSpectralTypesHtmlForAsteroidType(asteroidType) {
 }
 
 async function getAsteroidMetadataById(id) {
-    let response;
+    if (!apiUrl.includes('127.0.0.1')) { return {error: 'API coming soon...'}; } //// TEST
     const config = {
         method: 'get',
-        // url: `https://api.influenceth.io/v1/metadata/asteroids/${id}`,
-        url: `http://localhost:3000/asteroid/${id}`,
+        url: `${apiUrl}/asteroid/${id}`,
     };
     try {
-        response = await axios(config);
-        console.log(`--- response.data:`, response.data); //// TEST
+        const response = await axios(config);
+        const metadata = response.data;
+        console.log(`--- metadata from API:`, metadata); //// TEST
+        return metadata;
     } catch (error) {
-        console.log(`--- ERROR:`, error); //// TEST
-        return;
+        console.log(`--- ERROR from API:`, error); //// TEST
+        return {error};
     }
-    const diameter = response.data.attributes[1].value; // meters
-    const metadata = {
-        name: response.data.name,
-        image: response.data.image,
-        url: response.data.external_url,
-        type: response.data.attributes[0].value,
-        area: Math.floor(4 * Math.PI * Math.pow(diameter / 2, 2) / 1000000), // km2
-    };
-    console.log(`--- metadata:`, metadata); //// TEST
-    return metadata;
 }
 
 //// TO BE DELETED?
@@ -684,8 +683,88 @@ function closeOverlay() {
 }
 
 function onClickAddAsteroid() {
+    resetAsteroidMetadataHtml();
+    elInputAsteroidId.value = '';
     elOverlayWrapper.classList.remove('hidden');
     elOverlayAddAsteroid.classList.remove('hidden');
+}
+
+function addAsteroidData(asteroidData) {
+    asteroidsPlannerTree.push(asteroidData);
+    closeOverlay();
+    handleAsteroidsPlannerTreeChanged();
+}
+
+function toggleAsteroidMetadataCta(enable) {
+    if (enable) {
+        elAsteroidDetailsCta.classList.remove('disabled');
+    } else {
+        elAsteroidDetailsCta.classList.add('disabled');
+    }
+}
+
+function resetAsteroidMetadataHtml() {
+    elAsteroidMetadataWrapper.innerHTML = `
+        <div class="spectral-types-circle type-X">?</div>
+        <div class="asteroid-metadata-details hidden">
+            <div>ID: <span class="metadata" id="asteroid-metadata-id"></span></div>
+            <div>Name: <span class="metadata" id="asteroid-metadata-name"></span></div>
+            <div>Area: <span class="metadata" id="asteroid-metadata-area"></span></div>
+        </div>
+    `;
+}
+
+async function requestAsteroidDetails() {
+    if (elAsteroidDetailsCta.classList.contains('disabled')) {
+        // Do not call the API if the CTA is disabled
+        return;
+    }
+    resetAsteroidMetadataHtml();
+    toggleAsteroidMetadataCta(false); // Disable the CTA
+    const asteroidId = elInputAsteroidId.value;
+    let metadata = cacheAsteroidsMetadataById[asteroidId];
+    if (!metadata) {
+        // Asteroid NOT cached => API call for metadata
+        metadata = await getAsteroidMetadataById(asteroidId);
+        if (metadata.error) {
+            console.log(`---> ERROR:`, metadata.error); //// TEST
+            alert(metadata.error);
+            resetAsteroidMetadataHtml();
+            return;
+        }
+        cacheAsteroidsMetadataById[asteroidId] = metadata;
+    }
+    elInputAsteroidId.value = '';
+    const elSpectralType = elOverlayAddAsteroid.querySelector('.spectral-types-circle');
+    elSpectralType.classList.remove('type-X');
+    elSpectralType.classList.add(`type-${metadata.type}`, 'selected');
+    elSpectralType.textContent = metadata.type;
+    document.getElementById('asteroid-metadata-id').textContent = metadata.id;
+    document.getElementById('asteroid-metadata-name').innerHTML = `<a href="${metadata.url}" target="_blank" title="View in-game">${metadata.name}</a>`;
+    document.getElementById('asteroid-metadata-area').textContent = metadata.area;
+    elOverlayAddAsteroid.querySelector('.asteroid-metadata-details').classList.remove('hidden');
+    elAsteroidMetadataWrapper.innerHTML += `
+        <div class="cta-wrapper">
+            <div class="overlay-cta asteroid-add-cta" onclick="addAsteroidId(${asteroidId})">Add it</div>
+        </div>
+    `;
+}
+
+function addAsteroidId(id) {
+    const asteroidName = `Asteroid #${id}`;
+    // Check if already added
+    if (asteroidsPlannerTree.find(asteroidData => asteroidData.asteroid_name === asteroidName)) {
+        console.log(`%c--- WARNING: asteroid #${id} already exists in "asteroidsPlannerTree"`, 'background: chocolate'); //// TEST
+        alert(`Asteroid #${id} is already planned`);
+        return;
+    }
+    const asteroidData = {
+        asteroid_name: asteroidName,
+        asteroid_type: cacheAsteroidsMetadataById[id].type,
+        asteroid_area: cacheAsteroidsMetadataById[id].area,
+        planned_products: [],
+    };
+    addAsteroidData(asteroidData);
 }
 
 function setMockRockSpectralType(el, spectralType) {
@@ -736,13 +815,11 @@ function createMockRock() {
         asteroid_area: Number(area),
         planned_products: [],
     };
-    asteroidsPlannerTree.push(mockRockData);
-    // Reset selections in the overlay, close it, and update the Asteroids Planner tree
+    addAsteroidData(mockRockData);
+    // Reset selections in the overlay
     const elSelected = elOverlayAddAsteroid.querySelector('.mock-spectral-types .selected');
     setMockRockSpectralType(elSelected, spectralType); // De-select the selected spectral type
     elInputMockArea.value = '';
-    closeOverlay();
-    handleAsteroidsPlannerTreeChanged();
 }
 
 function onClickAddPlannedProduct() {
@@ -882,10 +959,17 @@ on('change', '#toggle-hide-unselected', el => {
     repositionConnections();
 });
 
+// Validate asteroid ID when requesting asteroid metadata
+on('change', "#input-asteroid-id", el => {
+    const intValue = parseInt(el.value);
+    // Min. 1, max. 250000 (Adalia Prime has ID 1)
+    el.value = isNaN(intValue) || intValue < 1 ? 1 : Math.min(intValue, 250000);
+});
+
 // Validate asteroid area when creating a "mock rock"
 on('change', "#input-mock-area", el => {
     const intValue = parseInt(el.value);
-    // Min. 13, max. 9999999 (note: Adalia Prime has 1768484 km2)
+    // Min. 13, max. 9999999 (Adalia Prime has 1768484 km2)
     el.value = isNaN(intValue) || intValue < 13 ? 13 : Math.min(intValue, 9999999);
 });
 
@@ -912,7 +996,9 @@ refreshTreesHtml();
 
 //// TO DO PRIO
 /*
-- replace "confirm()" with overlay re: deleting asteroids from the tree?
+- replace "confirm" and "alert" calls with (over-)overlay?
+    - "confirm" re: deleting asteroids from the tree
+    - "alert" re: API coming soon / asteroid # already planned
 */
 
 //// TO TEST
