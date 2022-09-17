@@ -1,4 +1,3 @@
-
 const elAsteroidsPlannerWrapper = document.getElementById('asteroids-planner-wrapper');
 const elAsteroidsPlannerTree = document.getElementById('asteroids-planner-tree');
 const elShoppingListTree = document.getElementById('shopping-list-tree');
@@ -129,6 +128,32 @@ function getSpectralTypesHtmlForAsteroidType(asteroidType) {
         spectralTypesHtml += `<span class="spectral-type type-${baseSpectral}">${baseSpectral}</span>`;
     });
     return spectralTypesHtml;
+}
+
+async function getAsteroidMetadataById(id) {
+    let response;
+    const config = {
+        method: 'get',
+        // url: `https://api.influenceth.io/v1/metadata/asteroids/${id}`,
+        url: `http://localhost:3000/asteroid/${id}`,
+    };
+    try {
+        response = await axios(config);
+        console.log(`--- response.data:`, response.data); //// TEST
+    } catch (error) {
+        console.log(`--- ERROR:`, error); //// TEST
+        return;
+    }
+    const diameter = response.data.attributes[1].value; // meters
+    const metadata = {
+        name: response.data.name,
+        image: response.data.image,
+        url: response.data.external_url,
+        type: response.data.attributes[0].value,
+        area: Math.floor(4 * Math.PI * Math.pow(diameter / 2, 2) / 1000000), // km2
+    };
+    console.log(`--- metadata:`, metadata); //// TEST
+    return metadata;
 }
 
 //// TO BE DELETED?
@@ -887,21 +912,6 @@ refreshTreesHtml();
 
 //// TO DO PRIO
 /*
-- decide on a backend solution
-    - NodeJS + file system DB?
-        - how to NodeJS + ".gitlab-ci.yml"
-            https://gist.github.com/Vladislao/daf99dd14031bde38cf5cb529e13b044
-        - DB candidates:
-            https://www.npmjs.com/package/node-persist
-                https://github.com/simonlast/node-persist
-            https://www.npmjs.com/package/file-system-db
-                https://github.com/WillTDA/File-System-DB
-            https://www.npmjs.com/package/node-storage
-                https://github.com/amativos/node-storage
-            https://www.npmjs.com/package/node-json-db
-            https://www.npmjs.com/package/simple-json-db
-            http://expressjs.com/en/guide/database-integration.html
-        - if using a file system DB, use distinct files for each user (regardless if authed or not)
 - replace "confirm()" with overlay re: deleting asteroids from the tree?
 */
 
@@ -915,18 +925,26 @@ refreshTreesHtml();
 /*
 - NEXT TOOL: "Asteroids Planner"
     - use D3.js
+    - button to connect wallet (MetaMask)
+        https://docs.metamask.io/guide/getting-started.html
+        https://docs.metamask.io/guide/create-dapp.html
     - select "planned asteroids" from either:
         - connected wallet (web3 + adalia.id API)
         - input asteroid ID and fetch metadata (web3 / adalia.id API)
             - alternative sources:
+                influenceth.io
+                    https://api.influenceth.io/v1/metadata/asteroids/1
+                        => area = 4 * pi * ((diameter / 2) ^ 2) / 1000000
                 [1ST] DrJones | Tyrell-Yutani
                     https://github.com/influenceth/influence-utils
-                        - downloaded JSONs from their Dropbox, into my "influence-utils-master-plus-JSONs" folder
+                        - downloaded JSONs from their Dropbox, into "_work/_data/influence-utils-master-plus-JSONs"
                 [1ST] Denker | adalia.info
                     https://adalia.info/
+                        - exported CSV + JSON files from their website, into "_work/_data"
+                        - repo
                         https://github.com/jisensee/influence-asset-export
-        - create "dummy asteroids" with a given area + spectral type
-            ^^ start with this?
+            - CREDIT the data source
+        [done] - create "dummy asteroids" with a given area + spectral type
     - allow multiple planned chains to be configured for each asteroid
         - allow the user to select raw materials from the chain only if they can be mined on that asteroid
         - ensure that the associated chains' total required area does not exceed the asteroid's area
