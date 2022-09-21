@@ -29,7 +29,7 @@ router.get(
         const asteroidId = req.params.id;
         const cachedMetadata = cache.asteroidsMetadataById[asteroidId];
         if (cachedMetadata) {
-            console.log(`--- found CACHED metadata:`, cachedMetadata); //// TEST
+            console.log(`---> found CACHED metadata:`, cachedMetadata); //// TEST
             res.json(cachedMetadata);
             return;
         }
@@ -53,19 +53,20 @@ router.get(
         console.log(`--- [router] GET /asteroids/owned-by/:address`); //// TEST
         const address = req.params.address;
         console.log(`---> address = ${address}`); //// TEST
-        // Count ALL asteroids
+        // Count ALL owned asteroids
         const asteroidsCount = await providerInfluencethIo.getAsteroidsCountOwnedBy(address);
         if (asteroidsCount.error) {
             res.json({error: asteroidsCount.error});
             return;
         }
-        // IDs for ALL (TBC?) asteroids
+        // Get IDs of ALL owned asteroids (TBC for higher numbers, e.g. +100 owned asteroids?)
         const asteroidsIds = await providerInfluencethIo.getAsteroidsIdsOwnedBy(address);
         if (asteroidsIds.error) {
             res.json({error: asteroidsIds.error});
             return;
         }
         console.log(`---> asteroidsIds:`, asteroidsIds); //// TEST
+        // Try to get cached metadata for ALL owned asteroids
         const asteroidsMetadataCached = [];
         asteroidsIds.forEach(asteroidId => {
             if (cache.asteroidsMetadataById[asteroidId]) {
@@ -73,31 +74,39 @@ router.get(
             }
         });
         if (asteroidsMetadataCached.length === asteroidsCount) {
-            // Found cached metadata for ALL asteroids => no need to call "getAsteroidsMetadataOwnedBy"
+            // Found cached metadata for ALL owned asteroids => no need to call "getAsteroidsMetadataOwnedBy"
             console.log(`---> found CACHED metadata for ALL asteroids`); //// TEST
-            res.json({
-                count: asteroidsCount, // total count, may be higher than "asteroids.length" (if count > 30)
-                metadata: asteroidsMetadataCached,
+            res.json(asteroidsMetadataCached);
+            return;
+        }
+        // Make requests (batched + delayed) to get metadata for ALL owned asteroids
+        const asteroidsMetadataFresh = [];
+        let batchesToFillAsteroidsCount = Math.ceil(asteroidsCount / providerInfluencethIo.ASTEROIDS_PER_PAGE_MAX);
+        console.log(`---> batchesToFillAsteroidsCount = ${batchesToFillAsteroidsCount}`); //// TEST
+        if (batchesToFillAsteroidsCount > 10) {
+            // Hard limit of 10 requests (i.e. max 300 asteroids) per wallet
+            console.log(`--->> WARNING: too high => hard limit 10 batches`); //// TEST
+            batchesToFillAsteroidsCount = 10;
+            return;
+        }
+        for (let page = 1; page <= batchesToFillAsteroidsCount; page++) {
+            console.log(`---> batch #${page}`); //// TEST
+            // Get metadata for max "ASTEROIDS_PER_PAGE_MAX" owned asteroids per "page"
+            if (page > 1) {
+                // Pause for 1 second before each subsequent request, to not spam the API
+                await new Promise(r => setTimeout(r, 1000));
+            }
+            const asteroidsMetadata = await providerInfluencethIo.getAsteroidsMetadataOwnedBy(address, page);
+            if (asteroidsMetadata.error) {
+                res.json({error: asteroidsMetadata.error});
+                return;
+            }
+            asteroidsMetadata.forEach(asteroidMetadata => {
+                cache.asteroidsMetadataById[asteroidMetadata.id] = asteroidMetadata;
+                asteroidsMetadataFresh.push(asteroidMetadata);
             });
-            return;
         }
-
-        //// TO DO: make paginated calls to API until ALL asteroids metadata is cached
-        //// ____
-
-        // Metadata for MAX 30 asteroids
-        const asteroidsMetadata = await providerInfluencethIo.getAsteroidsMetadataOwnedBy(address);
-        if (asteroidsMetadata.error) {
-            res.json({error: asteroidsMetadata.error});
-            return;
-        }
-        asteroidsMetadata.forEach(asteroidMetadata => {
-            cache.asteroidsMetadataById[asteroidMetadata.id] = asteroidMetadata;
-        });
-        res.json({
-            count: asteroidsCount, // total count, may be higher than "asteroids.length" (if count > 30)
-            metadata: asteroidsMetadata,
-        });
+        res.json(asteroidsMetadataFresh);
     }
 );
 
