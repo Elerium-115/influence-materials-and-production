@@ -28,7 +28,7 @@ async function loadAccessToken(provider) {
             return null;
     }
     cache.accessTokens[provider] = token;
-    console.log(`--- [loadAccessToken('${provider}')] SET token (length ${token.length})`); //// HIDE in prod
+    console.log(`--- [loadAccessToken('${provider}')] SET token ${token.replace(/^(.{4}).+(.{4})$/, '$1...$2')}`); //// HIDE in prod
     return token;
 }
 

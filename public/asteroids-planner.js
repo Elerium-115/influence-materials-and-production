@@ -32,6 +32,7 @@ let asteroidsPlannerLines = [];
 let onClickAsteroidActionInProgress = false;
 
 const cacheAsteroidsMetadataById = {};
+const cacheAsteroidsByWallet = {};
 
 // Depending on the environment, the API URL will be "http://localhost:3000" or "https://materials.adalia.id:3000"
 const apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
@@ -153,9 +154,6 @@ async function getAsteroidMetadataById(id) {
     }
 }
 
-/**
- * Get count and metadata for asteroids owned by the connected wallet
- */
 async function getAsteroidsFromWallet() {
     if (!apiUrl.includes('127.0.0.1')) { return {error: 'API coming soon...'}; } //// TEST
     const connectedAddress = getConnectedAddress();
@@ -724,7 +722,7 @@ function addAsteroidData(asteroidData) {
     handleAsteroidsPlannerTreeChanged();
 }
 
-function showAsteroidsFromWalletIfConnected() {
+async function showAsteroidsFromWalletIfConnected() {
     const connectedAddress = getConnectedAddress();
     if (!connectedAddress) {
         return;
@@ -733,17 +731,30 @@ function showAsteroidsFromWalletIfConnected() {
     elConnectedAddress.textContent = connectedAddress.replace(/^(.{6}).+(.{4})$/, '$1...$2');
     elConnectedAddress.classList.remove('hidden');
     // Show asteroids from wallet
-    const asteroids = getAsteroidsFromWallet();
-    //// TO DO: handle pagination if "asteroids.count" > "asteroids.metadata.length"
-    //// TO DO: show scrolling-box with asteroids from wallet (sorted by ID <=> by size)
+    let asteroids = cacheAsteroidsByWallet[connectedAddress];
+    if (asteroids) {
+        console.log(`--- asteroids from CACHE:`, asteroids);
+    } else {
+        // Data NOT cached => call to my API
+        asteroids = await getAsteroidsFromWallet();
+        if (asteroids.error) {
+            // Inform the user re: API error
+            alert(asteroids.error);
+            return;
+        }
+        cacheAsteroidsByWallet[connectedAddress] = asteroids;
+    }
+    //// TO DO: show "loading" until API-response arrives
+    //// TO DO: show scrolling-box with asteroids from wallet (already sorted by ID = by size)
     //// TO DO: allow selection of multiple asteroids, to be added to the planner at the same time
+    //// TO DO: add button to force an API request for the asteroids, and update the cache - MAX once per hour(?)
+    //// -- track time of forced requests in the API, not in the client?
     //// TO BE IMPLEMENTED
     //// ____
 }
 
 async function connectWalletAndGetAsteroids() {
     const walletData = await connectWallet();
-    console.log(`--- walletData:`, walletData);
     if (walletData.error) {
         alert(walletData.error);
         return;
@@ -779,7 +790,9 @@ async function requestAsteroidDetails() {
     toggleAsteroidMetadataCta(false); // Disable the CTA
     const asteroidId = elInputAsteroidId.value;
     let metadata = cacheAsteroidsMetadataById[asteroidId];
-    if (!metadata) {
+    if (metadata) {
+        console.log(`--- metadata from CACHE:`, metadata);
+    } else {
         // Data NOT cached => call to my API
         metadata = await getAsteroidMetadataById(asteroidId);
         if (metadata.error) {
@@ -1047,7 +1060,8 @@ handleAsteroidsPlannerTreeChanged();
 
 //// TO DO PRIO
 /*
-- replace "confirm" and "alert" calls with (over-)overlay?
+- detect when wallet disconnected => show "Connect walelt" button again
+- replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree
     - "alert" re: API coming soon / asteroid # already planned
 */

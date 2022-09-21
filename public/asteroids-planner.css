@@ -271,7 +271,7 @@
 #asteroids-planner-tree .asteroids-tree-buttons-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 4rem;
     text-align: center;
 }
 

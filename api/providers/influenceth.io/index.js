@@ -4,6 +4,8 @@ const utils = require('../../utils/index');
 // Source: https://github.com/Influenceth/influence-utils/blob/master/index.js
 const SPECTRAL_TYPES = [ 'C', 'Cm', 'Ci', 'Cs', 'Cms', 'Cis', 'S', 'Sm', 'Si', 'M', 'I' ];
 
+const ASTEROIDS_PER_PAGE_MAX = 30;
+
 function parseAsteroidMetadata(rawData) {
     const metadata = {
         // area: Math.floor(4 * Math.PI * Math.pow(rawData.radius, 2) / 1000000), // km2
@@ -25,6 +27,7 @@ async function getAsteroidMetadata(asteroidId) {
                 'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
             },
         };
+        console.log(`--- [getAsteroidMetadata] ${config.method.toUpperCase()} ${config.url}`); //// TEST
         const response = await axios(config);
         console.log(`--- [getAsteroidMetadata] response.data KEYS:`, Object.keys(response.data)); //// TEST
         return parseAsteroidMetadata(response.data);
@@ -51,6 +54,7 @@ async function getAsteroidsCountOwnedBy(address) {
                 'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
             },
         };
+        console.log(`--- [getAsteroidsCountOwnedBy] ${config.method.toUpperCase()} ${config.url}`); //// TEST
         const response = await axios(config);
         console.log(`--- [getAsteroidsCountOwnedBy] response.data:`, response.data); //// TEST
         return response.data;
@@ -76,6 +80,7 @@ async function getAsteroidsCountOwnedBy(address) {
                 'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
             },
         };
+        console.log(`--- [getAsteroidsIdsOwnedBy] ${config.method.toUpperCase()} ${config.url}`); //// TEST
         const response = await axios(config);
         console.log(`--- [getAsteroidsIdsOwnedBy] response.data LENGTH = ${response.data.length}`); //// TEST
         return response.data.map(rawData => {
@@ -88,23 +93,24 @@ async function getAsteroidsCountOwnedBy(address) {
 }
 
 /**
- * Get metadata for MAX 30 asteroids owned by address
+ * Get metadata for max "ASTEROIDS_PER_PAGE_MAX" asteroids owned by address, per "page"
  * @param address WARNING: case-sensitive
  */
-async function getAsteroidsMetadataOwnedBy(address) {
+async function getAsteroidsMetadataOwnedBy(address, page) {
     try {
         var config = {
             method: 'get',
             url: `https://api.influenceth.io/v1/asteroids`,
             params: {
                 ownedBy: address,
-                perPage: 30, // max value, otherwise forced down to 10 per page
-                page: 1,
+                perPage: ASTEROIDS_PER_PAGE_MAX, // Do NOT use higher values, because they are forced down to 10 per page
+                page: page,
             },
             headers: {
                 'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
             },
         };
+        console.log(`--- [getAsteroidsMetadataOwnedBy] ${config.method.toUpperCase()} ${config.url}`); //// TEST
         const response = await axios(config);
         console.log(`--- [getAsteroidsMetadataOwnedBy] response.data LENGTH = ${response.data.length}`); //// TEST
         return response.data.map(rawData => {
@@ -117,6 +123,7 @@ async function getAsteroidsMetadataOwnedBy(address) {
 }
 
 module.exports = {
+    ASTEROIDS_PER_PAGE_MAX,
     getAsteroidMetadata,
     getAsteroidsCountOwnedBy,
     getAsteroidsIdsOwnedBy,

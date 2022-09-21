@@ -1,7 +1,6 @@
 const axios = require('axios');
 
 async function getAccessToken(clientId, clientKey) {
-    console.log(`--- [influencethIo > getAccessToken]`);
     try {
         var config = {
             method: 'post',
@@ -12,6 +11,7 @@ async function getAccessToken(clientId, clientKey) {
                 client_secret: clientKey,
             },
         };
+        console.log(`--- [influencethIo > getAccessToken] ${config.method.toUpperCase()} ${config.url}`); //// TEST
         const response = await axios(config);
         console.log(`--- [influencethIo > getAccessToken] response.data KEYS:`, Object.keys(response.data)); //// TEST
         return response.data.access_token;
