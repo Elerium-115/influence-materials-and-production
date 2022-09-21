@@ -29,18 +29,16 @@
             <a href="./asteroids-planner.html" class="active">Asteroids Planner</a>
         </nav>
 
-        <div id="wip">Work in progress, using mock data</div>
-
-        <div id="asteroids-planner-wrapper">
+        <div id="asteroids-planner-wrapper" class="empty-planner">
             <div id="asteroids-planner-tree" class="tree-list">
                 <h3 onclick="goHome()">Asteroids Planner</h3>
                 <ul class="asteroids-tree"></ul>
                 <div class="options">
                     <label for="toggle-hide-subproducts"><input type="checkbox" id="toggle-hide-subproducts">Hide Sub-products</label>
                 </div>
-                <div class="asteroids-tree-button-wrapper">
-                    <!-- <div class="asteroids-tree-button add-asteroid" onclick="onClickAddAsteroid()">Add asteroid</div> -->
-                    <div class="asteroids-tree-button add-asteroid" onclick="asteroidsPlannerTree.length ? onClickAddAsteroid() : setupTest()">Add asteroid</div><!-- TEST -->
+                <div class="asteroids-tree-buttons-wrapper">
+                    <div class="asteroids-tree-button asteroids-tree-cta add-asteroid" onclick="onClickAddAsteroid()">Add asteroid</div>
+                    <div class="asteroids-tree-button asteroids-tree-cta see-example" onclick="setupExample()">See example</div>
                 </div>
             </div>
             <div id="shopping-list-tree" class="tree-list">
@@ -81,6 +79,15 @@
 
         <div id="overlay-wrapper" class="hidden">
             <div id="overlay-add-asteroid" class="overlay-panel hidden">
+                <div class="title-and-wallet-wrapper">
+                    <h3 class="brand-text">Import asteroids from wallet</h3>
+                    <div>
+                        <div class="overlay-cta connect-wallet-cta" onclick="connectWalletAndGetAsteroids()">Connect wallet</div>
+                        <div class="overlay-cta connected-address disabled hidden"></div>
+                    </div>
+                </div>
+                <div>Coming soon...</div>
+                <div class="hr">OR</div>
                 <h3 class="brand-text">Add an in-game asteroid</h3>
                 <div class="asteroid-id-and-cta">
                     <div class="asteroid-id">Asteroid ID:<input id="input-asteroid-id" type="text" oninput="toggleAsteroidMetadataCta(true);"></div>
@@ -115,7 +122,9 @@
 
     <script src="./leader-line.min.js"></script>
     <script src="./axios.min.js"></script>
+    <script src="./web3.min.js"></script>
     <script src="./abstract-core.js"></script>
+    <script src="./wallet-core.js"></script>
     <script src="./asteroids-planner-mock.js"></script>
     <script src="./asteroids-planner.js"></script>
 </body>

@@ -9,6 +9,11 @@ const elInputMockSpectralType = document.getElementById('input-mock-spectral-typ
 const elInputMockArea = document.getElementById('input-mock-area');
 
 const elButtonAddAsteroid = elAsteroidsPlannerTree.querySelector('#asteroids-planner-tree .add-asteroid');
+const elButtonSeeExample = elAsteroidsPlannerTree.querySelector('#asteroids-planner-tree .see-example');
+
+// Elements inside the overlay for "Add asteroid"
+const elConnectWalletCta = elOverlayAddAsteroid.querySelector('.connect-wallet-cta');
+const elConnectedAddress = elOverlayAddAsteroid.querySelector('.connected-address');
 const elInputAsteroidId = document.getElementById('input-asteroid-id');
 const elAsteroidMetadataWrapper = elOverlayAddAsteroid.querySelector('.asteroid-metadata-wrapper')
 const elAsteroidDetailsCta = elOverlayAddAsteroid.querySelector('.asteroid-id-and-cta .asteroid-details-cta')
@@ -71,13 +76,6 @@ const leaderLineOptionsLeftToRightAnimated = {
     dash: {len: 6, gap: 6, animation: true}, // len + gap = 12 => same speed as "leaderLineOptionsRightToLeftGradient"
     size: 0.5,
 };
-
-//// TEST
-function setupTest() {
-    asteroidsPlannerTree = [...mockAsteroidsPlannerTree];
-    handleAsteroidsPlannerTreeChanged();
-    goHome();
-}
 
 function getListOfAsteroids() {
     return asteroidsPlannerTree.map(data => data.asteroid_name);
@@ -155,6 +153,28 @@ async function getAsteroidMetadataById(id) {
     }
 }
 
+/**
+ * Get count and metadata for asteroids owned by the connected wallet
+ */
+async function getAsteroidsFromWallet() {
+    if (!apiUrl.includes('127.0.0.1')) { return {error: 'API coming soon...'}; } //// TEST
+    const connectedAddress = getConnectedAddress();
+    console.log(`--- getAsteroidsFromWallet @ ${connectedAddress}`); //// TEST
+    const config = {
+        method: 'get',
+        url: `${apiUrl}/asteroids/owned-by/${connectedAddress}`,
+    };
+    try {
+        const response = await axios(config);
+        const asteroids = response.data;
+        console.log(`--- asteroids from API:`, asteroids); //// TEST
+        return asteroids;
+    } catch (error) {
+        console.log(`--- ERROR from API:`, error); //// TEST
+        return {error};
+    }
+}
+
 //// TO BE DELETED?
 // function getLeaderLineAreaForTreeElement(el) {
 //     return LeaderLine.areaAnchor(el, {
@@ -167,6 +187,11 @@ async function getAsteroidMetadataById(id) {
 //         dash: true,
 //     });
 // }
+
+function setupExample() {
+    asteroidsPlannerTree = [...mockAsteroidsPlannerTree];
+    handleAsteroidsPlannerTreeChanged();
+}
 
 function onClickAsteroidAction(action, el) {
     if (onClickAsteroidActionInProgress) {
@@ -227,7 +252,6 @@ function onClickAsteroidAction(action, el) {
 }
 
 function refreshAsteroidsPlannerTreeHtml() {
-    // console.log(`--- refreshAsteroidsPlannerTreeHtml`); //// TEST
     let asteroidTreeListHtml = '';
     asteroidsPlannerTree.forEach(asteroidData => {
         const asteroidName = asteroidData.asteroid_name;
@@ -275,13 +299,11 @@ function refreshAsteroidsPlannerTreeHtml() {
             `;
             asteroidTreeListHtml += asteroidTreeListItemHtml;
     });
-    // console.log(`---> HTML length = ${asteroidTreeListHtml.length}`); //// TEST
     elAsteroidsPlannerTree.querySelector('.asteroids-tree').innerHTML = asteroidTreeListHtml;
     //// TO DO: improve CSS selectors using the new classes? - "asteroids-tree-item", "planned-products-tree-item", "intermediate-products-tree-item"
 }
 
 function refreshShoppingListTreeHtml() {
-    // console.log(`--- refreshShoppingListTreeHtml`); //// TEST
     let shoppingListTreeHtml = '';
     let inputsTreeHtml = '';
     if (shoppingListTree.inputs) {
@@ -348,7 +370,6 @@ function refreshShoppingListTreeHtml() {
             `;
     }
     shoppingListTreeHtml = inputsTreeHtml + buildingsTreeHtml + modulesTreeHtml + spectralTypesTreeHtml;
-    // console.log(`---> HTML length = ${shoppingListTreeHtml.length}`); //// TEST
     disconnectAsteroidsPlannerTree();
     elShoppingListTree.querySelector('.shopping-tree').innerHTML = shoppingListTreeHtml;
     connectAsteroidsPlannerTree();
@@ -397,7 +418,6 @@ function refreshAsteroidsPlannerSelection() {
             // Previously-selected asteroid was deleted => completely RESET selection
             console.log(`%c--- previously-selected asteroid was deleted => completely RESET selection`, 'background: blue'); //// TEST
             asteroidsPlannerSelection = {asteroidName: null, plannedProductName: null, intermediateProductName: null};
-            updateContent();
             return;
         }
         if (asteroidsPlannerSelection.plannedProductName) {
@@ -407,7 +427,6 @@ function refreshAsteroidsPlannerSelection() {
                 console.log(`%c--- previously-selected planned product was deleted => REDUCE selection to its parent asteroid`, 'background: blue'); //// TEST
                 asteroidsPlannerSelection.plannedProductName = null;
                 asteroidsPlannerSelection.intermediateProductName = null;
-                updateContent();
                 return;
             }
             if (asteroidsPlannerSelection.intermediateProductName) {
@@ -416,7 +435,6 @@ function refreshAsteroidsPlannerSelection() {
                     // Previously-selected intermediate product was deleted => REDUCE selection to its parent planned product
                     console.log(`%c--- previously-selected intermediate product was deleted => REDUCE selection to its parent planned product`, 'background: blue'); //// TEST
                     asteroidsPlannerSelection.intermediateProductName = null;
-                    updateContent();
                     return;
                 }
             }
@@ -448,7 +466,6 @@ function regenerateShoppingListTree() {
 }
 
 function refreshTreesHtml() {
-    console.log(`--- refreshTreesHtml`); //// TEST
     refreshAsteroidsPlannerTreeHtml();
     refreshShoppingListTreeHtml();
     if (asteroidsPlannerTree.length) {
@@ -457,9 +474,12 @@ function refreshTreesHtml() {
             elButtonAddAsteroid.line.remove();
             delete elButtonAddAsteroid.line;
         }
+        if (elButtonSeeExample.line) {
+            elButtonSeeExample.line.remove();
+            delete elButtonSeeExample.line;
+        }
     } else {
         elAsteroidsPlannerWrapper.classList.add('empty-planner');
-        resetContent();
     }
 }
 
@@ -477,9 +497,9 @@ function connectElements(el1, el2, options = {}) {
 }
 
 function repositionConnections() {
-    console.log(`--- repositionConnections`); //// TEST
-    // Reposition connection for "Add asteroid" button, if any line set
+    // Reposition connections for "Add asteroid" and "See example" buttons, if any line set
     elButtonAddAsteroid.line?.position();
+    elButtonSeeExample.line?.position();
     // Reposition connections for Asteroids Planner tree, if any lines set
     asteroidsPlannerLines.forEach(line => line.position());
 }
@@ -515,7 +535,6 @@ function connectAsteroidsPlannerTree() {
         return;
     }
     const elToConnect = getAsteroidsPlannerTreeElementToConnect();
-    // console.log(`--- connectAsteroidsPlannerTree > elToConnect:`, elToConnect); //// TEST
     if (!elToConnect) {
         // Abort if no element to connect (e.g. after deleting the selected asteroid)
         return;
@@ -631,7 +650,7 @@ function refreshAsteroidsPlannerBreadcrumbsHtml() {
             const onClickHtml = name === asteroidName ? '' : `onclick="onClickTreeItem('${name}')"`;
             asteroidsListHtml += `<li ${classHtml} ${onClickHtml}>${name}</li>`;
         });
-        asteroidsListHtml += `<li class="add-item">Add asteroid</li>`;
+        asteroidsListHtml += `<li class="add-item" onclick="onClickAddAsteroid()">Add asteroid</li>`;
         breadcrumbsHtml += `
                 <div class="separator"></div>
                 <div class="breadcrumb">
@@ -683,8 +702,18 @@ function closeOverlay() {
 }
 
 function onClickAddAsteroid() {
+    // Initialize state for "Import asteroids from wallet"
+    showAsteroidsFromWalletIfConnected();
+    // Reset state for "Add an in-game asteroid"
     resetAsteroidMetadataHtml();
     elInputAsteroidId.value = '';
+    // Reset state for "Create a mock rock"
+    const elSelected = elOverlayAddAsteroid.querySelector('.mock-spectral-types .selected');
+    if (elSelected) {
+        setMockRockSpectralType(elSelected, elInputMockSpectralType.value); // De-select the selected spectral type
+        elInputMockArea.value = '';
+    }
+    // Show overlay for "Add asteroid"
     elOverlayWrapper.classList.remove('hidden');
     elOverlayAddAsteroid.classList.remove('hidden');
 }
@@ -693,6 +722,33 @@ function addAsteroidData(asteroidData) {
     asteroidsPlannerTree.push(asteroidData);
     closeOverlay();
     handleAsteroidsPlannerTreeChanged();
+}
+
+function showAsteroidsFromWalletIfConnected() {
+    const connectedAddress = getConnectedAddress();
+    if (!connectedAddress) {
+        return;
+    }
+    elConnectWalletCta.classList.add('hidden');
+    elConnectedAddress.textContent = connectedAddress.replace(/^(.{6}).+(.{4})$/, '$1...$2');
+    elConnectedAddress.classList.remove('hidden');
+    // Show asteroids from wallet
+    const asteroids = getAsteroidsFromWallet();
+    //// TO DO: handle pagination if "asteroids.count" > "asteroids.metadata.length"
+    //// TO DO: show scrolling-box with asteroids from wallet (sorted by ID <=> by size)
+    //// TO DO: allow selection of multiple asteroids, to be added to the planner at the same time
+    //// TO BE IMPLEMENTED
+    //// ____
+}
+
+async function connectWalletAndGetAsteroids() {
+    const walletData = await connectWallet();
+    console.log(`--- walletData:`, walletData);
+    if (walletData.error) {
+        alert(walletData.error);
+        return;
+    }
+    showAsteroidsFromWalletIfConnected();
 }
 
 function toggleAsteroidMetadataCta(enable) {
@@ -724,12 +780,11 @@ async function requestAsteroidDetails() {
     const asteroidId = elInputAsteroidId.value;
     let metadata = cacheAsteroidsMetadataById[asteroidId];
     if (!metadata) {
-        // Asteroid NOT cached => API call for metadata
+        // Data NOT cached => call to my API
         metadata = await getAsteroidMetadataById(asteroidId);
         if (metadata.error) {
-            console.log(`---> ERROR:`, metadata.error); //// TEST
+            // Inform the user re: API error
             alert(metadata.error);
-            resetAsteroidMetadataHtml();
             return;
         }
         cacheAsteroidsMetadataById[asteroidId] = metadata;
@@ -816,29 +871,29 @@ function createMockRock() {
         planned_products: [],
     };
     addAsteroidData(mockRockData);
-    // Reset selections in the overlay
-    const elSelected = elOverlayAddAsteroid.querySelector('.mock-spectral-types .selected');
-    setMockRockSpectralType(elSelected, spectralType); // De-select the selected spectral type
-    elInputMockArea.value = '';
 }
 
 function onClickAddPlannedProduct() {
-    console.log(`--- onClickAddPlannedProduct`); //// TEST
     //// TO BE IMPLEMENTED
+    //// ____
 }
 
 function resetContent() {
-    console.log(`--- resetContent`); //// TEST
     elContent.innerHTML = `
-        <h3 id="start-title">Start planning your production chains across asteroids&nbsp;</h3>
+        <h3 id="start-title">Start planning your production chains across asteroids.</h3>
         <ul>
-            <!-- <li>Add asteroids by selecting any in-game asteroid, or by creating "mock rocks".</li> -->
             <li>Add in-game asteroids, or create "mock rocks".</li>
             <li>Plan one or more production chains, on each asteroid.</li>
         </ul>
+        <h3 id="example-title">First time here? See an example with some mock data.</h3>
         `;
     const elStartTitle = document.getElementById('start-title');
+    const elExampleTitle = document.getElementById('example-title');
+    if (elButtonAddAsteroid.line || elButtonSeeExample.line) {
+        console.log(`%c--- ERROR: "resetContent" called twice, without deleting the lines between calls`, 'background: maroon'); //// TEST
+    }
     elButtonAddAsteroid.line = connectElements(elStartTitle, elButtonAddAsteroid, leaderLineOptionsRightToLeftGradient);
+    elButtonSeeExample.line = connectElements(elExampleTitle, elButtonSeeExample, leaderLineOptionsRightToLeftGradient);
 }
 
 /**
@@ -846,7 +901,6 @@ function resetContent() {
  */
 function updateContent() {
     const {asteroidName, plannedProductName, intermediateProductName} = asteroidsPlannerSelection;
-    // console.log(`--- updateContent for '${asteroidName}' > '${plannedProductName}' > '${intermediateProductName}'`); //// TEST
     if (!asteroidsPlannerTree.length) {
         resetContent();
         return;
@@ -930,14 +984,12 @@ function updateContent() {
 }
 
 function goHome() {
-    console.log(`--- goHome`); //// TEST
     asteroidsPlannerSelection = {asteroidName: null, plannedProductName: null, intermediateProductName: null};
     disconnectAsteroidsPlannerTree();
     updateContent();
 }
 
 function onClickTreeItem(asteroidName, plannedProductName, intermediateProductName) {
-    // console.log(`--- onClickTreeItem('${asteroidName}', '${plannedProductName}', '${intermediateProductName}')`); //// TEST
     if (!asteroidName) {
         console.log(`%c--- WARNING: [onClickTreeItem] called WITHOUT asteroidName`, 'background: chocolate'); //// TEST
         return;
@@ -989,9 +1041,8 @@ window.addEventListener('keydown', event => {
     repositionConnections();
 };
 
-refreshTreesHtml();
-
-// setupTest(); //// TEST
+// Initialize everything
+handleAsteroidsPlannerTreeChanged();
 
 
 //// TO DO PRIO
@@ -1015,7 +1066,8 @@ refreshTreesHtml();
         https://docs.metamask.io/guide/getting-started.html
         https://docs.metamask.io/guide/create-dapp.html
     - select "planned asteroids" from either:
-        - connected wallet (web3 + adalia.id API)
+        - connected wallet (web3 + official / adalia.id API)
+            https://www.npmjs.com/package/influence-utils
         - input asteroid ID and fetch metadata (web3 / adalia.id API)
             - alternative sources:
                 influenceth.io
@@ -1027,6 +1079,7 @@ refreshTreesHtml();
                 [1ST] Denker | adalia.info
                     https://adalia.info/
                         - exported CSV + JSON files from their website, into "_work/_data"
+                            - imported CSV into my MongoDB
                         - repo
                         https://github.com/jisensee/influence-asset-export
             - CREDIT the data source
