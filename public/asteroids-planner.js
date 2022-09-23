@@ -14,6 +14,8 @@ const elButtonSeeExample = elAsteroidsPlannerTree.querySelector('#asteroids-plan
 // Elements inside the overlay for "Add asteroid"
 const elConnectWalletCta = elOverlayAddAsteroid.querySelector('.connect-wallet-cta');
 const elConnectedAddress = elOverlayAddAsteroid.querySelector('.connected-address');
+const elWalletAsteroidsWrapperOuter = elOverlayAddAsteroid.querySelector('.wallet-asteroids-wrapper-outer');
+const elWalletAsteroids = elOverlayAddAsteroid.querySelector('.wallet-asteroids');
 const elInputAsteroidId = document.getElementById('input-asteroid-id');
 const elAsteroidMetadataWrapper = elOverlayAddAsteroid.querySelector('.asteroid-metadata-wrapper')
 const elAsteroidDetailsCta = elOverlayAddAsteroid.querySelector('.asteroid-id-and-cta .asteroid-details-cta')
@@ -137,7 +139,20 @@ function getSpectralTypesHtmlForAsteroidType(asteroidType) {
     return spectralTypesHtml;
 }
 
-async function getAsteroidMetadataById(id) {
+function getWalletAsteroidCardHtml(metadata) {
+    // Template also adapted by "resetAsteroidMetadataHtml"
+    return `
+        <div class="spectral-types-circle type-${metadata.type}">${metadata.type}</div>
+        <div class="wallet-asteroid-metadata">
+            <div class="id">${metadata.id}</div>
+            <div class="name">${metadata.name}</div>
+            <div class="area-km2">${metadata.area}</div>
+            <a class="link-icon" href="${metadata.url}" target="_blank" title="View in-game"></a>
+        </div>
+    `;
+}
+
+async function fetchAsteroidMetadataById(id) {
     if (!apiUrl.includes('127.0.0.1')) { return {error: 'API coming soon...'}; } //// TEST
     const config = {
         method: 'get',
@@ -146,7 +161,7 @@ async function getAsteroidMetadataById(id) {
     try {
         const response = await axios(config);
         const metadata = response.data;
-        console.log(`--- metadata from API:`, metadata); //// TEST
+        // console.log(`--- metadata from API:`, metadata); //// TEST
         return metadata;
     } catch (error) {
         console.log(`--- ERROR from API:`, error); //// TEST
@@ -154,10 +169,10 @@ async function getAsteroidMetadataById(id) {
     }
 }
 
-async function getAsteroidsFromWallet() {
+async function fetchAsteroidsFromWallet() {
     if (!apiUrl.includes('127.0.0.1')) { return {error: 'API coming soon...'}; } //// TEST
     const connectedAddress = getConnectedAddress();
-    console.log(`--- getAsteroidsFromWallet @ ${connectedAddress}`); //// TEST
+    // console.log(`--- fetchAsteroidsFromWallet @ ${connectedAddress}`); //// TEST
     const config = {
         method: 'get',
         url: `${apiUrl}/asteroids/owned-by/${connectedAddress}`,
@@ -165,7 +180,7 @@ async function getAsteroidsFromWallet() {
     try {
         const response = await axios(config);
         const asteroids = response.data;
-        console.log(`--- asteroids from API:`, asteroids); //// TEST
+        // console.log(`--- asteroids from API:`, asteroids); //// TEST
         return asteroids;
     } catch (error) {
         console.log(`--- ERROR from API:`, error); //// TEST
@@ -189,6 +204,10 @@ async function getAsteroidsFromWallet() {
 function setupExample() {
     asteroidsPlannerTree = [...mockAsteroidsPlannerTree];
     handleAsteroidsPlannerTreeChanged();
+}
+
+function isPlannedAsteroidId(id) {
+    return asteroidsPlannerTree.find(asteroidData => asteroidData.asteroid_name === `Asteroid #${id}`);
 }
 
 function onClickAsteroidAction(action, el) {
@@ -287,7 +306,7 @@ function refreshAsteroidsPlannerTreeHtml() {
                         <span class="spectral-types">
                             ${getSpectralTypesHtmlForAsteroidType(asteroidData.asteroid_type)}
                         </span>
-                        <span class="area">${asteroidData.asteroid_area}</span>
+                        <span class="area area-km2">${asteroidData.asteroid_area}</span>
                     </div>
                 </div>
                 <ul class="planned-products-tree">
@@ -696,7 +715,7 @@ function closeOverlay() {
     elOverlayWrapper.querySelectorAll('.overlay-panel').forEach(el => {
         el.classList.add('hidden');
     });
-    elOverlayWrapper.classList.add('hidden');
+    document.body.classList.remove('overlay-visible');
 }
 
 function onClickAddAsteroid() {
@@ -712,7 +731,7 @@ function onClickAddAsteroid() {
         elInputMockArea.value = '';
     }
     // Show overlay for "Add asteroid"
-    elOverlayWrapper.classList.remove('hidden');
+    document.body.classList.add('overlay-visible');
     elOverlayAddAsteroid.classList.remove('hidden');
 }
 
@@ -720,37 +739,6 @@ function addAsteroidData(asteroidData) {
     asteroidsPlannerTree.push(asteroidData);
     closeOverlay();
     handleAsteroidsPlannerTreeChanged();
-}
-
-async function showAsteroidsFromWalletIfConnected() {
-    const connectedAddress = getConnectedAddress();
-    if (!connectedAddress) {
-        return;
-    }
-    elConnectWalletCta.classList.add('hidden');
-    elConnectedAddress.textContent = connectedAddress.replace(/^(.{6}).+(.{4})$/, '$1...$2');
-    elConnectedAddress.classList.remove('hidden');
-    // Show asteroids from wallet
-    let asteroids = cacheAsteroidsByWallet[connectedAddress];
-    if (asteroids) {
-        console.log(`--- asteroids from CACHE:`, asteroids);
-    } else {
-        // Data NOT cached => call to my API
-        asteroids = await getAsteroidsFromWallet();
-        if (asteroids.error) {
-            // Inform the user re: API error
-            alert(asteroids.error);
-            return;
-        }
-        cacheAsteroidsByWallet[connectedAddress] = asteroids;
-    }
-    //// TO DO: show "loading" until API-response arrives
-    //// TO DO: show scrolling-box with asteroids from wallet (already sorted by ID = by size)
-    //// TO DO: allow selection of multiple asteroids, to be added to the planner at the same time
-    //// TO DO: add button to force an API request for the asteroids, and update the cache - MAX once per hour(?)
-    //// -- track time of forced requests in the API, not in the client?
-    //// TO BE IMPLEMENTED
-    //// ____
 }
 
 async function connectWalletAndGetAsteroids() {
@@ -762,6 +750,85 @@ async function connectWalletAndGetAsteroids() {
     showAsteroidsFromWalletIfConnected();
 }
 
+async function showAsteroidsFromWalletIfConnected() {
+    elWalletAsteroids.innerHTML = '';
+    const connectedAddress = getConnectedAddress();
+    if (!connectedAddress) {
+        return;
+    }
+    elConnectWalletCta.classList.add('hidden');
+    elConnectedAddress.textContent = connectedAddress.replace(/^(.{6}).+(.{4})$/, '$1...$2');
+    elConnectedAddress.classList.remove('hidden');
+    // Show asteroids from wallet
+    let asteroids = cacheAsteroidsByWallet[connectedAddress];
+    if (asteroids) {
+        // console.log(`--- asteroids from CACHE:`, asteroids);
+    } else {
+        // Data NOT cached => call to my API
+        //// TO DO: show "loading" until API-response arrives?
+        //// ____
+        asteroids = await fetchAsteroidsFromWallet();
+        if (asteroids.error) {
+            // Inform the user re: API error
+            alert(asteroids.error);
+            return;
+        }
+        cacheAsteroidsByWallet[connectedAddress] = asteroids;
+        asteroids.forEach(metadata => {
+            cacheAsteroidsMetadataById[metadata.id] = metadata;
+        });
+    }
+    //// TO DO: basic filters for asteroids, based on spectral-type and size
+    //// ____
+    elWalletAsteroids.innerHTML += `
+        <div class="wallet-asteroid-filters">
+            <div class="filters"></div>
+            <div class="overlay-cta selected-asteroids-cta disabled" onclick="onClickAddSelectedAsteroids()"></div>
+        </div>
+    `;
+    asteroids.forEach(metadata => {
+        const classPlanned = isPlannedAsteroidId(metadata.id) ? 'planned' : '';
+        elWalletAsteroids.innerHTML += `
+            <div class="wallet-asteroid-card ${classPlanned}" onclick="onClickSelectWalletAsteroid(this)">
+                ${getWalletAsteroidCardHtml(metadata)}
+            </div>
+        `;
+    });
+    elWalletAsteroidsWrapperOuter.classList.remove('hidden');
+    //// TO DO: show message re: no astroids in connected wallet
+    //// ____
+    //// TO BE: anything else?
+    //// ____
+}
+
+function onClickAddSelectedAsteroids() {
+    elWalletAsteroids.querySelectorAll('.wallet-asteroid-card.selected').forEach(elSelectedAsteroid => {
+        const id = elSelectedAsteroid.querySelector('.id').textContent;
+        const asteroidData = {
+            asteroid_name: `Asteroid #${id}`,
+            asteroid_type: cacheAsteroidsMetadataById[id].type,
+            asteroid_area: cacheAsteroidsMetadataById[id].area,
+            planned_products: [],
+        };
+        asteroidsPlannerTree.push(asteroidData);
+    });
+    closeOverlay();
+    handleAsteroidsPlannerTreeChanged();
+}
+
+function onClickSelectWalletAsteroid(el) {
+    if (el.classList.contains('planned')) {
+        return;
+    }
+    el.classList.toggle('selected');
+    const elSelectedAsteroidsCta = elWalletAsteroids.querySelector('.selected-asteroids-cta');
+    if (elWalletAsteroids.querySelector('.wallet-asteroid-card.selected')) {
+        elSelectedAsteroidsCta.classList.remove('disabled');
+    } else {
+        elSelectedAsteroidsCta.classList.add('disabled');
+    }
+}
+
 function toggleAsteroidMetadataCta(enable) {
     if (enable) {
         elAsteroidDetailsCta.classList.remove('disabled');
@@ -771,12 +838,13 @@ function toggleAsteroidMetadataCta(enable) {
 }
 
 function resetAsteroidMetadataHtml() {
+    // Template adapted from "getWalletAsteroidCardHtml"
     elAsteroidMetadataWrapper.innerHTML = `
         <div class="spectral-types-circle type-X">?</div>
         <div class="asteroid-metadata-details hidden">
             <div>ID: <span class="metadata" id="asteroid-metadata-id"></span></div>
             <div>Name: <span class="metadata" id="asteroid-metadata-name"></span></div>
-            <div>Area: <span class="metadata" id="asteroid-metadata-area"></span></div>
+            <div>Area: <span class="metadata area-km2" id="asteroid-metadata-area"></span></div>
         </div>
     `;
 }
@@ -791,10 +859,10 @@ async function requestAsteroidDetails() {
     const asteroidId = elInputAsteroidId.value;
     let metadata = cacheAsteroidsMetadataById[asteroidId];
     if (metadata) {
-        console.log(`--- metadata from CACHE:`, metadata);
+        // console.log(`--- metadata from CACHE:`, metadata);
     } else {
         // Data NOT cached => call to my API
-        metadata = await getAsteroidMetadataById(asteroidId);
+        metadata = await fetchAsteroidMetadataById(asteroidId);
         if (metadata.error) {
             // Inform the user re: API error
             alert(metadata.error);
@@ -803,7 +871,7 @@ async function requestAsteroidDetails() {
         cacheAsteroidsMetadataById[asteroidId] = metadata;
     }
     elInputAsteroidId.value = '';
-    const elSpectralType = elOverlayAddAsteroid.querySelector('.spectral-types-circle');
+    const elSpectralType = elOverlayAddAsteroid.querySelector('.asteroid-metadata-wrapper .spectral-types-circle');
     elSpectralType.classList.remove('type-X');
     elSpectralType.classList.add(`type-${metadata.type}`, 'selected');
     elSpectralType.textContent = metadata.type;
@@ -955,7 +1023,7 @@ function updateContent() {
                                 ${asteroidData.asteroid_type}-type
                             </div>
                             <div class="asteroid-name">${asteroidData.asteroid_name}</div>
-                            <div class="area">${asteroidData.asteroid_area}</div>
+                            <div class="area area-km2">${asteroidData.asteroid_area}</div>
                         </div>
                     </div>
                 </div>
@@ -1060,10 +1128,14 @@ handleAsteroidsPlannerTreeChanged();
 
 //// TO DO PRIO
 /*
+- when adding a single asteroid ID, pressing "Enter" should trigger the "Get details" onclick handler (IFF non-empty value)
+- find another ASCII separator that looks the same in Firefox + Chrome
+    => replace it in "resetContent" CSS + breadcrumbs CSS
 - detect when wallet disconnected => show "Connect walelt" button again
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree
     - "alert" re: API coming soon / asteroid # already planned
+- search all occurrences of "____" => stuff to do
 */
 
 //// TO TEST

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1"
+	 id="svg833" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1333.3 1333.3"
+	 enable-background="new 0 0 1333.3 1333.3" xml:space="preserve">
+<sodipodi:namedview  bordercolor="#666666" borderopacity="1" gridtolerance="10" guidetolerance="10" id="namedview835" inkscape:current-layer="g841" inkscape:cx="500.452" inkscape:cy="701.96733" inkscape:pagecheckerboard="true" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-height="1387" inkscape:window-maximized="1" inkscape:window-width="3440" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:zoom="0.63480515" objecttolerance="10" pagecolor="#ffffff" showgrid="false">
+	</sodipodi:namedview>
+<g id="g841" transform="matrix(1.3333333,0,0,-1.3333333,0,1333.3333)" inkscape:groupmode="layer" inkscape:label="influence-icon-white-variant-dark-bg">
+	<g id="g845" transform="translate(799.3379,799.3369)">
+		<path id="path847" fill="#FFFFFF" d="M-103.8,0L-187,35.5h-83.1l53.6-23.1l-17-12.4l17-12.4l-53.6-23.1h83.1L-103.8,0z"/>
+	</g>
+	<g id="g857" transform="translate(799.3379,500.0063)">
+		<path id="path859" fill="#FFFFFF" d="M-103.8,0c0-114.6-92.9-207.5-207.5-207.5v415.1C-196.7,207.5-103.8,114.6-103.8,0"/>
+	</g>
+	<g id="g861" transform="translate(589.4102,184.4902)">
+		<path id="path863" fill="#FFFFFF" d="M-103.8,0c-174,0-315.5,141.5-315.5,315.5c0,174,141.6,315.5,315.5,315.5
+			c0.8,0,1.6-0.1,2.4-0.2v75.8c-216,0-391.1-175.1-391.1-391.1c0-216,175.1-391.1,391.1-391.1V0.2C-102.2,0.1-103,0-103.8,0"/>
+	</g>
+	
+		<linearGradient id="path867_00000060019290930503591020000013267968226005646258_" gradientUnits="userSpaceOnUse" x1="211.0956" y1="596.6683" x2="418.6356" y2="389.1233" gradientTransform="matrix(1.3333 0 0 1.3333 73 -221.5833)">
+		<stop  offset="0" style="stop-color:#36A7CD"/>
+		<stop  offset="1" style="stop-color:#36A7CD;stop-opacity:0"/>
+	</linearGradient>
+	<path id="path867" fill="url(#path867_00000060019290930503591020000013267968226005646258_)" d="M280.5,500
+		c0,114.6,92.9,207.5,207.5,207.5v75.8c-0.8-0.1-1.6-0.2-2.4-0.2c-156.1,0-283.1-127-283.1-283.1c0-156.1,127-283,283.1-283
+		c0.8,0,1.6-0.1,2.4-0.2v75.8C373.4,292.5,280.5,385.4,280.5,500"/>
+</g>
+</svg>

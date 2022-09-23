@@ -18,7 +18,7 @@ function parseAsteroidMetadata(rawData) {
     return metadata;
 }
 
-async function getAsteroidMetadata(asteroidId) {
+async function fetchAsteroidMetadata(asteroidId) {
     try {
         var config = {
             method: 'get',
@@ -27,12 +27,12 @@ async function getAsteroidMetadata(asteroidId) {
                 'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
             },
         };
-        console.log(`--- [getAsteroidMetadata] ${config.method.toUpperCase()} ${config.url}`); //// TEST
+        console.log(`--- [fetchAsteroidMetadata] ${config.method.toUpperCase()} ${config.url}`); //// TEST
         const response = await axios(config);
-        console.log(`--- [getAsteroidMetadata] response.data KEYS:`, Object.keys(response.data)); //// TEST
+        console.log(`--- [fetchAsteroidMetadata] response.data KEYS:`, Object.keys(response.data)); //// TEST
         return parseAsteroidMetadata(response.data);
     } catch (error) {
-        console.log(`--- [getAsteroidMetadata] ERROR:`, error); //// TEST
+        console.log(`--- [fetchAsteroidMetadata] ERROR:`, error); //// TEST
         return {error};
     }
 }
@@ -41,7 +41,7 @@ async function getAsteroidMetadata(asteroidId) {
  * Get count of ALL asteroids owned by address
  * @param address WARNING: case-sensitive
  */
-async function getAsteroidsCountOwnedBy(address) {
+async function fetchAsteroidsCountOwnedBy(address) {
     try {
         var config = {
             method: 'get',
@@ -54,12 +54,12 @@ async function getAsteroidsCountOwnedBy(address) {
                 'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
             },
         };
-        console.log(`--- [getAsteroidsCountOwnedBy] ${config.method.toUpperCase()} ${config.url}`); //// TEST
+        console.log(`--- [fetchAsteroidsCountOwnedBy] ${config.method.toUpperCase()} ${config.url}`); //// TEST
         const response = await axios(config);
-        console.log(`--- [getAsteroidsCountOwnedBy] response.data:`, response.data); //// TEST
+        console.log(`--- [fetchAsteroidsCountOwnedBy] response.data:`, response.data); //// TEST
         return response.data;
     } catch (error) {
-        console.log(`--- [getAsteroidsCountOwnedBy] ERROR:`, error); //// TEST
+        console.log(`--- [fetchAsteroidsCountOwnedBy] ERROR:`, error); //// TEST
         return {error};
     }
 }
@@ -68,7 +68,7 @@ async function getAsteroidsCountOwnedBy(address) {
  * Get IDs for ALL (TBC?) asteroids owned by address
  * @param address WARNING: case-sensitive
  */
- async function getAsteroidsIdsOwnedBy(address) {
+ async function fetchAsteroidsIdsOwnedBy(address) {
     try {
         var config = {
             method: 'get',
@@ -80,14 +80,14 @@ async function getAsteroidsCountOwnedBy(address) {
                 'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
             },
         };
-        console.log(`--- [getAsteroidsIdsOwnedBy] ${config.method.toUpperCase()} ${config.url}`); //// TEST
+        console.log(`--- [fetchAsteroidsIdsOwnedBy] ${config.method.toUpperCase()} ${config.url}`); //// TEST
         const response = await axios(config);
-        console.log(`--- [getAsteroidsIdsOwnedBy] response.data LENGTH = ${response.data.length}`); //// TEST
+        console.log(`--- [fetchAsteroidsIdsOwnedBy] response.data LENGTH = ${response.data.length}`); //// TEST
         return response.data.map(rawData => {
             return rawData.i;
         });
     } catch (error) {
-        console.log(`--- [getAsteroidsIdsOwnedBy] ERROR:`, error); //// TEST
+        console.log(`--- [fetchAsteroidsIdsOwnedBy] ERROR:`, error); //// TEST
         return {error};
     }
 }
@@ -96,7 +96,7 @@ async function getAsteroidsCountOwnedBy(address) {
  * Get metadata for max "ASTEROIDS_PER_PAGE_MAX" asteroids owned by address, per "page"
  * @param address WARNING: case-sensitive
  */
-async function getAsteroidsMetadataOwnedBy(address, page) {
+async function fetchAsteroidsMetadataOwnedBy(address, page) {
     try {
         var config = {
             method: 'get',
@@ -110,22 +110,22 @@ async function getAsteroidsMetadataOwnedBy(address, page) {
                 'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
             },
         };
-        console.log(`--- [getAsteroidsMetadataOwnedBy] ${config.method.toUpperCase()} ${config.url}`); //// TEST
+        console.log(`--- [fetchAsteroidsMetadataOwnedBy] ${config.method.toUpperCase()} ${config.url}`); //// TEST
         const response = await axios(config);
-        console.log(`--- [getAsteroidsMetadataOwnedBy] response.data LENGTH = ${response.data.length}`); //// TEST
+        console.log(`--- [fetchAsteroidsMetadataOwnedBy] response.data LENGTH = ${response.data.length}`); //// TEST
         return response.data.map(rawData => {
             return parseAsteroidMetadata(rawData);
         });
     } catch (error) {
-        console.log(`--- [getAsteroidsMetadataOwnedBy] ERROR:`, error); //// TEST
+        console.log(`--- [fetchAsteroidsMetadataOwnedBy] ERROR:`, error); //// TEST
         return {error};
     }
 }
 
 module.exports = {
     ASTEROIDS_PER_PAGE_MAX,
-    getAsteroidMetadata,
-    getAsteroidsCountOwnedBy,
-    getAsteroidsIdsOwnedBy,
-    getAsteroidsMetadataOwnedBy,
+    fetchAsteroidMetadata,
+    fetchAsteroidsCountOwnedBy,
+    fetchAsteroidsIdsOwnedBy,
+    fetchAsteroidsMetadataOwnedBy,
 };

@@ -14,7 +14,7 @@ async function loadAccessToken(provider) {
     switch (provider) {
         case 'influencethIo':
             try {
-                token = await authInfluencethIo.getAccessToken(
+                token = await authInfluencethIo.fetchAccessToken(
                     process.env.INFLUENCETH_IO_API_ID,
                     process.env.INFLUENCETH_IO_API_KEY,
                 );

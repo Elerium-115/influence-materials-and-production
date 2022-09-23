@@ -2,7 +2,9 @@
 
 @keyframes flash-interaction { 50% { background: var(--overactive-bg); } }
 
-.asteroid-info .area::after {
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.area-km2::after {
     content: ' km²';
 }
 
@@ -588,6 +590,7 @@
     color: var(--default-text_semifaded);
 }
 
+
 /* Overlays */
 
 #overlay-wrapper {
@@ -596,35 +599,32 @@
     bottom: 0;
     left: 0;
     right: 0;
-    display: flex;
+    /* do NOT use "display: flex" b/c an ".overlay-panel" taller than the window height can NOT be fully scrolled up/down */
+    display: grid;
     align-items: center;
-    justify-content: center;
     background: var(--default-overlay-bg);
+    overflow-y: auto;
     z-index: 1;
 }
 
-#ovrelay-close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    line-height: 1.6rem;
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--default-text);
-    cursor: pointer;
-    padding: 1rem;
+body:not(.overlay-visible) #overlay-wrapper {
+    display: none;
 }
 
-#ovrelay-close:hover {
-    color: white;
+body.overlay-visible {
+    overflow: hidden;
+}
+
+#overlay-wrapper .overlay-panel {
+    margin: 3rem auto;
 }
 
 #overlay-add-asteroid {
-    min-width: 66%;
+    width: 66%;
 }
 
 #overlay-add-asteroid h3 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 #overlay-add-asteroid .hr {
@@ -671,6 +671,7 @@
 }
 
 #overlay-add-asteroid .spectral-types-circle:hover::before,
+#overlay-add-asteroid .wallet-asteroid-card:hover .spectral-types-circle::before,
 #overlay-add-asteroid .spectral-types-circle.selected::before {
     opacity: 1;
 }
@@ -705,6 +706,192 @@
     margin-bottom: 0;
 }
 
+#overlay-add-asteroid .wallet-asteroids-wrapper-outer,
+#overlay-add-asteroid .wallet-asteroids-wrapper {
+    background: var(--dark-bg);
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroids-wrapper-outer {
+    position: relative;
+    height: 11rem;
+}
+
+#overlay-add-asteroid .wallet-asteroids-wrapper {
+    max-height: 11rem;
+    overflow: hidden;
+}
+
+#overlay-add-asteroid .wallet-asteroids-wrapper:hover {
+    position: absolute;
+    max-height: none;
+    filter: drop-shadow(0.25rem 0.25rem 0.25rem var(--dark-bg));
+    z-index: 1;
+}
+
+#overlay-add-asteroid .wallet-asteroids-wrapper:not(:hover)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 3rem;
+    background: linear-gradient(180deg, transparent 0%, var(--dark-bg) 100%);
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+/* TO DO: try to eliminate the intermediary ".wallet-asteroids-wrapper", if possible */
+/* ____ */
+
+#overlay-add-asteroid .wallet-asteroids {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 0.5rem;
+    margin: 0.5rem;
+    /* TO DO: try to use "grind" instead of "flex" => the last line should respect the existing columns, even if it has fewer asteroids */
+    /* -- also test with few asteroids on the first line => ok to be spaced evenly? */
+    /* ____ */
+}
+
+#overlay-add-asteroid .wallet-asteroid-filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 3rem;
+    padding: 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroid-filters .selected-asteroids-cta {
+    background: var(--default-bg);
+}
+
+#overlay-add-asteroid .wallet-asteroid-filters .selected-asteroids-cta::before {
+    content: 'Add selected';
+}
+
+#overlay-add-asteroid .wallet-asteroid-filters .selected-asteroids-cta.disabled::before {
+    content: 'Select asteroids';
+}
+
+#overlay-add-asteroid .wallet-asteroid-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 3.5rem 5rem;
+    gap: 1rem;
+    align-items: center;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:hover {
+    color: white;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:not(.planned):hover {
+    background: var(--active-bg);
+    background-position: center;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1rem;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 0%, var(--dark-bg) 100%);
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:not(.planned):hover::after {
+    background: linear-gradient(90deg, transparent 0%, var(--active-bg) 100%) !important;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.selected {
+    background: var(--default-bg);
+    border-color: var(--brand-text);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.selected::after {
+    background: linear-gradient(90deg, transparent 0%, var(--default-bg) 100%);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.planned {
+    cursor: not-allowed;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.planned::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.planned:hover::before {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:hover .spectral-types-circle {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .spectral-types-circle::before {
+    opacity: 0.5;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .wallet-asteroid-metadata {
+    overflow: hidden;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .id::before {
+    content: '# ';
+    color: var(--default-text_semifaded);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .name {
+    position: relative;
+    height: 1.3rem;
+    line-height: 1.3rem;
+    color: var(--default-text_semifaded);
+    /* TO DO: if overflow => animate left-right, when hovering over the card: https://codepen.io/pawankolhe/pen/abvMjGB */
+    /* ____ */
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.planned .name::before {
+    content: 'Planned';
+    position: relative;
+    color: var(--brand-text);
+    margin-right: 0.5rem;
+    z-index: 1;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:hover .link-icon {
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    width: 2rem;
+    height: 2rem;
+    background-image: url("./img/influence-logo.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .link-icon:hover {
+    animation: spin 500ms ease;
+}
+
 #overlay-add-asteroid .asteroid-id-and-cta .asteroid-id input,
 #overlay-add-asteroid .mock-area-and-cta .mock-area input {
     width: 5rem;
@@ -732,10 +919,6 @@
     color: white;
 }
 
-#overlay-add-asteroid #asteroid-metadata-area::after {
-    content: ' km²';
-}
-
 #overlay-add-asteroid .mock-spectral-types {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(3.5rem, 3.5rem));
@@ -753,4 +936,20 @@
 
 #overlay-add-asteroid .overlay-cta.asteroid-mock-cta {
     margin-left: 2rem;
+}
+
+#ovrelay-close {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    line-height: 1.6rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--default-text);
+    cursor: pointer;
+    padding: 1rem;
+}
+
+#ovrelay-close:hover {
+    color: white;
 }

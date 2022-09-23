@@ -27,7 +27,7 @@ async function connectWallet() {
         }
     } else {
         return {
-            error: 'You must install a wallet such as MetaMask',
+            error: 'Please install a wallet such as MetaMask',
         };
     }
 }

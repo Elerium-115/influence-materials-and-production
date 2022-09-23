@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-async function getAccessToken(clientId, clientKey) {
+async function fetchAccessToken(clientId, clientKey) {
     try {
         var config = {
             method: 'post',
@@ -11,16 +11,16 @@ async function getAccessToken(clientId, clientKey) {
                 client_secret: clientKey,
             },
         };
-        console.log(`--- [influencethIo > getAccessToken] ${config.method.toUpperCase()} ${config.url}`); //// TEST
+        console.log(`--- [influencethIo > fetchAccessToken] ${config.method.toUpperCase()} ${config.url}`); //// TEST
         const response = await axios(config);
-        console.log(`--- [influencethIo > getAccessToken] response.data KEYS:`, Object.keys(response.data)); //// TEST
+        console.log(`--- [influencethIo > fetchAccessToken] response.data KEYS:`, Object.keys(response.data)); //// TEST
         return response.data.access_token;
     } catch (error) {
-        console.log(`--- [influencethIo > getAccessToken] ERROR:`, error); //// TEST
+        console.log(`--- [influencethIo > fetchAccessToken] ERROR:`, error); //// TEST
         return null;
     }    
 }
 
 module.exports = {
-    getAccessToken,
+    fetchAccessToken,
 };
