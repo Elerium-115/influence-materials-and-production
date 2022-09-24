@@ -5,8 +5,8 @@
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
 @keyframes leftright {
-    0%, 10% { transform: translateX(0%); left: 0%; }
-    90%, 100% { transform: translateX(-100%); left: 100%; }
+    0%, 5% { transform: translateX(0%); left: 0%; }
+    95%, 100% { transform: translateX(-100%); left: 100%; }
 }
 
 .area-km2::after {

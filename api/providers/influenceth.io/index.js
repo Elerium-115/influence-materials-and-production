@@ -39,7 +39,7 @@ async function fetchAsteroidMetadata(asteroidId) {
 
 /**
  * Get count of ALL asteroids owned by address
- * @param address WARNING: case-sensitive
+ * @param address WARNING: case-sensitive on mainnet as of Sep 2022 (case-insensitive on testnet)
  */
 async function fetchAsteroidsCountOwnedBy(address) {
     try {
@@ -66,7 +66,7 @@ async function fetchAsteroidsCountOwnedBy(address) {
 
 /**
  * Get IDs for ALL (TBC?) asteroids owned by address
- * @param address WARNING: case-sensitive
+ * @param address WARNING: case-sensitive on mainnet as of Sep 2022 (case-insensitive on testnet
  */
  async function fetchAsteroidsIdsOwnedBy(address) {
     try {
@@ -94,7 +94,7 @@ async function fetchAsteroidsCountOwnedBy(address) {
 
 /**
  * Get metadata for max "ASTEROIDS_PER_PAGE_MAX" asteroids owned by address, per "page"
- * @param address WARNING: case-sensitive
+ * @param address WARNING: case-sensitive on mainnet as of Sep 2022 (case-insensitive on testnet
  */
 async function fetchAsteroidsMetadataOwnedBy(address, page) {
     try {

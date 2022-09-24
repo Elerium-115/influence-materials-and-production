@@ -1,38 +1,58 @@
-let web3;
+/**
+ * List of handler functions to be called, for each wallet event
+ */
+const walletEventsHandlers = {
+    accountsChanged: [],
+    networkChanged: [],
+};
+
+// Add debugging handlers for wallet events
+/* DISABLED
+walletEventsHandlers.accountsChanged.push(accounts => {
+    console.log(`--- accountsChanged:`, accounts); //// TEST
+});
+walletEventsHandlers.networkChanged.push(networkId => {
+    console.log(`--- networkChanged:`, networkId); //// TEST
+});
+*/
 
 document.addEventListener('DOMContentLoaded', () => {
-    web3 = new Web3(window.ethereum);
+    if (window.ethereum) {
+        // Execute all handlers assigned to each wallet event, when such an event is triggered
+        window.ethereum.on('accountsChanged', accounts => {
+            walletEventsHandlers.accountsChanged.forEach(handler => handler(accounts));
+        });
+        window.ethereum.on('networkChanged', networkId => {
+            walletEventsHandlers.networkChanged.forEach(handler => handler(networkId));
+        });
+    }
 });
-
-function getChecksumAddress(address) {
-    return web3 ? web3.utils.toChecksumAddress(address) : address; // fallback to NON-checksum address
-    //// TO DO: try to rework this without "web3" => delete "web3.min.js"?
-    //// ____
-}
 
 // Source: https://ethereum.org/en/developers/tutorials/hello-world-smart-contract-fullstack/#the-connectWallet-function
 async function connectWallet() {
+    let walletError = null;
     if (window.ethereum) {
         try {
-            const addressArray = await window.ethereum.request({
+            await window.ethereum.request({
                 method: 'eth_requestAccounts',
             });
-            return {
-                address: getChecksumAddress(addressArray[0]),
-            };
+            /**
+             * NOT using the address returned by this request.
+             * Instead, "ethereum.selectedAddress" will be used.
+             */
+            return;
         } catch (error) {
-            return {
-                error: error.message,
-            };
+            walletError = error.message;
         }
     } else {
-        return {
-            error: 'Please install a wallet such as MetaMask',
-        };
+        walletError = 'Please install a wallet such as MetaMask';
+    }
+    if (walletError) {
+        alert(walletError);
     }
 }
 
 function getConnectedAddress() {
     // WARNING: "ethereum.selectedAddress" is deprecated?
-    return (window.ethereum && window.ethereum.selectedAddress) ? getChecksumAddress(window.ethereum.selectedAddress) : null;
+    return window.ethereum?.selectedAddress;
 }

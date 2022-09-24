@@ -1,4 +1,5 @@
 const express = require('express');
+const { toChecksumAddress } = require('ethereum-checksum-address');
 const cache = require('../cache/index');
 const providerInfluencethIo = require('../providers/influenceth.io/index');
 
@@ -53,7 +54,7 @@ router.get(
     '/asteroids/owned-by/:address',
     async (req, res) => {
         console.log(`--- [router] GET /asteroids/owned-by/:address`); //// TEST
-        const address = req.params.address;
+        const address = toChecksumAddress(req.params.address);
         console.log(`---> address = ${address}`); //// TEST
         /* DISABLED call to Influence API for "asteroidsCount" b/c this can be derived from "asteroidsIds"
         // Count ALL owned asteroids
@@ -65,7 +66,7 @@ router.get(
         */
         // Get IDs of ALL owned asteroids (TBC for higher numbers, e.g. +100 owned asteroids?)
         let asteroidsIds;
-        let cachedAsteroidsIds = cache.ownedAsteroidsIdsByAddress[address];
+        let cachedAsteroidsIds = cache.ownedAsteroidsIdsByAddress[address.toLowerCase()];
         if (cachedAsteroidsIds && (Date.now() - cachedAsteroidsIds.date) < ONE_HOUR) {
             // Use cache if not older than ONE_HOUR
             asteroidsIds = cachedAsteroidsIds.asteroidsIds;
@@ -77,7 +78,7 @@ router.get(
                 return;
             }
             console.log(`---> asteroidsIds:`, asteroidsIds); //// TEST
-            cache.ownedAsteroidsIdsByAddress[address] = {
+            cache.ownedAsteroidsIdsByAddress[address.toLowerCase()] = {
                 asteroidsIds,
                 date: Date.now(),
             };

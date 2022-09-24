@@ -36,7 +36,7 @@ let asteroidsPlannerLines = [];
 let onClickAsteroidActionInProgress = false;
 
 const cacheAsteroidsMetadataById = {};
-const cacheAsteroidsByWallet = {};
+const cacheAsteroidsByWallet = {}; // Note: each key is a lowercase address
 
 // Depending on the environment, the API URL will be "http://localhost:3000" or "https://materials.adalia.id:3000"
 const apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
@@ -174,6 +174,9 @@ async function fetchAsteroidMetadataById(id) {
 async function fetchAsteroidsFromWallet() {
     if (!apiUrl.includes('127.0.0.1')) { return {error: 'API coming soon...'}; } //// TEST
     const connectedAddress = getConnectedAddress();
+    if (!connectedAddress) {
+        return {error: 'No connected address'};
+    }
     // console.log(`--- fetchAsteroidsFromWallet @ ${connectedAddress}`); //// TEST
     const config = {
         method: 'get',
@@ -721,9 +724,8 @@ function closeOverlay() {
 }
 
 function onClickAddAsteroid() {
-    // Initialize state for "Import asteroids from wallet"
-    resetWalletAsteroidsFilters();
-    showAsteroidsFromWalletIfConnected();
+    // Update state for "Import asteroids from wallet"
+    updateWalletAsteroidsPanel();
     // Reset state for "Add an in-game asteroid"
     resetAsteroidMetadataHtml();
     elInputAsteroidId.value = '';
@@ -738,39 +740,33 @@ function onClickAddAsteroid() {
     elOverlayAddAsteroid.classList.remove('hidden');
 }
 
-function resetWalletAsteroidsFilters() {
-    elSelectedAsteroidsCta.classList.add('disabled');
+// Add handler for wallet events in "Add asteroid" overlay
+walletEventsHandlers.accountsChanged.push(updateWalletAsteroidsPanel);
+
+async function updateWalletAsteroidsPanel() {
+    elWalletAsteroidsStatus.className = ''; // Remove all classes (including ".hidden")
+    elWalletAsteroidsWrapperOuter.classList.add('hidden');
     //// TO DO: reset the filters, once they are implemented
     //// ____
-}
-
-async function onClickConnectWallet() {
-    const walletData = await connectWallet();
-    if (walletData.error) {
-        alert(walletData.error);
-        return;
-    }
-    showAsteroidsFromWalletIfConnected();
-}
-
-async function showAsteroidsFromWalletIfConnected() {
-    elWalletAsteroidsStatus.className = ''; // Remove all classes (including ".hidden")
+    elSelectedAsteroidsCta.classList.add('disabled');
     elWalletAsteroids.innerHTML = '';
     const connectedAddress = getConnectedAddress();
-    if (!connectedAddress) {
+    if (connectedAddress) {
+        elConnectWalletCta.classList.add('hidden');
+        elConnectedAddress.textContent = connectedAddress.replace(/^(.{6}).+(.{4})$/, '$1...$2');
+        elConnectedAddress.title = connectedAddress;
+        elConnectedAddress.classList.remove('hidden');
+    } else {
+        elConnectedAddress.classList.add('hidden');
+        elConnectedAddress.textContent = '';
+        elConnectedAddress.title = '';
+        elConnectWalletCta.classList.remove('hidden');
         elWalletAsteroidsStatus.classList.add('not-connected');
         return;
     }
-    // Wallet is connected
-    elConnectWalletCta.classList.add('hidden');
-    elConnectedAddress.textContent = connectedAddress.replace(/^(.{6}).+(.{4})$/, '$1...$2');
-    elConnectedAddress.title = connectedAddress;
-    elConnectedAddress.classList.remove('hidden');
-    // Show asteroids from wallet
-    let asteroids = cacheAsteroidsByWallet[connectedAddress];
-    if (asteroids) {
-        // console.log(`--- asteroids from CACHE:`, asteroids);
-    } else {
+    // Wallet is connected => show asteroids from wallet, if any
+    let asteroids = cacheAsteroidsByWallet[connectedAddress.toLowerCase()];
+    if (!asteroids) {
         // Data NOT cached => call to my API
         elWalletAsteroidsStatus.classList.add('loading-asteroids');
         asteroids = await fetchAsteroidsFromWallet();
@@ -780,7 +776,7 @@ async function showAsteroidsFromWalletIfConnected() {
             alert(asteroids.error);
             return;
         }
-        cacheAsteroidsByWallet[connectedAddress] = asteroids;
+        cacheAsteroidsByWallet[connectedAddress.toLowerCase()] = asteroids;
         asteroids.forEach(metadata => {
             cacheAsteroidsMetadataById[metadata.id] = metadata;
         });
@@ -805,7 +801,7 @@ async function showAsteroidsFromWalletIfConnected() {
      * otherwise "clientWidth" is zero for hidden elements.
      * Source: https://codepen.io/pawankolhe/pen/abvMjGB
      * Note: "setTimeout" is required when this function is called via "onClickAddAsteroid",
-     * because then "elOverlayAddAsteroid" becomes visible only AFTER this function returns.
+     * because then the whole overlay becomes visible only AFTER this function returns.
      */
     elWalletAsteroidsWrapperOuter.classList.remove('hidden');
     setTimeout(() => {
@@ -876,9 +872,7 @@ async function requestAsteroidDetails() {
     toggleAsteroidMetadataCta(false); // Disable the CTA
     const asteroidId = elInputAsteroidId.value;
     let metadata = cacheAsteroidsMetadataById[asteroidId];
-    if (metadata) {
-        // console.log(`--- metadata from CACHE:`, metadata);
-    } else {
+    if (!metadata) {
         // Data NOT cached => call to my API
         metadata = await fetchAsteroidMetadataById(asteroidId);
         if (metadata.error) {

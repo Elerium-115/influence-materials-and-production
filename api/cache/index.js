@@ -8,12 +8,14 @@ const asteroidsMetadataById = {};
 
 /**
  * Format:
- * ownedAsteroidsIdsByAddress[address] = {
- *   asteroidsIds: [1, 23, 456, 7890],
- *   date: Date,
+ * ownedAsteroidsIdsByAddress = {
+ *   address_lowercase: {
+ *     asteroidsIds: [1, 23, 456, 7890],
+ *     date: Date,
+ *   },
  * }
  */
-const ownedAsteroidsIdsByAddress = {};
+const ownedAsteroidsIdsByAddress = {}; // Note: each key is a lowercase address
 
 module.exports = {
     accessTokens,
