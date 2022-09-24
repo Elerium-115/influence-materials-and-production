@@ -82,12 +82,17 @@
                 <div class="title-and-wallet-wrapper">
                     <h3 class="brand-text">Import asteroids from wallet</h3>
                     <div>
-                        <div class="overlay-cta connect-wallet-cta" onclick="connectWalletAndGetAsteroids()">Connect wallet</div>
+                        <div class="overlay-cta connect-wallet-cta" onclick="onClickConnectWallet()">Connect wallet</div>
                         <div class="overlay-cta connected-address disabled hidden"></div>
                     </div>
                 </div>
+                <div id="wallet-asteroids-status"></div>
                 <div class="wallet-asteroids-wrapper-outer hidden">
                     <div class="wallet-asteroids-wrapper">
+                        <div class="wallet-asteroid-filters">
+                            <div class="filters"></div>
+                            <div class="overlay-cta selected-asteroids-cta disabled" onclick="onClickAddSelectedAsteroids(this)"></div>
+                        </div>
                         <div class="wallet-asteroids"></div>
                     </div>
                 </div>

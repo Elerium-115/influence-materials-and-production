@@ -14,7 +14,9 @@ const elButtonSeeExample = elAsteroidsPlannerTree.querySelector('#asteroids-plan
 // Elements inside the overlay for "Add asteroid"
 const elConnectWalletCta = elOverlayAddAsteroid.querySelector('.connect-wallet-cta');
 const elConnectedAddress = elOverlayAddAsteroid.querySelector('.connected-address');
+const elWalletAsteroidsStatus = document.getElementById('wallet-asteroids-status');
 const elWalletAsteroidsWrapperOuter = elOverlayAddAsteroid.querySelector('.wallet-asteroids-wrapper-outer');
+const elSelectedAsteroidsCta = elWalletAsteroidsWrapperOuter.querySelector('.selected-asteroids-cta');
 const elWalletAsteroids = elOverlayAddAsteroid.querySelector('.wallet-asteroids');
 const elInputAsteroidId = document.getElementById('input-asteroid-id');
 const elAsteroidMetadataWrapper = elOverlayAddAsteroid.querySelector('.asteroid-metadata-wrapper')
@@ -145,8 +147,8 @@ function getWalletAsteroidCardHtml(metadata) {
         <div class="spectral-types-circle type-${metadata.type}">${metadata.type}</div>
         <div class="wallet-asteroid-metadata">
             <div class="id">${metadata.id}</div>
-            <div class="name">${metadata.name}</div>
-            <div class="area-km2">${metadata.area}</div>
+            <div class="name-wrapper"><div class="name">${metadata.name}</div></div>
+            <div class="area area-km2">${metadata.area}</div>
             <a class="link-icon" href="${metadata.url}" target="_blank" title="View in-game"></a>
         </div>
     `;
@@ -720,6 +722,7 @@ function closeOverlay() {
 
 function onClickAddAsteroid() {
     // Initialize state for "Import asteroids from wallet"
+    resetWalletAsteroidsFilters();
     showAsteroidsFromWalletIfConnected();
     // Reset state for "Add an in-game asteroid"
     resetAsteroidMetadataHtml();
@@ -735,13 +738,13 @@ function onClickAddAsteroid() {
     elOverlayAddAsteroid.classList.remove('hidden');
 }
 
-function addAsteroidData(asteroidData) {
-    asteroidsPlannerTree.push(asteroidData);
-    closeOverlay();
-    handleAsteroidsPlannerTreeChanged();
+function resetWalletAsteroidsFilters() {
+    elSelectedAsteroidsCta.classList.add('disabled');
+    //// TO DO: reset the filters, once they are implemented
+    //// ____
 }
 
-async function connectWalletAndGetAsteroids() {
+async function onClickConnectWallet() {
     const walletData = await connectWallet();
     if (walletData.error) {
         alert(walletData.error);
@@ -751,13 +754,17 @@ async function connectWalletAndGetAsteroids() {
 }
 
 async function showAsteroidsFromWalletIfConnected() {
+    elWalletAsteroidsStatus.className = ''; // Remove all classes (including ".hidden")
     elWalletAsteroids.innerHTML = '';
     const connectedAddress = getConnectedAddress();
     if (!connectedAddress) {
+        elWalletAsteroidsStatus.classList.add('not-connected');
         return;
     }
+    // Wallet is connected
     elConnectWalletCta.classList.add('hidden');
     elConnectedAddress.textContent = connectedAddress.replace(/^(.{6}).+(.{4})$/, '$1...$2');
+    elConnectedAddress.title = connectedAddress;
     elConnectedAddress.classList.remove('hidden');
     // Show asteroids from wallet
     let asteroids = cacheAsteroidsByWallet[connectedAddress];
@@ -765,9 +772,9 @@ async function showAsteroidsFromWalletIfConnected() {
         // console.log(`--- asteroids from CACHE:`, asteroids);
     } else {
         // Data NOT cached => call to my API
-        //// TO DO: show "loading" until API-response arrives?
-        //// ____
+        elWalletAsteroidsStatus.classList.add('loading-asteroids');
         asteroids = await fetchAsteroidsFromWallet();
+        elWalletAsteroidsStatus.classList.remove('loading-asteroids');
         if (asteroids.error) {
             // Inform the user re: API error
             alert(asteroids.error);
@@ -778,14 +785,12 @@ async function showAsteroidsFromWalletIfConnected() {
             cacheAsteroidsMetadataById[metadata.id] = metadata;
         });
     }
-    //// TO DO: basic filters for asteroids, based on spectral-type and size
-    //// ____
-    elWalletAsteroids.innerHTML += `
-        <div class="wallet-asteroid-filters">
-            <div class="filters"></div>
-            <div class="overlay-cta selected-asteroids-cta disabled" onclick="onClickAddSelectedAsteroids()"></div>
-        </div>
-    `;
+    if (!asteroids.length) {
+        elWalletAsteroidsStatus.classList.add('no-asteroids');
+        return;
+    }
+    // Connected wallet has asteroids
+    elWalletAsteroidsStatus.classList.add('hidden');
     asteroids.forEach(metadata => {
         const classPlanned = isPlannedAsteroidId(metadata.id) ? 'planned' : '';
         elWalletAsteroids.innerHTML += `
@@ -794,14 +799,28 @@ async function showAsteroidsFromWalletIfConnected() {
             </div>
         `;
     });
+    /**
+     * Mark overflowing asteroid names, to be animated left-right via CSS.
+     * This needs to be done after ALL wrappers (ancestors) are visible,
+     * otherwise "clientWidth" is zero for hidden elements.
+     * Source: https://codepen.io/pawankolhe/pen/abvMjGB
+     * Note: "setTimeout" is required when this function is called via "onClickAddAsteroid",
+     * because then "elOverlayAddAsteroid" becomes visible only AFTER this function returns.
+     */
     elWalletAsteroidsWrapperOuter.classList.remove('hidden');
-    //// TO DO: show message re: no astroids in connected wallet
-    //// ____
-    //// TO BE: anything else?
-    //// ____
+    setTimeout(() => {
+        elWalletAsteroids.querySelectorAll('.name-wrapper > .name').forEach(elName => {
+            if (elName.clientWidth > elName.parentElement.clientWidth) {
+                elName.classList.add('overflowing');
+            }
+        });
+    });
 }
 
-function onClickAddSelectedAsteroids() {
+function onClickAddSelectedAsteroids(el) {
+    if (el.classList.contains('disabled')) {
+        return;
+    }
     elWalletAsteroids.querySelectorAll('.wallet-asteroid-card.selected').forEach(elSelectedAsteroid => {
         const id = elSelectedAsteroid.querySelector('.id').textContent;
         const asteroidData = {
@@ -821,7 +840,6 @@ function onClickSelectWalletAsteroid(el) {
         return;
     }
     el.classList.toggle('selected');
-    const elSelectedAsteroidsCta = elWalletAsteroids.querySelector('.selected-asteroids-cta');
     if (elWalletAsteroids.querySelector('.wallet-asteroid-card.selected')) {
         elSelectedAsteroidsCta.classList.remove('disabled');
     } else {
@@ -952,6 +970,12 @@ function createMockRock() {
         planned_products: [],
     };
     addAsteroidData(mockRockData);
+}
+
+function addAsteroidData(asteroidData) {
+    asteroidsPlannerTree.push(asteroidData);
+    closeOverlay();
+    handleAsteroidsPlannerTreeChanged();
 }
 
 function onClickAddPlannedProduct() {
