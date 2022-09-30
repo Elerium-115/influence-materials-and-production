@@ -5,6 +5,7 @@ const elContentWrapper = document.getElementById('content-wrapper');
 const elContent = document.getElementById('content');
 const elOverlayWrapper = document.getElementById('overlay-wrapper');
 const elOverlayAddAsteroid = document.getElementById('overlay-add-asteroid');
+const elOverlayAddPlannedProduct = document.getElementById('overlay-add-product');
 const elInputMockSpectralType = document.getElementById('input-mock-spectral-type');
 const elInputMockArea = document.getElementById('input-mock-area');
 
@@ -277,6 +278,16 @@ function onClickAsteroidAction(action, el) {
             onClickAsteroidActionInProgress = false;
         }, 1000); // Match the animation duration for "flash-interaction"
     }
+}
+
+function deletePlannedProduct(asteroidName, plannedProductName) {
+    if (!confirm(`Are you sure you want to remove this planned product, and its production chain?`)) {
+        return; // Abort deletion
+    }
+    const asteroidData = getAsteroidData(asteroidName);
+    // Delete from array
+    asteroidData.planned_products = asteroidData.planned_products.filter(plannedProductData => plannedProductData.planned_product_name !== plannedProductName);
+    handleAsteroidsPlannerTreeChanged();
 }
 
 function refreshAsteroidsPlannerTreeHtml() {
@@ -693,7 +704,7 @@ function refreshAsteroidsPlannerBreadcrumbsHtml() {
                 const onClickHtml = name === plannedProductName ? '' : `onclick="onClickTreeItem('${asteroidName}', '${name}')"`;
                 plannedProductsListHtml += `<li ${classHtml} ${onClickHtml}>${name}</li>`;
             });
-            plannedProductsListHtml += `<li class="add-item">Add product</li>`;
+            plannedProductsListHtml += `<li class="add-item" onclick="onClickAddPlannedProduct()">Add product</li>`;
             breadcrumbsHtml += `
                 <div class="separator"></div>
                 <div class="breadcrumb">
@@ -1057,6 +1068,9 @@ function addAsteroidData(asteroidData) {
 }
 
 function onClickAddPlannedProduct() {
+    // Show overlay for "Add planned product"
+    document.body.classList.add('overlay-visible');
+    elOverlayAddPlannedProduct.classList.remove('hidden');
     //// TO BE IMPLEMENTED
     //// ____
 }
@@ -1150,9 +1164,12 @@ function updateContent() {
         getAsteroidData(asteroidName).planned_products.forEach(productData => {
             const productName = productData.planned_product_name;
             productCardsHtml += `
-                <div class="product-card" onclick="onClickTreeItem('${asteroidName}', '${productName}')">
-                    <img src="./img/products/${getItemNameSafe(productName)}.png" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
-                    <div class="product-name">${productName}</div>
+                <div class="product-card">
+                    <div onclick="onClickTreeItem('${asteroidName}', '${productName}')">
+                        <img src="./img/products/${getItemNameSafe(productName)}.png" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
+                        <div class="product-name">${productName}</div>
+                    </div>
+                    <div class="product-delete" onclick="deletePlannedProduct('${asteroidName}', '${productName}')"></div>
                 </div>
                 `;
         });

@@ -562,6 +562,7 @@
 }
 
 .content-cards .product-card {
+    position: relative;
     min-height: 13rem;
     text-align: center;
     border-left: 1px solid var(--default-text);
@@ -587,6 +588,31 @@
 
 .content-cards .product-card .product-name {
     padding-bottom: 1rem;
+}
+
+.content-cards .product-card .product-delete {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+}
+
+.content-cards .product-card:not(:hover) .product-delete {
+    display: none;
+}
+
+.content-cards .product-card .product-delete:hover {
+    background: red;
+}
+
+.content-cards .product-card .product-delete::after {
+    content: '✕';
 }
 
 .content-cards .product-card.product-add {
@@ -830,6 +856,10 @@ body.overlay-visible {
     background: var(--active-bg);
     border-color: var(--default-text);
     opacity: 1;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filter-spectral-type.selected:hover {
+    border-color: white;
 }
 
 #overlay-add-asteroid .wallet-asteroids-filters .filters-category-area .filter-options {
