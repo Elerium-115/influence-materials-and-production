@@ -3,7 +3,7 @@
  */
 const walletEventsHandlers = {
     accountsChanged: [],
-    networkChanged: [],
+    chainChanged: [],
 };
 
 // Add debugging handlers for wallet events
@@ -11,8 +11,8 @@ const walletEventsHandlers = {
 walletEventsHandlers.accountsChanged.push(accounts => {
     console.log(`--- accountsChanged:`, accounts); //// TEST
 });
-walletEventsHandlers.networkChanged.push(networkId => {
-    console.log(`--- networkChanged:`, networkId); //// TEST
+walletEventsHandlers.chainChanged.push(chainIdHex => {
+    console.log(`--- chainChanged:`, chainIdHex); //// TEST
 });
 */
 
@@ -22,8 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.ethereum.on('accountsChanged', accounts => {
             walletEventsHandlers.accountsChanged.forEach(handler => handler(accounts));
         });
-        window.ethereum.on('networkChanged', networkId => {
-            walletEventsHandlers.networkChanged.forEach(handler => handler(networkId));
+        // Using "chainChanged" b/c "networkChanged" is deprecated
+        window.ethereum.on('chainChanged', chainIdHex => {
+            walletEventsHandlers.chainChanged.forEach(handler => handler(chainIdHex));
         });
     }
 });

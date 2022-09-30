@@ -31,6 +31,15 @@ function getItemTypeClass(itemType) {
     return `item-type-${getItemNameSafe(itemType)}`;
 }
 
+function validateInputArea(el) {
+    if (!el.value.length) {
+        return;
+    }
+    const intValue = parseInt(el.value);
+    // Min. 13 km2, max. 1768484 km2 (Adalia Prime)
+    el.value = isNaN(intValue) || intValue < 13 ? 13 : Math.min(intValue, 1768484);
+}
+
 // Source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
 function on(eventType, selector, callback) {
     document.addEventListener(eventType, event => {

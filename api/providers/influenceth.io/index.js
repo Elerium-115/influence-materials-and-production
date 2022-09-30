@@ -1,6 +1,12 @@
 const axios = require('axios');
 const utils = require('../../utils/index');
 
+/**
+ * Provider:
+ * https://www.npmjs.com/package/influence-utils
+ * https://github.com/Influenceth/influence-utils
+ */
+
 // Source: https://github.com/Influenceth/influence-utils/blob/master/index.js
 const SPECTRAL_TYPES = [ 'C', 'Cm', 'Ci', 'Cs', 'Cms', 'Cis', 'S', 'Sm', 'Si', 'M', 'I' ];
 

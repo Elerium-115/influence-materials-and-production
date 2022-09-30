@@ -16,8 +16,14 @@ const elConnectWalletCta = elOverlayAddAsteroid.querySelector('.connect-wallet-c
 const elConnectedAddress = elOverlayAddAsteroid.querySelector('.connected-address');
 const elWalletAsteroidsStatus = document.getElementById('wallet-asteroids-status');
 const elWalletAsteroidsWrapperOuter = elOverlayAddAsteroid.querySelector('.wallet-asteroids-wrapper-outer');
+const elWalletAsteroidsFilters = elWalletAsteroidsWrapperOuter.querySelector('.wallet-asteroids-filters');
+const elWalletAsteroidsFilterLabelSpectralTypes = elWalletAsteroidsFilters.querySelector('.filters-category-spectral-types .filter-label');
+const elWalletAsteroidsFilterLabelArea = elWalletAsteroidsFilters.querySelector('.filters-category-area .filter-label');
+const elInputFilterAreaMin = elWalletAsteroidsFilters.querySelector('#input-filter-area-min');
+const elInputFilterAreaMax = elWalletAsteroidsFilters.querySelector('#input-filter-area-max');
+const elWalletAsteroidsFiltersReset = elWalletAsteroidsFilters.querySelector('.filters-reset');
 const elSelectedAsteroidsCta = elWalletAsteroidsWrapperOuter.querySelector('.selected-asteroids-cta');
-const elWalletAsteroids = elOverlayAddAsteroid.querySelector('.wallet-asteroids');
+const elWalletAsteroids = elWalletAsteroidsWrapperOuter.querySelector('.wallet-asteroids');
 const elInputAsteroidId = document.getElementById('input-asteroid-id');
 const elAsteroidMetadataWrapper = elOverlayAddAsteroid.querySelector('.asteroid-metadata-wrapper')
 const elAsteroidDetailsCta = elOverlayAddAsteroid.querySelector('.asteroid-id-and-cta .asteroid-details-cta')
@@ -746,8 +752,7 @@ walletEventsHandlers.accountsChanged.push(updateWalletAsteroidsPanel);
 async function updateWalletAsteroidsPanel() {
     elWalletAsteroidsStatus.className = ''; // Remove all classes (including ".hidden")
     elWalletAsteroidsWrapperOuter.classList.add('hidden');
-    //// TO DO: reset the filters, once they are implemented
-    //// ____
+    resetWalletAsteroidsFilters();
     elSelectedAsteroidsCta.classList.add('disabled');
     elWalletAsteroids.innerHTML = '';
     const connectedAddress = getConnectedAddress();
@@ -810,6 +815,85 @@ async function updateWalletAsteroidsPanel() {
                 elName.classList.add('overflowing');
             }
         });
+    });
+}
+
+function resetWalletAsteroidsFilters(shouldFilterWalletAsteroids = false) {
+    elWalletAsteroidsFilters.querySelectorAll('.filter-spectral-type:not(.selected)').forEach(el => el.classList.add('selected'));
+    elWalletAsteroidsFilterLabelSpectralTypes.classList.remove('brand-text');
+    elWalletAsteroidsFilterLabelArea.classList.remove('brand-text');
+    elInputFilterAreaMin.value = '';
+    elInputFilterAreaMax.value = '';
+    elWalletAsteroidsFiltersReset.classList.add('hidden');
+    if (shouldFilterWalletAsteroids) {
+        filterWalletAsteroids();
+    }
+}
+
+function toggleWalletSpectralType(el) {
+    el.classList.toggle('selected');
+    filterWalletAsteroids();
+}
+
+/**
+ * Select all filter-spectral-types, if at least one filter-spectral-type
+ * is de-selected. Otherwise de-select all filter-spectral-types.
+ */
+function toggleAllWalletSpectralTypes() {
+    const elsFilterSpectralType = elWalletAsteroidsFilters.querySelectorAll('.filter-spectral-type');
+    if (elWalletAsteroidsFilters.querySelector('.filter-spectral-type:not(.selected)')) {
+        elsFilterSpectralType.forEach(el => el.classList.add('selected'));
+    } else {
+        elsFilterSpectralType.forEach(el => el.classList.remove('selected'));
+    }
+    filterWalletAsteroids();
+}
+
+function onChangeInputFilterArea(el) {
+    validateInputArea(el);
+    if (el.value.length) {
+        // Ensure min <= max
+        if (el.id === 'input-filter-area-min' && elInputFilterAreaMax.value) {
+            el.value = Math.min(el.value, elInputFilterAreaMax.value);
+        }
+        if (el.id === 'input-filter-area-max' && elInputFilterAreaMin.value) {
+            el.value = Math.max(el.value, elInputFilterAreaMin.value);
+        }
+    }
+    filterWalletAsteroids();
+};
+
+/**
+ * Filter the wallet asteroids, based on the currently-selected filters for spectral-type and area
+ */
+function filterWalletAsteroids() {
+    // Reset any hidden wallet asteroids
+    const elAsteroidCardsToReset = elWalletAsteroids.querySelectorAll('.wallet-asteroid-card');
+    elAsteroidCardsToReset.forEach(elAsteroidCard => elAsteroidCard.classList.remove('hidden'));
+    elWalletAsteroidsFiltersReset.classList.add('hidden');
+    // Filter based on spectral-type
+    elWalletAsteroidsFilterLabelSpectralTypes.classList.remove('brand-text');
+    const elFilterSpectralTypesDeselected = elWalletAsteroidsFilters.querySelectorAll('.filter-spectral-type:not(.selected)');
+    if (elFilterSpectralTypesDeselected.length) {
+        elWalletAsteroidsFilterLabelSpectralTypes.classList.add('brand-text');
+        elWalletAsteroidsFiltersReset.classList.remove('hidden');
+    }
+    elFilterSpectralTypesDeselected.forEach(el => {
+        const elSpectralTypesToHide = elWalletAsteroids.querySelectorAll(`.type-${el.textContent}`);
+        elSpectralTypesToHide.forEach(elSpectralType => elSpectralType.closest('.wallet-asteroid-card').classList.add('hidden'));
+    });
+    // Filter based on area (from among the wallet asteroids not already filtered)
+    elWalletAsteroidsFilterLabelArea.classList.remove('brand-text');
+    if (elInputFilterAreaMin.value || elInputFilterAreaMax.value) {
+        elWalletAsteroidsFilterLabelArea.classList.add('brand-text');
+        elWalletAsteroidsFiltersReset.classList.remove('hidden');
+    }
+    elWalletAsteroids.querySelectorAll('.wallet-asteroid-card:not(.hidden)').forEach(el => {
+        const area = Number(el.querySelector('.area').textContent);
+        if ((elInputFilterAreaMin.value && area < Number(elInputFilterAreaMin.value)) ||
+            (elInputFilterAreaMax.value && area > Number(elInputFilterAreaMax.value))) {
+            el.classList.add('hidden');
+        }
     });
 }
 
@@ -1119,15 +1203,20 @@ on('change', "#input-asteroid-id", el => {
 
 // Validate asteroid area when creating a "mock rock"
 on('change', "#input-mock-area", el => {
-    const intValue = parseInt(el.value);
-    // Min. 13, max. 9999999 (Adalia Prime has 1768484 km2)
-    el.value = isNaN(intValue) || intValue < 13 ? 13 : Math.min(intValue, 9999999);
+    validateInputArea(el);
 });
 
 window.addEventListener('keydown', event => {
     // Pressing "Escape" while the overlay is visible, closes the overlay, without resetting any selections
     if (event.key === 'Escape') {
         closeOverlay();
+    }
+    // Pressing "Enter" while the "#input-asteroid-id" input is focused, triggers the "onlick" handler for "Get details"
+    if (event.key === 'Enter') {
+        if (elInputAsteroidId === document.activeElement && elInputAsteroidId.value.length) {
+            elInputAsteroidId.blur();
+            requestAsteroidDetails();
+        }
     }
 });
 
@@ -1146,10 +1235,8 @@ handleAsteroidsPlannerTreeChanged();
 
 //// TO DO PRIO
 /*
-- when adding a single asteroid ID, pressing "Enter" should trigger the "Get details" onclick handler (IFF non-empty value)
 - find another ASCII separator that looks the same in Firefox + Chrome
     => replace it in "resetContent" CSS + breadcrumbs CSS
-- detect when wallet disconnected => show "Connect walelt" button again
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree
     - "alert" re: API coming soon / asteroid # already planned

@@ -621,6 +621,7 @@ body.overlay-visible {
 }
 
 #overlay-wrapper .overlay-panel {
+    min-width: 35rem;
     margin: 3rem auto;
 }
 
@@ -759,23 +760,103 @@ body.overlay-visible {
     border-bottom-right-radius: 0.5rem;
 }
 
-#overlay-add-asteroid .wallet-asteroid-filters {
+#overlay-add-asteroid .wallet-asteroids-filters {
     display: flex;
-    align-items: center;
+    gap: 2rem;
+    align-items: flex-start;
     justify-content: space-between;
     width: 100%;
     padding: 1rem 1rem 0 1rem;
 }
 
-#overlay-add-asteroid .wallet-asteroid-filters .selected-asteroids-cta {
-    background: var(--default-bg);
+#overlay-add-asteroid .wallet-asteroids-filters .filters-wrapper {
+    display: flex;
+    gap: 2rem;
 }
 
-#overlay-add-asteroid .wallet-asteroid-filters .selected-asteroids-cta::before {
+#overlay-add-asteroid .wallet-asteroids-filters .filters {
+    background: var(--default-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters-category:hover .filters {
+    position: absolute;
+    filter: drop-shadow(0.25rem 0.25rem 0.25rem var(--dark-bg));
+    z-index: 2; /* ensure overlay above planned asteroids */
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filter-label-wrapper {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters:not(:hover) .filter-toggle-all,
+#overlay-add-asteroid .wallet-asteroids-filters .filters:not(:hover) .filter-options {
+    display: none;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters a {
+    cursor: pointer;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filter-options {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 1rem 0 0.5rem 0;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filter-spectral-type {
+    display: inline-block;
+    min-width: 2.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-radius: 0.5rem;
+    opacity: 0.5;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filter-spectral-type:hover {
+    background: var(--overactive-bg) !important;
+    color: white;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filter-spectral-type.selected {
+    background: var(--active-bg);
+    border-color: var(--default-text);
+    opacity: 1;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters-category-area .filter-options {
+    align-items: center;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters-category-area input {
+    width: 5rem;
+    margin: 0;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters-reset {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .selected-asteroids-cta {
+    background: var(--default-bg);
+    white-space: nowrap;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .selected-asteroids-cta::before {
     content: 'Add selected';
 }
 
-#overlay-add-asteroid .wallet-asteroid-filters .selected-asteroids-cta.disabled::before {
+#overlay-add-asteroid .wallet-asteroids-filters .selected-asteroids-cta.disabled::before {
     content: 'Select asteroids';
 }
 
@@ -921,6 +1002,14 @@ body.overlay-visible {
 
 #overlay-add-asteroid .wallet-asteroid-card .link-icon:hover {
     animation: spin 500ms ease-in-out;
+}
+
+#overlay-add-asteroid .asteroid-tools {
+    float: right;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    margin-left: 2rem;
 }
 
 #overlay-add-asteroid .asteroid-id-and-cta .asteroid-id input,
