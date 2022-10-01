@@ -3,10 +3,15 @@ const doDebug = location.href.includes('127.0.0.1');
 
 let maxLevel = 0;
 
-let horizontalLayout = document.getElementById('toggle-horizontal-layout').checked; // true vs. false
+let horizontalLayout = true;
+const elToggleHorizontalLayout = document.getElementById('toggle-horizontal-layout');
+if (elToggleHorizontalLayout) {
+    horizontalLayout = elToggleHorizontalLayout.checked;
+}
 
 const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
+const productSearchInput = productsListWrapper.querySelector('input');
 const productsListContainer = document.getElementById('products-list');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 
@@ -208,11 +213,19 @@ on('click', '#filters-list .option', el => {
 
 // Highlight all occurrences of a product, on hover over a product name from any list
 on('mouseenter', '.list-product-name', el => {
+    if (!productChainItemsContainer) {
+        // Does not exist in the "Asteroids Planner"
+        return;
+    }
     productChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
         itemContainer.classList.add('hover');
     });
 });
 on('mouseleave', '.list-product-name', el => {
+    if (!productChainItemsContainer) {
+        // Does not exist in the "Asteroids Planner"
+        return;
+    }
     productChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
         itemContainer.classList.remove('hover');
     });
@@ -221,7 +234,6 @@ on('mouseleave', '.list-product-name', el => {
 window.addEventListener('keydown', event => {
     // Pressing "Enter" while the product-search input is focused, selects the first matching product
     if (event.key === 'Enter') {
-        const productSearchInput = document.querySelector('#products-list-wrapper input');
         const firstSearchMatch = productsListContainer.querySelector('*:not(.not-matching-search)');
         if (productSearchInput === document.activeElement && productSearchInput.value.length && firstSearchMatch) {
             productSearchInput.blur();

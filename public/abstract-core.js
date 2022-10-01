@@ -43,6 +43,10 @@ function validateInputArea(el) {
 // Source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
 function on(eventType, selector, callback) {
     document.addEventListener(eventType, event => {
+        if (event.target.matches === undefined) {
+            // Avoid errors in Brave
+            return;
+        }
         if (event.target.matches(selector)) {
             callback(event.target);
         }

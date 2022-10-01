@@ -1,18 +1,18 @@
 const elAsteroidsPlannerWrapper = document.getElementById('asteroids-planner-wrapper');
 const elAsteroidsPlannerTree = document.getElementById('asteroids-planner-tree');
 const elShoppingListTree = document.getElementById('shopping-list-tree');
+const elBreadcrumbsWrapper = document.getElementById('breadcrumbs-wrapper')
 const elContentWrapper = document.getElementById('content-wrapper');
 const elContent = document.getElementById('content');
 const elOverlayWrapper = document.getElementById('overlay-wrapper');
 const elOverlayAddAsteroid = document.getElementById('overlay-add-asteroid');
-const elOverlayAddPlannedProduct = document.getElementById('overlay-add-product');
-const elInputMockSpectralType = document.getElementById('input-mock-spectral-type');
-const elInputMockArea = document.getElementById('input-mock-area');
+const elOverlayAddProduct = document.getElementById('overlay-add-product');
 
+// Buttons in the asteroids-planner-tree
 const elButtonAddAsteroid = elAsteroidsPlannerTree.querySelector('#asteroids-planner-tree .add-asteroid');
 const elButtonSeeExample = elAsteroidsPlannerTree.querySelector('#asteroids-planner-tree .see-example');
 
-// Elements inside the overlay for "Add asteroid"
+// Elements in the overlay for "Add asteroid"
 const elConnectWalletCta = elOverlayAddAsteroid.querySelector('.connect-wallet-cta');
 const elConnectedAddress = elOverlayAddAsteroid.querySelector('.connected-address');
 const elWalletAsteroidsStatus = document.getElementById('wallet-asteroids-status');
@@ -28,6 +28,11 @@ const elWalletAsteroids = elWalletAsteroidsWrapperOuter.querySelector('.wallet-a
 const elInputAsteroidId = document.getElementById('input-asteroid-id');
 const elAsteroidMetadataWrapper = elOverlayAddAsteroid.querySelector('.asteroid-metadata-wrapper')
 const elAsteroidDetailsCta = elOverlayAddAsteroid.querySelector('.asteroid-id-and-cta .asteroid-details-cta')
+const elInputMockSpectralType = document.getElementById('input-mock-spectral-type');
+const elInputMockArea = document.getElementById('input-mock-area');
+
+// Elements in the overlay for "Add product"
+const elOverlayAddProductAsteroidName = elOverlayAddProduct.querySelector('.asteroid-name');
 
 let asteroidsPlannerTree = [];
 let shoppingListTree = {};
@@ -47,6 +52,27 @@ const cacheAsteroidsByWallet = {}; // Note: each key is a lowercase address
 
 // Depending on the environment, the API URL will be "http://localhost:3000" or "https://materials.adalia.id:3000"
 const apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
+
+// Parse data from official JSON (partial copy-paste from "production-planner.js")
+const productDataByName = {}; // "items" in "production.js"
+const productNamesByHash = {}; // "itemNamesByHash" in "production.js"
+const productNamesSorted = []; // "itemNamesSorted" in "production.js"
+InfluenceProductionChainsJSON.products.forEach(product => {
+    productDataByName[product.name] = product;
+    productNamesSorted.push(product.name);
+});
+productNamesSorted.sort();
+
+// Ppopulate the products-list
+productNamesSorted.forEach(productName => {
+    const productNameCompact = getCompactName(productName);
+    productNamesByHash[productNameCompact] = productName;
+    const listItem = document.createElement('a');
+    listItem.setAttribute('onclick', `selectPlannedProduct('${productNameCompact}')`);
+    listItem.textContent = productName;
+    listItem.classList.add(getItemTypeClass(productDataByName[productName].type), 'list-product-name');
+    productsListContainer.appendChild(listItem);
+});
 
 /**
  * Leader Line settings
@@ -702,14 +728,20 @@ function refreshAsteroidsPlannerBreadcrumbsHtml() {
             getListOfPlannedProducts(asteroidName).forEach(name => {
                 const classHtml = name === plannedProductName ? 'class="selected"' : '';
                 const onClickHtml = name === plannedProductName ? '' : `onclick="onClickTreeItem('${asteroidName}', '${name}')"`;
-                plannedProductsListHtml += `<li ${classHtml} ${onClickHtml}>${name}</li>`;
+                plannedProductsListHtml += `
+                    <li ${classHtml} ${onClickHtml}>
+                        <div class="breadcrumb-name-inner">${name}</div>
+                    </li>
+                `;
             });
-            plannedProductsListHtml += `<li class="add-item" onclick="onClickAddPlannedProduct()">Add product</li>`;
+            plannedProductsListHtml += `<li class="add-item" onclick="onClickAddPlannedProductForAsteroid('${asteroidName}')">Add product</li>`;
             breadcrumbsHtml += `
                 <div class="separator"></div>
                 <div class="breadcrumb">
                     <ul>${plannedProductsListHtml}</ul>
-                    <div class="breadcrumb-name" onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}')">${plannedProductName}</div>
+                    <div class="breadcrumb-name" onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}')">
+                        <div class="breadcrumb-name-inner">${plannedProductName}</div>
+                    </div>
                 </div>
                 `;
             if (intermediateProductName) {
@@ -730,7 +762,7 @@ function refreshAsteroidsPlannerBreadcrumbsHtml() {
         }
     }
     breadcrumbsHtml += '</h3>';
-    document.getElementById('breadcrumbs-wrapper').innerHTML = breadcrumbsHtml;
+    elBreadcrumbsWrapper.innerHTML = breadcrumbsHtml;
 }
 
 function closeOverlay() {
@@ -1067,12 +1099,39 @@ function addAsteroidData(asteroidData) {
     handleAsteroidsPlannerTreeChanged();
 }
 
-function onClickAddPlannedProduct() {
+function onClickAddPlannedProductForAsteroid(asteroidName) {
+    hideAndResetProductsList();
     // Show overlay for "Add planned product"
     document.body.classList.add('overlay-visible');
-    elOverlayAddPlannedProduct.classList.remove('hidden');
-    //// TO BE IMPLEMENTED
+    elOverlayAddProduct.classList.remove('hidden');
+    elOverlayAddProductAsteroidName.textContent = asteroidName;
+}
+
+function selectPlannedProduct(productNameCompact) {
+    const asteroidName = elOverlayAddProductAsteroidName.textContent;
+    const productName = productNamesByHash[productNameCompact];
+    const asteroidData = getAsteroidData(asteroidName);
+    if (asteroidData.planned_products.find(productData => productData.planned_product_name === productName)) {
+        alert(`${productName} is already planned on ${asteroidName}`);
+        return;
+    }
+    //// TO DO: generate a blank production-chain for the selected product,
+    ////        and add it (along with the product itself) to "asteroidsPlannerTree", for "asteroidName"
     //// ____
+    asteroidData.planned_products.push({
+        intermediate_products: [],
+        planned_product_name: productName,
+        shopping_list: {
+            buildings: [],
+            inputs: [],
+            modules: [],
+            spectral_types: [],
+        },
+    });
+    closeOverlay();
+    handleAsteroidsPlannerTreeChanged();
+    // select the newly-added product
+    onClickTreeItem(asteroidName, productName);
 }
 
 function resetContent() {
@@ -1176,7 +1235,7 @@ function updateContent() {
         elContent.innerHTML = `
             <h3 class="content-title">Products planned on this asteroid</h3>
             <div class="content-cards">
-                <div class="product-card product-add" onclick="onClickAddPlannedProduct()">+</div>
+                <div class="product-card product-add" onclick="onClickAddPlannedProductForAsteroid('${asteroidName}')">+</div>
                 ${productCardsHtml}
             </div>
         `;
@@ -1212,15 +1271,21 @@ on('change', '#toggle-hide-unselected', el => {
 });
 
 // Validate asteroid ID when requesting asteroid metadata
-on('change', "#input-asteroid-id", el => {
+on('change', '#input-asteroid-id', el => {
     const intValue = parseInt(el.value);
     // Min. 1, max. 250000 (Adalia Prime has ID 1)
     el.value = isNaN(intValue) || intValue < 1 ? 1 : Math.min(intValue, 250000);
 });
 
-// Validate asteroid area when creating a "mock rock"
-on('change', "#input-mock-area", el => {
-    validateInputArea(el);
+// Mark / unmark overflowing breadcrumb elements, to be animated left-right via CSS
+const selectorOverflowingBreadcrumbElements = '.breadcrumbs .breadcrumb .breadcrumb-name-inner';
+on('mouseenter', selectorOverflowingBreadcrumbElements, el => {
+    if (el.clientWidth < el.scrollWidth) {
+        el.classList.add('overflowing');
+    }
+});
+on('mouseleave', selectorOverflowingBreadcrumbElements, el => {
+    el.classList.remove('overflowing');
 });
 
 window.addEventListener('keydown', event => {
@@ -1252,6 +1317,7 @@ handleAsteroidsPlannerTreeChanged();
 
 //// TO DO PRIO
 /*
+- sort all products-lists alphabetically (planned-products + intermediate-products)
 - find another ASCII separator that looks the same in Firefox + Chrome
     => replace it in "resetContent" CSS + breadcrumbs CSS
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)

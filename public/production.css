@@ -123,6 +123,7 @@
     display: block;
     color: var(--item-name);
     text-decoration: none;
+    cursor: pointer;
     padding: 0.5rem 1rem;
     /* do NOT use "line-height" instead of "padding", b/c multi-line product names should be compact */
 }

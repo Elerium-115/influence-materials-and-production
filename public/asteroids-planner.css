@@ -25,6 +25,7 @@
 }
 
 #asteroids-planner-tree {
+    max-width: 14rem;
     margin-left: 1rem;
 }
 
@@ -397,6 +398,7 @@
 }
 
 .breadcrumbs .breadcrumb {
+    max-width: 14rem;
     border-radius: 0.5rem;
 }
 
@@ -408,10 +410,12 @@
 
 .breadcrumbs .breadcrumb .breadcrumb-name {
     position: relative;
+    overflow: hidden;
     padding: 0 1rem;
 }
 
-.breadcrumbs .breadcrumb .breadcrumb-name:hover {
+.breadcrumbs .breadcrumb .breadcrumb-name:hover,
+.breadcrumbs .breadcrumb *:hover > .breadcrumb-name-inner {
     text-decoration: underline;
 }
 
@@ -419,10 +423,23 @@
     color: var(--brand-text);
 }
 
+.breadcrumbs .breadcrumb .breadcrumb-name-inner {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.breadcrumbs .breadcrumb .breadcrumb-name-inner.overflowing {
+    display: inline-block;
+    position: relative;
+    animation: leftright 2s infinite alternate ease-in-out;
+    overflow: visible; /* avoid extra margin on hover */
+}
+
 .breadcrumbs .breadcrumb ul {
     position: absolute;
+    max-width: 14rem; /* same as for ".breadcrumbs .breadcrumb" */
     background: var(--active-bg);
-    /* color: var(--default-text); */
     padding-top: 2rem;
     border-radius: 0.5rem;
     filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
@@ -433,6 +450,7 @@
 }
 
 .breadcrumbs .breadcrumb ul li {
+    overflow: hidden;
     padding: 0 1rem;
 }
 
@@ -587,7 +605,7 @@
 }
 
 .content-cards .product-card .product-name {
-    padding-bottom: 1rem;
+    padding: 0 0.5rem 1rem 0.5rem;
 }
 
 .content-cards .product-card .product-delete {
@@ -647,16 +665,18 @@ body.overlay-visible {
 }
 
 #overlay-wrapper .overlay-panel {
-    min-width: 35rem;
     margin: 3rem auto;
 }
 
-#overlay-add-asteroid {
-    width: 66%;
+#overlay-wrapper h3 {
+    margin-bottom: 1rem;
 }
 
-#overlay-add-asteroid h3 {
-    margin-bottom: 1rem;
+/* Overlay - Add asteroid */
+
+#overlay-add-asteroid {
+    min-width: 35rem;
+    width: 66%;
 }
 
 #overlay-add-asteroid .hr {
@@ -1087,6 +1107,14 @@ body.overlay-visible {
 #overlay-add-asteroid .overlay-cta.asteroid-mock-cta {
     margin-left: 2rem;
 }
+
+/* Overlay - Add planned product */
+
+#overlay-add-product #products-list-wrapper {
+    font-size: 0.8rem;
+}
+
+/* Overlay - Close */
 
 #ovrelay-close {
     position: fixed;

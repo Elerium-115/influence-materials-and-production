@@ -62,16 +62,14 @@
                 created by <a href="https://twitter.com/elerium115" target="_blank" title="Elerium115">@elerium115</a>
             </div>
             <div class="secondary extra-info">
-                for <a href="https://twitter.com/influenceth" target="_blank" title="Influence">@influenceth</a>
-                <br>
-                <a href="https://wiki.influenceth.io/en/community/user-guides/ACC" target="_blank" title="Adalian Creator Collective">
-                    <img src="./img/acc-logo.png" alt="ACC" class="footer-logo">
+                for <a href="https://twitter.com/influenceth" target="_blank" title="Influence">
+                    @influenceth<br>
+                    <img src="./img/influence-logo.svg" alt="Influence" class="footer-logo">
                 </a>
             </div>
             <div class="secondary">
                 hosted by <a href="https://my.adalia.id" target="_blank" title="my.adalia.id">
-                    my.adalia.id
-                    <br>
+                    my.adalia.id<br>
                     <img src="./img/adalia-id-logo.png" alt="my.adalia.id" class="footer-logo">
                 </a>
             </div>
@@ -162,20 +160,36 @@
                 </div>
                 <input type="hidden" id="input-mock-spectral-type" value="">
                 <div class="mock-area-and-cta">
-                    <div class="mock-area">Area:<input id="input-mock-area" class="input-area" type="text" placeholder="min. 13">km²</div>
+                    <div class="mock-area">Area:<input id="input-mock-area" class="input-area" type="text" placeholder="min. 13" onchange="validateInputArea(this)">km²</div>
                     <div class="overlay-cta asteroid-mock-cta" onclick="createMockRock()">Mock it</div>
                 </div>
             </div>
             <div id="overlay-add-product" class="overlay-panel hidden">
-                <div class="brand-text">Add a planned product</div>
+                <h3 class="brand-text">Add a product on <span class="asteroid-name"></span></h3>
+                <div>
+                    <span>Select product:</span>
+                    <div id="products-list-wrapper" class="list-hidden">
+                        <input type="text">
+                        <div id="products-list"></div>
+                        <div id="filters-list">
+                            <span class="header">Filter</span>
+                            <span id="filter-raw-materials" class="option checked">Raw Materials</span>
+                            <span id="filter-refined-materials" class="option checked">Refined Materials</span>
+                            <span id="filter-components" class="option checked">Components</span>
+                            <span id="filter-ship-components" class="option checked">Ship Components</span>
+                            <span id="filter-finished-goods" class="option checked">Finished Goods</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="ovrelay-close" onclick="closeOverlay()">✕</div>
-        </div>
     </div>
 
     <script src="./leader-line.min.js"></script>
     <script src="./axios.min.js"></script>
+    <script src="./influence-production-chains.js"></script>
     <script src="./abstract-core.js"></script>
+    <script src="./production-core.js"></script>
     <script src="./wallet-core.js"></script>
     <script src="./asteroids-planner-mock.js"></script>
     <script src="./asteroids-planner.js"></script>
