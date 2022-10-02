@@ -38,8 +38,8 @@
                     <label for="toggle-hide-subproducts"><input type="checkbox" id="toggle-hide-subproducts">Hide Sub-products</label>
                 </div>
                 <div class="asteroids-tree-buttons-wrapper">
-                    <div class="asteroids-tree-button asteroids-tree-cta add-asteroid" onclick="onClickAddAsteroid()">Add asteroid</div>
-                    <div class="asteroids-tree-button asteroids-tree-cta see-example" onclick="setupExample()">See example</div>
+                    <div class="cta add-asteroid" onclick="onClickAddAsteroid()">Add asteroid</div>
+                    <div class="cta see-example" onclick="setupExample()">See example</div>
                 </div>
             </div>
             <div id="shopping-list-tree" class="tree-list">
@@ -67,8 +67,8 @@
                 <div class="title-and-wallet-wrapper">
                     <h3 class="brand-text">Import asteroids from wallet</h3>
                     <div>
-                        <div class="overlay-cta connect-wallet-cta" onclick="connectWallet()">Connect wallet</div>
-                        <div class="overlay-cta connected-address disabled hidden"></div>
+                        <div class="cta connect-wallet-cta" onclick="connectWallet()">Connect wallet</div>
+                        <div class="cta connected-address disabled hidden"></div>
                     </div>
                 </div>
                 <div id="wallet-asteroids-status"></div>
@@ -98,7 +98,7 @@
                                     </div>
                                 </div>
                                 <div class="filters-category filters-category-area">
-                                    <div class="filters">
+                                    <div class="filters" onmouseleave="filterWalletAsteroids()">
                                         <div class="filter-label">Area</div>
                                         <div class="filter-options">
                                             <input id="input-filter-area-min" class="input-area" type="text" placeholder="Min" onchange="onChangeInputFilterArea(this)">
@@ -110,7 +110,7 @@
                                 </div>
                                 <a class="filters-reset hidden" onclick="resetWalletAsteroidsFilters(true)">Reset filters</a>
                             </div>
-                            <div class="overlay-cta selected-asteroids-cta disabled" onclick="onClickAddSelectedAsteroids(this)"></div>
+                            <div class="cta selected-asteroids-cta disabled" onclick="onClickAddSelectedAsteroids(this)"></div>
                         </div>
                         <div class="wallet-asteroids"></div>
                     </div>
@@ -124,7 +124,7 @@
                 </div>
                 <div class="asteroid-id-and-cta">
                     <div class="asteroid-id">Asteroid ID:<input id="input-asteroid-id" type="text" oninput="toggleAsteroidMetadataCta(true);"></div>
-                    <div class="overlay-cta asteroid-details-cta disabled" onclick="requestAsteroidDetails()">Get details</div>
+                    <div class="cta asteroid-details-cta disabled" onclick="requestAsteroidDetails()">Get details</div>
                 </div>
                 <div class="asteroid-metadata-wrapper"></div>
                 <div class="hr">OR</div>
@@ -147,7 +147,7 @@
                 <input type="hidden" id="input-mock-spectral-type" value="">
                 <div class="mock-area-and-cta">
                     <div class="mock-area">Area:<input id="input-mock-area" class="input-area" type="text" placeholder="min. 13" onchange="validateInputArea(this)">km²</div>
-                    <div class="overlay-cta asteroid-mock-cta" onclick="createMockRock()">Mock it</div>
+                    <div class="cta asteroid-mock-cta" onclick="createMockRock()">Mock it</div>
                 </div>
             </div>
             <div id="overlay-add-product" class="overlay-panel hidden">
@@ -167,6 +167,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div id="overlay-product-image" class="overlay-panel hidden" onclick="closeOverlay()">
+                <img src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
             </div>
             <div id="ovrelay-close" onclick="closeOverlay()">✕</div>
     </div>

@@ -13,7 +13,7 @@ document.querySelectorAll('.options label > input').forEach(elInput => {
 /**
  * e.g. "Thin-film Resistor" => "Thin-filmResistor"
  */
- function getCompactName(name) {
+function getCompactName(name) {
     return name.replace(/\s+/g, '');
 }
 
@@ -22,6 +22,13 @@ document.querySelectorAll('.options label > input').forEach(elInput => {
  */
 function getItemNameSafe(itemName) {
     return itemName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
+}
+
+/**
+ * e.g. "Thin-film Resistor" => "./img/products/thin-film-resistor.png"
+ */
+function getProductImageSrc(productName) {
+    return `./img/products/${getItemNameSafe(productName)}.png`;
 }
 
 /**

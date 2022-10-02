@@ -965,7 +965,7 @@ async function selectItemByName(itemName) {
     // default tier-limit such that only the minimal sub-chain is shown for the selected item (i.e. only its direct inputs)
     updateProductionChainForTierLimit(Math.max(0, selectedItemTier - 1));
     requiredProductImage.classList.remove('missing-image');
-    requiredProductImage.src = `./img/products/${getItemNameSafe(itemName)}.png`;
+    requiredProductImage.src = getProductImageSrc(itemName);
     const itemNameCompact = getCompactName(itemName);
     window.location.hash = `#${itemNameCompact}`;
 }

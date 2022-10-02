@@ -1,12 +1,13 @@
 const elAsteroidsPlannerWrapper = document.getElementById('asteroids-planner-wrapper');
 const elAsteroidsPlannerTree = document.getElementById('asteroids-planner-tree');
 const elShoppingListTree = document.getElementById('shopping-list-tree');
-const elBreadcrumbsWrapper = document.getElementById('breadcrumbs-wrapper')
+const elBreadcrumbsWrapper = document.getElementById('breadcrumbs-wrapper');
 const elContentWrapper = document.getElementById('content-wrapper');
 const elContent = document.getElementById('content');
 const elOverlayWrapper = document.getElementById('overlay-wrapper');
 const elOverlayAddAsteroid = document.getElementById('overlay-add-asteroid');
 const elOverlayAddProduct = document.getElementById('overlay-add-product');
+const elOverlayProductImage = document.getElementById('overlay-product-image');
 
 // Buttons in the asteroids-planner-tree
 const elButtonAddAsteroid = elAsteroidsPlannerTree.querySelector('#asteroids-planner-tree .add-asteroid');
@@ -26,13 +27,16 @@ const elWalletAsteroidsFiltersReset = elWalletAsteroidsFilters.querySelector('.f
 const elSelectedAsteroidsCta = elWalletAsteroidsWrapperOuter.querySelector('.selected-asteroids-cta');
 const elWalletAsteroids = elWalletAsteroidsWrapperOuter.querySelector('.wallet-asteroids');
 const elInputAsteroidId = document.getElementById('input-asteroid-id');
-const elAsteroidMetadataWrapper = elOverlayAddAsteroid.querySelector('.asteroid-metadata-wrapper')
-const elAsteroidDetailsCta = elOverlayAddAsteroid.querySelector('.asteroid-id-and-cta .asteroid-details-cta')
+const elAsteroidMetadataWrapper = elOverlayAddAsteroid.querySelector('.asteroid-metadata-wrapper');
+const elAsteroidDetailsCta = elOverlayAddAsteroid.querySelector('.asteroid-id-and-cta .asteroid-details-cta');
 const elInputMockSpectralType = document.getElementById('input-mock-spectral-type');
 const elInputMockArea = document.getElementById('input-mock-area');
 
 // Elements in the overlay for "Add product"
 const elOverlayAddProductAsteroidName = elOverlayAddProduct.querySelector('.asteroid-name');
+
+// Elements in the overlay for "Product image"
+const elOverlayProductImageImg = elOverlayProductImage.querySelector('img');
 
 let asteroidsPlannerTree = [];
 let shoppingListTree = {};
@@ -49,6 +53,8 @@ let onClickAsteroidActionInProgress = false;
 
 const cacheAsteroidsMetadataById = {};
 const cacheAsteroidsByWallet = {}; // Note: each key is a lowercase address
+
+const productImgOnError = `onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');"`;
 
 // Depending on the environment, the API URL will be "http://localhost:3000" or "https://materials.adalia.id:3000"
 const apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
@@ -169,14 +175,14 @@ function getSpectralTypesHtmlForAsteroidType(asteroidType) {
     let spectralTypesHtml = '';
     // Reorder spectral type "MS" as "SM"
     asteroidType.replace(/^MS$/, 'SM').split('').forEach(baseSpectral => {
-        spectralTypesHtml += `<span class="spectral-type type-${baseSpectral}">${baseSpectral}</span>`;
+        spectralTypesHtml += /*html*/ `<span class="spectral-type type-${baseSpectral}">${baseSpectral}</span>`;
     });
     return spectralTypesHtml;
 }
 
 function getWalletAsteroidCardHtml(metadata) {
     // Template also adapted by "resetAsteroidMetadataHtml"
-    return `
+    return /*html*/ `
         <div class="spectral-types-circle type-${metadata.type}">${metadata.type}</div>
         <div class="wallet-asteroid-metadata">
             <div class="id">${metadata.id}</div>
@@ -326,22 +332,22 @@ function refreshAsteroidsPlannerTreeHtml() {
             let intermediateProductsHtml = '';
             plannedProductData.intermediate_products.forEach(intermediateProductData => {
                 const intermediateProductName = intermediateProductData.intermediate_product_name;
-                intermediateProductsHtml += `
+                intermediateProductsHtml += /*html*/ `
                     <li class="intermediate-products-tree-item tree-label" data-intermediate-product-name="${intermediateProductName}" onClick="onClickTreeItem('${asteroidName}', '${plannedProductName}', '${intermediateProductName}')">
                         ${intermediateProductName}
                     </li>
-                    `;
+                `;
             });
-            plannedProductsHtml += `
+            plannedProductsHtml += /*html*/ `
                 <li class="planned-products-tree-item">
                     <div class="tree-label" data-planned-product-name="${plannedProductName}" onClick="onClickTreeItem('${asteroidName}', '${plannedProductName}')">${plannedProductName}</div>
                     <ul class="intermediate-products-tree">
                         ${intermediateProductsHtml}
                     </ul>
                 </li>
-                `;
+            `;
         });
-        const asteroidTreeListItemHtml = `
+        const asteroidTreeListItemHtml = /*html*/`
             <li class="asteroids-tree-item">
                 <div class="actions">
                     <div class="move move-up" onclick="onClickAsteroidAction('moveup', this)"></div>
@@ -361,8 +367,8 @@ function refreshAsteroidsPlannerTreeHtml() {
                     ${plannedProductsHtml}
                 </ul>
             </li>
-            `;
-            asteroidTreeListHtml += asteroidTreeListItemHtml;
+        `;
+        asteroidTreeListHtml += asteroidTreeListItemHtml;
     });
     elAsteroidsPlannerTree.querySelector('.asteroids-tree').innerHTML = asteroidTreeListHtml;
     //// TO DO: improve CSS selectors using the new classes? - "asteroids-tree-item", "planned-products-tree-item", "intermediate-products-tree-item"
@@ -374,31 +380,31 @@ function refreshShoppingListTreeHtml() {
     if (shoppingListTree.inputs) {
         let inputsListHtml = '';
         shoppingListTree.inputs.forEach(inputData => {
-            inputsListHtml += `<li class="tree-label" data-input-name="${inputData.input_name}">${inputData.input_name}</li>`;
+            inputsListHtml += /*html*/ `<li class="tree-label" data-input-name="${inputData.input_name}">${inputData.input_name}</li>`;
         });
-        inputsTreeHtml = `
+        inputsTreeHtml = /*html*/ `
             <li>
                 <div class="tree-label">Inputs</div>
                 <ul class="shopping-inputs-tree">
                     ${inputsListHtml}
                 </ul>
             </li>
-            `;
+        `;
     }
     let buildingsTreeHtml = '';
     if (shoppingListTree.buildings) {
         let buildingsListHtml = '';
         shoppingListTree.buildings.forEach(buildingData => {
-            buildingsListHtml += `<li class="tree-label" data-building-name="${buildingData.building_name}">${buildingData.building_name}</li>`;
+            buildingsListHtml += /*html*/ `<li class="tree-label" data-building-name="${buildingData.building_name}">${buildingData.building_name}</li>`;
         });
-        buildingsTreeHtml = `
+        buildingsTreeHtml = /*html*/ `
             <li>
                 <div class="tree-label">Buildings</div>
                 <ul class="shopping-buildings-tree">
                     ${buildingsListHtml}
                 </ul>
             </li>
-            `;
+        `;
     }
     let modulesTreeHtml = '';
     if (shoppingListTree.modules) {
@@ -408,31 +414,31 @@ function refreshShoppingListTreeHtml() {
             shoppingListTree.modules = [{module_name: '[redacted]'}];
         }
         shoppingListTree.modules.forEach(moduleData => {
-            modulesListHtml += `<li class="tree-label" data-module-name="${moduleData.module_name}">${moduleData.module_name}</li>`;
+            modulesListHtml += /*html*/ `<li class="tree-label" data-module-name="${moduleData.module_name}">${moduleData.module_name}</li>`;
         });
-        modulesTreeHtml = `
+        modulesTreeHtml = /*html*/ `
             <li>
                 <div class="tree-label">Modules</div>
                 <ul class="shopping-modules-tree">
                     ${modulesListHtml}
                 </ul>
             </li>
-            `;
+        `;
     }
     let spectralTypesTreeHtml = '';
     if (shoppingListTree.spectral_types) {
         let spectralTypesListHtml = '';
         shoppingListTree.spectral_types.forEach(baseSpectral => {
-            spectralTypesListHtml += `<li class="tree-label" data-base-spectral="${baseSpectral}">${baseSpectral}</li>`;
+            spectralTypesListHtml += /*html*/ `<li class="tree-label" data-base-spectral="${baseSpectral}">${baseSpectral}</li>`;
         });
-        spectralTypesTreeHtml = `
+        spectralTypesTreeHtml = /*html*/ `
             <li>
                 <div class="tree-label">Spectral Types</div>
                 <ul class="shopping-spectral-types-tree">
                     ${spectralTypesListHtml}
                 </ul>
             </li>
-            `;
+        `;
     }
     shoppingListTreeHtml = inputsTreeHtml + buildingsTreeHtml + modulesTreeHtml + spectralTypesTreeHtml;
     disconnectAsteroidsPlannerTree();
@@ -702,40 +708,40 @@ function reconnectAsteroidsPlannerTree() {
  */
 function refreshAsteroidsPlannerBreadcrumbsHtml() {
     const {asteroidName, plannedProductName, intermediateProductName} = asteroidsPlannerSelection;
-    let breadcrumbsHtml = `
+    let breadcrumbsHtml = /*html*/ `
         <h3 class="breadcrumbs">
             <div class="breadcrumb" onclick="goHome()">
                 <div class="breadcrumb-name">Adalia</div>
             </div>
-            `;
+    `;
     if (asteroidName) {
         let asteroidsListHtml = '';
         getListOfAsteroids().forEach(name => {
             const classHtml = name === asteroidName ? 'class="selected"' : '';
             const onClickHtml = name === asteroidName ? '' : `onclick="onClickTreeItem('${name}')"`;
-            asteroidsListHtml += `<li ${classHtml} ${onClickHtml}>${name}</li>`;
+            asteroidsListHtml += /*html*/ `<li ${classHtml} ${onClickHtml}>${name}</li>`;
         });
-        asteroidsListHtml += `<li class="add-item" onclick="onClickAddAsteroid()">Add asteroid</li>`;
-        breadcrumbsHtml += `
-                <div class="separator"></div>
-                <div class="breadcrumb">
-                    <ul>${asteroidsListHtml}</ul>
-                    <div class="breadcrumb-name" onclick="onClickTreeItem('${asteroidName}')">${asteroidName}</div>
-                </div>
-            `;
+        asteroidsListHtml += /*html*/ `<li class="add-item" onclick="onClickAddAsteroid()">Add asteroid</li>`;
+        breadcrumbsHtml += /*html*/ `
+            <div class="separator"></div>
+            <div class="breadcrumb">
+                <ul>${asteroidsListHtml}</ul>
+                <div class="breadcrumb-name" onclick="onClickTreeItem('${asteroidName}')">${asteroidName}</div>
+            </div>
+        `;
         if (plannedProductName) {
             let plannedProductsListHtml = '';
             getListOfPlannedProducts(asteroidName).forEach(name => {
                 const classHtml = name === plannedProductName ? 'class="selected"' : '';
                 const onClickHtml = name === plannedProductName ? '' : `onclick="onClickTreeItem('${asteroidName}', '${name}')"`;
-                plannedProductsListHtml += `
+                plannedProductsListHtml += /*html*/ `
                     <li ${classHtml} ${onClickHtml}>
                         <div class="breadcrumb-name-inner">${name}</div>
                     </li>
                 `;
             });
-            plannedProductsListHtml += `<li class="add-item" onclick="onClickAddPlannedProductForAsteroid('${asteroidName}')">Add product</li>`;
-            breadcrumbsHtml += `
+            plannedProductsListHtml += /*html*/ `<li class="add-item" onclick="onClickAddPlannedProductForAsteroid('${asteroidName}')">Add product</li>`;
+            breadcrumbsHtml += /*html*/ `
                 <div class="separator"></div>
                 <div class="breadcrumb">
                     <ul>${plannedProductsListHtml}</ul>
@@ -743,21 +749,21 @@ function refreshAsteroidsPlannerBreadcrumbsHtml() {
                         <div class="breadcrumb-name-inner">${plannedProductName}</div>
                     </div>
                 </div>
-                `;
+            `;
             if (intermediateProductName) {
                 let itermediateProductsListHtml = '';
                 getListOfIntermediaryProducts(asteroidName, plannedProductName).forEach(name => {
                     const classHtml = name === intermediateProductName ? 'class="selected"' : '';
                     const onClickHtml = name === intermediateProductName ? '' : `onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}', '${name}')"`;
-                    itermediateProductsListHtml += `<li ${classHtml} ${onClickHtml}>${name}</li>`;
+                    itermediateProductsListHtml += /*html*/ `<li ${classHtml} ${onClickHtml}>${name}</li>`;
                 });
-                breadcrumbsHtml += `
+                breadcrumbsHtml += /*html*/ `
                     <div class="separator"></div>
                     <div class="breadcrumb">
                         <ul>${itermediateProductsListHtml}</ul>
                         <div class="breadcrumb-name">${intermediateProductName}</div>
                     </div>
-                    `;
+                `;
             }
         }
     }
@@ -837,7 +843,7 @@ async function updateWalletAsteroidsPanel() {
     elWalletAsteroidsStatus.classList.add('hidden');
     asteroids.forEach(metadata => {
         const classPlanned = isPlannedAsteroidId(metadata.id) ? 'planned' : '';
-        elWalletAsteroids.innerHTML += `
+        elWalletAsteroids.innerHTML += /*html*/ `
             <div class="wallet-asteroid-card ${classPlanned}" onclick="onClickSelectWalletAsteroid(this)">
                 ${getWalletAsteroidCardHtml(metadata)}
             </div>
@@ -848,7 +854,7 @@ async function updateWalletAsteroidsPanel() {
      * This needs to be done after ALL wrappers (ancestors) are visible,
      * otherwise "clientWidth" is zero for hidden elements.
      * Source: https://codepen.io/pawankolhe/pen/abvMjGB
-     * Note: "setTimeout" is required when this function is called via "onClickAddAsteroid",
+     * NOTE: "setTimeout" is required when this function is called via "onClickAddAsteroid",
      * because then the whole overlay becomes visible only AFTER this function returns.
      */
     elWalletAsteroidsWrapperOuter.classList.remove('hidden');
@@ -980,7 +986,7 @@ function toggleAsteroidMetadataCta(enable) {
 
 function resetAsteroidMetadataHtml() {
     // Template adapted from "getWalletAsteroidCardHtml"
-    elAsteroidMetadataWrapper.innerHTML = `
+    elAsteroidMetadataWrapper.innerHTML = /*html*/ `
         <div class="spectral-types-circle type-X">?</div>
         <div class="asteroid-metadata-details hidden">
             <div>ID: <span class="metadata" id="asteroid-metadata-id"></span></div>
@@ -1015,12 +1021,12 @@ async function requestAsteroidDetails() {
     elSpectralType.classList.add(`type-${metadata.type}`, 'selected');
     elSpectralType.textContent = metadata.type;
     document.getElementById('asteroid-metadata-id').textContent = metadata.id;
-    document.getElementById('asteroid-metadata-name').innerHTML = `<a href="${metadata.url}" target="_blank" title="View in-game">${metadata.name}</a>`;
+    document.getElementById('asteroid-metadata-name').innerHTML = /*html*/ `<a href="${metadata.url}" target="_blank" title="View in-game">${metadata.name}</a>`;
     document.getElementById('asteroid-metadata-area').textContent = metadata.area;
     elOverlayAddAsteroid.querySelector('.asteroid-metadata-details').classList.remove('hidden');
-    elAsteroidMetadataWrapper.innerHTML += `
+    elAsteroidMetadataWrapper.innerHTML += /*html*/ `
         <div class="cta-wrapper">
-            <div class="overlay-cta asteroid-add-cta" onclick="addAsteroidId(${asteroidId})">Add it</div>
+            <div class="cta asteroid-add-cta" onclick="addAsteroidId(${asteroidId})">Add it</div>
         </div>
     `;
 }
@@ -1115,9 +1121,6 @@ function selectPlannedProduct(productNameCompact) {
         alert(`${productName} is already planned on ${asteroidName}`);
         return;
     }
-    //// TO DO: generate a blank production-chain for the selected product,
-    ////        and add it (along with the product itself) to "asteroidsPlannerTree", for "asteroidName"
-    //// ____
     asteroidData.planned_products.push({
         intermediate_products: [],
         planned_product_name: productName,
@@ -1134,15 +1137,27 @@ function selectPlannedProduct(productNameCompact) {
     onClickTreeItem(asteroidName, productName);
 }
 
+function onClickProductImage(el, productName) {
+    if (el.querySelector('img').classList.contains('missing-image')) {
+        // Do not show overlay for missing image
+        return;
+    }
+    elOverlayProductImageImg.classList.remove('missing-image');
+    // Show overlay for "Product image"
+    document.body.classList.add('overlay-visible');
+    elOverlayProductImage.classList.remove('hidden');
+    elOverlayProductImageImg.src = getProductImageSrc(productName);
+}
+
 function resetContent() {
-    elContent.innerHTML = `
+    elContent.innerHTML = /*html*/ `
         <h3 id="start-title">Start planning your production chains across asteroids.</h3>
         <ul>
             <li>Add in-game asteroids, or create "mock rocks".</li>
             <li>Plan one or more production chains, on each asteroid.</li>
         </ul>
         <h3 id="example-title">First time here? See an example with some mock data.</h3>
-        `;
+    `;
     const elStartTitle = document.getElementById('start-title');
     const elExampleTitle = document.getElementById('example-title');
     if (elButtonAddAsteroid.line || elButtonSeeExample.line) {
@@ -1163,34 +1178,11 @@ function updateContent() {
     }
     refreshAsteroidsPlannerBreadcrumbsHtml();
     elContent.innerHTML = '';
-    /* DISABLED test content
-    elContent.innerHTML += `<div style="background: black;">[content for '${asteroidName}' > '${plannedProductName}' > '${intermediateProductName}']</div>`; //// DEBUG
-    if (intermediateProductName) {
-        // Intermediate product content
-        //// PLACEHOLDER
-        elContent.innerHTML += `<div>
-                This is an intermediate product you selected for the planned product <a href="#">${plannedProductName}</a>.
-                <br><br>
-                In order to add or remove intermediate products, <a href="#">edit the production chain</a> for this planned product.
-                <br><br>
-                <span class="brand-text">x2 ${intermediateProductName}</span> required for the production of <span class="brand-text">x1 ${plannedProductName}</span>, with your current production plan.
-            </div>`;
-    }
-    if (plannedProductName) {
-        // Product image
-        //// PLACEHOLDER
-        if (intermediateProductName) {
-            elContent.innerHTML += `<div><img src="./img/products/${getItemNameSafe(intermediateProductName)}.png" alt=""></div>`;
-        } else {
-            elContent.innerHTML += `<div><img src="./img/products/${getItemNameSafe(plannedProductName)}.png" alt=""></div>`;
-        }
-    }
-    */
     if (!asteroidName) {
         // Home
         let asteroidCardsHtml = '';
         asteroidsPlannerTree.forEach(asteroidData => {
-            asteroidCardsHtml += `
+            asteroidCardsHtml += /*html*/ `
                 <div class="asteroid-card">
                     <div class="spectral-types-circle type-${asteroidData.asteroid_type}" onclick="onClickTreeItem('${asteroidData.asteroid_name}')">
                         <div class="asteroid-info">
@@ -1202,9 +1194,9 @@ function updateContent() {
                         </div>
                     </div>
                 </div>
-                `;
+            `;
         });
-        elContent.innerHTML = `
+        elContent.innerHTML = /*html*/ `
             <h3 class="content-title">Asteroids with planned production chains</h3>
             <div class="content-cards">
                 <div class="asteroid-card">
@@ -1222,23 +1214,91 @@ function updateContent() {
         let productCardsHtml = '';
         getAsteroidData(asteroidName).planned_products.forEach(productData => {
             const productName = productData.planned_product_name;
-            productCardsHtml += `
+            productCardsHtml += /*html*/ `
                 <div class="product-card">
                     <div onclick="onClickTreeItem('${asteroidName}', '${productName}')">
-                        <img src="./img/products/${getItemNameSafe(productName)}.png" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
+                        <img src="${getProductImageSrc(productName)}" alt="" ${productImgOnError}>
                         <div class="product-name">${productName}</div>
                     </div>
                     <div class="product-delete" onclick="deletePlannedProduct('${asteroidName}', '${productName}')"></div>
                 </div>
-                `;
+            `;
         });
-        elContent.innerHTML = `
+        elContent.innerHTML = /*html*/ `
             <h3 class="content-title">Products planned on this asteroid</h3>
             <div class="content-cards">
                 <div class="product-card product-add" onclick="onClickAddPlannedProductForAsteroid('${asteroidName}')">+</div>
                 ${productCardsHtml}
             </div>
         `;
+    } else if (!intermediateProductName) {
+        // Planned product
+        let intermediateProductsHtml = '';
+        let intermediateProductsListHtml = '';
+        getListOfIntermediaryProducts(asteroidName, plannedProductName).forEach(intermediateProductName => {
+            if (intermediateProductsListHtml.length) {
+                intermediateProductsListHtml += ', ';
+            }
+            intermediateProductsListHtml += /*html*/ `
+                <a onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}', '${intermediateProductName}')">${intermediateProductName}</a>
+            `.trim(); // Trim to avoid spacing before ","
+        });
+        if (intermediateProductsListHtml.length) {
+            intermediateProductsHtml = /*html*/ `
+                <div class="content-subtitle">Intermediate products selected for this planned product:</div>
+                <div>${intermediateProductsListHtml}</div>
+            `;
+        } else {
+            intermediateProductsHtml = /*html*/ `
+                <div class="content-subtitle">No intermediate products selected for this planned product.</div>
+            `;
+        }
+        elContent.innerHTML = /*html*/ `
+            <h3 class="content-title">Planned product</h3>
+            <div class="content-product-wrapper">
+                <div class="content-cards">
+                    <div class="product-card" onclick="onClickProductImage(this, '${plannedProductName}')">
+                        <img src="${getProductImageSrc(plannedProductName)}" alt="" ${productImgOnError}>
+                        <div class="product-name">${plannedProductName}</div>
+                    </div>
+                </div>
+                <div class="content-product-info">
+                    <div class="cta pulse-brand">Add production chain</div>
+                    ${intermediateProductsHtml}
+                </div>
+            </div>
+        `;
+        //// TO DO: Show button to add / edit production chain for this product
+        /*
+        - "add" button (with ".pulse-brand") if the product was added with a "blank" production chain
+        - "edit" button (NO ".pulse-brand") if the product already has a production chain configured
+        - clicking the button should hide the left-side trees (via horizontal animation?), to make room for the production chain
+        */
+        //// ____
+        //// TO DO: Add link to remove this planned product
+        //// ____
+    } else {
+        // Intermediate product
+        elContent.innerHTML = /*html*/ `
+            <h3 class="content-title">Intermediate product</h3>
+            <div class="content-product-wrapper">
+                <div class="content-cards">
+                <div class="product-card" onclick="onClickProductImage(this, '${intermediateProductName}')">
+                        <img src="${getProductImageSrc(intermediateProductName)}" alt="" ${productImgOnError}>
+                        <div class="product-name">${intermediateProductName}</div>
+                    </div>
+                </div>
+                <div class="content-product-info">
+                    This is an intermediate product, selected for the planned product <a onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}')">${plannedProductName}</a>.
+                    <br><br>
+                    <span class="brand-text">x2 ${intermediateProductName}</span> required for the production of <span class="brand-text">x1 ${plannedProductName}</span>, with the current production plan.
+                    <br><br>
+                    To add or remove intermediate products, <a onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}')">edit the production chain</a> for the planned product.
+                </div>
+            </div>
+        `;
+        //// TO DO: ???
+        //// ____
     }
 }
 
@@ -1318,12 +1378,10 @@ handleAsteroidsPlannerTreeChanged();
 //// TO DO PRIO
 /*
 - sort all products-lists alphabetically (planned-products + intermediate-products)
-- find another ASCII separator that looks the same in Firefox + Chrome
-    => replace it in "resetContent" CSS + breadcrumbs CSS
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree
     - "alert" re: API coming soon / asteroid # already planned
-- search all occurrences of "____" => stuff to do
+- search all occurrences of "____" => to do
 */
 
 //// TO TEST

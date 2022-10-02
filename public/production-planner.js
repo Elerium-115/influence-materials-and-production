@@ -1134,7 +1134,7 @@ function injectPlannedProductNameAndImage(plannedProductId) {
     productsListWrapper.querySelector('input').placeholder = productName;
     selectedItemNameContainer.textContent = productName;
     shoppingListProductImage.classList.remove('missing-image');
-    shoppingListProductImage.src = `./img/products/${getItemNameSafe(productName)}.png`;
+    shoppingListProductImage.src = getProductImageSrc(productName);
 }
 
 /**

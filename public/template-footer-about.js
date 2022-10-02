@@ -1,7 +1,8 @@
+/**
+ * NOTE: Also load `template-footer-about.css` in the parent `<head>`, for a nicer page-load
+ */
 export const templateFooterAbout = /*html*/ `
     <link rel="stylesheet" href="./style.css">
-
-    <!-- also load this in the parent <head>, for a nicer page-load -->
     <link rel="stylesheet" href="./template-footer-about.css">
 
     <div class="footer-about">

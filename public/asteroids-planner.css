@@ -9,8 +9,37 @@
     95%, 100% { transform: translateX(-100%); left: 100%; }
 }
 
+@keyframes pulse-brand {
+	0% { filter: drop-shadow(0 0 0 var(--brand-text)); }
+	25% { filter: drop-shadow(0 0 0.4rem var(--brand-text)); }
+	50% { filter: drop-shadow(0 0 0 var(--brand-text)); }
+}
+
+.pulse-brand:not(:hover) {
+    filter: drop-shadow(0 0 0 var(--brand-text));
+	animation: pulse-brand 2s infinite;
+}
+
 .area-km2::after {
     content: ' km²';
+}
+
+/* Buttons */
+.cta {
+    display: inline-block;
+    background: var(--dark-bg);
+    color: var(--brand-text);
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+.cta.disabled {
+    color: var(--default-text);
+    cursor: not-allowed;
+}
+.cta:not(.disabled):hover {
+    background: var(--brand-text);
+    color: black;
 }
 
 #asteroids-planner-wrapper {
@@ -283,42 +312,22 @@
     text-align: center;
 }
 
-#asteroids-planner-tree .asteroids-tree-button {
-    display: inline-block;
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    border: 1px solid transparent;
-    border-radius: 0.5rem;
-}
-
-#asteroids-planner-tree .asteroids-tree-cta {
-    background: var(--dark-bg);
-    color: var(--brand-text);
+#asteroids-planner-tree .cta {
     margin-top: 2rem;
 }
 
-#asteroids-planner-tree .asteroids-tree-cta:hover {
-    background: var(--brand-text);
-    color: black;
-}
-
-.empty-planner #asteroids-planner-tree .asteroids-tree-cta {
+.empty-planner #asteroids-planner-tree .cta {
     margin-top: 0;
 }
 
-.empty-planner #asteroids-planner-tree .asteroids-tree-cta:not(:hover) {
+.empty-planner #asteroids-planner-tree .cta:not(:hover) {
+    /* copy-paste from ".pulse-brand" */
     filter: drop-shadow(0 0 0 var(--brand-text));
 	animation: pulse-brand 2s infinite;
 }
 
 #asteroids-planner-wrapper:not(.empty-planner) #asteroids-planner-tree .see-example {
     display: none;
-}
-
-@keyframes pulse-brand {
-	0% { filter: drop-shadow(0 0 0 var(--brand-text)); }
-	25% { filter: drop-shadow(0 0 0.4rem var(--brand-text)); }
-	50% { filter: drop-shadow(0 0 0 var(--brand-text)); }
 }
 
 
@@ -392,9 +401,13 @@
     margin-left: -1rem;
 }
 
-.breadcrumbs .separator::before {
-    content: '⧟';
-    opacity: 0.25;
+.breadcrumbs .separator {
+    width: 1rem;
+    background-image: url("./img/arrow.svg");
+    background-repeat: no-repeat;
+    background-position-y: center;
+    margin-bottom: -0.2rem;
+    opacity: 0.2;
 }
 
 .breadcrumbs .breadcrumb {
@@ -416,6 +429,7 @@
 
 .breadcrumbs .breadcrumb .breadcrumb-name:hover,
 .breadcrumbs .breadcrumb *:hover > .breadcrumb-name-inner {
+    color: var(--brand-text);
     text-decoration: underline;
 }
 
@@ -514,13 +528,33 @@
 }
 
 .empty-planner #content ul li::before {
-    content: '⧟';
-    margin-right: 1.5rem;
-    opacity: 0.25;
+    content: '';
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    background-image: url("./img/arrow.svg");
+    background-repeat: no-repeat;
+    background-position-y: center;
+    margin-right: 1rem;
+    margin-bottom: -0.2rem;
+    opacity: 0.2;
 }
 
-.content-title {
+#content .content-title {
     margin-bottom: 2rem;
+}
+
+#content .content-product-wrapper {
+    display: flex;
+    gap: 2rem;
+}
+
+#content .content-subtitle {
+    margin: 2rem 0 0.5rem 0;
+}
+
+#content a {
+    cursor: pointer;
 }
 
 
@@ -728,25 +762,6 @@ body.overlay-visible {
     opacity: 1;
 }
 
-#overlay-add-asteroid .overlay-cta {
-    display: inline-block;
-    background: var(--dark-bg);
-    color: var(--brand-text);
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-}
-
-#overlay-add-asteroid .overlay-cta.disabled {
-    color: var(--default-text);
-    cursor: not-allowed;
-}
-
-#overlay-add-asteroid .overlay-cta:not(.disabled):hover {
-    background: var(--brand-text);
-    color: black;
-}
-
 #overlay-add-asteroid .title-and-wallet-wrapper {
     display: flex;
     gap: 2rem;
@@ -897,7 +912,7 @@ body.overlay-visible {
     cursor: pointer;
 }
 
-#overlay-add-asteroid .wallet-asteroids-filters .selected-asteroids-cta {
+#overlay-add-asteroid .wallet-asteroids-filters .selected-asteroids-cta:not(:hover) {
     background: var(--default-bg);
     white-space: nowrap;
 }
@@ -1081,7 +1096,7 @@ body.overlay-visible {
     margin-top: 2rem;
 }
 
-#overlay-add-asteroid .overlay-cta.asteroid-details-cta {
+#overlay-add-asteroid .asteroid-details-cta {
     margin-left: 1.5rem;
 }
 
@@ -1104,7 +1119,7 @@ body.overlay-visible {
     border-radius: 0.5rem;
 }
 
-#overlay-add-asteroid .overlay-cta.asteroid-mock-cta {
+#overlay-add-asteroid .asteroid-mock-cta {
     margin-left: 2rem;
 }
 
@@ -1112,6 +1127,14 @@ body.overlay-visible {
 
 #overlay-add-product #products-list-wrapper {
     font-size: 0.8rem;
+}
+
+/* Overlay - Product image */
+
+#overlay-product-image {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 /* Overlay - Close */
