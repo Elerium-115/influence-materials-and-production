@@ -153,6 +153,7 @@ body {
     font-family: Jura, sans-serif;
 }
 
+
 /* main */
 
 .main {
@@ -202,42 +203,8 @@ body {
     display: none;
 }
 
+
 /* spectral types */
-
-.reset-button {
-    float: right;
-    margin-bottom: 1vw;
-    margin-left: 5vw;
-}
-
-.reset-button a {
-    display: block;
-    color: var(--default-text);
-    margin-top: -8px;
-    padding: 10px 20px;
-    border: 1px solid #696e7b;
-    border-radius: 10px;
-}
-
-.reset-button a:hover {
-    cursor: pointer;
-    color: #d4d6d9;
-    background-color: rgba(255, 255, 255, 0.05);
-    text-decoration: none;
-}
-
-.spectral-types h2,
-.material-types h2
-{
-    margin-bottom: 10px;
-}
-
-.spectral-types > i,
-.material-types > i {
-    font-style: normal;
-    font-size: 0.9rem;
-    opacity: 0.5;
-}
 
 .spectral-types ul {
     display: grid;
@@ -346,155 +313,6 @@ body {
     background: conic-gradient(var(--gradient-type-x));
 }
 
-/* raw materials */
-
-.material-types {
-    margin-top: 2rem;
-}
-
-.raw-materials {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    row-gap: 0.1rem;
-    margin-top: 25px;
-}
-
-.material-type {
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    position: relative;
-    font-size: 1.2rem;
-    padding: 0.5rem 60px 0.5rem 0;
-}
-
-.material-type::after {
-    content: "";
-    position: absolute;
-    right: 1rem;
-    background-image: url("img/material-types-icons.png");
-    background-repeat: no-repeat;
-    background-size: 240px; /* scaled to 37.5% of PNG width 640px */
-    width: 24px; /* scaled to 37.5% of icon width 64px */
-    height: 22.5px; /* scaled to 37.5% of icon height 60px */
-}
-
-/* background-position calculated at 37.5% values, due to "::after" pseudo-element scaled to 37.5% of icon size */
-.material-type[data-value="volatiles"]::after { background-position-x: 0; }
-.material-type[data-value="organics"]::after { background-position-x: -24px; }
-.material-type[data-value="metals"]::after { background-position-x: -48px; }
-.material-type[data-value="rare-earth"]::after { background-position-x: -72px; }
-.material-type[data-value="fissiles"]::after { background-position-x: -96px; }
-
-.material-type[data-value="volatiles"].active::after { background-position-x: -120px; }
-.material-type[data-value="organics"].active::after { background-position-x: -144px; }
-.material-type[data-value="metals"].active::after { background-position-x: -168px; }
-.material-type[data-value="rare-earth"].active::after { background-position-x: -192px; }
-.material-type[data-value="fissiles"].active::after { background-position-x: -216px; }
-
-.material-type[data-value="volatiles"] { background: linear-gradient(-90deg, var(--volatiles_faded) 0%, transparent 100%); }
-.material-type[data-value="organics"] { background: linear-gradient(-90deg, var(--organics_faded) 0%, transparent 100%); }
-.material-type[data-value="metals"] { background: linear-gradient(-90deg, var(--metals_faded) 0%, transparent 100%); }
-.material-type[data-value="rare-earth"] { background: linear-gradient(-90deg, var(--rare-earth_faded) 0%, transparent 100%); }
-.material-type[data-value="fissiles"] { background: linear-gradient(-90deg, var(--fissiles_faded) 0%, transparent 100%); }
-
-.material-type[data-value="volatiles"].active { color: var(--volatiles); }
-.material-type[data-value="organics"].active { color: var(--organics); }
-.material-type[data-value="metals"].active { color: var(--metals); }
-.material-type[data-value="rare-earth"].active { color: var(--rare-earth); }
-.material-type[data-value="fissiles"].active { color: var(--fissiles); }
-
-.materials-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-    column-gap: 1rem;
-    row-gap: 0.5rem;
-    padding: 0.5rem 0;
-}
-
-.materials-wrapper.volatiles { background: linear-gradient(90deg, var(--volatiles_faded) 0%, transparent 100%); }
-.materials-wrapper.organics { background: linear-gradient(90deg, var(--organics_faded) 0%, transparent 100%); }
-.materials-wrapper.metals { background: linear-gradient(90deg, var(--metals_faded) 0%, transparent 100%); }
-.materials-wrapper.rare-earth { background: linear-gradient(90deg, var(--rare-earth_faded) 0%, transparent 100%); }
-.materials-wrapper.fissiles { background: linear-gradient(90deg, var(--fissiles_faded) 0%, transparent 100%); }
-
-.raw-material {
-    display: grid;
-    place-items: center;
-    text-align: center;
-    font-size: 0.9rem;
-    min-height: 3.5rem;
-    padding: 5px 10px;
-    border: 1px solid transparent;
-    border-top-style: hidden;
-    border-bottom-style: hidden;
-    border-radius: 10px;
-}
-
-.raw-material:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    cursor: pointer;
-}
-
-.volatiles .raw-material.active { border-color: var(--volatiles); color: var(--volatiles); }
-.organics .raw-material.active { border-color: var(--organics); color: var(--organics); }
-.metals .raw-material.active { border-color: var(--metals); color: var(--metals); }
-.rare-earth .raw-material.active { border-color: var(--rare-earth); color: var(--rare-earth); }
-.fissiles .raw-material.active { border-color: var(--fissiles); color: var(--fissiles); }
-
-.raw-material i {
-    display: block;
-    font-style: normal;
-    font-size: 0.7rem;
-    opacity: 0.5;
-}
-
-.footer-about {
-    display: flex;
-    justify-content: space-evenly;
-    margin-top: 2rem;
-}
-
-.footer-about > * {
-    text-align: center;
-    padding: 0 0.5rem;
-}
-
-.footer-about .title {
-    color: var(--brand-text);
-    font-weight: bold;
-}
-
-.footer-about .primary, .footer-about .secondary {
-    font-size: 0.9em;
-}
-
-.footer-about .secondary {
-    opacity: 0.5;
-}
-
-.footer-about .secondary:hover {
-    opacity: 1;
-}
-
-.footer-logo {
-    max-width: 4rem;
-    max-height: 4rem;
-}
-
-/* screen below 990 px */
-
-@media only screen and (max-width: 990px) {
-    .spectral-types ul {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2vw;
-    }
-
-    .spectral-types ul li {
-        width: 8.5vmin; /* aspect-ratio 1:1 */
-    }
-}
 
 /* screen below 700 px */
 
@@ -509,51 +327,5 @@ body {
 
     #topbar #dalia-id-logo .logo-small {
         display: block;
-    }
-
-    .spectral-types ul {
-        gap: 3vw;
-    }
-
-    .spectral-types ul li {
-        width: 12vmin; /* aspect-ratio 1:1 */
-    }
-
-    .spectral-types > i, .material-types > i {
-        display: none;
-    }
-
-    .material-type {
-        font-size: 0;
-        padding-right: 40px;
-    }
-
-    .material-type::after {
-        left: 0;
-    }
-
-    .materials-wrapper {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .raw-material {
-        padding: 0.5rem 1rem;
-        border-radius: 1rem;
-    }
-
-    .raw-material i {
-        display: none;
-    }
-
-    .footer-about {
-        font-size: 0.8rem;
-    }
-
-    .footer-about .secondary.extra-info {
-        display: none;
-    }
-
-    .footer-logo {
-        display: none;
     }
 }

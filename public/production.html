@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./production.css">
+    <link rel="stylesheet" href="./template-footer-about.css">
     <link rel="icon" href="./img/site-icon.png" type="image/png">
     <title>Influence Production Chains</title>
     <meta name="twitter:card" content="summary">
@@ -118,26 +119,11 @@
             </div>
         </div>
 
-        <div class="footer-about">
-            <div class="title">
-                Materials & Production Tools
-            </div>
-            <div class="primary">
-                created by <a href="https://twitter.com/elerium115" target="_blank" title="Elerium115">@elerium115</a>
-            </div>
-            <div class="secondary extra-info">
-                for <a href="https://twitter.com/influenceth" target="_blank" title="Influence">
-                    @influenceth<br>
-                    <img src="./img/influence-logo.svg" alt="Influence" class="footer-logo">
-                </a>
-            </div>
-            <div class="secondary">
-                hosted by <a href="https://my.adalia.id" target="_blank" title="my.adalia.id">
-                    my.adalia.id<br>
-                    <img src="./img/adalia-id-logo.png" alt="my.adalia.id" class="footer-logo">
-                </a>
-            </div>
-        </div>
+        <div id=template-footer-about></div>
+        <script type="module">
+            import {templateFooterAbout} from './template-footer-about.js'
+            document.getElementById('template-footer-about').attachShadow({mode: 'open'}).innerHTML = templateFooterAbout;
+        </script>
 
         <div id="minimap-wrapper">
             <div id="minimap-toggle" class="pointer" onclick="toggleMinimap()">Minimap</div>
