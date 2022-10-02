@@ -239,13 +239,14 @@ body {
 }
 
 .spectral-types ul li:hover,
-.spectral-types-circle:hover {
+.spectral-types-circle:not(.selected):hover {
     background: rgba(255, 255, 255, 0.05);
     cursor: pointer;
 }
 
 .spectral-types ul li.active,
-.spectral-types-circle:hover {
+.spectral-types-circle:hover,
+.spectral-types-circle.selected {
     color: #fff;
 }
 

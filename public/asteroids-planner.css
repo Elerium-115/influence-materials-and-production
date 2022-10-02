@@ -42,6 +42,19 @@
     color: black;
 }
 
+.influence-logo-icon {
+    width: 2rem;
+    height: 2rem;
+    background-image: url("./img/influence-logo.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+}
+
+.influence-logo-icon:hover {
+    animation: spin 500ms ease-in-out;
+}
+
 #asteroids-planner-wrapper {
     display: grid;
     grid-template-columns: auto auto 1fr;
@@ -540,11 +553,19 @@
     opacity: 0.2;
 }
 
+#content a {
+    cursor: pointer;
+}
+
 #content .content-title {
     margin-bottom: 2rem;
 }
 
-#content .content-product-wrapper {
+#content .content-title:not(:first-child) {
+    margin-top: 2rem;
+}
+
+#content .content-columns {
     display: flex;
     gap: 2rem;
 }
@@ -553,8 +574,19 @@
     margin: 2rem 0 0.5rem 0;
 }
 
-#content a {
-    cursor: pointer;
+#content .game-link {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+#content .game-link .influence-logo-icon {
+    display: inline-block;
+    margin-left: 0.5rem;
+}
+
+#content .game-link:hover .influence-logo-icon {
+    animation: spin 500ms ease-in-out;
 }
 
 
@@ -571,7 +603,12 @@
     opacity: 0.5;
 }
 
-.content-cards .asteroid-card .spectral-types-circle:hover::before {
+.content-cards .asteroid-card .spectral-types-circle.selected {
+    cursor: default;
+}
+
+.content-cards .asteroid-card .spectral-types-circle:hover::before,
+.content-cards .asteroid-card .spectral-types-circle.selected::before {
     opacity: 1;
 }
 
@@ -1052,21 +1089,11 @@ body.overlay-visible {
     color: white;
 }
 
-#overlay-add-asteroid .wallet-asteroid-card:hover .link-icon {
+#overlay-add-asteroid .wallet-asteroid-card:hover .influence-logo-icon {
     position: absolute;
     top: -0.5rem;
     right: -0.5rem;
-    width: 2rem;
-    height: 2rem;
-    background-image: url("./img/influence-logo.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    border-radius: 50%;
     z-index: 1;
-}
-
-#overlay-add-asteroid .wallet-asteroid-card .link-icon:hover {
-    animation: spin 500ms ease-in-out;
 }
 
 #overlay-add-asteroid .asteroid-tools {

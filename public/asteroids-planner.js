@@ -188,7 +188,7 @@ function getWalletAsteroidCardHtml(metadata) {
             <div class="id">${metadata.id}</div>
             <div class="name-wrapper"><div class="name">${metadata.name}</div></div>
             <div class="area area-km2">${metadata.area}</div>
-            <a class="link-icon" href="${metadata.url}" target="_blank" title="View in-game"></a>
+            <a class="influence-logo-icon" href="${metadata.url}" target="_blank" title="View in-game"></a>
         </div>
     `;
 }
@@ -950,10 +950,13 @@ function onClickAddSelectedAsteroids(el) {
     if (el.classList.contains('disabled')) {
         return;
     }
-    elWalletAsteroids.querySelectorAll('.wallet-asteroid-card.selected').forEach(elSelectedAsteroid => {
+    let selectedAsteroidName = '';
+    const elSelectedASteroids = elWalletAsteroids.querySelectorAll('.wallet-asteroid-card.selected');
+    elSelectedASteroids.forEach(elSelectedAsteroid => {
         const id = elSelectedAsteroid.querySelector('.id').textContent;
+        selectedAsteroidName = `Asteroid #${id}`;
         const asteroidData = {
-            asteroid_name: `Asteroid #${id}`,
+            asteroid_name: selectedAsteroidName,
             asteroid_type: cacheAsteroidsMetadataById[id].type,
             asteroid_area: cacheAsteroidsMetadataById[id].area,
             planned_products: [],
@@ -962,6 +965,13 @@ function onClickAddSelectedAsteroids(el) {
     });
     closeOverlay();
     handleAsteroidsPlannerTreeChanged();
+    if (elSelectedASteroids.length === 1) {
+        // View the newly added asteroid, if a single wallet-asteroid was added
+        onClickTreeItem(selectedAsteroidName);
+    } else {
+        // View all asteroids, if multiple wallet-asteroids were added
+        goHome();
+    }
 }
 
 function onClickSelectWalletAsteroid(el) {
@@ -1103,6 +1113,8 @@ function addAsteroidData(asteroidData) {
     asteroidsPlannerTree.push(asteroidData);
     closeOverlay();
     handleAsteroidsPlannerTreeChanged();
+    // View the newly added asteroid
+    onClickTreeItem(asteroidData.asteroid_name);
 }
 
 function onClickAddPlannedProductForAsteroid(asteroidName) {
@@ -1212,7 +1224,27 @@ function updateContent() {
     } else if (!plannedProductName) {
         // Asteroid
         let productCardsHtml = '';
-        getAsteroidData(asteroidName).planned_products.forEach(productData => {
+        const asteroidData = getAsteroidData(asteroidName);
+        const asteroidIdMatches = asteroidName.match(/Asteroid #(\d+)/);
+        let asteroidInfoHtml = '';
+        if (asteroidIdMatches) {
+            // In-game asteroid
+            asteroidInfoHtml = /*html*/ `
+                <div class="asteroid-details">Loading...</div>
+                <a class="game-link" href="https://game.influenceth.io/asteroids/${asteroidIdMatches[1]}" target="_blank">
+                    View in-game
+                    <span class="influence-logo-icon"></span>
+                </a>
+            `;
+            //// TO DO: show full asteroid details in ".asteroid-details" (get from cache, or fetch from my API)
+            //// ____
+        } else {
+            // Mock rock
+            asteroidInfoHtml = /*html*/ `
+                Just a "mock rock", not an in-game asteroid.
+            `;
+        }
+        asteroidData.planned_products.forEach(productData => {
             const productName = productData.planned_product_name;
             productCardsHtml += /*html*/ `
                 <div class="product-card">
@@ -1225,6 +1257,25 @@ function updateContent() {
             `;
         });
         elContent.innerHTML = /*html*/ `
+            <div class="content-columns">
+                <div class="content-cards">
+                    <div class="asteroid-card">
+                        <div class="spectral-types-circle type-${asteroidData.asteroid_type} selected">
+                            <div class="asteroid-info">
+                                <div class="asteroid-type">
+                                    ${asteroidData.asteroid_type}-type
+                                </div>
+                                <div class="asteroid-name">${asteroidData.asteroid_name}</div>
+                                <div class="area area-km2">${asteroidData.asteroid_area}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="content-title">Asteroid info</h3>
+                    ${asteroidInfoHtml}
+                </div>
+            </div>
             <h3 class="content-title">Products planned on this asteroid</h3>
             <div class="content-cards">
                 <div class="product-card product-add" onclick="onClickAddPlannedProductForAsteroid('${asteroidName}')">+</div>
@@ -1255,7 +1306,7 @@ function updateContent() {
         }
         elContent.innerHTML = /*html*/ `
             <h3 class="content-title">Planned product</h3>
-            <div class="content-product-wrapper">
+            <div class="content-columns">
                 <div class="content-cards">
                     <div class="product-card" onclick="onClickProductImage(this, '${plannedProductName}')">
                         <img src="${getProductImageSrc(plannedProductName)}" alt="" ${productImgOnError}>
@@ -1268,6 +1319,8 @@ function updateContent() {
                 </div>
             </div>
         `;
+        //// TO DO: full-res product images in the overlay
+        //// ____
         //// TO DO: Show button to add / edit production chain for this product
         /*
         - "add" button (with ".pulse-brand") if the product was added with a "blank" production chain
@@ -1281,7 +1334,7 @@ function updateContent() {
         // Intermediate product
         elContent.innerHTML = /*html*/ `
             <h3 class="content-title">Intermediate product</h3>
-            <div class="content-product-wrapper">
+            <div class="content-columns">
                 <div class="content-cards">
                 <div class="product-card" onclick="onClickProductImage(this, '${intermediateProductName}')">
                         <img src="${getProductImageSrc(intermediateProductName)}" alt="" ${productImgOnError}>
