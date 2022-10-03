@@ -598,6 +598,10 @@
     gap: 3rem;
 }
 
+.content-cards .content-card {
+    position: relative;
+}
+
 .content-cards .asteroid-card .spectral-types-circle::before {
     padding: 0.4rem;
     opacity: 0.5;
@@ -651,7 +655,6 @@
 }
 
 .content-cards .product-card {
-    position: relative;
     min-height: 13rem;
     text-align: center;
     border-left: 1px solid var(--default-text);
@@ -664,6 +667,12 @@
     color: white;
     border-color: white;
     cursor: pointer;
+}
+
+.content-cards .product-card.product-add {
+    font-size: 8rem;
+    line-height: 12rem;
+    color: var(--default-text_semifaded);
 }
 
 .content-cards .product-card img {
@@ -679,7 +688,9 @@
     padding: 0 0.5rem 1rem 0.5rem;
 }
 
-.content-cards .product-card .product-delete {
+/* Content card icons */
+
+.content-cards .content-card .card-icon {
     position: absolute;
     top: 0;
     right: 0;
@@ -690,24 +701,87 @@
     height: 2rem;
     padding: 0.5rem;
     border-radius: 50%;
+    opacity: 0.5;
+    filter: drop-shadow(0.25rem 0.25rem 0.25rem var(--dark-bg));
 }
 
-.content-cards .product-card:not(:hover) .product-delete {
+.content-cards .content-card .card-icon:hover {
+    opacity: 1;
+}
+
+.content-cards .content-card:not(:hover) .card-icon {
     display: none;
 }
 
-.content-cards .product-card .product-delete:hover {
+.content-cards .content-card .card-icon.delete:hover {
     background: red;
 }
 
-.content-cards .product-card .product-delete::after {
+.content-cards .content-card .card-icon.delete::after {
     content: '✕';
 }
 
-.content-cards .product-card.product-add {
-    font-size: 8rem;
-    line-height: 12rem;
-    color: var(--default-text_semifaded);
+.content-cards .content-card .card-icon.move {
+    right: unset;
+    left: 0;
+}
+
+.content-cards .content-card .card-icon.move:hover {
+    background: var(--brand-text);
+    color: black;
+}
+
+.content-cards .content-card .card-icon.move-up::after {
+    content: '▲';
+    padding-bottom: 0.2rem;
+}
+
+.content-cards .content-card .card-icon.move-down {
+    top: unset;
+    bottom: 0;
+}
+
+.content-cards .content-card .card-icon.move-down::after {
+    content: '▼';
+    padding-top: 0.2rem;
+}
+
+.content-cards .content-card .card-icon.zoom-image {
+    opacity: 1;
+}
+
+.content-cards .content-card .card-icon.zoom-image::after {
+    content: '+';
+    font-size: 2rem;
+    padding-bottom: 0.2rem;
+}
+
+.content-cards .parent-missing-image .card-icon.zoom-image {
+    display: none;
+}
+
+/* Single card */
+
+.content-cards.single-card {
+    gap: 1rem;
+}
+
+.content-cards.single-card .delete-card {
+    color: white;
+    cursor: pointer;
+    margin: 0 auto;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    opacity: 0.25;
+}
+
+.content-cards.single-card .delete-card:hover {
+    background: red;
+    opacity: 1;
+}
+
+.content-cards.single-card .delete-card::after {
+    content: 'Remove';
 }
 
 

@@ -34,6 +34,7 @@ const elInputMockArea = document.getElementById('input-mock-area');
 
 // Elements in the overlay for "Add product"
 const elOverlayAddProductAsteroidName = elOverlayAddProduct.querySelector('.asteroid-name');
+const elOverlayAddProductInput = elOverlayAddProduct.querySelector('#products-list-wrapper input');
 
 // Elements in the overlay for "Product image"
 const elOverlayProductImageImg = elOverlayProductImage.querySelector('img');
@@ -54,7 +55,11 @@ let onClickAsteroidActionInProgress = false;
 const cacheAsteroidsMetadataById = {};
 const cacheAsteroidsByWallet = {}; // Note: each key is a lowercase address
 
-const productImgOnError = `onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');"`;
+const productImgOnError = `
+    onerror="this.src='./img/site-icon.png';
+    this.classList.add('missing-image');
+    this.parentElement.classList.add('parent-missing-image');"
+`;
 
 // Depending on the environment, the API URL will be "http://localhost:3000" or "https://materials.adalia.id:3000"
 const apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
@@ -252,6 +257,24 @@ function setupExample() {
 
 function isPlannedAsteroidId(id) {
     return asteroidsPlannerTree.find(asteroidData => asteroidData.asteroid_name === `Asteroid #${id}`);
+}
+
+function proxyActionForAsteroid(event, action, asteroidName) {
+    event.stopPropagation();
+    const elAsteroidTreeItem = elAsteroidsPlannerTree.querySelector(`[data-asteroid-name="${asteroidName}"]`).closest('.asteroids-tree-item');
+    let elAsteroidTreeAction = null;
+    switch (action) {
+        case 'delete':
+            elAsteroidTreeAction = elAsteroidTreeItem.querySelector('.delete');
+            break;
+        case 'moveup':
+            elAsteroidTreeAction = elAsteroidTreeItem.querySelector('.move-up');
+            break;
+        case 'movedown':
+            elAsteroidTreeAction = elAsteroidTreeItem.querySelector('.move-down');
+            break;
+    }
+    onClickAsteroidAction(action, elAsteroidTreeAction);
 }
 
 function onClickAsteroidAction(action, el) {
@@ -487,7 +510,7 @@ function refreshAsteroidsPlannerSelection() {
         const selectedAsteroidData = asteroidsPlannerTree.find(asteroidData => asteroidData.asteroid_name === asteroidsPlannerSelection.asteroidName);
         if (!selectedAsteroidData) {
             // Previously-selected asteroid was deleted => completely RESET selection
-            console.log(`%c--- previously-selected asteroid was deleted => completely RESET selection`, 'background: blue'); //// TEST
+            // console.log(`%c--- previously-selected asteroid was deleted => completely RESET selection`, 'background: blue'); //// TEST
             asteroidsPlannerSelection = {asteroidName: null, plannedProductName: null, intermediateProductName: null};
             return;
         }
@@ -495,7 +518,7 @@ function refreshAsteroidsPlannerSelection() {
             const selectedPlannedProductData = selectedAsteroidData.planned_products.find(plannedProductData => plannedProductData.planned_product_name === asteroidsPlannerSelection.plannedProductName);
             if (!selectedPlannedProductData) {
                 // Previously-selected planned product was deleted => REDUCE selection to its parent asteroid
-                console.log(`%c--- previously-selected planned product was deleted => REDUCE selection to its parent asteroid`, 'background: blue'); //// TEST
+                // console.log(`%c--- previously-selected planned product was deleted => REDUCE selection to its parent asteroid`, 'background: blue'); //// TEST
                 asteroidsPlannerSelection.plannedProductName = null;
                 asteroidsPlannerSelection.intermediateProductName = null;
                 return;
@@ -504,7 +527,7 @@ function refreshAsteroidsPlannerSelection() {
                 const selectedIntermediateProductData = selectedPlannedProductData.intermediate_products.find(intermediateProductData => intermediateProductData.intermediate_product_name === asteroidsPlannerSelection.intermediateProductName);
                 if (!selectedIntermediateProductData) {
                     // Previously-selected intermediate product was deleted => REDUCE selection to its parent planned product
-                    console.log(`%c--- previously-selected intermediate product was deleted => REDUCE selection to its parent planned product`, 'background: blue'); //// TEST
+                    // console.log(`%c--- previously-selected intermediate product was deleted => REDUCE selection to its parent planned product`, 'background: blue'); //// TEST
                     asteroidsPlannerSelection.intermediateProductName = null;
                     return;
                 }
@@ -1118,11 +1141,14 @@ function addAsteroidData(asteroidData) {
 }
 
 function onClickAddPlannedProductForAsteroid(asteroidName) {
-    hideAndResetProductsList();
+    elOverlayAddProductAsteroidName.textContent = asteroidName;
     // Show overlay for "Add planned product"
     document.body.classList.add('overlay-visible');
     elOverlayAddProduct.classList.remove('hidden');
-    elOverlayAddProductAsteroidName.textContent = asteroidName;
+    // Manipulate the products-list after the overlay is visible
+    hideAndResetProductsList();
+    elOverlayAddProductInput.click();
+    elOverlayAddProductInput.focus();
 }
 
 function selectPlannedProduct(productNameCompact) {
@@ -1194,8 +1220,16 @@ function updateContent() {
         // Home
         let asteroidCardsHtml = '';
         asteroidsPlannerTree.forEach(asteroidData => {
+            let cardIconMoveUpHtml = '';
+            let cardIconMoveDownHtml = '';
+            if (asteroidsPlannerTree.indexOf(asteroidData) > 0) {
+                cardIconMoveUpHtml = /*html*/ `<div class="card-icon move move-up" onclick="proxyActionForAsteroid(event, 'moveup', '${asteroidData.asteroid_name}')"></div>`;
+            }
+            if (asteroidsPlannerTree.indexOf(asteroidData) < asteroidsPlannerTree.length - 1) {
+                cardIconMoveDownHtml = /*html*/ `<div class="card-icon move move-down" onclick="proxyActionForAsteroid(event, 'movedown', '${asteroidData.asteroid_name}')"></div>`;
+            }
             asteroidCardsHtml += /*html*/ `
-                <div class="asteroid-card">
+                <div class="content-card asteroid-card">
                     <div class="spectral-types-circle type-${asteroidData.asteroid_type}" onclick="onClickTreeItem('${asteroidData.asteroid_name}')">
                         <div class="asteroid-info">
                             <div class="asteroid-type">
@@ -1204,6 +1238,9 @@ function updateContent() {
                             <div class="asteroid-name">${asteroidData.asteroid_name}</div>
                             <div class="area area-km2">${asteroidData.asteroid_area}</div>
                         </div>
+                        <div class="card-icon delete" onclick="proxyActionForAsteroid(event, 'delete', '${asteroidData.asteroid_name}')"></div>
+                        ${cardIconMoveUpHtml}
+                        ${cardIconMoveDownHtml}
                     </div>
                 </div>
             `;
@@ -1211,7 +1248,7 @@ function updateContent() {
         elContent.innerHTML = /*html*/ `
             <h3 class="content-title">Asteroids with planned production chains</h3>
             <div class="content-cards">
-                <div class="asteroid-card">
+                <div class="content-card asteroid-card">
                     <div class="spectral-types-circle type-X" onclick="onClickAddAsteroid()">
                         <div class="asteroid-info">
                             <div class="asteroid-add">+</div>
@@ -1247,19 +1284,19 @@ function updateContent() {
         asteroidData.planned_products.forEach(productData => {
             const productName = productData.planned_product_name;
             productCardsHtml += /*html*/ `
-                <div class="product-card">
+                <div class="content-card product-card">
                     <div onclick="onClickTreeItem('${asteroidName}', '${productName}')">
                         <img src="${getProductImageSrc(productName)}" alt="" ${productImgOnError}>
                         <div class="product-name">${productName}</div>
                     </div>
-                    <div class="product-delete" onclick="deletePlannedProduct('${asteroidName}', '${productName}')"></div>
+                    <div class="card-icon delete" onclick="deletePlannedProduct('${asteroidName}', '${productName}')"></div>
                 </div>
             `;
         });
         elContent.innerHTML = /*html*/ `
             <div class="content-columns">
-                <div class="content-cards">
-                    <div class="asteroid-card">
+                <div class="content-cards single-card">
+                    <div class="content-card asteroid-card">
                         <div class="spectral-types-circle type-${asteroidData.asteroid_type} selected">
                             <div class="asteroid-info">
                                 <div class="asteroid-type">
@@ -1270,6 +1307,7 @@ function updateContent() {
                             </div>
                         </div>
                     </div>
+                    <div class="delete-card" onclick="proxyActionForAsteroid(event, 'delete', '${asteroidName}')"></div>
                 </div>
                 <div>
                     <h3 class="content-title">Asteroid info</h3>
@@ -1278,7 +1316,7 @@ function updateContent() {
             </div>
             <h3 class="content-title">Products planned on this asteroid</h3>
             <div class="content-cards">
-                <div class="product-card product-add" onclick="onClickAddPlannedProductForAsteroid('${asteroidName}')">+</div>
+                <div class="content-card product-card product-add" onclick="onClickAddPlannedProductForAsteroid('${asteroidName}')">+</div>
                 ${productCardsHtml}
             </div>
         `;
@@ -1307,11 +1345,13 @@ function updateContent() {
         elContent.innerHTML = /*html*/ `
             <h3 class="content-title">Planned product</h3>
             <div class="content-columns">
-                <div class="content-cards">
-                    <div class="product-card" onclick="onClickProductImage(this, '${plannedProductName}')">
+                <div class="content-cards single-card">
+                    <div class="content-card product-card" onclick="onClickProductImage(this, '${plannedProductName}')">
                         <img src="${getProductImageSrc(plannedProductName)}" alt="" ${productImgOnError}>
                         <div class="product-name">${plannedProductName}</div>
+                        <div class="card-icon zoom-image"></div>
                     </div>
+                    <div class="delete-card" onclick="deletePlannedProduct('${asteroidName}', '${plannedProductName}')"></div>
                 </div>
                 <div class="content-product-info">
                     <div class="cta pulse-brand">Add production chain</div>
@@ -1328,17 +1368,16 @@ function updateContent() {
         - clicking the button should hide the left-side trees (via horizontal animation?), to make room for the production chain
         */
         //// ____
-        //// TO DO: Add link to remove this planned product
-        //// ____
     } else {
         // Intermediate product
         elContent.innerHTML = /*html*/ `
             <h3 class="content-title">Intermediate product</h3>
             <div class="content-columns">
-                <div class="content-cards">
-                <div class="product-card" onclick="onClickProductImage(this, '${intermediateProductName}')">
+                <div class="content-cards single-card">
+                    <div class="content-card product-card" onclick="onClickProductImage(this, '${intermediateProductName}')">
                         <img src="${getProductImageSrc(intermediateProductName)}" alt="" ${productImgOnError}>
                         <div class="product-name">${intermediateProductName}</div>
+                        <div class="card-icon zoom-image"></div>
                     </div>
                 </div>
                 <div class="content-product-info">
