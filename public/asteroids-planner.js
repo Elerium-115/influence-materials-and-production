@@ -1309,7 +1309,7 @@ function updateContent() {
                     </div>
                     <div class="delete-card" onclick="proxyActionForAsteroid(event, 'delete', '${asteroidName}')"></div>
                 </div>
-                <div>
+                <div class="content-info-wrapper">
                     <h3 class="content-title">Asteroid info</h3>
                     ${asteroidInfoHtml}
                 </div>
@@ -1322,7 +1322,7 @@ function updateContent() {
         `;
     } else if (!intermediateProductName) {
         // Planned product
-        let intermediateProductsHtml = '';
+        let intermediateProductsAndShoppingListHtml = '';
         let intermediateProductsListHtml = '';
         getListOfIntermediaryProducts(asteroidName, plannedProductName).forEach(intermediateProductName => {
             if (intermediateProductsListHtml.length) {
@@ -1332,13 +1332,39 @@ function updateContent() {
                 <a onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}', '${intermediateProductName}')">${intermediateProductName}</a>
             `.trim(); // Trim to avoid spacing before ","
         });
-        if (intermediateProductsListHtml.length) {
-            intermediateProductsHtml = /*html*/ `
+        //// TO DO: check if product has a blank production chain
+        //// ____
+        const hasProductionChain = Boolean(intermediateProductsListHtml.length); //// DUMMY, TO BE UPDATED
+        if (!hasProductionChain) {
+            intermediateProductsAndShoppingListHtml = /*html*/ `
+                <div class="content-subtitle">No production chain configured for this planned product.</div>
+            `;
+        } else if (intermediateProductsListHtml.length) {
+            intermediateProductsAndShoppingListHtml = /*html*/ `
                 <div class="content-subtitle">Intermediate products selected for this planned product:</div>
-                <div>${intermediateProductsListHtml}</div>
+                <div class="intermediate-products">${intermediateProductsListHtml}</div>
+                <div class="content-subtitle">Shopping list:</div>
+                <div class="shopping-list">
+                    <div>
+                        <div class="title">Inputs</div>
+                        [redacted]
+                    </div>
+                    <div>
+                        <div class="title">Buildings</div>
+                        [redacted]
+                    </div>
+                    <div>
+                        <div class="title">Modules</div>
+                        [redacted]
+                    </div>
+                    <div>
+                        <div class="title">Spectral Types</div>
+                        [redacted]
+                    </div>
+                </div>
             `;
         } else {
-            intermediateProductsHtml = /*html*/ `
+            intermediateProductsAndShoppingListHtml = /*html*/ `
                 <div class="content-subtitle">No intermediate products selected for this planned product.</div>
             `;
         }
@@ -1353,9 +1379,9 @@ function updateContent() {
                     </div>
                     <div class="delete-card" onclick="deletePlannedProduct('${asteroidName}', '${plannedProductName}')"></div>
                 </div>
-                <div class="content-product-info">
-                    <div class="cta pulse-brand">Add production chain</div>
-                    ${intermediateProductsHtml}
+                <div class="content-info-wrapper">
+                    <div class="cta ${hasProductionChain ? '' : 'pulse-brand'}">${hasProductionChain ? 'Edit' : 'Add'} production chain</div>
+                    ${intermediateProductsAndShoppingListHtml}
                 </div>
             </div>
         `;
@@ -1380,7 +1406,7 @@ function updateContent() {
                         <div class="card-icon zoom-image"></div>
                     </div>
                 </div>
-                <div class="content-product-info">
+                <div class="content-info-wrapper">
                     This is an intermediate product, selected for the planned product <a onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}')">${plannedProductName}</a>.
                     <br><br>
                     <span class="brand-text">x2 ${intermediateProductName}</span> required for the production of <span class="brand-text">x1 ${plannedProductName}</span>, with the current production plan.

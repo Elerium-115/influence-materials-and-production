@@ -27,6 +27,7 @@
 /* Buttons */
 .cta {
     display: inline-block;
+    white-space: nowrap;
     background: var(--dark-bg);
     color: var(--brand-text);
     cursor: pointer;
@@ -80,6 +81,7 @@
 #asteroids-planner-tree h3,
 #shopping-list-tree h3 {
     line-height: 2rem;
+    white-space: nowrap;
 }
 
 .empty-planner #asteroids-planner-tree h3,
@@ -141,6 +143,10 @@
     margin-top: 1rem;
     border-left: 1px solid var(--default-text);
     border-right: 1px solid transparent;
+}
+
+#asteroids-planner-tree .asteroid-name {
+    white-space: nowrap;
 }
 
 #asteroids-planner-tree .asteroid-info {
@@ -326,7 +332,7 @@
 }
 
 #asteroids-planner-tree .cta {
-    margin-top: 2rem;
+    margin: 2rem auto 0 auto;
 }
 
 .empty-planner #asteroids-planner-tree .cta {
@@ -437,6 +443,7 @@
 .breadcrumbs .breadcrumb .breadcrumb-name {
     position: relative;
     overflow: hidden;
+    white-space: nowrap;
     padding: 0 1rem;
 }
 
@@ -567,7 +574,14 @@
 
 #content .content-columns {
     display: flex;
-    gap: 2rem;
+    gap: 3rem;
+}
+
+#content .content-info-wrapper {
+    min-width: 11rem; /* same as ".content-cards" grid minmax value */
+    background: var(--active-bg);
+    padding: 1rem;
+    border-radius: 1rem;
 }
 
 #content .content-subtitle {
@@ -589,6 +603,23 @@
     animation: spin 500ms ease-in-out;
 }
 
+#content .intermediate-products a {
+    color: var(--brand-text);
+}
+
+#content .shopping-list {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-auto-flow: column;
+    gap: 1rem;
+    font-size: 0.8rem;
+}
+
+#content .shopping-list .title {
+    color: var(--link);
+    font-size: 0.9rem;
+}
+
 
 /* Content cards */
 
@@ -608,7 +639,7 @@
 }
 
 .content-cards .asteroid-card .spectral-types-circle.selected {
-    cursor: default;
+    cursor: unset;
 }
 
 .content-cards .asteroid-card .spectral-types-circle:hover::before,
@@ -756,21 +787,33 @@
     padding-bottom: 0.2rem;
 }
 
-.content-cards .parent-missing-image .card-icon.zoom-image {
+.content-cards .product-card.parent-missing-image {
+    /* use both classes in the selector, for higher specificity */
+    cursor: unset;
+}
+
+.content-cards .product-card.parent-missing-image .card-icon.zoom-image {
     display: none;
 }
 
 /* Single card */
 
 .content-cards.single-card {
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
+    /* min/max width same as ".content-cards" grid minmax value */
+    min-width: 11rem;
+    max-width: 11rem;
 }
 
 .content-cards.single-card .delete-card {
+    height: 2rem;
+    line-height: 2rem;
     color: white;
     cursor: pointer;
     margin: 0 auto;
-    padding: 0.25rem 0.5rem;
+    padding: 0 0.5rem;
     border-radius: 1rem;
     opacity: 0.25;
 }
