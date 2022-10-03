@@ -7,6 +7,7 @@ const mockAsteroidsPlannerTree = [
 		"planned_products": [
 			{
 				"planned_product_name": "Aluminium",
+				"production_plan_id": 1,
 				"intermediate_products": [
 					{
 						"intermediate_product_name": "Alumina"
@@ -42,6 +43,7 @@ const mockAsteroidsPlannerTree = [
 			},
 			{
 				"planned_product_name": "Steel",
+				"production_plan_id": 2,
 				"intermediate_products": [
 					{
 						"intermediate_product_name": "Graphite"
@@ -90,6 +92,7 @@ const mockAsteroidsPlannerTree = [
 		"planned_products": [
 			{
 				"planned_product_name": "Carbon Monoxide",
+				"production_plan_id": 3,
 				"intermediate_products": [],
 				"shopping_list":
 				{
@@ -112,6 +115,7 @@ const mockAsteroidsPlannerTree = [
 		"planned_products": [
 			{
 				"planned_product_name": "Feldspar",
+				"production_plan_id": 4,
 				"intermediate_products": [],
 				"shopping_list":
 				{
@@ -134,6 +138,7 @@ const mockAsteroidsPlannerTree = [
 		"planned_products": [
 			{
 				"planned_product_name": "Hydrolox Fuel",
+				"production_plan_id": 5,
 				"intermediate_products": [
 					{
 						"intermediate_product_name": "Hydrogen"
@@ -163,6 +168,7 @@ const mockAsteroidsPlannerTree = [
 			},
 			{
 				"planned_product_name": "Oxygen",
+				"production_plan_id": 6,
 				"intermediate_products": [],
 				"shopping_list":
 				{
@@ -182,6 +188,7 @@ const mockAsteroidsPlannerTree = [
 			},
 			{
 				"planned_product_name": "Water",
+				"production_plan_id": 7,
 				"intermediate_products": [],
 				"shopping_list":
 				{

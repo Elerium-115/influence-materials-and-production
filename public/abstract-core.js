@@ -25,10 +25,11 @@ function getItemNameSafe(itemName) {
 }
 
 /**
- * e.g. "Thin-film Resistor" => "./img/products/thin-film-resistor.png"
+ * e.g. "Thin-film Resistor" => "./img/products/default/thin-film-resistor.png"
+ * Valid formats: "thumb" (low-res) / "default" (medium-res) / "original" (high-res)
  */
-function getProductImageSrc(productName) {
-    return `./img/products/${getItemNameSafe(productName)}.png`;
+function getProductImageSrc(productName, format = 'default') {
+    return `./img/products/${format}/${getItemNameSafe(productName)}.png`;
 }
 
 /**

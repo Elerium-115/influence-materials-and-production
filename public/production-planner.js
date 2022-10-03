@@ -290,7 +290,7 @@ function createProductContainer(itemId) {
     productContainer.dataset.itemName = itemName;
     productContainer.innerHTML = `<div class="item-name">${itemName}</div>`;
     productContainer.innerHTML += `<div class="item-qty"></div>`;
-    // productContainer.innerHTML += `<img class="thumb" src="./img/thumbs/${getItemNameSafe(itemName)}.png" alt="" onerror="this.src='./img/site-icon.png';">`;
+    // productContainer.innerHTML += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png';">`;
     productContainer.classList.add(getItemTypeClass(productData.type));
     productContainer.addEventListener('click', event => {
         toggleProductItemId(itemId); // the user may either select or deselect a product

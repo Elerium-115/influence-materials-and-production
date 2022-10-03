@@ -1160,8 +1160,9 @@ function selectPlannedProduct(productNameCompact) {
         return;
     }
     asteroidData.planned_products.push({
-        intermediate_products: [],
         planned_product_name: productName,
+        production_plan_id: null,
+        intermediate_products: [],
         shopping_list: {
             buildings: [],
             inputs: [],
@@ -1184,7 +1185,7 @@ function onClickProductImage(el, productName) {
     // Show overlay for "Product image"
     document.body.classList.add('overlay-visible');
     elOverlayProductImage.classList.remove('hidden');
-    elOverlayProductImageImg.src = getProductImageSrc(productName);
+    elOverlayProductImageImg.src = getProductImageSrc(productName, 'original');
 }
 
 function resetContent() {
@@ -1324,7 +1325,8 @@ function updateContent() {
         // Planned product
         let intermediateProductsAndShoppingListHtml = '';
         let intermediateProductsListHtml = '';
-        getListOfIntermediaryProducts(asteroidName, plannedProductName).forEach(intermediateProductName => {
+        const listOfIntermediaryProducts = getListOfIntermediaryProducts(asteroidName, plannedProductName);
+        listOfIntermediaryProducts.forEach(intermediateProductName => {
             if (intermediateProductsListHtml.length) {
                 intermediateProductsListHtml += ', ';
             }
@@ -1332,17 +1334,19 @@ function updateContent() {
                 <a onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}', '${intermediateProductName}')">${intermediateProductName}</a>
             `.trim(); // Trim to avoid spacing before ","
         });
-        //// TO DO: check if product has a blank production chain
-        //// ____
-        const hasProductionChain = Boolean(intermediateProductsListHtml.length); //// DUMMY, TO BE UPDATED
-        if (!hasProductionChain) {
-            intermediateProductsAndShoppingListHtml = /*html*/ `
-                <div class="content-subtitle">No production chain configured for this planned product.</div>
-            `;
-        } else if (intermediateProductsListHtml.length) {
-            intermediateProductsAndShoppingListHtml = /*html*/ `
-                <div class="content-subtitle">Intermediate products selected for this planned product:</div>
-                <div class="intermediate-products">${intermediateProductsListHtml}</div>
+        const hasProductionPlan = Boolean(getPlannedProductData(asteroidName, plannedProductName).production_plan_id);
+        if (hasProductionPlan) {
+            if (listOfIntermediaryProducts.length) {
+                intermediateProductsAndShoppingListHtml = /*html*/ `
+                    <div class="content-subtitle">Intermediate products selected for this planned product:</div>
+                    <div class="intermediate-products">${intermediateProductsListHtml}</div>
+                `;
+            } else {
+                intermediateProductsAndShoppingListHtml = /*html*/ `
+                    <div class="content-subtitle">No intermediate products selected for this planned product.</div>
+                `;
+            }
+            intermediateProductsAndShoppingListHtml += /*html*/ `
                 <div class="content-subtitle">Shopping list:</div>
                 <div class="shopping-list">
                     <div>
@@ -1365,7 +1369,7 @@ function updateContent() {
             `;
         } else {
             intermediateProductsAndShoppingListHtml = /*html*/ `
-                <div class="content-subtitle">No intermediate products selected for this planned product.</div>
+                <div class="content-subtitle">No production chain configured for this planned product.</div>
             `;
         }
         elContent.innerHTML = /*html*/ `
@@ -1380,20 +1384,11 @@ function updateContent() {
                     <div class="delete-card" onclick="deletePlannedProduct('${asteroidName}', '${plannedProductName}')"></div>
                 </div>
                 <div class="content-info-wrapper">
-                    <div class="cta ${hasProductionChain ? '' : 'pulse-brand'}">${hasProductionChain ? 'Edit' : 'Add'} production chain</div>
+                    <div class="cta ${hasProductionPlan ? '' : 'pulse-brand'}">${hasProductionPlan ? 'Edit' : 'Add'} production chain</div>
                     ${intermediateProductsAndShoppingListHtml}
                 </div>
             </div>
         `;
-        //// TO DO: full-res product images in the overlay
-        //// ____
-        //// TO DO: Show button to add / edit production chain for this product
-        /*
-        - "add" button (with ".pulse-brand") if the product was added with a "blank" production chain
-        - "edit" button (NO ".pulse-brand") if the product already has a production chain configured
-        - clicking the button should hide the left-side trees (via horizontal animation?), to make room for the production chain
-        */
-        //// ____
     } else {
         // Intermediate product
         elContent.innerHTML = /*html*/ `

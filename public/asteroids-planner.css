@@ -1276,9 +1276,20 @@ body.overlay-visible {
 /* Overlay - Product image */
 
 #overlay-product-image {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+    position: absolute;
+    display: grid;
+    align-items: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 !important;
+}
+
+#overlay-product-image img {
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
 }
 
 /* Overlay - Close */
