@@ -1275,7 +1275,7 @@ function updateContent() {
                     if (bonusesHtml.length) {
                         bonusesHtml += ', ';
                     }
-                    bonusesHtml += /*html*/ `<span>+${bonus.modifier}% ${bonus.type}</span>`;
+                    bonusesHtml += /*html*/ `<span class="bonus-${bonus.type.toLowerCase()}">+${bonus.modifier}% ${bonus.type}</span>`;
                 });
                 elContent.querySelector('.asteroid-details').innerHTML = /*html*/ `
                     <div><div>Name:</div><div>${metadata.name}</div></div>
@@ -1422,8 +1422,6 @@ function updateContent() {
                 </div>
             </div>
         `;
-        //// TO DO: ???
-        //// ____
     }
 }
 

@@ -619,6 +619,12 @@
     color: white;
 }
 
+#content .asteroid-details .bonus-volatiles { color: var(--volatiles); }
+#content .asteroid-details .bonus-organics { color: var(--organics); }
+#content .asteroid-details .bonus-metals { color: var(--metals); }
+#content .asteroid-details .bonus-rare-earth { color: var(--rare-earth); }
+#content .asteroid-details .bonus-fissiles { color: var(--fissiles); }
+
 #content .intermediate-products a {
     color: var(--brand-text);
 }
