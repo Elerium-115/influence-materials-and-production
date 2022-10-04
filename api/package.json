@@ -13,6 +13,7 @@
         "cors": "^2.8.5",
         "dotenv": "^16.0.2",
         "ethereum-checksum-address": "^0.0.8",
-        "express": "^4.18.1"
+        "express": "^4.18.1",
+        "influence-utils": "^1.10.1"
     }
 }

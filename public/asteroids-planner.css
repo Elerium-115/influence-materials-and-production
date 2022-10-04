@@ -578,6 +578,7 @@
 }
 
 #content .content-info-wrapper {
+    position: relative;
     min-width: 11rem; /* same as ".content-cards" grid minmax value */
     background: var(--active-bg);
     padding: 1rem;
@@ -588,19 +589,34 @@
     margin: 2rem 0 0.5rem 0;
 }
 
-#content .game-link {
+#content .influence-logo-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+#content .influence-logo-icon.loading {
+    animation: spin 500ms linear infinite;
+    opacity: 0.5;
+}
+
+#content .asteroid-details {
     display: flex;
-    align-items: center;
-    margin-top: 1rem;
+    flex-direction: column;
+    font-size: 0.9rem;
 }
 
-#content .game-link .influence-logo-icon {
-    display: inline-block;
-    margin-left: 0.5rem;
+#content .asteroid-details > * {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    margin: 0 -0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
 }
 
-#content .game-link:hover .influence-logo-icon {
-    animation: spin 500ms ease-in-out;
+#content .asteroid-details > *:hover {
+    background: var(--overactive-bg);
+    color: white;
 }
 
 #content .intermediate-products a {

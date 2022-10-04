@@ -1,27 +1,54 @@
 const axios = require('axios');
+const influenceUtils = require('influence-utils');
 const utils = require('../../utils/index');
 
 /**
  * Provider:
  * https://www.npmjs.com/package/influence-utils
  * https://github.com/Influenceth/influence-utils
+ * https://github.com/Influenceth/influence-utils/blob/master/index.js
  */
 
-// Source: https://github.com/Influenceth/influence-utils/blob/master/index.js
-const SPECTRAL_TYPES = [ 'C', 'Cm', 'Ci', 'Cs', 'Cms', 'Cis', 'S', 'Sm', 'Si', 'M', 'I' ];
-
 const ASTEROIDS_PER_PAGE_MAX = 30;
+
+const BONUS_TYPE_PRETTY = {
+    yield: 'Yield',
+    volatile: 'Volatiles',
+    metal: 'Metals',
+    organic: 'Organics',
+    rareearth: 'Rare-Earth',
+    fissile: 'Fissiles',
+};
 
 function parseAsteroidMetadata(rawData) {
     const metadata = {
         // area: Math.floor(4 * Math.PI * Math.pow(rawData.radius, 2) / 1000000), // km2
         area: rawData.lots,
+        bonuses: parseAsteroidBonuses(rawData.bonuses),
         id: rawData.asteroidId,
         name: rawData.name,
-        type: SPECTRAL_TYPES[rawData.spectralType].toUpperCase(),
+        owner: rawData.owner,
+        rarity: influenceUtils.toRarity(rawData.bonuses),
+        scanned: rawData.scanned,
+        size: influenceUtils.toSize(rawData.radius),
+        type: influenceUtils.toSpectralType(rawData.spectralType).toUpperCase(),
         url: `https://game.influenceth.io/asteroids/${rawData.asteroidId}`,
     };
     return metadata;
+}
+
+function parseAsteroidBonuses(rawBonuses) {
+    const bonuses = [];
+    rawBonuses.forEach(bonusData => {
+        if (bonusData.level === 0) {
+            return;
+        }
+        bonuses.push({
+            modifier: bonusData.modifier,
+            type: BONUS_TYPE_PRETTY[bonusData.type],
+        });
+    });
+    return bonuses;
 }
 
 async function fetchAsteroidMetadata(asteroidId) {

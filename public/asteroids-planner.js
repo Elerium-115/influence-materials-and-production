@@ -159,15 +159,18 @@ function getListOfIntermediaryProducts(asteroidName, plannedProductName) {
 
 function getAsteroidsPlannerTreeElementToConnect() {
     let elName;
-    if (asteroidsPlannerSelection.plannedProductName) {
-        elName = elAsteroidsPlannerTree.querySelector(`[data-planned-product-name="${asteroidsPlannerSelection.plannedProductName}"]`);
-        if (!elName) {
-            console.log(`%c--- ERROR: NO tree element matching plannedProductName = ${asteroidsPlannerSelection.plannedProductName}`, 'background: maroon'); //// TEST
-        }
-    } else if (asteroidsPlannerSelection.asteroidName) {
+    if (asteroidsPlannerSelection.asteroidName) {
+        // Get the name-element for the currently-selected asteroid
         elName = elAsteroidsPlannerTree.querySelector(`[data-asteroid-name="${asteroidsPlannerSelection.asteroidName}"]`);
         if (!elName) {
             console.log(`%c--- ERROR: NO tree element matching asteroidName = ${asteroidsPlannerSelection.asteroidName}`, 'background: maroon'); //// TEST
+        }
+        if (asteroidsPlannerSelection.plannedProductName) {
+            // Get the name-element for the currently-selected product, from the currently-selected asteroid
+            elName = elName.closest('.asteroids-tree-item').querySelector(`[data-planned-product-name="${asteroidsPlannerSelection.plannedProductName}"]`);
+            if (!elName) {
+                console.log(`%c--- ERROR: NO tree element matching plannedProductName = ${asteroidsPlannerSelection.plannedProductName}`, 'background: maroon'); //// TEST
+            }
         }
     }
     if (!elName) {
@@ -237,18 +240,20 @@ async function fetchAsteroidsFromWallet() {
     }
 }
 
-//// TO BE DELETED?
-// function getLeaderLineAreaForTreeElement(el) {
-//     return LeaderLine.areaAnchor(el, {
-//         color: leaderLineColors.link,
-//         x: '0%',
-//         y: '15%',
-//         width: '100%',
-//         height: '70%',
-//         radius: 8,
-//         dash: true,
-//     });
-// }
+async function loadAsteroidMetadataById(asteroidId) {
+    let metadata = cacheAsteroidsMetadataById[asteroidId];
+    if (!metadata) {
+        // Data NOT cached => call to my API
+        metadata = await fetchAsteroidMetadataById(asteroidId);
+        if (metadata.error) {
+            // Inform the user re: API error
+            alert(metadata.error);
+            return;
+        }
+        cacheAsteroidsMetadataById[asteroidId] = metadata;
+    }
+    return metadata;
+}
 
 function setupExample() {
     asteroidsPlannerTree = [...mockAsteroidsPlannerTree];
@@ -1037,17 +1042,7 @@ async function requestAsteroidDetails() {
     resetAsteroidMetadataHtml();
     toggleAsteroidMetadataCta(false); // Disable the CTA
     const asteroidId = elInputAsteroidId.value;
-    let metadata = cacheAsteroidsMetadataById[asteroidId];
-    if (!metadata) {
-        // Data NOT cached => call to my API
-        metadata = await fetchAsteroidMetadataById(asteroidId);
-        if (metadata.error) {
-            // Inform the user re: API error
-            alert(metadata.error);
-            return;
-        }
-        cacheAsteroidsMetadataById[asteroidId] = metadata;
-    }
+    const metadata = await loadAsteroidMetadataById(asteroidId);
     elInputAsteroidId.value = '';
     const elSpectralType = elOverlayAddAsteroid.querySelector('.asteroid-metadata-wrapper .spectral-types-circle');
     elSpectralType.classList.remove('type-X');
@@ -1185,6 +1180,8 @@ function onClickProductImage(el, productName) {
     // Show overlay for "Product image"
     document.body.classList.add('overlay-visible');
     elOverlayProductImage.classList.remove('hidden');
+    // Prevent the previous product image from being shown, while the new image is loading
+    elOverlayProductImageImg.src = '';
     elOverlayProductImageImg.src = getProductImageSrc(productName, 'original');
 }
 
@@ -1268,14 +1265,29 @@ function updateContent() {
         if (asteroidIdMatches) {
             // In-game asteroid
             asteroidInfoHtml = /*html*/ `
+                <a class="influence-logo-icon loading" target="_blank" title="View in-game"></a>
                 <div class="asteroid-details">Loading...</div>
-                <a class="game-link" href="https://game.influenceth.io/asteroids/${asteroidIdMatches[1]}" target="_blank">
-                    View in-game
-                    <span class="influence-logo-icon"></span>
-                </a>
             `;
-            //// TO DO: show full asteroid details in ".asteroid-details" (get from cache, or fetch from my API)
-            //// ____
+            // Show full asteroid details, after they are loaded from cache / API (async)
+            loadAsteroidMetadataById(asteroidIdMatches[1]).then(metadata => {
+                let bonusesHtml = '';
+                metadata.bonuses.forEach(bonus => {
+                    if (bonusesHtml.length) {
+                        bonusesHtml += ', ';
+                    }
+                    bonusesHtml += /*html*/ `<span>+${bonus.modifier}% ${bonus.type}</span>`;
+                });
+                elContent.querySelector('.asteroid-details').innerHTML = /*html*/ `
+                    <div><div>Name:</div><div>${metadata.name}</div></div>
+                    <div><div>Owner:</div><div>${metadata.owner ? metadata.owner : 'Not owned'}</div></div>
+                    <div><div>Size:</div><div>${metadata.size}</div></div>
+                    <div><div>Rarity:</div><div class="rarity-${metadata.rarity.toLowerCase()}">${metadata.rarity}</div></div>
+                    <div><div>Bonuses:</div><div>${metadata.scanned ? bonusesHtml : 'Not scanned'}</div></div>
+                `;
+                const elGameLink = elContent.querySelector('.influence-logo-icon');
+                elGameLink.href = metadata.url;
+                elGameLink.classList.remove('loading');
+            });
         } else {
             // Mock rock
             asteroidInfoHtml = /*html*/ `
