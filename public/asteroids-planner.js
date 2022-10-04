@@ -478,6 +478,8 @@ function refreshShoppingListTreeHtml() {
 function compareListElementsByInputName(el1, el2) { return el1.input_name.localeCompare(el2.input_name); }
 function compareListElementsByBuildingName(el1, el2) { return el1.building_name.localeCompare(el2.building_name); }
 function compareListElementsByModuleName(el1, el2) { return el1.module_name.localeCompare(el2.module_name); }
+function compareListElementsByPlannedProductName(el1, el2) { return el1.planned_product_name.localeCompare(el2.planned_product_name); }
+function compareListElementsByIntermediateProductName(el1, el2) { return el1.intermediate_product_name.localeCompare(el2.intermediate_product_name); }
 
 function mergeAndSortArraysWithUniqueValuesForKey(arr1, arr2, key = null) {
     if (!key) {
@@ -541,6 +543,20 @@ function refreshAsteroidsPlannerSelection() {
     }
 }
 
+/**
+ * Sort products alphabetically, within "asteroidsPlannerTree"
+ */
+function sortProductsInAsteroidsPlannerTree() {
+    asteroidsPlannerTree.forEach(asteroidData => {
+        // Sort planned products on this asteroid
+        asteroidData.planned_products = asteroidData.planned_products.sort(compareListElementsByPlannedProductName);
+        asteroidData.planned_products.forEach(plannedProductData => {
+            // Sort intermediate products of this planned product
+            plannedProductData.intermediate_products = plannedProductData.intermediate_products.sort(compareListElementsByIntermediateProductName);
+        });
+    });
+}
+
 function regenerateShoppingListTree() {
     if (!asteroidsPlannerTree.length) {
         shoppingListTree = {};
@@ -582,11 +598,14 @@ function refreshTreesHtml() {
     }
 }
 
-function handleAsteroidsPlannerTreeChanged() {
+function handleAsteroidsPlannerTreeChanged(shouldUpdateContent = true) {
     refreshAsteroidsPlannerSelection();
+    sortProductsInAsteroidsPlannerTree();
     regenerateShoppingListTree();
     refreshTreesHtml();
-    updateContent();
+    if (shouldUpdateContent) {
+        updateContent();
+    }
 }
 
 function connectElements(el1, el2, options = {}) {
@@ -992,7 +1011,11 @@ function onClickAddSelectedAsteroids(el) {
         asteroidsPlannerTree.push(asteroidData);
     });
     closeOverlay();
-    handleAsteroidsPlannerTreeChanged();
+    /**
+     * Do NOT call "updateContent" on this execution of "handleAsteroidsPlannerTreeChanged",
+     * because both "onClickTreeItem" and "goHome" end up calling "updateContent", for a different selection.
+     */
+    handleAsteroidsPlannerTreeChanged(false);
     if (elSelectedASteroids.length === 1) {
         // View the newly added asteroid, if a single wallet-asteroid was added
         onClickTreeItem(selectedAsteroidName);
@@ -1130,7 +1153,11 @@ function createMockRock() {
 function addAsteroidData(asteroidData) {
     asteroidsPlannerTree.push(asteroidData);
     closeOverlay();
-    handleAsteroidsPlannerTreeChanged();
+    /**
+     * Do NOT call "updateContent" on this execution of "handleAsteroidsPlannerTreeChanged",
+     * because "onClickTreeItem" ends up calling "updateContent", for a different selection.
+     */
+    handleAsteroidsPlannerTreeChanged(false);
     // View the newly added asteroid
     onClickTreeItem(asteroidData.asteroid_name);
 }
@@ -1166,7 +1193,11 @@ function selectPlannedProduct(productNameCompact) {
         },
     });
     closeOverlay();
-    handleAsteroidsPlannerTreeChanged();
+    /**
+     * Do NOT call "updateContent" on this execution of "handleAsteroidsPlannerTreeChanged",
+     * because "onClickTreeItem" ends up calling "updateContent", for a different selection.
+     */
+    handleAsteroidsPlannerTreeChanged(false);
     // select the newly-added product
     onClickTreeItem(asteroidName, productName);
 }
@@ -1270,6 +1301,15 @@ function updateContent() {
             `;
             // Show full asteroid details, after they are loaded from cache / API (async)
             loadAsteroidMetadataById(asteroidIdMatches[1]).then(metadata => {
+                const elAsteroidDetails = elContent.querySelector('.asteroid-details');
+                if (!elAsteroidDetails) {
+                    /**
+                     * Do not attempt to update the asteroid details,
+                     * if something else was (auto-)selected, before this callback was triggered.
+                     * (e.g. selecting a product, while the asteroid details are still loading)
+                     */
+                    return;
+                }
                 let bonusesHtml = '';
                 metadata.bonuses.forEach(bonus => {
                     if (bonusesHtml.length) {
@@ -1277,7 +1317,10 @@ function updateContent() {
                     }
                     bonusesHtml += /*html*/ `<span class="bonus-${bonus.type.toLowerCase()}">+${bonus.modifier}% ${bonus.type}</span>`;
                 });
-                elContent.querySelector('.asteroid-details').innerHTML = /*html*/ `
+                if (!bonusesHtml.length) {
+                    bonusesHtml = 'No bonuses';
+                }
+                elAsteroidDetails.innerHTML = /*html*/ `
                     <div><div>Name:</div><div>${metadata.name}</div></div>
                     <div><div>Owner:</div><div>${metadata.owner ? metadata.owner : 'Not owned'}</div></div>
                     <div><div>Size:</div><div>${metadata.size}</div></div>
@@ -1500,7 +1543,6 @@ handleAsteroidsPlannerTreeChanged();
 
 //// TO DO PRIO
 /*
-- sort all products-lists alphabetically (planned-products + intermediate-products)
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree
     - "alert" re: API coming soon / asteroid # already planned
