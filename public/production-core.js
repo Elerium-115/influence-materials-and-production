@@ -13,6 +13,7 @@ const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
 const productSearchInput = productsListWrapper.querySelector('input');
 const productsListContainer = document.getElementById('products-list');
+const selectedItemNameContainer = document.getElementById('selected-item-name');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 
 function getItemContainerById(itemContainerId) {

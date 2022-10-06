@@ -25,47 +25,6 @@ const rawMaterialDataByName = {
     "Uraninite":        { "label": "Mineral",       "materialType": "Fissiles",     "baseSpectrals": ["M"]      },
 }
 
-// Parse data from official JSON
-const buildingDataById = {};
-const productDataById = {};
-const productDataByName = {}; // "items" in "production.js"
-const productNamesByHash = {}; // "itemNamesByHash" in "production.js"
-const productNamesSorted = []; // "itemNamesSorted" in "production.js"
-const processDataById = {};
-const processVariantIdsByProductId = {};
-InfluenceProductionChainsJSON.buildings.forEach(building => buildingDataById[building.id] = building);
-InfluenceProductionChainsJSON.products.forEach(product => {
-    productDataById[product.id] = product;
-    productDataByName[product.name] = product;
-    productNamesSorted.push(product.name);
-});
-productNamesSorted.sort();
-InfluenceProductionChainsJSON.processes.forEach(process => {
-    // Set qty for each input
-    process.inputs = process.inputs.map(input => {
-        input.qty = 2; //// PLACEHOLDER
-        return input;
-    });
-    // Set qty for each output
-    process.outputs = process.outputs.map(output => {
-        output.qty = 1; //// PLACEHOLDER
-        return output;
-    });
-    // Set module parts
-    process.parts = null; // future format: [ 'Condenser', 'Evaporator' ]
-    if (process.name === 'Desalination') {
-        process.parts = [ 'Condenser', 'Evaporator' ]; //// PLACEHOLDER
-    }
-    processDataById[process.id] = process;
-    process.outputs.forEach(output => {
-        const productId = output.productId;
-        if (!processVariantIdsByProductId[productId]) {
-            processVariantIdsByProductId[productId] = [];
-        }
-        processVariantIdsByProductId[productId].push(process.id);
-    });
-});
-
 /*
 Terminology:
 - a "product" or "process" may appear multiple times in the production chain
@@ -125,7 +84,6 @@ let itemIdsForProcessVariantsWaitingSelection = [];
 
 let shouldHandleHashchange = true;
 
-const selectedItemNameContainer = document.getElementById('selected-item-name');
 const shareLinkContainer = document.getElementById('share-link');
 const shoppingListContainer = document.getElementById('shopping-list');
 const shoppingListProductImage = document.getElementById('shopping-list-product-image');
@@ -143,18 +101,8 @@ productNamesSorted.forEach(productName => {
     productsListContainer.appendChild(listItem);
 });
 
-/**
- * Leader Line settings
- * https://anseki.github.io/leader-line/
- */
-const leaderLineColorEnabled = 'gray';
-const leaderLineColorDisabled = 'rgba(128, 128, 128, 0.25)';
-const leaderLineOptionsDefault = {
-    path: 'straight',
-    size: 1,
-    color: leaderLineColorEnabled,
-    endPlug: 'behind',
-};
+// Leader Line settings, additional to those from "production-core.js"
+leaderLineOptionsDefault.path = 'straight';
 
 function getChildContainersOfItemId(itemId, onlySelectedContainers = false) {
     let selector = `[data-parent-container-id="${itemId}"]`;
@@ -716,10 +664,10 @@ function markProcessDisabled(itemId) {
         inputItemData.isDisabled = true;
         inputContainer.classList.add('disabled-item');
         // Also mark the connection from this input as disabled
-        inputItemData.line.color = leaderLineColorDisabled;
+        inputItemData.line.color = leaderLineColors.disabled;
     });
     // Also mark the connection from this process as disabled
-    itemDataById[itemId].line.color = leaderLineColorDisabled;
+    itemDataById[itemId].line.color = leaderLineColors.disabled;
 }
 
 function markProcessNotDisabled(itemId) {
@@ -732,10 +680,10 @@ function markProcessNotDisabled(itemId) {
         inputItemData.isDisabled = false;
         inputContainer.classList.remove('disabled-item');
         // Also mark the connection from this input as NOT disabled
-        inputItemData.line.color = leaderLineColorEnabled;
+        inputItemData.line.color = leaderLineColors.default;
     });
     // Also mark the connection from this process as NOT disabled
-    itemDataById[itemId].line.color = leaderLineColorEnabled;
+    itemDataById[itemId].line.color = leaderLineColors.default;
 }
 
 function markProcessWaitingSelection(itemId) {
@@ -908,7 +856,7 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
                         line.startSocket = leaderLineOptions.startSocket;
                         line.endSocket = leaderLineOptions.endSocket;
                     }
-                    line.color = leaderLineColorEnabled;
+                    line.color = leaderLineColors.default;
                     // Fade connections from disabled items (re: disabled process variant), and to/from faded items
                     let isFaded = false;
                     if (productChainItemsContainer.classList.contains('faded')) {
@@ -920,7 +868,7 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
                         }
                     }
                     if (itemData.isDisabled || isFaded) {
-                        line.color = leaderLineColorDisabled;
+                        line.color = leaderLineColors.disabled;
                     }
                     line.position();
                     break;
@@ -1370,6 +1318,7 @@ if (doDebug && false) {
         debugContainer.classList.remove('hidden');
     });
 }
+
 
 //// FIX BUG re: qty of intermediate products should use the same formula as calculating the qty of inputs
 //// -- for each intermediate product, sum the (potentially-different!) qtys of all its selected-occurrences in the chain

@@ -205,3 +205,13 @@ const mockAsteroidsPlannerTree = [
 		],
 	}
 ];
+
+const mockProductionPlans = {
+	1: {"planned_product_name": "Aluminium"},
+	2: {"planned_product_name": "Steel"},
+	3: {"planned_product_name": "Carbon Monoxide"},
+	4: {"planned_product_name": "Feldspar"},
+	5: {"planned_product_name": "Hydrolox Fuel"},
+	6: {"planned_product_name": "Oxygen"},
+	7: {"planned_product_name": "Water"},
+};

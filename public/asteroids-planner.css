@@ -1331,3 +1331,17 @@ body.overlay-visible {
 #ovrelay-close:hover {
     color: white;
 }
+
+
+/* Template - Production plan */
+
+#template-production-plan {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--default-bg);
+    overflow: auto;
+    z-index: 1;
+}

@@ -1,3 +1,4 @@
+const elAsteroidsPlanner = document.querySelector('.asteroids-planner');
 const elAsteroidsPlannerWrapper = document.getElementById('asteroids-planner-wrapper');
 const elAsteroidsPlannerTree = document.getElementById('asteroids-planner-tree');
 const elShoppingListTree = document.getElementById('shopping-list-tree');
@@ -39,6 +40,9 @@ const elOverlayAddProductInput = elOverlayAddProduct.querySelector('#products-li
 // Elements in the overlay for "Product image"
 const elOverlayProductImageImg = elOverlayProductImage.querySelector('img');
 
+// Template elements
+const elTemplateProductionPlan = document.getElementById('template-production-plan');
+
 let asteroidsPlannerTree = [];
 let shoppingListTree = {};
 
@@ -64,16 +68,6 @@ const productImgOnError = `
 // Depending on the environment, the API URL will be "http://localhost:3000" or "https://materials.adalia.id:3000"
 const apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
 
-// Parse data from official JSON (partial copy-paste from "production-planner.js")
-const productDataByName = {}; // "items" in "production.js"
-const productNamesByHash = {}; // "itemNamesByHash" in "production.js"
-const productNamesSorted = []; // "itemNamesSorted" in "production.js"
-InfluenceProductionChainsJSON.products.forEach(product => {
-    productDataByName[product.name] = product;
-    productNamesSorted.push(product.name);
-});
-productNamesSorted.sort();
-
 // Ppopulate the products-list
 productNamesSorted.forEach(productName => {
     const productNameCompact = getCompactName(productName);
@@ -85,21 +79,7 @@ productNamesSorted.forEach(productName => {
     productsListContainer.appendChild(listItem);
 });
 
-/**
- * Leader Line settings
- * https://anseki.github.io/leader-line/
- */
-const leaderLineColors = {
-    default: 'gray',
-    brand: 'var(--brand-text)',
-    link: 'var(--link)',
-};
-const leaderLineColorDisabled = 'rgba(128, 128, 128, 0.25)';
-const leaderLineOptionsDefault = {
-    size: 1,
-    color: leaderLineColors.default,
-    endPlug: 'behind',
-};
+// Leader Line settings, additional to those from "production-core.js"
 const leaderLineOptionsRightToLeftGradient = {
     ...leaderLineOptionsDefault,
     startSocket: 'left',
@@ -1216,6 +1196,31 @@ function onClickProductImage(el, productName) {
     elOverlayProductImageImg.src = getProductImageSrc(productName, 'original');
 }
 
+function showProductionPlanId(productionPlanId) {
+    // Load the production plan associated with "productionPlanId"
+    //// TO BE IMPLEMENTED
+    //// ____
+    selectedItemNameContainer.textContent = mockProductionPlans[productionPlanId].planned_product_name; //// PLACEHOLDER
+    //// TO BE IMPLEMENTED
+    //// ____
+    // Show the Production Plan template, and hide the Asteroids Planner tool (e.g. to avoid "phantom scrolling")
+    elTemplateProductionPlan.classList.remove('hidden');
+    elAsteroidsPlanner.classList.add('hidden');
+
+}
+
+function onClickProductionPlanActions(actions) {
+    if (actions.includes('save')) {
+        //// TO BE IMPLEMENTED
+        //// ____
+    }
+    if (actions.includes('close')) {
+        // Show the Asteroids Planner tool, and hide the Production Plan template
+        elAsteroidsPlanner.classList.remove('hidden');
+        elTemplateProductionPlan.classList.add('hidden');
+    }
+}
+
 function resetContent() {
     elContent.innerHTML = /*html*/ `
         <h3 id="start-title">Start planning your production chains across asteroids.</h3>
@@ -1389,8 +1394,8 @@ function updateContent() {
                 <a onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}', '${intermediateProductName}')">${intermediateProductName}</a>
             `.trim(); // Trim to avoid spacing before ","
         });
-        const hasProductionPlan = Boolean(getPlannedProductData(asteroidName, plannedProductName).production_plan_id);
-        if (hasProductionPlan) {
+        const productionPlanId = getPlannedProductData(asteroidName, plannedProductName).production_plan_id;
+        if (productionPlanId) {
             if (listOfIntermediaryProducts.length) {
                 intermediateProductsAndShoppingListHtml = /*html*/ `
                     <div class="content-subtitle">Intermediate products selected for this planned product:</div>
@@ -1439,7 +1444,7 @@ function updateContent() {
                     <div class="delete-card" onclick="deletePlannedProduct('${asteroidName}', '${plannedProductName}')"></div>
                 </div>
                 <div class="content-info-wrapper">
-                    <div class="cta ${hasProductionPlan ? '' : 'pulse-brand'}">${hasProductionPlan ? 'Edit' : 'Add'} production chain</div>
+                    <div class="cta ${productionPlanId ? '' : 'pulse-brand'}" onclick="showProductionPlanId(${productionPlanId})">${productionPlanId ? 'Edit' : 'Add'} production chain</div>
                     ${intermediateProductsAndShoppingListHtml}
                 </div>
             </div>

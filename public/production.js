@@ -960,7 +960,7 @@ async function selectItemByName(itemName) {
     // hide-and-reset products-list, and highlight the selected item
     hideAndResetProductsList();
     productsListWrapper.querySelector('input').placeholder = itemName;
-    document.getElementById('selected-item-name').textContent = itemName;
+    selectedItemNameContainer.textContent = itemName;
     updateTierSlider();
     // default tier-limit such that only the minimal sub-chain is shown for the selected item (i.e. only its direct inputs)
     updateProductionChainForTierLimit(Math.max(0, selectedItemTier - 1));
@@ -1150,6 +1150,7 @@ setTimeout(() => {
     selectItemByName(itemNamesByHash[hashToPreselect]);
     initializeMinimap();
 }, 10);
+
 
 //// FIX BUG re: raw materials should also support process variants (e.g. Hydrogen)
 

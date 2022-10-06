@@ -177,43 +177,47 @@ body {
     padding: 5rem 2rem 2rem 2rem;
 }
 
-#topbar {
+.topbar {
     position: fixed;
     top: 0;
-    margin-left: -2rem; /* match with padding-left of ".main" */
     width: 100%;
     display: flex;
     background: var(--dark-bg);
     font-size: 0.9rem;
+    margin-left: -2rem; /* match with padding-left of ".main" */
     padding-left: 1.5rem;
     z-index: 1;
 }
 
-#topbar > * {
+.topbar > * {
     display: flex;
     align-items: center;
     height: 3rem;
     padding: 0 1rem;
 }
 
-#topbar .active {
+.topbar a {
+    cursor: pointer;
+}
+
+.topbar .active {
     background-color: var(--default-bg);
     color: var(--brand-text);
 }
 
-#topbar #dalia-id-logo {
+.topbar #dalia-id-logo {
     opacity: 0.8;
 }
 
-#topbar #dalia-id-logo:hover {
+.topbar #dalia-id-logo:hover {
     opacity: 1;
 }
 
-#topbar #dalia-id-logo img {
+.topbar #dalia-id-logo img {
     max-height: 60%;
 }
 
-#topbar #dalia-id-logo .logo-small {
+.topbar #dalia-id-logo .logo-small {
     display: none;
 }
 
@@ -332,15 +336,15 @@ body {
 /* screen below 700 px */
 
 @media only screen and (max-width: 700px) {
-    #topbar {
+    .topbar {
         font-size: 0.8rem;
     }
 
-    #topbar #dalia-id-logo .logo-large {
+    .topbar #dalia-id-logo .logo-large {
         display: none;
     }
 
-    #topbar #dalia-id-logo .logo-small {
+    .topbar #dalia-id-logo .logo-small {
         display: block;
     }
 }
