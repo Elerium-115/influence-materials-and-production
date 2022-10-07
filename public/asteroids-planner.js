@@ -1196,17 +1196,25 @@ function onClickProductImage(el, productName) {
     elOverlayProductImageImg.src = getProductImageSrc(productName, 'original');
 }
 
-function showProductionPlanId(productionPlanId) {
-    // Load the production plan associated with "productionPlanId"
-    //// TO BE IMPLEMENTED
-    //// ____
-    selectedItemNameContainer.textContent = mockProductionPlans[productionPlanId].planned_product_name; //// PLACEHOLDER
-    //// TO BE IMPLEMENTED
-    //// ____
+function showProductionPlanId(plannedProductName, productionPlanId = null) {
+    selectedItemNameContainer.textContent = plannedProductName;
+    if (productionPlanId) {
+        // Load the production plan associated with "productionPlanId"
+        const productionPlanData = mockProductionPlans[productionPlanId];
+        //// TO BE IMPLEMENTED
+        //// ____
+    } else {
+        // Initialize blank production plan for "plannedProductName"
+        //// TO BE IMPLEMENTED
+        //// ____
+    }
     // Show the Production Plan template, and hide the Asteroids Planner tool (e.g. to avoid "phantom scrolling")
     elTemplateProductionPlan.classList.remove('hidden');
-    elAsteroidsPlanner.classList.add('hidden');
-
+    elTemplateProductionPlan.classList.add('enabling');
+    setTimeout(() => {
+        elTemplateProductionPlan.classList.remove('enabling');
+        elAsteroidsPlanner.classList.add('hidden');
+    }, 500); // Match the animation duration for "enabling"
 }
 
 function onClickProductionPlanActions(actions) {
@@ -1217,7 +1225,12 @@ function onClickProductionPlanActions(actions) {
     if (actions.includes('close')) {
         // Show the Asteroids Planner tool, and hide the Production Plan template
         elAsteroidsPlanner.classList.remove('hidden');
-        elTemplateProductionPlan.classList.add('hidden');
+
+        elTemplateProductionPlan.classList.add('disabling');
+        setTimeout(() => {
+            elTemplateProductionPlan.classList.remove('disabling');
+            elTemplateProductionPlan.classList.add('hidden');
+        }, 500); // Match the animation duration for "enabling"
     }
 }
 
@@ -1444,7 +1457,7 @@ function updateContent() {
                     <div class="delete-card" onclick="deletePlannedProduct('${asteroidName}', '${plannedProductName}')"></div>
                 </div>
                 <div class="content-info-wrapper">
-                    <div class="cta ${productionPlanId ? '' : 'pulse-brand'}" onclick="showProductionPlanId(${productionPlanId})">${productionPlanId ? 'Edit' : 'Add'} production chain</div>
+                    <div class="cta ${productionPlanId ? '' : 'pulse-brand'}" onclick="showProductionPlanId('${plannedProductName}', ${productionPlanId})">${productionPlanId ? 'Edit' : 'Add'} production chain</div>
                     ${intermediateProductsAndShoppingListHtml}
                 </div>
             </div>

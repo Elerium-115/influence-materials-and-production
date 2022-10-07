@@ -60,5 +60,5 @@ const leaderLineOptionsDefault = {
 };
 
 
-//// TO DO: move code from "production-planner.js", if ALSO used in "template-production-plan"
+//// TO DO: move code from "production-planner.js" to here, if ALSO used in "template-production-plan"
 //// ____

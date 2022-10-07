@@ -14,12 +14,12 @@ const templateProductionPlan = /*html*/ `
             <a onclick="onClickProductionPlanActions(['close'])">Close without saving</a>
             <a class="active" onclick="onClickProductionPlanActions(['save', 'close'])">Save and close</a>
             <a onclick="onClickProductionPlanActions(['save'])">Save and continue editing</a>
-        </nav>
-
-        <div id="production-wrapper" class="chain-type-combined">
             <div class="options">
                 <label for="toggle-horizontal-layout" class="checked"><input type="checkbox" id="toggle-horizontal-layout" checked>Horizontal Layout</label>
             </div>
+        </nav>
+
+        <div id="production-wrapper" class="chain-type-combined">
             <div id="selected-production-chain">
                 <h2><span id="selected-item-name"></span> - Production Plan</h2>
             </div>

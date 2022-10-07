@@ -1336,12 +1336,37 @@ body.overlay-visible {
 /* Template - Production plan */
 
 #template-production-plan {
-    position: fixed;
+    position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     background: var(--default-bg);
-    overflow: auto;
     z-index: 1;
+}
+
+#template-production-plan.enabling { animation: enabling-template 500ms; }
+#template-production-plan.disabling { animation: disabling-template 500ms; }
+#template-production-plan.enabling .topbar { animation: enabling-topbar 500ms; }
+#template-production-plan.disabling .topbar { animation: disabling-topbar 500ms; }
+#template-production-plan.enabling #production-wrapper { position: absolute; animation: enabling-production-wrapper 500ms; }
+#template-production-plan.disabling #production-wrapper { position: absolute; animation: disabling-production-wrapper 500ms; }
+#template-production-plan.enabling #minimap-wrapper { animation: enabling-minimap-wrapper 500ms; }
+#template-production-plan.disabling #minimap-wrapper { animation: disabling-minimap-wrapper 500ms; }
+
+@keyframes enabling-template { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes disabling-template { 0% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes enabling-topbar { 0% { top: -3rem; } 100% { top: 0; } }
+@keyframes disabling-topbar { 0% { top: 0; } 100% { top: -3rem; } }
+@keyframes enabling-production-wrapper { 0% { left: -100%; } 100% { left: 0; } }
+@keyframes disabling-production-wrapper { 0% { left: 0; } 100% { left: -100%; } }
+@keyframes enabling-minimap-wrapper { 0% { right: -50%; } 100% { right: 0; } }
+@keyframes disabling-minimap-wrapper { 0% { right: 0; } 100% { right: -50%; } }
+
+#template-production-plan .topbar .options {
+    padding-left: 2rem;
+}
+
+#template-production-plan #selected-production-chain {
+    margin-top: unset;
 }
