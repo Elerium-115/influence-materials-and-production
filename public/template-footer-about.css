@@ -30,6 +30,7 @@
 .footer-logo {
     max-width: 4rem;
     max-height: 4rem;
+    margin-top: 0.5rem;
 }
 
 /* screen below 700 px */

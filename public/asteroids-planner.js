@@ -58,6 +58,7 @@ let onClickAsteroidActionInProgress = false;
 
 const cacheAsteroidsMetadataById = {};
 const cacheAsteroidsByWallet = {}; // Note: each key is a lowercase address
+const cacheProductionPlanDataById = {};
 
 const productImgOnError = `
     onerror="this.src='./img/site-icon.png';
@@ -220,19 +221,51 @@ async function fetchAsteroidsFromWallet() {
     }
 }
 
-async function loadAsteroidMetadataById(asteroidId) {
-    let metadata = cacheAsteroidsMetadataById[asteroidId];
+async function fetchProductionPlanDataById(id) {
+    if (!apiUrl.includes('127.0.0.1')) { return {error: 'API coming soon...'}; } //// TEST
+    const config = {
+        method: 'get',
+        url: `${apiUrl}/production-plan/${id}`,
+    };
+    try {
+        const response = await axios(config);
+        const metadata = response.data;
+        // console.log(`--- data from API:`, data); //// TEST
+        return metadata;
+    } catch (error) {
+        console.log(`--- ERROR from API:`, error); //// TEST
+        return {error};
+    }
+}
+
+async function loadAsteroidMetadataById(id) {
+    let metadata = cacheAsteroidsMetadataById[id];
     if (!metadata) {
         // Data NOT cached => call to my API
-        metadata = await fetchAsteroidMetadataById(asteroidId);
+        metadata = await fetchAsteroidMetadataById(id);
         if (metadata.error) {
             // Inform the user re: API error
             alert(metadata.error);
             return;
         }
-        cacheAsteroidsMetadataById[asteroidId] = metadata;
+        cacheAsteroidsMetadataById[id] = metadata;
     }
     return metadata;
+}
+
+async function loadProductionPlanDataById(id) {
+    let data = cacheProductionPlanDataById[id];
+    if (!data) {
+        // Data NOT cached => call to my API
+        data = await fetchProductionPlanDataById(id);
+        if (data.error) {
+            // Inform the user re: API error
+            alert(data.error);
+            return;
+        }
+        cacheProductionPlanDataById[id] = data;
+    }
+    return data;
 }
 
 function setupExample() {
@@ -1196,15 +1229,20 @@ function onClickProductImage(el, productName) {
     elOverlayProductImageImg.src = getProductImageSrc(productName, 'original');
 }
 
-function showProductionPlanId(plannedProductName, productionPlanId = null) {
+async function showProductionPlanId(plannedProductName, productionPlanId = null) {
     selectedItemNameContainer.textContent = plannedProductName;
+    let productionPlanData;
     if (productionPlanId) {
         // Load the production plan associated with "productionPlanId"
-        const productionPlanData = mockProductionPlans[productionPlanId];
+        productionPlanData = await loadProductionPlanDataById(productionPlanId);
         //// TO BE IMPLEMENTED
         //// ____
     } else {
         // Initialize blank production plan for "plannedProductName"
+        productionPlanData = {
+            planned_product_name: plannedProductName,
+            itemDataById: null,
+        };
         //// TO BE IMPLEMENTED
         //// ____
     }

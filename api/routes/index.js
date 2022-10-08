@@ -2,6 +2,7 @@ const express = require('express');
 const { toChecksumAddress } = require('ethereum-checksum-address');
 const cache = require('../cache/index');
 const providerInfluencethIo = require('../providers/influenceth.io/index');
+const providerMock = require('../providers/mock/index');
 
 const router = express.Router();
 
@@ -50,7 +51,7 @@ router.get(
  * @desc        Get count and metadata for asteroids owned by address
  * @route       GET /asteroids/owned-by/:address
  */
- router.get(
+router.get(
     '/asteroids/owned-by/:address',
     async (req, res) => {
         console.log(`--- [router] GET /asteroids/owned-by/:address`); //// TEST
@@ -125,6 +126,30 @@ router.get(
             });
         }
         res.json(asteroidsMetadataFresh);
+    }
+);
+
+/**
+ * @desc        Get data for production plan ID
+ * @route       GET /production-plan/:id
+ */
+router.get(
+    '/production-plan/:id',
+    async (req, res) => {
+        console.log(`--- [router] GET /production-plan/:id`); //// TEST
+        const productionPlandId = req.params.id;
+        const cachedData = cache.productionPlanDataById[productionPlandId];
+        if (cachedData) {
+            console.log(`---> found CACHED data`); //// TEST
+            res.json(cachedData);
+            return;
+        }
+        //// TO DO: get production plan data from data storage
+        //// ____
+        // Mock production plan data
+        const productionPlanData = providerMock.mockProductionPlanDataById[productionPlandId];
+        cache.productionPlanDataById[productionPlandId] = productionPlanData;
+        res.json(productionPlanData);
     }
 );
 

@@ -1291,6 +1291,10 @@ body.overlay-visible {
 
 /* Overlay - Add planned product */
 
+#overlay-add-product h3 {
+    margin-bottom: 2rem;
+}
+
 #overlay-add-product #products-list-wrapper {
     font-size: 0.8rem;
 }
