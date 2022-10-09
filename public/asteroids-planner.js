@@ -69,7 +69,7 @@ const productImgOnError = `
 // Depending on the environment, the API URL will be "http://localhost:3000" or "https://materials.adalia.id:3000"
 const apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
 
-// Ppopulate the products-list
+// Ppopulate "productNamesByHash" and the products-list
 productNamesSorted.forEach(productName => {
     const productNameCompact = getCompactName(productName);
     productNamesByHash[productNameCompact] = productName;
@@ -340,7 +340,7 @@ function onClickAsteroidAction(action, el) {
          * Reposition connections after moving the asteroid up or down in the DOM.
          * No need to "handleAsteroidsPlannerTreeChanged", b/c all elements (from both trees) are preserved in the DOM.
          */
-        repositionConnections();
+        repositionAsteroidsPlannerConnections();
         // Flash interaction
         elAsteroidTreeItem.classList.add('flash-interaction');
         // Swap in array (move up or down)
@@ -627,7 +627,7 @@ function connectElements(el1, el2, options = {}) {
     return line;
 }
 
-function repositionConnections() {
+function repositionAsteroidsPlannerConnections() {
     // Reposition connections for "Add asteroid" and "See example" buttons, if any line set
     elButtonAddAsteroid.line?.position();
     elButtonSeeExample.line?.position();
@@ -750,7 +750,7 @@ function connectAsteroidsPlannerTree() {
              * Note that this would still need to be done,
              * even if adding the class "has-connections" before rendering the lines.
              */
-            repositionConnections();
+            repositionAsteroidsPlannerConnections();
         }
     }
 }
@@ -1230,7 +1230,6 @@ function onClickProductImage(el, productName) {
 }
 
 async function showProductionPlanId(plannedProductName, productionPlanId = null) {
-    selectedItemNameContainer.textContent = plannedProductName;
     let productionPlanData;
     if (productionPlanId) {
         // Load the production plan associated with "productionPlanId"
@@ -1252,6 +1251,11 @@ async function showProductionPlanId(plannedProductName, productionPlanId = null)
     setTimeout(() => {
         elTemplateProductionPlan.classList.remove('enabling');
         elAsteroidsPlanner.classList.add('hidden');
+        selectPlannedProductData(productionPlanData);
+        //// TO DO: hide lines re: "elAsteroidsPlanner"
+        //// ____
+        //// TO DO : fix minimap not initialized ok?
+        //// ____
     }, 500); // Match the animation duration for "enabling"
 }
 
@@ -1263,11 +1267,14 @@ function onClickProductionPlanActions(actions) {
     if (actions.includes('close')) {
         // Show the Asteroids Planner tool, and hide the Production Plan template
         elAsteroidsPlanner.classList.remove('hidden');
-
         elTemplateProductionPlan.classList.add('disabling');
         setTimeout(() => {
             elTemplateProductionPlan.classList.remove('disabling');
             elTemplateProductionPlan.classList.add('hidden');
+            //// TO DO: hide lines+items re: "elTemplateProductionPlan"
+            //// ____
+            //// TO DO: show lines re: "elAsteroidsPlanner"
+            //// ____
         }, 500); // Match the animation duration for "enabling"
     }
 }
@@ -1543,13 +1550,13 @@ function onClickTreeItem(asteroidName, plannedProductName, intermediateProductNa
 // Toggle hide / show intermediate products in the Shopping List tree
 on('change', '#toggle-hide-subproducts', elInput => {
     elAsteroidsPlannerTree.classList.toggle('hide-subproducts');
-    repositionConnections();
+    repositionAsteroidsPlannerConnections();
 });
 
 // Toggle hide / show unselected elements in the Shopping List tree
 on('change', '#toggle-hide-unselected', el => {
     elShoppingListTree.classList.toggle('hide-unselected');
-    repositionConnections();
+    repositionAsteroidsPlannerConnections();
 });
 
 // Validate asteroid ID when requesting asteroid metadata
@@ -1589,8 +1596,8 @@ window.addEventListener('keydown', event => {
  * b/c the position of DOM elements changes:
  * - "Jura" during the initial page-load
  */
- document.fonts.onloadingdone = function(fontFaceSetEvent) {
-    repositionConnections();
+document.fonts.onloadingdone = function(fontFaceSetEvent) {
+    repositionAsteroidsPlannerConnections();
 };
 
 // Initialize everything

@@ -1,3 +1,9 @@
+/*
+Common code used in:
+- Production Chains tool
+- Production Planner tool + any other tool that includes "template-production-plan"
+- Asteroids Planner tool
+*/
 
 const doDebug = location.href.includes('127.0.0.1');
 
@@ -122,6 +128,10 @@ function sortLevels(startLevel = 1) {
     for (let i = startLevel; i <= maxLevel; i++) {
         const levelContainer = document.getElementById(`level_${i}`);
         const itemContainersOnLevel = [...levelContainer.querySelectorAll('[data-container-id]')];
+        /**
+         * NOTE: "compareItemContainers" has different definitions
+         * in "production.js" vs. "production-planner-core.js"
+         */
         itemContainersOnLevel.sort(compareItemContainers);
         levelContainer.textContent = '';
         itemContainersOnLevel.forEach(el => {

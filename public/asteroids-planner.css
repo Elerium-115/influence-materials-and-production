@@ -400,13 +400,6 @@
 }
 
 
-/* Leader Line */
-
-.leader-line-areaAnchor:hover {
-    z-index: -1; /* WARNING: Some area-anchors still remain "on top" during hover? */
-}
-
-
 /* Breadcrumbs */
 
 #breadcrumbs-wrapper {
@@ -1346,6 +1339,15 @@ body.overlay-visible {
     left: 0;
     right: 0;
     background: var(--default-bg);
+}
+
+/**
+ * "z-index" >= 1 required for correct animation,
+ * but must NOT be set when the production plan is shown,
+ * otherwise the Leader Lines remain hidden below this element.
+ */
+#template-production-plan.enabling,
+#template-production-plan.disabling {
     z-index: 1;
 }
 

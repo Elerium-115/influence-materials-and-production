@@ -16,8 +16,7 @@ const mockProductionPlanDataById = {
 			  "level": 2,
 			  "parentItemId": 1,
 			  "processId": 101,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			},
 			"3": {
 			  "isDisabled": false,
@@ -25,8 +24,7 @@ const mockProductionPlanDataById = {
 			  "level": 3,
 			  "parentItemId": 2,
 			  "processId": null,
-			  "productId": 18,
-			  "line": {}
+			  "productId": 18
 			},
 			"4": {
 			  "isDisabled": false,
@@ -34,8 +32,7 @@ const mockProductionPlanDataById = {
 			  "level": 3,
 			  "parentItemId": 2,
 			  "processId": null,
-			  "productId": 88,
-			  "line": {}
+			  "productId": 88
 			},
 			"5": {
 			  "isDisabled": false,
@@ -43,8 +40,7 @@ const mockProductionPlanDataById = {
 			  "level": 4,
 			  "parentItemId": 4,
 			  "processId": 73,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			},
 			"6": {
 			  "isDisabled": false,
@@ -52,8 +48,7 @@ const mockProductionPlanDataById = {
 			  "level": 5,
 			  "parentItemId": 5,
 			  "processId": null,
-			  "productId": 11,
-			  "line": {}
+			  "productId": 11
 			},
 			"7": {
 			  "isDisabled": false,
@@ -61,8 +56,7 @@ const mockProductionPlanDataById = {
 			  "level": 5,
 			  "parentItemId": 5,
 			  "processId": null,
-			  "productId": 2,
-			  "line": {}
+			  "productId": 2
 			},
 			"8": {
 			  "isDisabled": false,
@@ -70,8 +64,7 @@ const mockProductionPlanDataById = {
 			  "level": 5,
 			  "parentItemId": 5,
 			  "processId": null,
-			  "productId": 55,
-			  "line": {}
+			  "productId": 55
 			},
 			"9": {
 			  "isDisabled": false,
@@ -79,8 +72,7 @@ const mockProductionPlanDataById = {
 			  "level": 4,
 			  "parentItemId": 3,
 			  "processId": 18,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			}
 		},
 	},
@@ -101,8 +93,7 @@ const mockProductionPlanDataById = {
 			  "level": 2,
 			  "parentItemId": 1,
 			  "processId": 41,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			},
 			"3": {
 			  "isDisabled": false,
@@ -110,8 +101,7 @@ const mockProductionPlanDataById = {
 			  "level": 3,
 			  "parentItemId": 2,
 			  "processId": null,
-			  "productId": 28,
-			  "line": {}
+			  "productId": 28
 			},
 			"4": {
 			  "isDisabled": false,
@@ -119,8 +109,7 @@ const mockProductionPlanDataById = {
 			  "level": 3,
 			  "parentItemId": 2,
 			  "processId": null,
-			  "productId": 18,
-			  "line": {}
+			  "productId": 18
 			},
 			"5": {
 			  "isDisabled": false,
@@ -128,8 +117,7 @@ const mockProductionPlanDataById = {
 			  "level": 4,
 			  "parentItemId": 4,
 			  "processId": 18,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			},
 			"6": {
 			  "isDisabled": true,
@@ -138,7 +126,6 @@ const mockProductionPlanDataById = {
 			  "parentItemId": 3,
 			  "processId": 27,
 			  "productId": null,
-			  "line": {},
 			  "processVariantItemIds": [
 				6,
 				8
@@ -150,8 +137,7 @@ const mockProductionPlanDataById = {
 			  "level": 5,
 			  "parentItemId": 6,
 			  "processId": null,
-			  "productId": 19,
-			  "line": {}
+			  "productId": 19
 			},
 			"8": {
 			  "isDisabled": false,
@@ -160,7 +146,6 @@ const mockProductionPlanDataById = {
 			  "parentItemId": 3,
 			  "processId": 93,
 			  "productId": null,
-			  "line": {},
 			  "processVariantItemIds": [
 				6,
 				8
@@ -172,8 +157,7 @@ const mockProductionPlanDataById = {
 			  "level": 5,
 			  "parentItemId": 8,
 			  "processId": null,
-			  "productId": 6,
-			  "line": {}
+			  "productId": 6
 			},
 			"10": {
 			  "isDisabled": false,
@@ -181,8 +165,7 @@ const mockProductionPlanDataById = {
 			  "level": 5,
 			  "parentItemId": 8,
 			  "processId": null,
-			  "productId": 63,
-			  "line": {}
+			  "productId": 63
 			},
 			"11": {
 			  "isDisabled": false,
@@ -191,7 +174,6 @@ const mockProductionPlanDataById = {
 			  "parentItemId": 10,
 			  "processId": 51,
 			  "productId": null,
-			  "line": {},
 			  "processVariantItemIds": [
 				11,
 				14
@@ -203,8 +185,7 @@ const mockProductionPlanDataById = {
 			  "level": 7,
 			  "parentItemId": 11,
 			  "processId": null,
-			  "productId": 22,
-			  "line": {}
+			  "productId": 22
 			},
 			"13": {
 			  "isDisabled": false,
@@ -212,8 +193,7 @@ const mockProductionPlanDataById = {
 			  "level": 7,
 			  "parentItemId": 11,
 			  "processId": null,
-			  "productId": 37,
-			  "line": {}
+			  "productId": 37
 			},
 			"14": {
 			  "isDisabled": true,
@@ -222,7 +202,6 @@ const mockProductionPlanDataById = {
 			  "parentItemId": 10,
 			  "processId": 72,
 			  "productId": null,
-			  "line": {},
 			  "processVariantItemIds": [
 				11,
 				14
@@ -234,8 +213,7 @@ const mockProductionPlanDataById = {
 			  "level": 7,
 			  "parentItemId": 14,
 			  "processId": null,
-			  "productId": 12,
-			  "line": {}
+			  "productId": 12
 			},
 			"16": {
 			  "isDisabled": true,
@@ -243,8 +221,7 @@ const mockProductionPlanDataById = {
 			  "level": 7,
 			  "parentItemId": 14,
 			  "processId": null,
-			  "productId": 55,
-			  "line": {}
+			  "productId": 55
 			},
 			"17": {
 			  "isDisabled": false,
@@ -252,8 +229,7 @@ const mockProductionPlanDataById = {
 			  "level": 8,
 			  "parentItemId": 13,
 			  "processId": 34,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			},
 			"18": {
 			  "isDisabled": false,
@@ -261,8 +237,7 @@ const mockProductionPlanDataById = {
 			  "level": 9,
 			  "parentItemId": 17,
 			  "processId": null,
-			  "productId": 20,
-			  "line": {}
+			  "productId": 20
 			},
 			"19": {
 			  "isDisabled": false,
@@ -270,8 +245,7 @@ const mockProductionPlanDataById = {
 			  "level": 10,
 			  "parentItemId": 18,
 			  "processId": 20,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			}
 		},
 	},
@@ -292,8 +266,7 @@ const mockProductionPlanDataById = {
 			  "level": 2,
 			  "parentItemId": 1,
 			  "processId": 6,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			}
 		},
 	},
@@ -314,8 +287,7 @@ const mockProductionPlanDataById = {
 			  "level": 2,
 			  "parentItemId": 1,
 			  "processId": 11,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			}
 		},
 	},
@@ -336,8 +308,7 @@ const mockProductionPlanDataById = {
 			  "level": 2,
 			  "parentItemId": 1,
 			  "processId": 47,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			},
 			"3": {
 			  "isDisabled": false,
@@ -345,8 +316,7 @@ const mockProductionPlanDataById = {
 			  "level": 3,
 			  "parentItemId": 2,
 			  "processId": null,
-			  "productId": 1,
-			  "line": {}
+			  "productId": 1
 			},
 			"4": {
 			  "isDisabled": false,
@@ -354,8 +324,7 @@ const mockProductionPlanDataById = {
 			  "level": 3,
 			  "parentItemId": 2,
 			  "processId": null,
-			  "productId": 22,
-			  "line": {}
+			  "productId": 22
 			},
 			"5": {
 			  "isDisabled": false,
@@ -363,8 +332,7 @@ const mockProductionPlanDataById = {
 			  "level": 4,
 			  "parentItemId": 4,
 			  "processId": 22,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			},
 			"6": {
 			  "isDisabled": false,
@@ -372,8 +340,7 @@ const mockProductionPlanDataById = {
 			  "level": 5,
 			  "parentItemId": 5,
 			  "processId": null,
-			  "productId": 0,
-			  "line": {}
+			  "productId": 0
 			},
 			"7": {
 			  "isDisabled": false,
@@ -382,7 +349,6 @@ const mockProductionPlanDataById = {
 			  "parentItemId": 3,
 			  "processId": 1,
 			  "productId": null,
-			  "line": {},
 			  "processVariantItemIds": [
 				7,
 				8
@@ -395,7 +361,6 @@ const mockProductionPlanDataById = {
 			  "parentItemId": 3,
 			  "processId": 22,
 			  "productId": null,
-			  "line": {},
 			  "processVariantItemIds": [
 				7,
 				8
@@ -407,8 +372,7 @@ const mockProductionPlanDataById = {
 			  "level": 5,
 			  "parentItemId": 8,
 			  "processId": null,
-			  "productId": 0,
-			  "line": {}
+			  "productId": 0
 			}
 		},
 	},
@@ -429,8 +393,7 @@ const mockProductionPlanDataById = {
 			  "level": 2,
 			  "parentItemId": 1,
 			  "processId": 22,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			},
 			"3": {
 			  "isDisabled": false,
@@ -438,8 +401,7 @@ const mockProductionPlanDataById = {
 			  "level": 3,
 			  "parentItemId": 2,
 			  "processId": null,
-			  "productId": 0,
-			  "line": {}
+			  "productId": 0
 			}
 		},
 	},
@@ -460,8 +422,7 @@ const mockProductionPlanDataById = {
 			  "level": 2,
 			  "parentItemId": 1,
 			  "processId": 0,
-			  "productId": null,
-			  "line": {}
+			  "productId": null
 			}
 		},
 	},
