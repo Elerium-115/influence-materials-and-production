@@ -1342,9 +1342,9 @@ body.overlay-visible {
 }
 
 /**
- * "z-index" >= 1 required for correct animation,
- * but must NOT be set when the production plan is shown,
- * otherwise the Leader Lines remain hidden below this element.
+ * "z-index" = 1 required for correct animation,
+ * but must NOT be set when the template-production-plan is shown,
+ * otherwise the production-plan-lines remain hidden below this element.
  */
 #template-production-plan.enabling,
 #template-production-plan.disabling {
@@ -1375,4 +1375,11 @@ body.overlay-visible {
 
 #template-production-plan #selected-production-chain {
     margin-top: unset;
+}
+
+
+/* Leader Lines */
+
+.hidden-asteroids-planner .leader-line-asteroids-planner {
+    display: none;
 }

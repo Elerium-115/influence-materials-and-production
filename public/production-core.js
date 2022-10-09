@@ -21,6 +21,7 @@ const productSearchInput = productsListWrapper.querySelector('input');
 const productsListContainer = document.getElementById('products-list');
 const selectedItemNameContainer = document.getElementById('selected-item-name');
 const productChainItemsContainer = document.getElementById('production-chain-items');
+const elMinimapWrapper = document.getElementById('minimap-wrapper');
 
 function getItemContainerById(itemContainerId) {
     return productChainItemsContainer.querySelector(`[data-container-id='${itemContainerId}']`);
@@ -140,9 +141,18 @@ function sortLevels(startLevel = 1) {
     }
 }
 
-function initializeMinimap() {
+function resetMinimap() {
+    const elMinimapCanvasOld = document.getElementById('minimap-canvas');
+    if (elMinimapCanvasOld) {
+        elMinimapCanvasOld.parentElement.removeChild(elMinimapCanvasOld);
+    }
+    // The new minimap canvas must be visible when initialized
+    elMinimapWrapper.classList.remove('minimized');
+    const elMinimapCanvasNew = document.createElement('canvas');
+    elMinimapCanvasNew.id = 'minimap-canvas';
+    elMinimapWrapper.appendChild(elMinimapCanvasNew);
     // Source: https://larsjung.de/pagemap/
-    pagemap(document.getElementById('minimap-canvas'), {
+    pagemap(elMinimapCanvasNew, {
         // viewport: productChainItemsContainer,
         styles: {
             'div.item-type-raw-material': 'rgba(55, 55, 55, 1)', // var(--raw-material) + alpha
@@ -162,7 +172,7 @@ function initializeMinimap() {
 }
 
 function toggleMinimap() {
-    document.getElementById('minimap-wrapper').classList.toggle('minimized');
+    elMinimapWrapper.classList.toggle('minimized');
 }
 
 function toggleHorizontalLayout(el) {

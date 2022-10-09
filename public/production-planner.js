@@ -56,7 +56,7 @@ function selectPlannedProductHash(hash) {
     // Re-render the entire planned chain on page-load, based on the decoded hash, if any
     if (hashEncodedFromItemDataById) {
         // if (doDebug) console.log(`%c--- RENDER the entire planned chain, based on the decoded hash`, 'background: blue');
-        resetEverything();
+        fullyResetProductionPlan();
         /**
          * Decode partial "itemDataById" (without "line" properties), and use it to render the planned chain.
          * During this process, the "line" property will automatically be injected into each item.
@@ -153,6 +153,7 @@ if (!hashToPreselect) {
 }
 selectPlannedProductHash(hashToPreselect);
 
+resetMinimap();
 
 //// FIX BUG re: qty of intermediate products should use the same formula as calculating the qty of inputs
 //// -- for each intermediate product, sum the (potentially-different!) qtys of all its selected-occurrences in the chain

@@ -624,6 +624,7 @@ function handleAsteroidsPlannerTreeChanged(shouldUpdateContent = true) {
 function connectElements(el1, el2, options = {}) {
     const line = new LeaderLine(el1, el2);
     line.setOptions(options);
+    markNewLeaderLine('leader-line-asteroids-planner');
     return line;
 }
 
@@ -1234,16 +1235,12 @@ async function showProductionPlanId(plannedProductName, productionPlanId = null)
     if (productionPlanId) {
         // Load the production plan associated with "productionPlanId"
         productionPlanData = await loadProductionPlanDataById(productionPlanId);
-        //// TO BE IMPLEMENTED
-        //// ____
     } else {
         // Initialize blank production plan for "plannedProductName"
         productionPlanData = {
             planned_product_name: plannedProductName,
             itemDataById: null,
         };
-        //// TO BE IMPLEMENTED
-        //// ____
     }
     // Show the Production Plan template, and hide the Asteroids Planner tool (e.g. to avoid "phantom scrolling")
     elTemplateProductionPlan.classList.remove('hidden');
@@ -1251,11 +1248,9 @@ async function showProductionPlanId(plannedProductName, productionPlanId = null)
     setTimeout(() => {
         elTemplateProductionPlan.classList.remove('enabling');
         elAsteroidsPlanner.classList.add('hidden');
+        document.body.classList.add('hidden-asteroids-planner');
         selectPlannedProductData(productionPlanData);
-        //// TO DO: hide lines re: "elAsteroidsPlanner"
-        //// ____
-        //// TO DO : fix minimap not initialized ok?
-        //// ____
+        resetMinimap();
     }, 500); // Match the animation duration for "enabling"
 }
 
@@ -1267,14 +1262,12 @@ function onClickProductionPlanActions(actions) {
     if (actions.includes('close')) {
         // Show the Asteroids Planner tool, and hide the Production Plan template
         elAsteroidsPlanner.classList.remove('hidden');
+        document.body.classList.remove('hidden-asteroids-planner');
         elTemplateProductionPlan.classList.add('disabling');
+        fullyResetProductionPlan();
         setTimeout(() => {
             elTemplateProductionPlan.classList.remove('disabling');
             elTemplateProductionPlan.classList.add('hidden');
-            //// TO DO: hide lines+items re: "elTemplateProductionPlan"
-            //// ____
-            //// TO DO: show lines re: "elAsteroidsPlanner"
-            //// ____
         }, 500); // Match the animation duration for "enabling"
     }
 }

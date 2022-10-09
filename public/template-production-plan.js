@@ -45,7 +45,6 @@ const templateProductionPlan = /*html*/ `
 
         <div id="minimap-wrapper">
             <div id="minimap-toggle" class="pointer" onclick="toggleMinimap()">Minimap</div>
-            <canvas id="minimap-canvas"></canvas>
         </div>
 
         <div id="production-chain-overlay" class="hidden">

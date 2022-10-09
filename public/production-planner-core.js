@@ -183,7 +183,7 @@ function isAlwaysConfirmChecked() {
     return document.getElementById('toggle-always-confirm').checked;
 }
 
-function resetEverything() {
+function fullyResetProductionPlan() {
     refreshConnections(false, 'delete'); // delete connections
     itemDataById = {};
     selectedProductItemIds = [];
@@ -197,7 +197,7 @@ function resetFadedItemsAndConnectionsV2() {
     refreshConnections();
 }
 
-function getOptionsForCurrentLayout() {
+function getLeaderLineOptionsForCurrentLayout() {
     const leaderLineOptions = {...leaderLineOptionsProductionChain};
     if (horizontalLayout) {
         leaderLineOptions.startSocket = 'right';
@@ -209,13 +209,17 @@ function getOptionsForCurrentLayout() {
     return leaderLineOptions;
 }
 
+function markNewLeaderLine(className) {
+    document.querySelector('body > svg.leader-line:not(.leader-line-marked)').classList.add('leader-line-marked', className);
+}
+
 function connectItemIds(startItemId, endItemId) {
     /**
      * LeaderLine is automatically re-positioned when the window is resized
      * https://anseki.github.io/leader-line/#start-end
      */
     const line = new LeaderLine(getItemContainerById(startItemId), getItemContainerById(endItemId));
-    const leaderLineOptions = getOptionsForCurrentLayout();
+    const leaderLineOptions = getLeaderLineOptionsForCurrentLayout();
     // Show arrow only when connecting the planned product
     if (startItemId === 1 || endItemId === 1) {
         leaderLineOptions.endPlug = 'arrow1';
@@ -223,6 +227,7 @@ function connectItemIds(startItemId, endItemId) {
         leaderLineOptions.endPlugColor = '#a9acb3';
     }
     line.setOptions(leaderLineOptions);
+    markNewLeaderLine('leader-line-production-plan');
     return line;
 }
 
@@ -850,7 +855,7 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
             switch (action) {
                 case 'reposition':
                     if (hasChangedLayout) {
-                        const leaderLineOptions = getOptionsForCurrentLayout();
+                        const leaderLineOptions = getLeaderLineOptionsForCurrentLayout();
                         line.startSocket = leaderLineOptions.startSocket;
                         line.endSocket = leaderLineOptions.endSocket;
                     }
@@ -1094,7 +1099,7 @@ function injectPlannedProductNameAndImage(plannedProductId) {
  */
 function selectPlannedProductId(plannedProductId) {
     // if (doDebug) console.log(`--- SELECTING planned product ${plannedProductId} (${productDataById[plannedProductId].name})`);
-    resetEverything();
+    fullyResetProductionPlan();
     injectPlannedProductNameAndImage(plannedProductId);
     const plannedProductItemData = {
         isDisabled: false,
@@ -1134,11 +1139,10 @@ function renderItemByIdAndData(itemId, itemData) {
 }
 
 function selectPlannedProductData(plannedProductData) {
-    console.log(`--- itemDataById:`, itemDataById); //// TEST
     // Re-render the entire planned chain, based on its "itemDataById", if NOT null
     if (plannedProductData.itemDataById) {
         // if (doDebug) console.log(`%c--- RENDER the entire planned chain, based on its "itemDataById"`, 'background: blue');
-        resetEverything();
+        fullyResetProductionPlan();
         /**
          * Ensure "itemDataById" from "plannedProductData" is NOT mutated,
          * until the user saves the newly configured production plan.
@@ -1219,8 +1223,6 @@ on('mouseleave', '[data-container-id]', el => {
         });
     }
 });
-
-initializeMinimap();
 
 // Debug itemData on hover
 if (doDebug && false) {
