@@ -1,6 +1,7 @@
 const mockProductionPlanDataById = {
 	1: {
-		"planned_product_name": "Aluminium",
+		"plannedProductName": "Aluminium",
+		"productionPlanId": 1,
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
@@ -77,7 +78,8 @@ const mockProductionPlanDataById = {
 		},
 	},
 	2: {
-		"planned_product_name": "Steel",
+		"plannedProductName": "Steel",
+		"productionPlanId": 2,
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
@@ -250,7 +252,8 @@ const mockProductionPlanDataById = {
 		},
 	},
 	3: {
-		"planned_product_name": "Carbon Monoxide",
+		"plannedProductName": "Carbon Monoxide",
+		"productionPlanId": 3,
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
@@ -271,7 +274,8 @@ const mockProductionPlanDataById = {
 		},
 	},
 	4: {
-		"planned_product_name": "Feldspar",
+		"plannedProductName": "Feldspar",
+		"productionPlanId": 4,
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
@@ -292,7 +296,8 @@ const mockProductionPlanDataById = {
 		},
 	},
 	5: {
-		"planned_product_name": "Hydrolox Fuel",
+		"plannedProductName": "Hydrolox Fuel",
+		"productionPlanId": 5,
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
@@ -377,7 +382,8 @@ const mockProductionPlanDataById = {
 		},
 	},
 	6: {
-		"planned_product_name": "Oxygen",
+		"plannedProductName": "Oxygen",
+		"productionPlanId": 6,
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
@@ -406,7 +412,8 @@ const mockProductionPlanDataById = {
 		},
 	},
 	7: {
-		"planned_product_name": "Water",
+		"plannedProductName": "Water",
+		"productionPlanId": 7,
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,

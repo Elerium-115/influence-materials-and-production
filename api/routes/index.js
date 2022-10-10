@@ -153,4 +153,36 @@ router.get(
     }
 );
 
+/**
+ * @desc        Save data for production plan ID
+ * @route       POST /production-plan/:id
+ */
+router.post(
+    '/production-plan/:id',
+    async (req, res) => {
+        console.log(`--- [router] POST /production-plan/:id`); //// TEST
+        // console.log(`---> request body:`, req.body); //// TEST
+        const productionPlanData = req.body;
+        const productionPlandId = req.params.id;
+        //// TO DO: validate "productionPlanData" (respond with error if invalid)
+        //// ____
+        if (isNaN(Number(productionPlandId))) {
+            /**
+             * Insert new production plan in data storage.
+             * Then update the local "productionPlanData", with the new "productionPlandId" inserted in data storage.
+             */
+            //// TO BE IMPLEMENTED
+            //// ____
+        } else {
+            // Update existing production plan in data storage.
+            //// TO BE IMPLEMENTED
+            //// ____
+        }
+        //// TO DO: Save "productionPlanData" in cache, then respond with the saved production plan data (or error)
+        //// ____
+        const savedProductionPlanData = {error: 'API under construction'}; //// TEST
+        res.send(savedProductionPlanData);
+    }
+);
+
 module.exports = router;

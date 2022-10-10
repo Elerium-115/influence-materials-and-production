@@ -66,9 +66,6 @@ const productImgOnError = `
     this.parentElement.classList.add('parent-missing-image');"
 `;
 
-// Depending on the environment, the API URL will be "http://localhost:3000" or "https://materials.adalia.id:3000"
-const apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
-
 // Ppopulate "productNamesByHash" and the products-list
 productNamesSorted.forEach(productName => {
     const productNameCompact = getCompactName(productName);
@@ -229,9 +226,9 @@ async function fetchProductionPlanDataById(id) {
     };
     try {
         const response = await axios(config);
-        const metadata = response.data;
+        const data = response.data;
         // console.log(`--- data from API:`, data); //// TEST
-        return metadata;
+        return data;
     } catch (error) {
         console.log(`--- ERROR from API:`, error); //// TEST
         return {error};
@@ -1238,7 +1235,8 @@ async function showProductionPlanId(plannedProductName, productionPlanId = null)
     } else {
         // Initialize blank production plan for "plannedProductName"
         productionPlanData = {
-            planned_product_name: plannedProductName,
+            plannedProductName,
+            productionPlanId: null,
             itemDataById: null,
         };
     }
@@ -1254,9 +1252,18 @@ async function showProductionPlanId(plannedProductName, productionPlanId = null)
     }, 500); // Match the animation duration for "enabling"
 }
 
-function onClickProductionPlanActions(actions) {
+async function onClickProductionPlanActions(actions) {
     if (actions.includes('save')) {
-        //// TO BE IMPLEMENTED
+        const savedProductionPlanData = await saveProductionPlan();
+        console.log(`--- savedProductionPlanData:`, savedProductionPlanData); //// TEST
+        if (!savedProductionPlanData) {
+            return;
+        }
+        cacheProductionPlanDataById[savedProductionPlanData.productionPlanId] = savedProductionPlanData;
+        //// TO DO:
+        //// -- allow saving a production plan only for connected wallets
+        //// -- ensure that saving an "example" production plan does NOT mutate the original example
+        //// ---- e.g. by allowing the "example" asteroids plan only for NON-connected users
         //// ____
     }
     if (actions.includes('close')) {

@@ -120,6 +120,11 @@ const overlaySelectedProcessNameContainer = document.getElementById('overlay-sel
 let isToolProductionPlanner = false;
 
 /**
+ * The ID used for saving a production plan in the data storage
+ */
+let productionPlanId = null;
+
+/**
  * Leader Line settings
  * https://anseki.github.io/leader-line/
  */
@@ -1139,6 +1144,7 @@ function renderItemByIdAndData(itemId, itemData) {
 }
 
 function selectPlannedProductData(plannedProductData) {
+    productionPlanId = plannedProductData.productionPlanId;
     // Re-render the entire planned chain, based on its "itemDataById", if NOT null
     if (plannedProductData.itemDataById) {
         // if (doDebug) console.log(`%c--- RENDER the entire planned chain, based on its "itemDataById"`, 'background: blue');
@@ -1155,10 +1161,59 @@ function selectPlannedProductData(plannedProductData) {
         return;
     }
     // Select the planned product
-    const productName = plannedProductData.planned_product_name;
+    const productName = plannedProductData.plannedProductName;
     // if (doDebug) console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue');
     const plannedProductId = Number(productDataByName[productName].id);
     selectPlannedProductId(plannedProductId);
+}
+
+async function postProductionPlanData(productionPlanData) {
+    if (!apiUrl.includes('127.0.0.1')) { return {error: 'API coming soon...'}; } //// TEST
+    const config = {
+        method: 'post',
+        url: `${apiUrl}/production-plan/${productionPlanData.productionPlanId}`,
+        data: productionPlanData,
+    };
+    try {
+        const response = await axios(config);
+        const data = response.data;
+        // console.log(`--- data from API:`, data); //// TEST
+        return data;
+    } catch (error) {
+        console.log(`--- ERROR from API:`, error); //// TEST
+        return {error};
+    }
+}
+
+/**
+ * Save the current production plan to data storage (excluding lines),
+ * and return the saved production plan data (or "null" on error).
+ */
+async function saveProductionPlan() {
+    if (itemIdsForProcessVariantsWaitingSelection.length) {
+        // Waiting for user to select a required process variant => NOT saving the production plan
+        alert('Please select a required process variant');
+        return null;
+    }
+    const plannedProductName = productDataById[itemDataById[1].productId].name;
+    const itemDataByIdWithoutLines = {};
+    for (const [itemId, itemData] of Object.entries(itemDataById)) {
+        const itemDataWithoutLine = {...itemData};
+        delete itemDataWithoutLine.line;
+        itemDataByIdWithoutLines[itemId] = itemDataWithoutLine;
+    }
+    const productionPlanData = {
+        plannedProductName,
+        productionPlanId,
+        itemDataById: itemDataByIdWithoutLines,
+    };
+    const savedProductionPlanData = await postProductionPlanData(productionPlanData);
+    if (savedProductionPlanData.error) {
+        // Inform the user re: API error
+        alert(savedProductionPlanData.error);
+        return null;
+    }
+    return savedProductionPlanData;
 }
 
 // Toggle horizontal vs. vertical layout for the production chain
