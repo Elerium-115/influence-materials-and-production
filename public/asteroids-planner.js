@@ -1254,17 +1254,17 @@ async function showProductionPlanId(plannedProductName, productionPlanId = null)
 
 async function onClickProductionPlanActions(actions) {
     if (actions.includes('save')) {
+        //// TO DO:
+        //// -- allow saving a production plan only for connected wallets
+        //// -- ensure that saving an "example" production plan does NOT mutate the original example
+        //// ---- e.g. by allowing the "example" asteroids plan only for NON-connected users, as a read-only plan
+        //// ____
         const savedProductionPlanData = await saveProductionPlan();
         console.log(`--- savedProductionPlanData:`, savedProductionPlanData); //// TEST
         if (!savedProductionPlanData) {
             return;
         }
         cacheProductionPlanDataById[savedProductionPlanData.productionPlanId] = savedProductionPlanData;
-        //// TO DO:
-        //// -- allow saving a production plan only for connected wallets
-        //// -- ensure that saving an "example" production plan does NOT mutate the original example
-        //// ---- e.g. by allowing the "example" asteroids plan only for NON-connected users
-        //// ____
     }
     if (actions.includes('close')) {
         // Show the Asteroids Planner tool, and hide the Production Plan template

@@ -3,6 +3,7 @@ const { toChecksumAddress } = require('ethereum-checksum-address');
 const cache = require('../cache/index');
 const providerInfluencethIo = require('../providers/influenceth.io/index');
 const providerMock = require('../providers/mock/index');
+const utils = require('../utils/index');
 
 const router = express.Router();
 
@@ -163,9 +164,11 @@ router.post(
         console.log(`--- [router] POST /production-plan/:id`); //// TEST
         // console.log(`---> request body:`, req.body); //// TEST
         const productionPlanData = req.body;
+        if (!utils.isValidProductionPlanData(productionPlanData)) {
+            res.json({error: 'Invalid production plan data'});
+            return;
+        }
         const productionPlandId = req.params.id;
-        //// TO DO: validate "productionPlanData" (respond with error if invalid)
-        //// ____
         if (isNaN(Number(productionPlandId))) {
             /**
              * Insert new production plan in data storage.
@@ -175,13 +178,14 @@ router.post(
             //// ____
         } else {
             // Update existing production plan in data storage.
+            //// TO DO: check that the production plan being updated corresponds to the same planned product (else respond with error)
+            //// -- i.e. compare "productionPlanData.itemDataById[1].productId"
+            //// ____
             //// TO BE IMPLEMENTED
             //// ____
         }
-        //// TO DO: Save "productionPlanData" in cache, then respond with the saved production plan data (or error)
-        //// ____
-        const savedProductionPlanData = {error: 'API under construction'}; //// TEST
-        res.send(savedProductionPlanData);
+        cache.productionPlanDataById[productionPlanData.productionPlandId] = productionPlanData;
+        res.send(productionPlanData);
     }
 );
 
