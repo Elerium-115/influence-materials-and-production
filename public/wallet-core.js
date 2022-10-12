@@ -53,6 +53,20 @@ async function connectWallet() {
     }
 }
 
+/**
+ * Refresh wallet by triggering "walletEventsHandlers" for "accountsChanged"
+ */
+async function refreshWallet() {
+    if (window.ethereum) {
+        // Wait until the connected address can be retrieved
+        await window.ethereum.request({
+            method: 'eth_accounts',
+        });
+        // Then trigger the "walletEventsHandlers" for "accountsChanged"
+        window.ethereum.emit('accountsChanged');
+    }
+}
+
 function getConnectedAddress() {
     // WARNING: "ethereum.selectedAddress" is deprecated?
     return window.ethereum?.selectedAddress;

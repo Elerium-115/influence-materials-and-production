@@ -189,11 +189,26 @@ body {
     z-index: 1;
 }
 
-.topbar > * {
+.topbar-sections {
+    justify-content: space-between;
+}
+
+.topbar-section-left {
+    display: flex;
+}
+
+.topbar:not(.topbar-sections) > *,
+.topbar-section-left > * {
     display: flex;
     align-items: center;
     height: 3rem;
     padding: 0 1rem;
+}
+
+.topbar-section-right {
+    display: flex;
+    align-items: center;
+    margin: 0 1.5rem;
 }
 
 .topbar a {

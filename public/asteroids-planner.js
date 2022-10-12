@@ -15,8 +15,6 @@ const elButtonAddAsteroid = elAsteroidsPlannerTree.querySelector('#asteroids-pla
 const elButtonSeeExample = elAsteroidsPlannerTree.querySelector('#asteroids-planner-tree .see-example');
 
 // Elements in the overlay for "Add asteroid"
-const elConnectWalletCta = elOverlayAddAsteroid.querySelector('.connect-wallet-cta');
-const elConnectedAddress = elOverlayAddAsteroid.querySelector('.connected-address');
 const elWalletAsteroidsStatus = document.getElementById('wallet-asteroids-status');
 const elWalletAsteroidsWrapperOuter = elOverlayAddAsteroid.querySelector('.wallet-asteroids-wrapper-outer');
 const elWalletAsteroidsFilters = elWalletAsteroidsWrapperOuter.querySelector('.wallet-asteroids-filters');
@@ -42,6 +40,10 @@ const elOverlayProductImageImg = elOverlayProductImage.querySelector('img');
 
 // Template elements
 const elTemplateProductionPlan = document.getElementById('template-production-plan');
+
+// Selections of multiple elements
+const elsConnectWalletCta = document.querySelectorAll('.connect-wallet-cta');
+const elsConnectedAddress = document.querySelectorAll('.connected-address');
 
 let asteroidsPlannerTree = [];
 let shoppingListTree = {};
@@ -853,9 +855,6 @@ function onClickAddAsteroid() {
     elOverlayAddAsteroid.classList.remove('hidden');
 }
 
-// Add handler for wallet events in "Add asteroid" overlay
-walletEventsHandlers.accountsChanged.push(updateWalletAsteroidsPanel);
-
 async function updateWalletAsteroidsPanel() {
     elWalletAsteroidsStatus.className = ''; // Remove all classes (including ".hidden")
     elWalletAsteroidsWrapperOuter.classList.add('hidden');
@@ -863,16 +862,7 @@ async function updateWalletAsteroidsPanel() {
     elSelectedAsteroidsCta.classList.add('disabled');
     elWalletAsteroids.innerHTML = '';
     const connectedAddress = getConnectedAddress();
-    if (connectedAddress) {
-        elConnectWalletCta.classList.add('hidden');
-        elConnectedAddress.textContent = connectedAddress.replace(/^(.{6}).+(.{4})$/, '$1...$2');
-        elConnectedAddress.title = connectedAddress;
-        elConnectedAddress.classList.remove('hidden');
-    } else {
-        elConnectedAddress.classList.add('hidden');
-        elConnectedAddress.textContent = '';
-        elConnectedAddress.title = '';
-        elConnectWalletCta.classList.remove('hidden');
+    if (!connectedAddress) {
         elWalletAsteroidsStatus.classList.add('not-connected');
         return;
     }
@@ -1547,6 +1537,27 @@ function onClickTreeItem(asteroidName, plannedProductName, intermediateProductNa
     updateContent();
 }
 
+function updateAllWalletInstances() {
+    const connectedAddress = getConnectedAddress();
+    if (connectedAddress) {
+        // Hide the "Connect wallet" buttons, and show the buttons with the connected address
+        elsConnectWalletCta.forEach(el => el.classList.add('hidden'));
+        elsConnectedAddress.forEach(el => {
+            el.textContent = connectedAddress.replace(/^(.{6}).+(.{4})$/, '$1...$2');
+            el.title = connectedAddress;
+            el.classList.remove('hidden');
+        });
+    } else {
+        // Hide and empty the buttons with the connected address, and show the "Connect wallet" buttons
+        elsConnectedAddress.forEach(el => {
+            el.classList.add('hidden');
+            el.textContent = '';
+            el.title = '';
+        });
+        elsConnectWalletCta.forEach(el => el.classList.remove('hidden'));
+    }
+}
+
 // Toggle hide / show intermediate products in the Shopping List tree
 on('change', '#toggle-hide-subproducts', elInput => {
     elAsteroidsPlannerTree.classList.toggle('hide-subproducts');
@@ -1599,6 +1610,18 @@ window.addEventListener('keydown', event => {
 document.fonts.onloadingdone = function(fontFaceSetEvent) {
     repositionAsteroidsPlannerConnections();
 };
+
+/**
+ * Add handlers for wallet events, affecting:
+ * - all wallet instances (in the topbar, and in the "Add asteroid" overlay)
+ * - the wallet-asteroids (in the "Add asteroid" overlay)
+ */
+walletEventsHandlers.accountsChanged.push(
+    updateAllWalletInstances,
+    updateWalletAsteroidsPanel,
+);
+
+refreshWallet();
 
 // Initialize everything
 handleAsteroidsPlannerTreeChanged();
