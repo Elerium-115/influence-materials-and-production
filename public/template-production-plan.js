@@ -17,6 +17,10 @@ const templateProductionPlan = /*html*/ `
             <div class="options">
                 <label for="toggle-horizontal-layout" class="checked"><input type="checkbox" id="toggle-horizontal-layout" checked>Horizontal Layout</label>
             </div>
+            <div class="topbar-section-right">
+                <div class="cta connect-wallet-cta" onclick="connectWallet()">Connect wallet</div>
+                <div class="cta connected-address disabled hidden"></div>
+            </div>
         </nav>
 
         <div id="production-wrapper" class="chain-type-combined">

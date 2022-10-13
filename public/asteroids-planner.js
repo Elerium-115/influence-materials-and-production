@@ -56,6 +56,8 @@ let asteroidsPlannerSelection = {
 
 let asteroidsPlannerLines = [];
 
+let isExampleAsteroidsPlan = false;
+
 let onClickAsteroidActionInProgress = false;
 
 const cacheAsteroidsMetadataById = {};
@@ -268,6 +270,7 @@ async function loadProductionPlanDataById(id) {
 }
 
 function setupExample() {
+    isExampleAsteroidsPlan = true;
     asteroidsPlannerTree = [...mockAsteroidsPlannerTree];
     handleAsteroidsPlannerTreeChanged();
 }
@@ -1249,6 +1252,16 @@ async function onClickProductionPlanActions(actions) {
         //// -- ensure that saving an "example" production plan does NOT mutate the original example
         //// ---- e.g. by allowing the "example" asteroids plan only for NON-connected users, as a read-only plan
         //// ____
+        //// TO DO: how to handle a wallet being connected AFTER the "example" asteroids plan was loaded?
+        //// -- e.g. if connecting a wallet while "isExampleAsteroidsPlan" true, then:
+        //// ---- RESET the asteroids plan (via alert / confirm?)
+        //// ---- FORCE-CLOSE the production plan (if open)
+        //// ---- SET "isExampleAsteroidsPlan" false
+        //// ____
+        if (!getConnectedAddress()) {
+            alert('Please connect a wallet such as MetaMask, in order to save production plans');
+            return;
+        }
         const savedProductionPlanData = await saveProductionPlan();
         console.log(`--- savedProductionPlanData:`, savedProductionPlanData); //// TEST
         if (!savedProductionPlanData) {
@@ -1276,15 +1289,14 @@ function resetContent() {
             <li>Add in-game asteroids, or create "mock rocks".</li>
             <li>Plan one or more production chains, on each asteroid.</li>
         </ul>
-        <h3 id="example-title">First time here? See an example with some mock data.</h3>
+        <h3 id="example-title" class="hidden">First time here? See an example with some mock data.</h3>
     `;
     const elStartTitle = document.getElementById('start-title');
-    const elExampleTitle = document.getElementById('example-title');
     if (elButtonAddAsteroid.line || elButtonSeeExample.line) {
         console.log(`%c--- ERROR: "resetContent" called twice, without deleting the lines between calls`, 'background: maroon'); //// TEST
     }
     elButtonAddAsteroid.line = connectElements(elStartTitle, elButtonAddAsteroid, leaderLineOptionsRightToLeftGradient);
-    elButtonSeeExample.line = connectElements(elExampleTitle, elButtonSeeExample, leaderLineOptionsRightToLeftGradient);
+    updateExampleBasedOnConnectedAddress();
 }
 
 /**
@@ -1537,13 +1549,42 @@ function onClickTreeItem(asteroidName, plannedProductName, intermediateProductNa
     updateContent();
 }
 
+function updateExampleBasedOnConnectedAddress() {
+    if (!asteroidsPlannerTree.length) {
+        // NO selection (i.e. "Home")
+        const elExampleTitle = document.getElementById('example-title');
+        if (getConnectedAddress()) {
+            // Wallet connected => do NOT show the example button + title
+            elButtonSeeExample.classList.add('hidden');
+            if (elExampleTitle && !elExampleTitle.classList.contains('hidden')) {
+                elExampleTitle.classList.add('hidden');
+                if (elButtonSeeExample.line) {
+                    elButtonSeeExample.line.remove();
+                    delete elButtonSeeExample.line;
+                }
+            }
+        } else {
+            // Wallet NOT connected => DO show the example button + title
+            elButtonSeeExample.classList.remove('hidden');
+            if (elExampleTitle && elExampleTitle.classList.contains('hidden')) {
+                elExampleTitle.classList.remove('hidden');
+                elButtonSeeExample.line = connectElements(elExampleTitle, elButtonSeeExample, leaderLineOptionsRightToLeftGradient);
+            }
+        }
+        repositionAsteroidsPlannerConnections();
+    }
+}
+
 function updateAllWalletInstances() {
     const connectedAddress = getConnectedAddress();
     if (connectedAddress) {
         // Hide the "Connect wallet" buttons, and show the buttons with the connected address
         elsConnectWalletCta.forEach(el => el.classList.add('hidden'));
         elsConnectedAddress.forEach(el => {
-            el.textContent = connectedAddress.replace(/^(.{6}).+(.{4})$/, '$1...$2');
+            el.innerHTML = /*html*/ `
+                <img src="https://avatars.dicebear.com/api/identicon/${connectedAddress}.svg" class="identicon">
+                ${connectedAddress.replace(/^(.{6}).+(.{4})$/, '$1...$2')}
+            `;
             el.title = connectedAddress;
             el.classList.remove('hidden');
         });
@@ -1551,7 +1592,7 @@ function updateAllWalletInstances() {
         // Hide and empty the buttons with the connected address, and show the "Connect wallet" buttons
         elsConnectedAddress.forEach(el => {
             el.classList.add('hidden');
-            el.textContent = '';
+            el.innerHTML = '';
             el.title = '';
         });
         elsConnectWalletCta.forEach(el => el.classList.remove('hidden'));
@@ -1618,6 +1659,7 @@ document.fonts.onloadingdone = function(fontFaceSetEvent) {
  */
 walletEventsHandlers.accountsChanged.push(
     updateAllWalletInstances,
+    updateExampleBasedOnConnectedAddress,
     updateWalletAsteroidsPanel,
 );
 
@@ -1629,6 +1671,8 @@ handleAsteroidsPlannerTreeChanged();
 
 //// TO DO PRIO
 /*
+- add button (below "Add asteroid" button) + link (in content IFF "home") to completely reset the asteroids plan
+- auto-load the asteroids plan associated with the connected address, if any
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree
     - "alert" re: API coming soon / asteroid # already planned

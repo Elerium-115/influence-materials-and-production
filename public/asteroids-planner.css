@@ -42,6 +42,15 @@
     background: var(--brand-text);
     color: black;
 }
+.cta.connected-address {
+    display: flex;
+    align-items: center;
+}
+.cta.connected-address .identicon {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 1rem;
+}
 
 .influence-logo-icon {
     width: 2rem;
@@ -1371,6 +1380,10 @@ body.overlay-visible {
 
 #template-production-plan .topbar .options {
     padding-left: 2rem;
+}
+
+#template-production-plan .topbar .topbar-section-right {
+    margin-left: 0;
 }
 
 #template-production-plan #selected-production-chain {
