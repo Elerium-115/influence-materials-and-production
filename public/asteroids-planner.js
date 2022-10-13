@@ -269,12 +269,6 @@ async function loadProductionPlanDataById(id) {
     return data;
 }
 
-function setupExample() {
-    isExampleAsteroidsPlan = true;
-    asteroidsPlannerTree = [...mockAsteroidsPlannerTree];
-    handleAsteroidsPlannerTreeChanged();
-}
-
 function isPlannedAsteroidId(id) {
     return asteroidsPlannerTree.find(asteroidData => asteroidData.asteroid_name === `Asteroid #${id}`);
 }
@@ -1247,17 +1241,10 @@ async function showProductionPlanId(plannedProductName, productionPlanId = null)
 
 async function onClickProductionPlanActions(actions) {
     if (actions.includes('save')) {
-        //// TO DO:
-        //// -- allow saving a production plan only for connected wallets
-        //// -- ensure that saving an "example" production plan does NOT mutate the original example
-        //// ---- e.g. by allowing the "example" asteroids plan only for NON-connected users, as a read-only plan
-        //// ____
-        //// TO DO: how to handle a wallet being connected AFTER the "example" asteroids plan was loaded?
-        //// -- e.g. if connecting a wallet while "isExampleAsteroidsPlan" true, then:
-        //// ---- RESET the asteroids plan (via alert / confirm?)
-        //// ---- FORCE-CLOSE the production plan (if open)
-        //// ---- SET "isExampleAsteroidsPlan" false
-        //// ____
+        /**
+         * Saving a production plan requires a connected wallet.
+         * NOTE: The "mock" production plans (from the "example" asteroids plan) are read-only.
+         */
         if (!getConnectedAddress()) {
             alert('Please connect a wallet such as MetaMask, in order to save production plans');
             return;
@@ -1306,6 +1293,7 @@ function updateContent() {
     const {asteroidName, plannedProductName, intermediateProductName} = asteroidsPlannerSelection;
     if (!asteroidsPlannerTree.length) {
         resetContent();
+        isExampleAsteroidsPlan = false;
         return;
     }
     refreshAsteroidsPlannerBreadcrumbsHtml();
@@ -1539,6 +1527,23 @@ function goHome() {
     updateContent();
 }
 
+function resetAsteroidsPlan() {
+    isExampleAsteroidsPlan = false;
+    asteroidsPlannerTree = [];
+    /**
+     * Do NOT call "updateContent" on this execution of "handleAsteroidsPlannerTreeChanged",
+     * because "goHome" also ends up calling "updateContent".
+     */
+    handleAsteroidsPlannerTreeChanged(false);
+    goHome();
+}
+
+function setupExample() {
+    isExampleAsteroidsPlan = true;
+    asteroidsPlannerTree = [...mockAsteroidsPlannerTree];
+    handleAsteroidsPlannerTreeChanged();
+}
+
 function onClickTreeItem(asteroidName, plannedProductName, intermediateProductName) {
     if (!asteroidName) {
         console.log(`%c--- WARNING: [onClickTreeItem] called WITHOUT asteroidName`, 'background: chocolate'); //// TEST
@@ -1550,8 +1555,19 @@ function onClickTreeItem(asteroidName, plannedProductName, intermediateProductNa
 }
 
 function updateExampleBasedOnConnectedAddress() {
-    if (!asteroidsPlannerTree.length) {
-        // NO selection (i.e. "Home")
+    if (asteroidsPlannerTree.length) {
+        // Non-empty asteroids plan
+        if (isExampleAsteroidsPlan && getConnectedAddress()) {
+            /**
+             * If the wallet becomes connected while using the "example" asteroids plan, then:
+             * - close the production plan (if open)
+             * - reset the asteroids plan
+             */
+            onClickProductionPlanActions(['close']);
+            resetAsteroidsPlan();
+        }
+    } else {
+        // Empty asteroids plan (i.e. content has been reset)
         const elExampleTitle = document.getElementById('example-title');
         if (getConnectedAddress()) {
             // Wallet connected => do NOT show the example button + title

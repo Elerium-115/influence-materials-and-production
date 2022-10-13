@@ -30,7 +30,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Source: https://ethereum.org/en/developers/tutorials/hello-world-smart-contract-fullstack/#the-connectWallet-function
-async function connectWallet() {
+async function connectWallet(isExampleAsteroidsPlan = false) {
+    if (!getConnectedAddress() && isExampleAsteroidsPlan) {
+        /**
+         * Attempting to connect a wallet while using the "example" asteroids plan
+         * => require confirmation, before resetting the asteroids plan.
+         */
+        if (!confirm(`The current "example" asteroids plan will be reset, after you connect your wallet. You can then start a new plan, and it will be automatically saved for your wallet. Are you sure you want to continue?`)) {
+            return; // Abort wallet connection
+        }
+    }
     let walletError = null;
     if (window.ethereum) {
         try {

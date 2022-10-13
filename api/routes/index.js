@@ -145,10 +145,13 @@ router.get(
             res.json(cachedData);
             return;
         }
-        //// TO DO: get production plan data from data storage
-        //// ____
-        // Mock production plan data
-        const productionPlanData = providerMock.mockProductionPlanDataById[productionPlandId];
+        // First check if the requested ID is a "mock" production plan
+        let productionPlanData = providerMock.mockProductionPlanDataById[productionPlandId];
+        if (!productionPlanData) {
+            // The requested ID is not a "mock" production plan => use the data storage
+            //// TO DO: get production plan data from data storage
+            //// ____
+        }
         cache.productionPlanDataById[productionPlandId] = productionPlanData;
         res.json(productionPlanData);
     }
@@ -169,6 +172,11 @@ router.post(
             return;
         }
         const productionPlandId = req.params.id;
+        // Do NOT allow saving a "mock" production plan, to avoid mutating it for other users
+        if (providerMock.mockProductionPlanDataById[productionPlandId]) {
+            res.json({error: 'Saving an "example" production plan is not allowed'});
+            return;
+        }
         if (isNaN(Number(productionPlandId))) {
             /**
              * Insert new production plan in data storage.
@@ -179,7 +187,7 @@ router.post(
         } else {
             // Update existing production plan in data storage.
             //// TO DO: check that the production plan being updated corresponds to the same planned product (else respond with error)
-            //// -- i.e. compare "productionPlanData.itemDataById[1].productId"
+            //// -- i.e. compare "productionPlanData.itemDataById[1].productId", between plan from "req.body", and existing plan from data storage
             //// ____
             //// TO BE IMPLEMENTED
             //// ____
