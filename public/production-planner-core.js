@@ -187,12 +187,27 @@ function getArraySortedByNameFromObjectValues(obj) {
 }
 
 /**
- * Return the list of intermediate product names, for a given production plan
+ * Return the list of intermediate products, for a given production plan - counting
+ * selected occurrences in the chain, NOT quantities required for the planned product.
  */
 function getIntermediateProductsForProductionPlan(itemDataById) {
-    return Object.values(itemDataById)
+    const intermediateProductsData = {};
+    Object.values(itemDataById)
         .filter(itemData => itemData.productId !== null && itemData.isSelected && itemData.level > 1)
-        .map(itemData => productDataById[itemData.productId].name);
+        .map(itemData => {
+            const productId = itemData.productId;
+            const intermediateProductData = {
+                name: productDataById[productId].name,
+                qty: 0,
+            };
+            if (!intermediateProductsData[productId]) {
+                intermediateProductsData[productId] = intermediateProductData;
+            }
+            // Increment qty for each occurrence of this product
+            intermediateProductsData[productId].qty++;
+        });
+    // if (doDebug) console.log(`--- intermediateProductsData:`, intermediateProductsData);
+    return getArraySortedByNameFromObjectValues(intermediateProductsData);
 }
 
 function getShoppingListForProductionPlan(itemDataById) {
@@ -992,31 +1007,10 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
 }
 
 function renderSelectedProductsList() {
-    const intermediateProductsList = {};
-    selectedProductItemIds.forEach(itemId => {
-        // Skip the planned product
-        if (itemId === 1) {
-            return;
-        }
-        const productId = itemDataById[itemId].productId;
-        const selectedProductData = {
-            name: productDataById[productId].name,
-            qty: 0,
-        };
-        if (!intermediateProductsList[productId]) {
-            intermediateProductsList[productId] = selectedProductData;
-        }
-        // Increment qty for each occurrence of this product
-        intermediateProductsList[productId].qty++;
-    });
-    // if (doDebug) console.log(`--- intermediateProductsList:`, intermediateProductsList);
-    // Convert "intermediateProductsList" to sorted array
-    const intermediateProductsListArray = Object.values(intermediateProductsList);
-    // if (doDebug) console.log(`--- intermediateProductsListArray:`, intermediateProductsListArray);
+    const intermediateProducts = getIntermediateProductsForProductionPlan(itemDataById);
     let intermediateProductsListHtml = '';
-    if (intermediateProductsListArray.length) {
-        intermediateProductsListArray.sort(compareListElementsByName);
-        intermediateProductsListArray.forEach(intermediateProductData => {
+    if (intermediateProducts.length) {
+        intermediateProducts.forEach(intermediateProductData => {
             intermediateProductsListHtml += `<span><a href="#${getCompactName(intermediateProductData.name)}" class="list-product-name">${intermediateProductData.name}</a>`;
             if (intermediateProductData.qty > 1) {
                 intermediateProductsListHtml += `<span class="qty">${intermediateProductData.qty}</span>`;

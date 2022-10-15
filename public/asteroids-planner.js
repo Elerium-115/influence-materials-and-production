@@ -1349,10 +1349,10 @@ function handleSavedProductionPlanData(savedProductionPlanData) {
     // The ID needs to be updated, in case it was null (when saved for the first time).
     plannedProductData.production_plan_id = savedProductionPlanData.productionPlanId;
     // The intermediate products and the shopping list need to be inferred.
-    const intermediateProductNames = getIntermediateProductsForProductionPlan(savedProductionPlanData.itemDataById);
-    plannedProductData.intermediate_products = intermediateProductNames.map(productName => {
+    const intermediateProducts = getIntermediateProductsForProductionPlan(savedProductionPlanData.itemDataById);
+    plannedProductData.intermediate_products = intermediateProducts.map(intermediateProductData => {
         return {
-            intermediate_product_name: productName,
+            intermediate_product_name: intermediateProductData.name,
         };
     });
     const shoppingList = getShoppingListForProductionPlan(savedProductionPlanData.itemDataById);
