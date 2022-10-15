@@ -1,32 +1,67 @@
-
 /**
- * Example of asteroids plan format, NOT used anywhere from this const.
- * The actual "asteroidsPlan" is generated via "updateAsteroidsPlanFromTree".
+ * Sample format for the asteroids plan, NOT used anywhere from this const.
+ * The actual "asteroidsPlan" is generated via "regenerateAndSaveAsteroidsPlan".
  */
 const mockAsteroidsPlan = [
 	{
 		"asteroid_name": "Asteroid #39744",
 		"asteroid_type": "M",
 		"asteroid_area": 75,
-		"production_plan_ids": [1, 2],
+		"planned_products": [
+			{
+				"planned_product_name": "Aluminium",
+				"production_plan_id": "mock1",
+			},
+			{
+				"planned_product_name": "Steel",
+				"production_plan_id": "mock2",
+			},
+		],
 	},
 	{
 		"asteroid_name": "Asteroid #60980",
 		"asteroid_type": "CIS",
 		"asteroid_area": 50,
-		"production_plan_ids": [3],
+		"planned_products": [
+			{
+				"planned_product_name": "Carbon Monoxide",
+				"production_plan_id": "mock3",
+			},
+			{
+				"planned_product_name": "Sulfuric Acid",
+				"production_plan_id": null,
+			},
+		],
 	},
 	{
 		"asteroid_name": "Mock Rock #1",
 		"asteroid_type": "SM",
 		"asteroid_area": 150,
-		"production_plan_ids": [4],
+		"planned_products": [
+			{
+				"planned_product_name": "Feldspar",
+				"production_plan_id": "mock4",
+			},
+		],
 	},
 	{
 		"asteroid_name": "Mock Rock #2",
 		"asteroid_type": "I",
 		"asteroid_area": 200,
-		"production_plan_ids": [5, 6, 7],
+		"planned_products": [
+			{
+				"planned_product_name": "Hydrolox Fuel",
+				"production_plan_id": "mock5",
+			},
+			{
+				"planned_product_name": "Oxygen",
+				"production_plan_id": "mock6",
+			},
+			{
+				"planned_product_name": "Water",
+				"production_plan_id": "mock7",
+			},
+		],
 	},
 ];
 
@@ -38,7 +73,7 @@ const mockAsteroidsPlannerTree = [
 		"planned_products": [
 			{
 				"planned_product_name": "Aluminium",
-				"production_plan_id": 1,
+				"production_plan_id": "mock1",
 				"intermediate_products": [
 					{
 						"intermediate_product_name": "Alumina"
@@ -74,7 +109,7 @@ const mockAsteroidsPlannerTree = [
 			},
 			{
 				"planned_product_name": "Steel",
-				"production_plan_id": 2,
+				"production_plan_id": "mock2",
 				"intermediate_products": [
 					{
 						"intermediate_product_name": "Graphite"
@@ -123,7 +158,7 @@ const mockAsteroidsPlannerTree = [
 		"planned_products": [
 			{
 				"planned_product_name": "Carbon Monoxide",
-				"production_plan_id": 3,
+				"production_plan_id": "mock3",
 				"intermediate_products": [],
 				"shopping_list":
 				{
@@ -137,6 +172,18 @@ const mockAsteroidsPlannerTree = [
 					"spectral_types": ["C", "I"],
 				},
 			},
+			{
+				"planned_product_name": "Sulfuric Acid",
+				"production_plan_id": null,
+				"intermediate_products": [],
+				"shopping_list":
+				{
+					"inputs": [],
+					"buildings": [],
+					"modules": [],
+					"spectral_types": [],
+				},
+			},
 		],
 	},
 	{
@@ -146,7 +193,7 @@ const mockAsteroidsPlannerTree = [
 		"planned_products": [
 			{
 				"planned_product_name": "Feldspar",
-				"production_plan_id": 4,
+				"production_plan_id": "mock4",
 				"intermediate_products": [],
 				"shopping_list":
 				{
@@ -169,7 +216,7 @@ const mockAsteroidsPlannerTree = [
 		"planned_products": [
 			{
 				"planned_product_name": "Hydrolox Fuel",
-				"production_plan_id": 5,
+				"production_plan_id": "mock5",
 				"intermediate_products": [
 					{
 						"intermediate_product_name": "Hydrogen"
@@ -199,7 +246,7 @@ const mockAsteroidsPlannerTree = [
 			},
 			{
 				"planned_product_name": "Oxygen",
-				"production_plan_id": 6,
+				"production_plan_id": "mock6",
 				"intermediate_products": [],
 				"shopping_list":
 				{
@@ -219,7 +266,7 @@ const mockAsteroidsPlannerTree = [
 			},
 			{
 				"planned_product_name": "Water",
-				"production_plan_id": 7,
+				"production_plan_id": "mock7",
 				"intermediate_products": [],
 				"shopping_list":
 				{

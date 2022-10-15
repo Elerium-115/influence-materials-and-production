@@ -45,7 +45,13 @@ const elTemplateProductionPlan = document.getElementById('template-production-pl
 const elsConnectWalletCta = document.querySelectorAll('.connect-wallet-cta');
 const elsConnectedAddress = document.querySelectorAll('.connected-address');
 
+/**
+ * "asteroidsPlan" is a reduced representation of "asteroidsPlannerTree",
+ * using the same format, but excluding the details that can be inferred.
+ * See "asteroids-planner-mock.js" for a comparison between them.
+ */
 let asteroidsPlan = [];
+
 let asteroidsPlannerTree = [];
 let shoppingListTree = {};
 
@@ -360,22 +366,25 @@ function deletePlannedProduct(asteroidName, plannedProductName) {
     handleAsteroidsPlannerTreeChanged();
 }
 
-function updateAsteroidsPlanFromTree() {
+function regenerateAndSaveAsteroidsPlan() {
     asteroidsPlan = [];
     asteroidsPlannerTree.forEach(asteroidData => {
-        const {asteroid_name, asteroid_type, asteroid_area} = asteroidData;
-        asteroidsPlan.push({
-            asteroid_name,
-            asteroid_type,
-            asteroid_area,
-            production_plan_ids: asteroidData.planned_products.map(plannedProductData => plannedProductData.production_plan_id),
+        let asteroidDataForPlan = {...asteroidData};
+        // For each planned product, keep only the "planned_product_name" and "production_plan_id"
+        asteroidDataForPlan.planned_products = asteroidDataForPlan.planned_products.map(plannedProductData => {
+            const {planned_product_name, production_plan_id} = plannedProductData;
+            return {
+                planned_product_name,
+                production_plan_id,
+            };
         });
+        asteroidsPlan.push(asteroidDataForPlan);
     });
     //// TO DO: if wallet connected => save the asteroids plan via API
     //// ____
 }
 
-function updateAsteroidsTreeFromPlan() {
+function regenerateAsteroidsTreeFromPlan() {
     //// TO BE IMPLEMENTED
     //// ____
 }
@@ -629,7 +638,7 @@ function refreshTreesHtml() {
 }
 
 function handleAsteroidsPlannerTreeChanged(shouldUpdateContent = true) {
-    updateAsteroidsPlanFromTree();
+    regenerateAndSaveAsteroidsPlan();
     refreshAsteroidsPlannerSelection();
     sortProductsInAsteroidsPlannerTree();
     regenerateShoppingListTree();
@@ -692,7 +701,6 @@ function connectAsteroidsPlannerTree() {
     let shoppingLists = [];
     if (asteroidsPlannerSelection.asteroidName) {
         const asteroidData = getAsteroidData(asteroidsPlannerSelection.asteroidName);
-        const plannedProducts = getListOfPlannedProducts(asteroidsPlannerSelection.asteroidName);
         if (asteroidsPlannerSelection.plannedProductName) {
             const plannedProductData = getPlannedProductData(asteroidsPlannerSelection.asteroidName, asteroidsPlannerSelection.plannedProductName);
             // Use the "shopping_list" from only the selected planned product
@@ -1236,6 +1244,10 @@ function onClickProductImage(el, productName) {
     elOverlayProductImageImg.src = getProductImageSrc(productName, 'original');
 }
 
+/**
+ * Note that "productionPlanId" is a string, NOT a number,
+ * because the mock production plans have IDs like "mock1".
+ */
 async function showProductionPlanId(plannedProductName, productionPlanId = null) {
     let productionPlanData;
     if (productionPlanId) {
@@ -1277,6 +1289,7 @@ async function onClickProductionPlanActions(actions) {
             return;
         }
         cacheProductionPlanDataById[savedProductionPlanData.productionPlanId] = savedProductionPlanData;
+        handleSavedProductionPlanData(savedProductionPlanData);
     }
     if (actions.includes('close')) {
         // Show the Asteroids Planner tool, and hide the Production Plan template
@@ -1289,6 +1302,20 @@ async function onClickProductionPlanActions(actions) {
             elTemplateProductionPlan.classList.add('hidden');
         }, 500); // Match the animation duration for "enabling"
     }
+}
+
+function handleSavedProductionPlanData(savedProductionPlanData) {
+    /**
+     * Update the "asteroidsPlannerTree" details for the currently selected planned product,
+     * using the [ID, intermediate products, shopping list] from the newly saved production plan.
+     */
+    const {asteroidName, plannedProductName} = asteroidsPlannerSelection;
+    // The ID needs to be updated, in case it was null (when saved for the first time).
+    getPlannedProductData(asteroidName, plannedProductName).production_plan_id = savedProductionPlanData.productionPlanId;
+    // The intermediate products and the shopping list need to be inferred.
+    //// TO BE IMPLEMENTED
+    //// ____
+    handleAsteroidsPlannerTreeChanged();
 }
 
 function resetContent() {
@@ -1503,6 +1530,12 @@ function updateContent() {
                 <div class="content-subtitle">No production chain configured for this planned product.</div>
             `;
         }
+        let ctaProductionChainHtml = '';
+        if (productionPlanId) {
+            ctaProductionChainHtml = `<div class="cta" onclick="showProductionPlanId('${plannedProductName}', '${productionPlanId}')">Edit production chain</div>`;
+        } else {
+            ctaProductionChainHtml = `<div class="cta pulse-brand" onclick="showProductionPlanId('${plannedProductName}')">Add production chain</div>`;
+        }
         elContent.innerHTML = /*html*/ `
             <h3 class="content-title">Planned product</h3>
             <div class="content-columns">
@@ -1515,7 +1548,7 @@ function updateContent() {
                     <div class="cta-remove-text delete-card" onclick="deletePlannedProduct('${asteroidName}', '${plannedProductName}')"></div>
                 </div>
                 <div class="content-info-wrapper">
-                    <div class="cta ${productionPlanId ? '' : 'pulse-brand'}" onclick="showProductionPlanId('${plannedProductName}', ${productionPlanId})">${productionPlanId ? 'Edit' : 'Add'} production chain</div>
+                    ${ctaProductionChainHtml}
                     ${intermediateProductsAndShoppingListHtml}
                 </div>
             </div>

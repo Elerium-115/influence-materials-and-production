@@ -1213,6 +1213,8 @@ async function saveProductionPlan() {
         alert(savedProductionPlanData.error);
         return null;
     }
+    // Update the production plan ID, with the newly saved ID, in case it was null
+    productionPlanId = savedProductionPlanData.productionPlanId;
     return savedProductionPlanData;
 }
 

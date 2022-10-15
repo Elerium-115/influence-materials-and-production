@@ -1,5 +1,5 @@
 const mockProductionPlanDataById = {
-	1: {
+	"mock1": {
 		"plannedProductName": "Aluminium",
 		"productionPlanId": 1,
 		"itemDataById": {
@@ -77,7 +77,7 @@ const mockProductionPlanDataById = {
 			}
 		},
 	},
-	2: {
+	"mock2": {
 		"plannedProductName": "Steel",
 		"productionPlanId": 2,
 		"itemDataById": {
@@ -251,7 +251,7 @@ const mockProductionPlanDataById = {
 			}
 		},
 	},
-	3: {
+	"mock3": {
 		"plannedProductName": "Carbon Monoxide",
 		"productionPlanId": 3,
 		"itemDataById": {
@@ -273,7 +273,7 @@ const mockProductionPlanDataById = {
 			}
 		},
 	},
-	4: {
+	"mock4": {
 		"plannedProductName": "Feldspar",
 		"productionPlanId": 4,
 		"itemDataById": {
@@ -295,7 +295,7 @@ const mockProductionPlanDataById = {
 			}
 		},
 	},
-	5: {
+	"mock5": {
 		"plannedProductName": "Hydrolox Fuel",
 		"productionPlanId": 5,
 		"itemDataById": {
@@ -381,7 +381,7 @@ const mockProductionPlanDataById = {
 			}
 		},
 	},
-	6: {
+	"mock6": {
 		"plannedProductName": "Oxygen",
 		"productionPlanId": 6,
 		"itemDataById": {
@@ -411,7 +411,7 @@ const mockProductionPlanDataById = {
 			}
 		},
 	},
-	7: {
+	"mock7": {
 		"plannedProductName": "Water",
 		"productionPlanId": 7,
 		"itemDataById": {

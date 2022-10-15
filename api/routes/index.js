@@ -3,6 +3,7 @@ const { toChecksumAddress } = require('ethereum-checksum-address');
 const cache = require('../cache/index');
 const providerInfluencethIo = require('../providers/influenceth.io/index');
 const providerMock = require('../providers/mock/index');
+const providerMongoDB = require('../providers/mongodb/index');
 const utils = require('../utils/index');
 
 const router = express.Router();
@@ -138,21 +139,21 @@ router.get(
     '/production-plan/:id',
     async (req, res) => {
         console.log(`--- [router] GET /production-plan/:id`); //// TEST
-        const productionPlandId = req.params.id;
-        const cachedData = cache.productionPlanDataById[productionPlandId];
+        const productionPlanId = req.params.id;
+        const cachedData = cache.productionPlanDataById[productionPlanId];
         if (cachedData) {
             console.log(`---> found CACHED data`); //// TEST
             res.json(cachedData);
             return;
         }
         // First check if the requested ID is a "mock" production plan
-        let productionPlanData = providerMock.mockProductionPlanDataById[productionPlandId];
+        let productionPlanData = providerMock.mockProductionPlanDataById[productionPlanId];
         if (!productionPlanData) {
             // The requested ID is not a "mock" production plan => use the data storage
             //// TO DO: get production plan data from data storage
             //// ____
         }
-        cache.productionPlanDataById[productionPlandId] = productionPlanData;
+        cache.productionPlanDataById[productionPlanId] = productionPlanData;
         res.json(productionPlanData);
     }
 );
@@ -171,17 +172,19 @@ router.post(
             res.json({error: 'Invalid production plan data'});
             return;
         }
-        const productionPlandId = req.params.id;
+        const productionPlanId = req.params.id;
         // Do NOT allow saving a "mock" production plan, to avoid mutating it for other users
-        if (providerMock.mockProductionPlanDataById[productionPlandId]) {
+        if (providerMock.mockProductionPlanDataById[productionPlanId]) {
             res.json({error: 'Saving an "example" production plan is not allowed'});
             return;
         }
-        if (isNaN(Number(productionPlandId))) {
+        if (isNaN(Number(productionPlanId))) {
             /**
              * Insert new production plan in data storage.
-             * Then update the local "productionPlanData", with the new "productionPlandId" inserted in data storage.
+             * Then update the local "productionPlanData", with the new "productionPlanId" inserted in data storage.
              */
+            const nextProductionPlanId = await providerMongoDB.getNextProductionPlanId();
+            productionPlanData.productionPlanId = nextProductionPlanId;
             //// TO BE IMPLEMENTED
             //// ____
         } else {
@@ -192,7 +195,7 @@ router.post(
             //// TO BE IMPLEMENTED
             //// ____
         }
-        cache.productionPlanDataById[productionPlanData.productionPlandId] = productionPlanData;
+        cache.productionPlanDataById[productionPlanData.productionPlanId] = productionPlanData;
         res.send(productionPlanData);
     }
 );
