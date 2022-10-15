@@ -1,4 +1,35 @@
 
+/**
+ * Example of asteroids plan format, NOT used anywhere from this const.
+ * The actual "asteroidsPlan" is generated via "updateAsteroidsPlanFromTree".
+ */
+const mockAsteroidsPlan = [
+	{
+		"asteroid_name": "Asteroid #39744",
+		"asteroid_type": "M",
+		"asteroid_area": 75,
+		"production_plan_ids": [1, 2],
+	},
+	{
+		"asteroid_name": "Asteroid #60980",
+		"asteroid_type": "CIS",
+		"asteroid_area": 50,
+		"production_plan_ids": [3],
+	},
+	{
+		"asteroid_name": "Mock Rock #1",
+		"asteroid_type": "SM",
+		"asteroid_area": 150,
+		"production_plan_ids": [4],
+	},
+	{
+		"asteroid_name": "Mock Rock #2",
+		"asteroid_type": "I",
+		"asteroid_area": 200,
+		"production_plan_ids": [5, 6, 7],
+	},
+];
+
 const mockAsteroidsPlannerTree = [
 	{
 		"asteroid_name": "Asteroid #39744",

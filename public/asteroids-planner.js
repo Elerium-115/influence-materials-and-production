@@ -45,6 +45,7 @@ const elTemplateProductionPlan = document.getElementById('template-production-pl
 const elsConnectWalletCta = document.querySelectorAll('.connect-wallet-cta');
 const elsConnectedAddress = document.querySelectorAll('.connected-address');
 
+let asteroidsPlan = [];
 let asteroidsPlannerTree = [];
 let shoppingListTree = {};
 
@@ -359,6 +360,26 @@ function deletePlannedProduct(asteroidName, plannedProductName) {
     handleAsteroidsPlannerTreeChanged();
 }
 
+function updateAsteroidsPlanFromTree() {
+    asteroidsPlan = [];
+    asteroidsPlannerTree.forEach(asteroidData => {
+        const {asteroid_name, asteroid_type, asteroid_area} = asteroidData;
+        asteroidsPlan.push({
+            asteroid_name,
+            asteroid_type,
+            asteroid_area,
+            production_plan_ids: asteroidData.planned_products.map(plannedProductData => plannedProductData.production_plan_id),
+        });
+    });
+    //// TO DO: if wallet connected => save the asteroids plan via API
+    //// ____
+}
+
+function updateAsteroidsTreeFromPlan() {
+    //// TO BE IMPLEMENTED
+    //// ____
+}
+
 function refreshAsteroidsPlannerTreeHtml() {
     let asteroidTreeListHtml = '';
     asteroidsPlannerTree.forEach(asteroidData => {
@@ -608,6 +629,7 @@ function refreshTreesHtml() {
 }
 
 function handleAsteroidsPlannerTreeChanged(shouldUpdateContent = true) {
+    updateAsteroidsPlanFromTree();
     refreshAsteroidsPlannerSelection();
     sortProductsInAsteroidsPlannerTree();
     regenerateShoppingListTree();
@@ -1283,7 +1305,7 @@ function resetContent() {
         console.log(`%c--- ERROR: "resetContent" called twice, without deleting the lines between calls`, 'background: maroon'); //// TEST
     }
     elButtonAddAsteroid.line = connectElements(elStartTitle, elButtonAddAsteroid, leaderLineOptionsRightToLeftGradient);
-    updateExampleBasedOnConnectedAddress();
+    updateAsteroidsPlanOnAccountsChanged();
 }
 
 /**
@@ -1339,6 +1361,7 @@ function updateContent() {
                 </div>
                 ${asteroidCardsHtml}
             </div>
+            <div class="cta-remove-text remove-all-asteroids" onclick="resetAsteroidsPlan(true)">Remove all asteroids</div>
         `;
     } else if (!plannedProductName) {
         // Asteroid
@@ -1416,7 +1439,7 @@ function updateContent() {
                             </div>
                         </div>
                     </div>
-                    <div class="delete-card" onclick="proxyActionForAsteroid(event, 'delete', '${asteroidName}')"></div>
+                    <div class="cta-remove-text delete-card" onclick="proxyActionForAsteroid(event, 'delete', '${asteroidName}')"></div>
                 </div>
                 <div class="content-info-wrapper">
                     <h3 class="content-title">Asteroid info</h3>
@@ -1489,7 +1512,7 @@ function updateContent() {
                         <div class="product-name">${plannedProductName}</div>
                         <div class="card-icon zoom-image"></div>
                     </div>
-                    <div class="delete-card" onclick="deletePlannedProduct('${asteroidName}', '${plannedProductName}')"></div>
+                    <div class="cta-remove-text delete-card" onclick="deletePlannedProduct('${asteroidName}', '${plannedProductName}')"></div>
                 </div>
                 <div class="content-info-wrapper">
                     <div class="cta ${productionPlanId ? '' : 'pulse-brand'}" onclick="showProductionPlanId('${plannedProductName}', ${productionPlanId})">${productionPlanId ? 'Edit' : 'Add'} production chain</div>
@@ -1527,7 +1550,14 @@ function goHome() {
     updateContent();
 }
 
-function resetAsteroidsPlan() {
+function resetAsteroidsPlan(shouldConfirm = false) {
+    if (shouldConfirm) {
+        const asteroidWithProductionPlan = asteroidsPlannerTree.find(asteroidData => asteroidData.planned_products.length);
+        const textConfirmDeleteProducts = asteroidWithProductionPlan ? ', and all their production chains' : '';
+        if (!confirm(`Are you sure you want to remove all asteroids${textConfirmDeleteProducts}?`)) {
+            return; // Abort reset
+        }
+    }
     isExampleAsteroidsPlan = false;
     asteroidsPlannerTree = [];
     /**
@@ -1554,20 +1584,39 @@ function onClickTreeItem(asteroidName, plannedProductName, intermediateProductNa
     updateContent();
 }
 
-function updateExampleBasedOnConnectedAddress() {
+function updateAsteroidsPlanOnAccountsChanged() {
     if (asteroidsPlannerTree.length) {
         // Non-empty asteroids plan
-        if (isExampleAsteroidsPlan && getConnectedAddress()) {
+        if (getConnectedAddress()) {
+            if (isExampleAsteroidsPlan) {
+                /**
+                 * If the wallet becomes connected while using the "example" asteroids plan, then:
+                 * - close the production plan (if open)
+                 * - reset the asteroids plan
+                 */
+                onClickProductionPlanActions(['close']);
+                resetAsteroidsPlan();
+            } else {
+                //// TO DO: if the wallet becomes connected while using a NON-example asteroids plan
+                //// => auto-save it for the newly-connected account
+                //// ____
+                //// TO DO: if the connected address changes, while the wallet is connected
+                //// => auto-switch to the asteroids plan for the new address
+                //// ____
+            }
+        } else {
             /**
-             * If the wallet becomes connected while using the "example" asteroids plan, then:
+             * If the wallet becomes disconnected while using a non-empty asteroids plan, then:
              * - close the production plan (if open)
              * - reset the asteroids plan
+             * NOTE: This prevents keeping the asteroids plan from wallet "A",
+             * and then auto-saving it for wallet "B" if connected afterwards.
              */
             onClickProductionPlanActions(['close']);
             resetAsteroidsPlan();
         }
     } else {
-        // Empty asteroids plan (i.e. content has been reset)
+        // Empty asteroids plan => content is / has just been reset
         const elExampleTitle = document.getElementById('example-title');
         if (getConnectedAddress()) {
             // Wallet connected => do NOT show the example button + title
@@ -1591,7 +1640,7 @@ function updateExampleBasedOnConnectedAddress() {
     }
 }
 
-function updateAllWalletInstances() {
+function updateWalletCtaInstancesOnAccountsChanged() {
     const connectedAddress = getConnectedAddress();
     if (connectedAddress) {
         // Hide the "Connect wallet" buttons, and show the buttons with the connected address
@@ -1674,8 +1723,8 @@ document.fonts.onloadingdone = function(fontFaceSetEvent) {
  * - the wallet-asteroids (in the "Add asteroid" overlay)
  */
 walletEventsHandlers.accountsChanged.push(
-    updateAllWalletInstances,
-    updateExampleBasedOnConnectedAddress,
+    updateWalletCtaInstancesOnAccountsChanged,
+    updateAsteroidsPlanOnAccountsChanged,
     updateWalletAsteroidsPanel,
 );
 
@@ -1687,7 +1736,6 @@ handleAsteroidsPlannerTreeChanged();
 
 //// TO DO PRIO
 /*
-- add button (below "Add asteroid" button) + link (in content IFF "home") to completely reset the asteroids plan
 - auto-load the asteroids plan associated with the connected address, if any
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree

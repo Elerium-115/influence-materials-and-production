@@ -24,7 +24,7 @@
     content: ' km²';
 }
 
-/* Buttons */
+/* CTA */
 .cta {
     display: inline-block;
     white-space: nowrap;
@@ -51,6 +51,19 @@
     height: 1rem;
     margin-right: 1rem;
 }
+.cta-remove-text {
+    line-height: 2rem;
+    color: white;
+    cursor: pointer;
+    padding: 0 0.5rem;
+    border-radius: 1rem;
+    opacity: 0.25;
+}
+.cta-remove-text:hover {
+    background: red;
+    opacity: 1;
+}
+
 
 .influence-logo-icon {
     width: 2rem;
@@ -644,6 +657,11 @@
     font-size: 0.9rem;
 }
 
+#content .remove-all-asteroids {
+    display: inline-block;
+    margin-top: 2rem;
+}
+
 
 /* Content cards */
 
@@ -832,19 +850,7 @@
 }
 
 .content-cards.single-card .delete-card {
-    height: 2rem;
-    line-height: 2rem;
-    color: white;
-    cursor: pointer;
     margin: 0 auto;
-    padding: 0 0.5rem;
-    border-radius: 1rem;
-    opacity: 0.25;
-}
-
-.content-cards.single-card .delete-card:hover {
-    background: red;
-    opacity: 1;
 }
 
 .content-cards.single-card .delete-card::after {
