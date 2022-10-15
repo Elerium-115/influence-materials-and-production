@@ -32,13 +32,17 @@ const rawMaterialDataByName = {
 
 // Parse data from official JSON
 const buildingDataById = {};
+const buildingIdByName = {};
 const productDataById = {};
 const productDataByName = {}; // "items" in "production.js"
 const productNamesByHash = {}; // "itemNamesByHash" in "production.js"
 const productNamesSorted = []; // "itemNamesSorted" in "production.js"
 const processDataById = {};
 const processVariantIdsByProductId = {};
-InfluenceProductionChainsJSON.buildings.forEach(building => buildingDataById[building.id] = building);
+InfluenceProductionChainsJSON.buildings.forEach(building => {
+    buildingDataById[building.id] = building;
+    buildingIdByName[building.name] = building.id;
+});
 InfluenceProductionChainsJSON.products.forEach(product => {
     productDataById[product.id] = product;
     productDataByName[product.name] = product;
@@ -102,12 +106,6 @@ let itemDataById = {};
  * NOTE: This does NOT include processes.
  */
 let selectedProductItemIds = [];
-
-/**
- * No shopping list will be shown, while this list is NOT empty
- * (i.e. waiting for user to select one of the required process variants)
- */
-let itemIdsForProcessVariantsWaitingSelection = [];
 
 let shouldHandleHashchange = true;
 
@@ -184,15 +182,139 @@ function getChildContainersOfItemId(itemId, onlySelectedContainers = false) {
     return productChainItemsContainer.querySelectorAll(selector);
 }
 
+function getArraySortedByNameFromObjectValues(obj) {
+    return Object.values(obj).sort(compareListElementsByName);
+}
+
+/**
+ * Return the list of intermediate product names, for a given production plan
+ */
+function getIntermediateProductsForProductionPlan(itemDataById) {
+    return Object.values(itemDataById)
+        .filter(itemData => itemData.productId !== null && itemData.isSelected && itemData.level > 1)
+        .map(itemData => productDataById[itemData.productId].name);
+}
+
+function getShoppingListForProductionPlan(itemDataById) {
+    if (isProcessVariantWaitingSelection(itemDataById)) {
+        // Waiting for user to select a required process variant => NO shopping list
+        // if (doDebug) console.log(`--- NO shopping list, waiting for user to select a required process variant`);
+        return null;
+    }
+    const shoppingList = {};
+
+    // #1 - required inputs
+    const requiredInputs = {};
+    for (const [itemId, itemData] of Object.entries(itemDataById)) {
+        // Parse only inputs (i.e. non-selected product-items) of process variants which are selected
+        if (!itemData.isSelected && itemData.productId !== null && itemDataById[itemData.parentItemId].isSelected) {
+            const productId = itemData.productId;
+            // Shopping data for the current occurrence of this product
+            const inputData = {
+                name: productDataById[productId].name,
+                qty: getTotalQtyForItemId(itemId, itemDataById),
+            };
+            if (!requiredInputs[productId]) {
+                requiredInputs[productId] = inputData;
+            } else {
+                // Add qtys of all occurrences of this product
+                requiredInputs[productId].qty += inputData.qty;
+            }
+        }
+    }
+    // Note: if NO required inputs => the planned product is a raw material, or has no process (e.g. Food as of Jul 2022)
+    shoppingList.inputs = getArraySortedByNameFromObjectValues(requiredInputs);
+
+    // #2 - required buildings
+    const requiredBuildings = {};
+    for (const itemData of Object.values(itemDataById)) {
+        const processId = itemData.processId;
+        if (processId !== null && itemData.isSelected) {
+            const buildingName = getBuildingNameForProcessId(processId);
+            const buildingData = {
+                name: buildingName,
+                qty: 0,
+            };
+            if (!requiredBuildings[buildingName]) {
+                requiredBuildings[buildingName] = buildingData;
+            }
+            requiredBuildings[buildingName].qty++;
+        }
+    }
+    shoppingList.buildings = getArraySortedByNameFromObjectValues(requiredBuildings);
+
+    // #3 - required process modules, for the required buildings
+    //// TO BE IMPLEMENTED, pending official details
+    shoppingList.modules = [];
+
+    // #4 - required spectral types, only if the user selected to extract at least one raw material
+    const requiredSpectralTypes = {};
+    /**
+     * Parse only selected processes that require an extractor.
+     * This ignores non-extraction processes that have a raw material as output (e.g. "Water Electrolysis" for "Hydrogen").
+     * This also ignores selected raw materials with process variants, if none of the variants is selected (e.g. "Hydrogen").
+     */
+    const selectedExtractionProcesses = Object.values(itemDataById).filter(itemData => {
+        // Skip products and non-selected processes
+        if (itemData.processId === null || !itemData.isSelected) {
+            return false;
+        }
+        // Skip processes that do not require an "Extractor"
+        const processData = processDataById[itemData.processId];
+        if (processData.buildingId !== buildingIdByName['Extractor']) {
+            return false;
+        }
+        return true;
+    });
+    selectedExtractionProcesses.forEach(processData => {
+        const rawMaterialId = itemDataById[processData.parentItemId].productId;
+        const rawMaterialName = productDataById[rawMaterialId].name;
+        const baseSpectrals = rawMaterialDataByName[rawMaterialName].baseSpectrals;
+        baseSpectrals.forEach(baseSpectral => {
+            const spectralTypeData = {
+                name: baseSpectral,
+                isOptional: true,
+            };
+            if (!requiredSpectralTypes[baseSpectral]) {
+                requiredSpectralTypes[baseSpectral] = spectralTypeData;
+            }
+            if (baseSpectrals.length === 1) {
+                requiredSpectralTypes[baseSpectral].isOptional = false;
+            }
+        });
+    });
+    shoppingList.spectralTypes = getArraySortedByNameFromObjectValues(requiredSpectralTypes);
+
+    return shoppingList;
+}
+
 function isAlwaysConfirmChecked() {
     return document.getElementById('toggle-always-confirm').checked;
+}
+
+function isProcessVariantWaitingSelection(itemDataById) {
+    // Check only items with process variants
+    for (const [itemId, itemData] of Object.entries(itemDataById).filter(entry => entry[1].processVariantItemIds)) {
+        // For each set of process variants, check if all variants are waiting selection (assume "true" by default)
+        let isSetOfProcessVariantsWaitingSelection = true;
+        for (const itemId of itemData.processVariantItemIds) {
+            if (itemDataById[itemId].isSelected) {
+                isSetOfProcessVariantsWaitingSelection = false;
+                break;
+            }
+        }
+        if (isSetOfProcessVariantsWaitingSelection) {
+            // At least one set of process variants is waiting selection
+            return true;
+        }
+    }
+    return false;
 }
 
 function fullyResetProductionPlan() {
     refreshConnections(false, 'delete'); // delete connections
     itemDataById = {};
     selectedProductItemIds = [];
-    itemIdsForProcessVariantsWaitingSelection = [];
     maxLevel = 0;
     productChainItemsContainer.textContent = '';
 }
@@ -424,8 +546,6 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
     if (processVariantItemIds.length > 1) {
         // Multiple process variants => prompt the user to select one
         // if (doDebug) console.log(`%c--- PROMPT the user to select one of the processVariantItemIds: [${processVariantItemIds.toString()}]`, 'background: yellow; color: black;');
-        // Append new process variants waiting selection - i.e. allow multiple products to feature the prompt for selecting a process variant
-        itemIdsForProcessVariantsWaitingSelection = itemIdsForProcessVariantsWaitingSelection.concat(processVariantItemIds);
         processVariantItemIds.forEach(itemId => {
             // Mark all process variants from this group
             itemDataById[itemId].processVariantItemIds = processVariantItemIds;
@@ -439,21 +559,14 @@ function removeItemIdFromSelectedProductItemIds(itemId) {
     selectedProductItemIds = selectedProductItemIds.filter(someItemId => someItemId !== itemId);
 }
 
-function removeArrayFromItemIdsForProcessVariantsWaitingSelection(itemIdsArray) {
-    itemIdsArray.forEach(itemId => {
-        itemIdsForProcessVariantsWaitingSelection = itemIdsForProcessVariantsWaitingSelection.filter(someItemId => someItemId !== itemId);
-    });
-}
-
 /**
  * Recursive function to purge an item and its sub-chain.
  * - #1 - call "purgeItemId" on each child recursively, until no more children left
  * - #2 - delete "line" starting from [self]
  * - #3 - if [self] is a product => remove [self] from "selectedProductItemIds"
- * - #4 - if [self] is a process variant waiting selection => remove [self] from "itemIdsForProcessVariantsWaitingSelection"
- * - #5 - delete DOM container of [self]
- * - #6 - if the level-container of [self] becomes empty => delete it from the DOM, and decrement "maxLevel"
- * - #7 - remove [self] from "itemDataByIds"
+ * - #4 - delete DOM container of [self]
+ * - #5 - if the level-container of [self] becomes empty => delete it from the DOM, and decrement "maxLevel"
+ * - #6 - remove [self] from "itemDataByIds"
  */
 function purgeItemId(itemId) {
     // if (doDebug) console.log(`%c--- purgeItemId(${itemId})`, 'background: maroon');
@@ -467,20 +580,16 @@ function purgeItemId(itemId) {
     if (itemData.productId !== null) {
         removeItemIdFromSelectedProductItemIds(itemId);
     }
-    // #4 - if [self] is a process variant waiting selection => remove [self] from "itemIdsForProcessVariantsWaitingSelection"
-    if (itemData.processVariantItemIds) {
-        removeArrayFromItemIdsForProcessVariantsWaitingSelection(itemData.processVariantItemIds);
-    }
-    // #5 - delete DOM container of [self]
+    // #4 - delete DOM container of [self]
     const itemContainer = getItemContainerById(itemId);
     itemContainer.remove();
-    // #6 - if the level-container of [self] becomes empty => delete it from the DOM, and decrement "maxLevel"
+    // #5 - if the level-container of [self] becomes empty => delete it from the DOM, and decrement "maxLevel"
     const levelContainer = document.getElementById(`level_${itemData.level}`);
     if (!levelContainer.childElementCount) {
         levelContainer.remove();
         maxLevel--;
     }
-    // #7 - remove [self] from "itemDataByIds"
+    // #6 - remove [self] from "itemDataByIds"
     delete itemDataById[itemId];
 }
 
@@ -636,13 +745,6 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
     if (itemData.processVariantItemIds) {
         // This is a process variant
         markProcessNotDisabled(itemId);
-        if (itemIdsForProcessVariantsWaitingSelection.includes(itemId)) {
-            /**
-             * The user selected one of the required process variants
-             * => remove only this set of process variants from "itemIdsForProcessVariantsWaitingSelection"
-             */
-            removeArrayFromItemIdsForProcessVariantsWaitingSelection(itemData.processVariantItemIds);
-        }
         itemData.processVariantItemIds.forEach(processVariantItemId => {
             // Remove class "waiting-selection" from all process variants in this group, and their inputs
             markProcessNotWaitingSelection(processVariantItemId);
@@ -762,10 +864,10 @@ function getInputQtyForProcess(processId, inputProductId) {
 }
 
 /**
- * Get total-qty required for a product-item from the production chain,
+ * Get total-qty required for a product-item from the given production chain,
  * by recursively multiplying each input-qty from that sub-chain, up to the planned-product
  */
-function getTotalQtyForItemId(itemId) {
+function getTotalQtyForItemId(itemId, itemDataById) {
     let totalQty = 1;
     const inputItemData = itemDataById[itemId];
     const inputProductId = inputItemData.productId;
@@ -775,7 +877,7 @@ function getTotalQtyForItemId(itemId) {
         const processId = processItemData.processId;
         const inputQty = getInputQtyForProcess(processId, inputProductId);
         totalQty = inputQty;
-        totalQty *= getTotalQtyForItemId(processItemData.parentItemId);
+        totalQty *= getTotalQtyForItemId(processItemData.parentItemId, itemDataById);
     }
     return totalQty;
 }
@@ -928,153 +1030,83 @@ function renderSelectedProductsList() {
     document.getElementById('user-selected-products-list').innerHTML = intermediateProductsListHtml;
 }
 
-function renderShoppingList(shoppingList) {
-    // if (doDebug) console.log(`--- shoppingList:`, shoppingList);
-    if (itemIdsForProcessVariantsWaitingSelection.length) {
+function renderShoppingList() {
+    const shoppingList = getShoppingListForProductionPlan(itemDataById);
+    if (!shoppingList) {
         // Waiting for user to select a required process variant => NO shopping list
-        shoppingListContainer.innerHTML = '<p class="brand-text">Please select a<br>required process variant.</p>';
+        shoppingListContainer.innerHTML = /*html*/ `<p class="brand-text">Please select a<br>required process variant.</p>`;
         return;
     }
-    // #1 - required inputs
     let shoppingListHtml = '';
-    // Convert "shoppingList" to sorted array
-    const shoppingListArray = Object.values(shoppingList);
-    if (shoppingListArray.length) {
-        shoppingListArray.sort(compareListElementsByName);
-        // if (doDebug) console.log(`--- shoppingListArray:`, shoppingListArray);
-        shoppingListHtml += '<div class="line line-title"><div>Inputs</div><div>Qty</div></div>';
-        shoppingListArray.forEach(shoppingData => {
-            shoppingListHtml += `<div class="line">
-                    <div><a href="#${getCompactName(shoppingData.name)}" class="list-product-name">${shoppingData.name}</a></div>
-                    <div class="qty">${shoppingData.qty}</div>
-                </div>`;
+
+    // #1 - required inputs
+    if (shoppingList.inputs.length) {
+        // if (doDebug) console.log(`--- shoppingList.inputs:`, shoppingList.inputs);
+        shoppingListHtml += /*html*/ `<div class="line line-title"><div>Inputs</div><div>Qty</div></div>`;
+        shoppingList.inputs.forEach(inputData => {
+            shoppingListHtml += /*html*/ `
+                <div class="line">
+                    <div><a href="#${getCompactName(inputData.name)}" class="list-product-name">${inputData.name}</a></div>
+                    <div class="qty">${inputData.qty}</div>
+                </div>
+            `;
         });
         shoppingListHtml += `<hr>`;
-    } else {
-        // The planned product is a raw material or has no process (e.g. Food as of Jul 2022) => NO inputs
     }
+
     // #2 - required buildings
-    shoppingListHtml += `<div class="line line-title">Buildings</div>`; // including extractors and empty lots
-    const buildingsList = {};
-    for (const itemData of Object.values(itemDataById)) {
-        const processId = itemData.processId;
-        if (processId !== null && itemData.isSelected) {
-            const buildingName = getBuildingNameForProcessId(processId);
-            const buildingData = {
-                name: buildingName,
-                qty: 0,
-            };
-            if (!buildingsList[buildingName]) {
-                buildingsList[buildingName] = buildingData;
-            }
-            buildingsList[buildingName].qty++;
-        }
-    }
-    // Convert "buildingsList" to sorted array
-    const buildingsListArray = Object.values(buildingsList);
-    buildingsListArray.sort(compareListElementsByName);
-    buildingsListArray.forEach(buildingData => {
-        // Do not link "#EmptyLot" (not a product)
-        const hrefHtml = buildingData.name === 'Empty Lot' ? '' : `href="#${getCompactName(buildingData.name)}"`;
-        shoppingListHtml += `<div class="line">
-                <div><a ${hrefHtml} class="list-product-name">${buildingData.name}</a></div>
-                <div class="qty">${buildingData.qty}</div>
-            </div>`;
-    });
-    shoppingListHtml += `<hr>`;
-    // #3 - required process modules, for the required buildings
-    //// TO BE IMPLEMENTED
-    shoppingListHtml += `<div class="line line-title">Modules</div>`;
-    shoppingListHtml += `<div class="line">[redacted]</div>`;
-    shoppingListHtml += `<hr>`;
-    // #4 - required spectral types, only if the user selected to produce at least one raw material
-    shoppingListHtml += `<div class="line line-title">Spectral Types</div>`;
-    const spectralTypesList = {};
-    const optionalSpectrals = [];
-    productChainItemsContainer.querySelectorAll(`.item-type-raw-material.selected-item`).forEach(itemContainer => {
-        const selectedProcessContainer = getChildContainersOfItemId(itemContainer.dataset.containerId, true)[0];
-        /**
-         * Skip this selected raw material, if it has no selected process
-         * (i.e. user switching between process variants - e.g. for "Hydrogen")
-         */
-        if (!selectedProcessContainer) {
-            return;
-        }
-        /**
-         * Skip this selected raw material, if its selected process has inputs
-         * (i.e. refined from another raw material - e.g. "Hydrogen" from "Water")
-         */
-        const itemData = itemDataById[selectedProcessContainer.dataset.containerId];
-        if (processDataById[itemData.processId].inputs.length) {
-            return;
-        }
-        const baseSpectrals = rawMaterialDataByName[itemContainer.dataset.itemName].baseSpectrals;
-        baseSpectrals.forEach(baseSpectral => {
-            const spectralTypeData = {
-                isOptional: true,
-                name: baseSpectral,
-            };
-            if (!spectralTypesList[baseSpectral]) {
-                spectralTypesList[baseSpectral] = spectralTypeData;
-            }
-            if (baseSpectrals.length === 1) {
-                spectralTypesList[baseSpectral].isOptional = false;
-            }
+    if (shoppingList.buildings.length) {
+        shoppingListHtml += /*html*/ `<div class="line line-title">Buildings</div>`; // including extractors and empty lots
+        shoppingList.buildings.forEach(buildingData => {
+            // Do not link "#EmptyLot" (not a product)
+            const hrefHtml = buildingData.name === 'Empty Lot' ? '' : `href="#${getCompactName(buildingData.name)}"`;
+            shoppingListHtml += /*html*/ `
+                <div class="line">
+                    <div><a ${hrefHtml} class="list-product-name">${buildingData.name}</a></div>
+                    <div class="qty">${buildingData.qty}</div>
+                </div>
+            `;
         });
-    });
-    const spectralTypesListArray = Object.values(spectralTypesList);
-    spectralTypesListArray.sort(compareListElementsByName);
-    shoppingListHtml += `<div class="line line-spectral-types">`;
-    spectralTypesListArray.forEach(spectralTypeData => {
-        const baseSpectral = spectralTypeData.name;
-        let isOptionalClass = '';
-        if (spectralTypeData.isOptional) {
-            isOptionalClass = 'is-optional';
-            optionalSpectrals.push(baseSpectral);
-        }
-        shoppingListHtml += `<span class="spectral-type type-${baseSpectral} ${isOptionalClass}">${baseSpectral}</span>`;
-    });
-    shoppingListHtml += `</div>`;
-    if (optionalSpectrals.length) {
-        let optionalSpectralsText = `Types ${optionalSpectrals.join(', ')} are optional`;
-        if (optionalSpectrals.length === 1) {
-            optionalSpectralsText = `Type ${optionalSpectrals[0]} is optional`;
-        }
-        shoppingListHtml += `<div class="line line-spectral-types">${optionalSpectralsText}</div>`;
+        shoppingListHtml += `<hr>`;
     }
+
+    // #3 - required process modules, for the required buildings
+    //// TO BE IMPLEMENTED, pending official details
+    shoppingListHtml += /*html*/ `<div class="line line-title">Modules</div>`;
+    shoppingListHtml += /*html*/ `<div class="line">[redacted]</div>`;
+    shoppingListHtml += `<hr>`;
+
+    // #4 - required spectral types, only if the user selected to extract at least one raw material
+    if (shoppingList.spectralTypes.length) {
+        const optionalSpectrals = [];
+        shoppingListHtml += /*html*/ `<div class="line line-title">Spectral Types</div>`;
+        shoppingListHtml += /*html*/ `<div class="line line-spectral-types">`;
+        shoppingList.spectralTypes.forEach(spectralTypeData => {
+            const baseSpectral = spectralTypeData.name;
+            let isOptionalClass = '';
+            if (spectralTypeData.isOptional) {
+                isOptionalClass = 'is-optional';
+                optionalSpectrals.push(baseSpectral);
+            }
+            shoppingListHtml += /*html*/ `<span class="spectral-type type-${baseSpectral} ${isOptionalClass}">${baseSpectral}</span>`;
+        });
+        shoppingListHtml += `</div>`;
+        if (optionalSpectrals.length) {
+            let optionalSpectralsText = `Types ${optionalSpectrals.join(', ')} are optional`;
+            if (optionalSpectrals.length === 1) {
+                optionalSpectralsText = `Type ${optionalSpectrals[0]} is optional`;
+            }
+            shoppingListHtml += /*html*/ `<div class="line line-spectral-types">${optionalSpectralsText}</div>`;
+        }
+    }
+
     shoppingListContainer.innerHTML = shoppingListHtml;
 }
 
 function refreshDetailsAndConnections(skipHashEncoding = false) {
     // if (doDebug) console.log(`--- refreshDetailsAndConnections`);
-    const shoppingList = {};
-    if (itemIdsForProcessVariantsWaitingSelection.length) {
-        // Waiting for user to select a required process variant => NO shopping list
-        // if (doDebug) console.log(`--- NO shoppingList, waiting for user to select a required process variant`);
-        renderSelectedProductsList(); // DO render the selected products, even if the shopping list will be empty
-        renderShoppingList(shoppingList);
-        refreshConnections();
-        return;
-    }
-    for (const [itemId, itemData] of Object.entries(itemDataById)) {
-        // Parse only inputs (i.e. non-selected product-items) of process variants which are selected
-        if (!itemData.isSelected && itemData.productId !== null && itemDataById[itemData.parentItemId].isSelected) {
-            const shoppingProductId = itemData.productId;
-            // Shopping data for the current occurrence of this product
-            const shoppingProductData = {
-                name: productDataById[shoppingProductId].name,
-                qty: getTotalQtyForItemId(itemId),
-            };
-            if (!shoppingList[shoppingProductId]) {
-                shoppingList[shoppingProductId] = shoppingProductData;
-            } else {
-                // Add qtys of all occurrences of this product
-                shoppingList[shoppingProductId].qty += shoppingProductData.qty;
-            }
-        }
-    }
     renderSelectedProductsList();
-    renderShoppingList(shoppingList);
+    renderShoppingList();
     refreshConnections();
     // Hash encoding is only used in the Production Planner tool
     if (!skipHashEncoding && isToolProductionPlanner) {
@@ -1190,7 +1222,7 @@ async function postProductionPlanData(productionPlanData) {
  * and return the saved production plan data (or "null" on error).
  */
 async function saveProductionPlan() {
-    if (itemIdsForProcessVariantsWaitingSelection.length) {
+    if (isProcessVariantWaitingSelection(itemDataById)) {
         // Waiting for user to select a required process variant => NOT saving the production plan
         alert('Please select a required process variant');
         return null;
@@ -1289,8 +1321,6 @@ if (doDebug && false) {
         debugHtml += `itemId = ${el.dataset.containerId}<br><br>`
         debugHtml += `itemData:<br>`;
         debugHtml += `${JSON.stringify(itemDataById[el.dataset.containerId], null, '\t')}<br><br>`;
-        debugHtml += `itemIdsForProcessVariants<br>..WaitingSelection:<br>`;
-        debugHtml += `${JSON.stringify(itemIdsForProcessVariantsWaitingSelection, null, '\t')}<br><br>`;
         debugHtml += `selectedProductItemIds:<br>`;
         debugHtml += `[${selectedProductItemIds.join(', ')}]<br>`;
         debugContainer.innerHTML = debugHtml;

@@ -1,7 +1,7 @@
 const mockProductionPlanDataById = {
 	"mock1": {
 		"plannedProductName": "Aluminium",
-		"productionPlanId": 1,
+		"productionPlanId": "mock1",
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
@@ -79,7 +79,7 @@ const mockProductionPlanDataById = {
 	},
 	"mock2": {
 		"plannedProductName": "Steel",
-		"productionPlanId": 2,
+		"productionPlanId": "mock2",
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
@@ -253,7 +253,7 @@ const mockProductionPlanDataById = {
 	},
 	"mock3": {
 		"plannedProductName": "Carbon Monoxide",
-		"productionPlanId": 3,
+		"productionPlanId": "mock3",
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
@@ -275,7 +275,7 @@ const mockProductionPlanDataById = {
 	},
 	"mock4": {
 		"plannedProductName": "Feldspar",
-		"productionPlanId": 4,
+		"productionPlanId": "mock4",
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
@@ -297,7 +297,7 @@ const mockProductionPlanDataById = {
 	},
 	"mock5": {
 		"plannedProductName": "Hydrolox Fuel",
-		"productionPlanId": 5,
+		"productionPlanId": "mock5",
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
@@ -383,7 +383,7 @@ const mockProductionPlanDataById = {
 	},
 	"mock6": {
 		"plannedProductName": "Oxygen",
-		"productionPlanId": 6,
+		"productionPlanId": "mock6",
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
@@ -413,7 +413,7 @@ const mockProductionPlanDataById = {
 	},
 	"mock7": {
 		"plannedProductName": "Water",
-		"productionPlanId": 7,
+		"productionPlanId": "mock7",
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,

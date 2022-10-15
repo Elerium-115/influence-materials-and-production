@@ -76,35 +76,45 @@ const mockAsteroidsPlannerTree = [
 				"production_plan_id": "mock1",
 				"intermediate_products": [
 					{
-						"intermediate_product_name": "Alumina"
+						"intermediate_product_name": "Alumina",
 					},
 					{
-						"intermediate_product_name": "Graphite"
+						"intermediate_product_name": "Graphite",
 					},
 				],
 				"shopping_list":
 				{
 					"inputs": [
 						{
-							"input_name": "Ammonia"
+							"input_name": "Ammonia",
+							"qty": 4,
 						},
 						{
-							"input_name": "Feldspar"
+							"input_name": "Feldspar",
+							"qty": 4,
 						},
 						{
-							"input_name": "Sulfuric Acid"
+							"input_name": "Sulfuric Acid",
+							"qty": 4,
 						},
 					],
 					"buildings": [
 						{
-							"building_name": "Extractor"
+							"building_name": "Extractor",
+							"qty": 1,
 						},
 						{
-							"building_name": "Refinery"
+							"building_name": "Refinery",
+							"qty": 2,
 						},
 					],
 					"modules": [],
-					"spectral_types": ["M"],
+					"spectral_types": [
+						{
+							"is_optional": false,
+							"spectral_type_name": "M",
+						},
+					],
 				},
 			},
 			{
@@ -112,41 +122,50 @@ const mockAsteroidsPlannerTree = [
 				"production_plan_id": "mock2",
 				"intermediate_products": [
 					{
-						"intermediate_product_name": "Graphite"
+						"intermediate_product_name": "Graphite",
 					},
 					{
-						"intermediate_product_name": "Iron"
+						"intermediate_product_name": "Iron",
 					},
 					{
-						"intermediate_product_name": "Iron Oxide"
+						"intermediate_product_name": "Iron Oxide",
 					},
 					{
-						"intermediate_product_name": "Iron Sulfide"
+						"intermediate_product_name": "Iron Sulfide",
 					},
 					{
-						"intermediate_product_name": "Troilite"
+						"intermediate_product_name": "Troilite",
 					},
 				],
 				"shopping_list":
 				{
 					"inputs": [
 						{
-							"input_name": "Carbon Monoxide"
+							"input_name": "Carbon Monoxide",
+							"qty": 4,
 						},
 						{
-							"input_name": "Oxygen"
+							"input_name": "Oxygen",
+							"qty": 8,
 						},
 					],
 					"buildings": [
 						{
-							"building_name": "Extractor"
+							"building_name": "Extractor",
+							"qty": 2,
 						},
 						{
-							"building_name": "Refinery"
+							"building_name": "Refinery",
+							"qty": 4,
 						},
 					],
 					"modules": [],
-					"spectral_types": ["M"],
+					"spectral_types": [
+						{
+							"is_optional": false,
+							"spectral_type_name": "M",
+						},
+					],
 				},
 			},
 		],
@@ -165,11 +184,21 @@ const mockAsteroidsPlannerTree = [
 					"inputs": [],
 					"buildings": [
 						{
-							"building_name": "Extractor"
+							"building_name": "Extractor",
+							"qty": 1,
 						},
 					],
 					"modules": [],
-					"spectral_types": ["C", "I"],
+					"spectral_types": [
+						{
+							"is_optional": true,
+							"spectral_type_name": "C",
+						},
+						{
+							"is_optional": true,
+							"spectral_type_name": "I",
+						},
+					],
 				},
 			},
 			{
@@ -200,11 +229,17 @@ const mockAsteroidsPlannerTree = [
 					"inputs": [],
 					"buildings": [
 						{
-							"building_name": "Extractor"
+							"building_name": "Extractor",
+							"qty": 1,
 						},
 					],
 					"modules": [],
-					"spectral_types": ["S"],
+					"spectral_types": [
+						{
+							"is_optional": false,
+							"spectral_type_name": "S",
+						},
+					],
 				},
 			},
 		],
@@ -219,29 +254,37 @@ const mockAsteroidsPlannerTree = [
 				"production_plan_id": "mock5",
 				"intermediate_products": [
 					{
-						"intermediate_product_name": "Hydrogen"
+						"intermediate_product_name": "Hydrogen",
 					},
 					{
-						"intermediate_product_name": "Oxygen"
+						"intermediate_product_name": "Oxygen",
 					},
 				],
 				"shopping_list":
 				{
 					"inputs": [
 						{
-							"input_name": "Water"
+							"input_name": "Water",
+							"qty": 4,
 						},
 					],
 					"buildings": [
 						{
-							"building_name": "Extractor"
+							"building_name": "Extractor",
+							"qty": 1,
 						},
 						{
-							"building_name": "Refinery"
+							"building_name": "Refinery",
+							"qty": 2,
 						},
 					],
 					"modules": [],
-					"spectral_types": ["I"],
+					"spectral_types": [
+						{
+							"is_optional": false,
+							"spectral_type_name": "I",
+						},
+					],
 				},
 			},
 			{
@@ -252,12 +295,14 @@ const mockAsteroidsPlannerTree = [
 				{
 					"inputs": [
 						{
-							"input_name": "Water"
+							"input_name": "Water",
+							"qty": 2,
 						},
 					],
 					"buildings": [
 						{
-							"building_name": "Refinery"
+							"building_name": "Refinery",
+							"qty": 1,
 						},
 					],
 					"modules": [],
@@ -273,11 +318,21 @@ const mockAsteroidsPlannerTree = [
 					"inputs": [],
 					"buildings": [
 						{
-							"building_name": "Extractor"
+							"building_name": "Extractor",
+							"qty": 1,
 						},
 					],
 					"modules": [],
-					"spectral_types": ["C", "I"],
+					"spectral_types": [
+						{
+							"is_optional": true,
+							"spectral_type_name": "C",
+						},
+						{
+							"is_optional": true,
+							"spectral_type_name": "I",
+						},
+					],
 				},
 			},
 		],

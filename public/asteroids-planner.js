@@ -386,6 +386,7 @@ function regenerateAndSaveAsteroidsPlan() {
 
 function regenerateAsteroidsTreeFromPlan() {
     //// TO BE IMPLEMENTED
+    //// -- call this when connecting a wallet, to auto-load the asteroids plan from data storage, then regen the tree & stuff here
     //// ____
 }
 
@@ -442,7 +443,6 @@ function refreshAsteroidsPlannerTreeHtml() {
 }
 
 function refreshShoppingListTreeHtml() {
-    let shoppingListTreeHtml = '';
     let inputsTreeHtml = '';
     if (shoppingListTree.inputs) {
         let inputsListHtml = '';
@@ -477,7 +477,7 @@ function refreshShoppingListTreeHtml() {
     if (shoppingListTree.modules) {
         let modulesListHtml = '';
         if (!shoppingListTree.modules.length) {
-            //// PLACEHOLDER
+            //// TO BE IMPLEMENTED, pending official details
             shoppingListTree.modules = [{module_name: '[redacted]'}];
         }
         shoppingListTree.modules.forEach(moduleData => {
@@ -495,8 +495,8 @@ function refreshShoppingListTreeHtml() {
     let spectralTypesTreeHtml = '';
     if (shoppingListTree.spectral_types) {
         let spectralTypesListHtml = '';
-        shoppingListTree.spectral_types.forEach(baseSpectral => {
-            spectralTypesListHtml += /*html*/ `<li class="tree-label" data-base-spectral="${baseSpectral}">${baseSpectral}</li>`;
+        shoppingListTree.spectral_types.forEach(spectralTypeData => {
+            spectralTypesListHtml += /*html*/ `<li class="tree-label" data-base-spectral="${spectralTypeData.spectral_type_name}">${spectralTypeData.spectral_type_name}</li>`;
         });
         spectralTypesTreeHtml = /*html*/ `
             <li>
@@ -507,16 +507,29 @@ function refreshShoppingListTreeHtml() {
             </li>
         `;
     }
-    shoppingListTreeHtml = inputsTreeHtml + buildingsTreeHtml + modulesTreeHtml + spectralTypesTreeHtml;
+    const shoppingListTreeHtml = inputsTreeHtml + buildingsTreeHtml + modulesTreeHtml + spectralTypesTreeHtml;
     disconnectAsteroidsPlannerTree();
     elShoppingListTree.querySelector('.shopping-tree').innerHTML = shoppingListTreeHtml;
     connectAsteroidsPlannerTree();
+}
+
+/**
+ * Parse an array of objects and, for each object,
+ * delete all keys, other than the one passed as argument.
+ */
+function keepSingleKeyForObjectsInArray(arr, key) {
+    return arr.map(obj => {
+        const prunedObject = {};
+        prunedObject[key] = obj[key];
+        return prunedObject;
+    });
 }
 
 // Sort array of objects alphabetically, based on a certain key of each object
 function compareListElementsByInputName(el1, el2) { return el1.input_name.localeCompare(el2.input_name); }
 function compareListElementsByBuildingName(el1, el2) { return el1.building_name.localeCompare(el2.building_name); }
 function compareListElementsByModuleName(el1, el2) { return el1.module_name.localeCompare(el2.module_name); }
+function compareListElementsBySpectralTypeName(el1, el2) { return el1.spectral_type_name.localeCompare(el2.spectral_type_name); }
 function compareListElementsByPlannedProductName(el1, el2) { return el1.planned_product_name.localeCompare(el2.planned_product_name); }
 function compareListElementsByIntermediateProductName(el1, el2) { return el1.intermediate_product_name.localeCompare(el2.intermediate_product_name); }
 
@@ -525,15 +538,23 @@ function mergeAndSortArraysWithUniqueValuesForKey(arr1, arr2, key = null) {
         // Source: https://stackoverflow.com/a/36469404/11071601
         return [...new Set([...arr1, ...arr2])].sort();
     }
-    const mergedArray = [];
+    let mergedArray = [];
     const uniqueKeyValues = [];
     arr1.concat(arr2).forEach(data => {
-        const value = data[key];
+        // Avoid mutating the data in the original arrays being merged & sorted
+        const clonedData = {...data};
+        const value = clonedData[key];
         if (!uniqueKeyValues.includes(value)) {
-            mergedArray.push(data);
+            mergedArray.push(clonedData);
             uniqueKeyValues.push(value);
         }
     });
+    /**
+     * Keep the key based on which the arrays are being merged & sorted, and delete
+     * all other keys - e.g. delete "qty" and "is_optional" properties, because they
+     * depend on the current selection (selected asteroid / selected planned product).
+     */
+    mergedArray = keepSingleKeyForObjectsInArray(mergedArray, key);
     switch (key) {
         case 'input_name':
             return mergedArray.sort(compareListElementsByInputName);
@@ -541,6 +562,8 @@ function mergeAndSortArraysWithUniqueValuesForKey(arr1, arr2, key = null) {
             return mergedArray.sort(compareListElementsByBuildingName);
         case 'module_name':
             return mergedArray.sort(compareListElementsByModuleName);
+        case 'spectral_type_name':
+            return mergedArray.sort(compareListElementsBySpectralTypeName);
     }
     console.log(`%c--- ERROR: invalid sort key = ${key}`, 'background: maroon'); //// TEST
     return [];
@@ -614,9 +637,16 @@ function regenerateShoppingListTree() {
             shoppingListTree.inputs = mergeAndSortArraysWithUniqueValuesForKey(shoppingListTree.inputs, shoppingList.inputs, 'input_name');
             shoppingListTree.buildings = mergeAndSortArraysWithUniqueValuesForKey(shoppingListTree.buildings, shoppingList.buildings, 'building_name');
             shoppingListTree.modules = mergeAndSortArraysWithUniqueValuesForKey(shoppingListTree.modules, shoppingList.modules, 'module_name');
-            shoppingListTree.spectral_types = mergeAndSortArraysWithUniqueValuesForKey(shoppingListTree.spectral_types, shoppingList.spectral_types);
+            shoppingListTree.spectral_types = mergeAndSortArraysWithUniqueValuesForKey(shoppingListTree.spectral_types, shoppingList.spectral_types, 'spectral_type_name');
         });
     });
+    //// TO DO: how to highlight optional spectral types in tree + content?
+    //// -- NOTE: if the selected asteroid has multiple planned products, with different optionality for C / I types
+    //// ---- => the NON-optional status takes precedence
+    //// ____
+    //// TO DO: show warning if the shopping list for the current selection (asteroid / planned product)
+    //// -- includes NON-optional spectral types which are NOT found on that asteroid
+    //// ____
 }
 
 function refreshTreesHtml() {
@@ -719,7 +749,7 @@ function connectAsteroidsPlannerTree() {
         shoppingList.inputs.forEach(inputData => targetInputs = [...new Set([...targetInputs, inputData.input_name])]);
         shoppingList.buildings.forEach(buildingData => targetBuildings = [...new Set([...targetBuildings, buildingData.building_name])]);
         shoppingList.modules.forEach(moduleData => targetModules = [...new Set([...targetModules, moduleData.module_name])]);
-        shoppingList.spectral_types.forEach(spectralType => targetSpectralTypes = [...new Set([...targetSpectralTypes, spectralType])]);
+        shoppingList.spectral_types.forEach(spectralTypeData => targetSpectralTypes = [...new Set([...targetSpectralTypes, spectralTypeData.spectral_type_name])]);
     });
     targetInputs.forEach(inputName => {
         const origin = elShoppingListTree.querySelector(`[data-input-name="${inputName}"]`);
@@ -1284,7 +1314,6 @@ async function onClickProductionPlanActions(actions) {
             return;
         }
         const savedProductionPlanData = await saveProductionPlan();
-        console.log(`--- savedProductionPlanData:`, savedProductionPlanData); //// TEST
         if (!savedProductionPlanData) {
             return;
         }
@@ -1300,6 +1329,12 @@ async function onClickProductionPlanActions(actions) {
         setTimeout(() => {
             elTemplateProductionPlan.classList.remove('disabling');
             elTemplateProductionPlan.classList.add('hidden');
+            /**
+             * Reposition the connections, AFTER the asteroids planner becomes visible again.
+             * Otherwise the connections would remain hidden - because they were created
+             * during "handleSavedProductionPlanData", when the asteroids planner was still hidden.
+             */
+            repositionAsteroidsPlannerConnections();
         }, 500); // Match the animation duration for "enabling"
     }
 }
@@ -1310,11 +1345,48 @@ function handleSavedProductionPlanData(savedProductionPlanData) {
      * using the [ID, intermediate products, shopping list] from the newly saved production plan.
      */
     const {asteroidName, plannedProductName} = asteroidsPlannerSelection;
+    const plannedProductData = getPlannedProductData(asteroidName, plannedProductName);
     // The ID needs to be updated, in case it was null (when saved for the first time).
-    getPlannedProductData(asteroidName, plannedProductName).production_plan_id = savedProductionPlanData.productionPlanId;
+    plannedProductData.production_plan_id = savedProductionPlanData.productionPlanId;
     // The intermediate products and the shopping list need to be inferred.
-    //// TO BE IMPLEMENTED
-    //// ____
+    const intermediateProductNames = getIntermediateProductsForProductionPlan(savedProductionPlanData.itemDataById);
+    plannedProductData.intermediate_products = intermediateProductNames.map(productName => {
+        return {
+            intermediate_product_name: productName,
+        };
+    });
+    const shoppingList = getShoppingListForProductionPlan(savedProductionPlanData.itemDataById);
+    if (!shoppingList) {
+        console.log(`%c--- ERROR: production plan was saved with process variants waiting selection`, 'background: maroon'); //// TEST
+        return;
+    }
+    const shoppingListInputs = shoppingList.inputs.map(inputData => {
+        return {
+            input_name: inputData.name,
+            qty: inputData.qty,
+        };
+    });
+    const shoppingListBuildings = shoppingList.buildings.map(buildingData => {
+        return {
+            building_name: buildingData.name,
+            qty: buildingData.qty,
+        };
+    });
+    //// TO BE IMPLEMENTED, pending official details
+    const shoppingListModules = [];
+    const shoppingListSpectralTypes = shoppingList.spectralTypes.map(spectralTypeData => {
+        return {
+            spectral_type_name: spectralTypeData.name,
+            is_optional: spectralTypeData.isOptional,
+        };
+    });
+
+    plannedProductData.shopping_list = {
+        inputs: shoppingListInputs,
+        buildings: shoppingListBuildings,
+        modules: shoppingListModules,
+        spectral_types: shoppingListSpectralTypes,
+    };
     handleAsteroidsPlannerTreeChanged();
 }
 
@@ -1603,6 +1675,10 @@ function resetAsteroidsPlan(shouldConfirm = false) {
 
 function setupExample() {
     isExampleAsteroidsPlan = true;
+    //// TO DO: remove "mockAsteroidsPlannerTree"
+    //// -- instead, generate "asteroidsPlannerTree" from "regenerateAsteroidsTreeFromPlan(mockAsteroidsPlan)"
+    //// -- also remove comment in mock file re: "mockAsteroidsPlan" not being used
+    //// ____
     asteroidsPlannerTree = [...mockAsteroidsPlannerTree];
     handleAsteroidsPlannerTreeChanged();
 }
