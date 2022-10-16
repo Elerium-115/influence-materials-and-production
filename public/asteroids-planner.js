@@ -135,13 +135,13 @@ function getListOfPlannedProducts(asteroidName) {
 function getPlannedProductData(asteroidName, plannedProductName) {
     const asteroidData = getAsteroidData(asteroidName);
     if (!asteroidData) {
-        console.log(`%c--- ERROR: [getListOfIntermediaryProducts] NO asteroidData for asteroidName = ${asteroidName}`, 'background: maroon'); //// TEST
+        console.log(`%c--- ERROR: [getPlannedProductData] NO asteroidData for asteroidName = ${asteroidName}`, 'background: maroon'); //// TEST
         return [];
     }
     return asteroidData.planned_products.find(data => data.planned_product_name === plannedProductName);
 }
 
-function getListOfIntermediaryProducts(asteroidName, plannedProductName) {
+function getListOfIntermediateProducts(asteroidName, plannedProductName) {
     const plannedProductData = getPlannedProductData(asteroidName, plannedProductName);
     return plannedProductData.intermediate_products.map(data => data.intermediate_product_name);
 }
@@ -869,7 +869,7 @@ function refreshAsteroidsPlannerBreadcrumbsHtml() {
             `;
             if (intermediateProductName) {
                 let itermediateProductsListHtml = '';
-                getListOfIntermediaryProducts(asteroidName, plannedProductName).forEach(name => {
+                getListOfIntermediateProducts(asteroidName, plannedProductName).forEach(name => {
                     const classHtml = name === intermediateProductName ? 'class="selected"' : '';
                     const onClickHtml = name === intermediateProductName ? '' : `onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}', '${name}')"`;
                     itermediateProductsListHtml += /*html*/ `<li ${classHtml} ${onClickHtml}>${name}</li>`;
@@ -1555,8 +1555,8 @@ function updateContent() {
         // Planned product
         let intermediateProductsAndShoppingListHtml = '';
         let intermediateProductsListHtml = '';
-        const listOfIntermediaryProducts = getListOfIntermediaryProducts(asteroidName, plannedProductName);
-        listOfIntermediaryProducts.forEach(intermediateProductName => {
+        const listOfIntermediateProducts = getListOfIntermediateProducts(asteroidName, plannedProductName);
+        listOfIntermediateProducts.forEach(intermediateProductName => {
             if (intermediateProductsListHtml.length) {
                 intermediateProductsListHtml += ', ';
             }
@@ -1564,9 +1564,10 @@ function updateContent() {
                 <a onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}', '${intermediateProductName}')">${intermediateProductName}</a>
             `.trim(); // Trim to avoid spacing before ","
         });
-        const productionPlanId = getPlannedProductData(asteroidName, plannedProductName).production_plan_id;
+        const plannedProductData = getPlannedProductData(asteroidName, plannedProductName);
+        const productionPlanId = plannedProductData.production_plan_id;
         if (productionPlanId) {
-            if (listOfIntermediaryProducts.length) {
+            if (listOfIntermediateProducts.length) {
                 intermediateProductsAndShoppingListHtml = /*html*/ `
                     <div class="content-subtitle">Intermediate products selected for this planned product:</div>
                     <div class="intermediate-products">${intermediateProductsListHtml}</div>
@@ -1576,24 +1577,40 @@ function updateContent() {
                     <div class="content-subtitle">No intermediate products selected for this planned product.</div>
                 `;
             }
+            let inputsHtml = '';
+            plannedProductData.shopping_list.inputs.forEach(inputData => {
+                inputsHtml += /*html*/ `<div class="row"><span class="name">${inputData.input_name}</span><span class="qty">${inputData.qty}</span></div>`;
+            });
+            let buildingsHtml = '';
+            plannedProductData.shopping_list.buildings.forEach(buildingData => {
+                buildingsHtml += /*html*/ `<div class="row"><span class="name">${buildingData.building_name}</span><span class="qty">${buildingData.qty}</span></div>`;
+            });
+            //// TO BE IMPLEMENTED, pending official details
+            const modulesHtml = /*html*/ `<div class="row"><span class="name">[redacted]</span></div>`;
+            let spectralTypesHtml = '';
+            plannedProductData.shopping_list.spectral_types.forEach(spectralTypeData => {
+                spectralTypesHtml += /*html*/ `<div class="row"><span class="name">${spectralTypeData.spectral_type_name}</span></div>`;
+                //// TO DO: mark optional spectral types
+                //// ____
+            });
             intermediateProductsAndShoppingListHtml += /*html*/ `
                 <div class="content-subtitle">Shopping list:</div>
                 <div class="shopping-list">
                     <div>
                         <div class="title">Inputs</div>
-                        [redacted]
+                        ${inputsHtml}
                     </div>
                     <div>
                         <div class="title">Buildings</div>
-                        [redacted]
+                        ${buildingsHtml}
                     </div>
                     <div>
                         <div class="title">Modules</div>
-                        [redacted]
+                        ${modulesHtml}
                     </div>
                     <div>
                         <div class="title">Spectral Types</div>
-                        [redacted]
+                        ${spectralTypesHtml}
                     </div>
                 </div>
             `;

@@ -646,15 +646,35 @@
 
 #content .shopping-list {
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 50% 50%;
     grid-auto-flow: column;
-    gap: 1rem;
+    gap: 1rem 2rem;
     font-size: 0.8rem;
+    margin-top: 1rem;
 }
 
 #content .shopping-list .title {
     color: var(--link);
     font-size: 0.9rem;
+}
+
+#content .shopping-list .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 -0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+}
+
+#content .shopping-list .row:hover {
+    background: var(--overactive-bg);
+}
+
+#content .shopping-list .row .qty::before {
+    content: '✕';
+    font-size: 0.5rem;
+    margin-right: 0.2rem;
 }
 
 #content .remove-all-asteroids {
