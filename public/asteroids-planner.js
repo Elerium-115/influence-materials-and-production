@@ -1589,9 +1589,8 @@ function updateContent() {
             const modulesHtml = /*html*/ `<div class="row"><span class="name">[redacted]</span></div>`;
             let spectralTypesHtml = '';
             plannedProductData.shopping_list.spectral_types.forEach(spectralTypeData => {
-                spectralTypesHtml += /*html*/ `<div class="row"><span class="name">${spectralTypeData.spectral_type_name}</span></div>`;
-                //// TO DO: mark optional spectral types
-                //// ____
+                const optionalClass = spectralTypeData.is_optional ? 'optional' : '';
+                spectralTypesHtml += /*html*/ `<div class="row"><span class="name ${optionalClass}">${spectralTypeData.spectral_type_name}</span></div>`;
             });
             intermediateProductsAndShoppingListHtml += /*html*/ `
                 <div class="content-subtitle">Shopping list:</div>
@@ -1862,6 +1861,8 @@ handleAsteroidsPlannerTreeChanged();
 
 //// TO DO PRIO
 /*
+- click on a shopping-list-input (either from the tree, or from the planned-product contents)
+    => overlay with summary of that input-product + option to plan it on one of the asteroids (then redirect to that selection)
 - auto-load the asteroids plan associated with the connected address, if any
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree

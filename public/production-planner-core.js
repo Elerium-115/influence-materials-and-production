@@ -1011,7 +1011,8 @@ function renderSelectedProductsList() {
     let intermediateProductsListHtml = '';
     if (intermediateProducts.length) {
         intermediateProducts.forEach(intermediateProductData => {
-            intermediateProductsListHtml += `<span><a href="#${getCompactName(intermediateProductData.name)}" class="list-product-name">${intermediateProductData.name}</a>`;
+            const hrefHtml = isToolProductionPlanner ? `href="#${getCompactName(intermediateProductData.name)}"` : '';
+            intermediateProductsListHtml += /*html*/ `<span><a ${hrefHtml} class="list-product-name">${intermediateProductData.name}</a>`;
             if (intermediateProductData.qty > 1) {
                 intermediateProductsListHtml += `<span class="qty">${intermediateProductData.qty}</span>`;
             }
@@ -1038,9 +1039,10 @@ function renderShoppingList() {
         // if (doDebug) console.log(`--- shoppingList.inputs:`, shoppingList.inputs);
         shoppingListHtml += /*html*/ `<div class="line line-title"><div>Inputs</div><div>Qty</div></div>`;
         shoppingList.inputs.forEach(inputData => {
+            const hrefHtml = isToolProductionPlanner ? `href="#${getCompactName(inputData.name)}"` : '';
             shoppingListHtml += /*html*/ `
                 <div class="line">
-                    <div><a href="#${getCompactName(inputData.name)}" class="list-product-name">${inputData.name}</a></div>
+                    <div><a ${hrefHtml} class="list-product-name">${inputData.name}</a></div>
                     <div class="qty">${inputData.qty}</div>
                 </div>
             `;
@@ -1053,7 +1055,7 @@ function renderShoppingList() {
         shoppingListHtml += /*html*/ `<div class="line line-title">Buildings</div>`; // including extractors and empty lots
         shoppingList.buildings.forEach(buildingData => {
             // Do not link "#EmptyLot" (not a product)
-            const hrefHtml = buildingData.name === 'Empty Lot' ? '' : `href="#${getCompactName(buildingData.name)}"`;
+            const hrefHtml = (isToolProductionPlanner && buildingData.name !== 'Empty Lot') ? `href="#${getCompactName(buildingData.name)}"` : '';
             shoppingListHtml += /*html*/ `
                 <div class="line">
                     <div><a ${hrefHtml} class="list-product-name">${buildingData.name}</a></div>

@@ -89,17 +89,6 @@
     gap: 10rem; /* compensate for "#shopping-list-tree" hidden if ".empty-planner" */
 }
 
-#asteroids-planner-tree {
-    max-width: 14rem;
-    margin-left: 1rem;
-}
-
-.empty-planner #asteroids-planner-tree {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
 #asteroids-planner-tree h3,
 #shopping-list-tree h3 {
     line-height: 2rem;
@@ -155,6 +144,17 @@
 
 
 /* Asteroids Planner tree */
+
+#asteroids-planner-tree {
+    max-width: 14rem;
+    margin-left: 1rem;
+}
+
+.empty-planner #asteroids-planner-tree {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
 #asteroids-planner-tree h3 {
     color: var(--brand-text);
@@ -375,6 +375,7 @@
 /* Shopping List tree */
 
 #shopping-list-tree {
+    max-width: 14rem;
     text-align: right;
 }
 
@@ -669,6 +670,11 @@
 
 #content .shopping-list .row:hover {
     background: var(--overactive-bg);
+}
+
+#content .shopping-list .row .optional::after {
+    content: ' - optional';
+    opacity: 0.5;
 }
 
 #content .shopping-list .row .qty::before {
