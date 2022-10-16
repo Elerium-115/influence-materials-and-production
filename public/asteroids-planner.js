@@ -191,7 +191,6 @@ function getWalletAsteroidCardHtml(metadata) {
 }
 
 async function fetchAsteroidMetadataById(id) {
-    if (!apiUrl.includes('127.0.0.1')) { return {error: 'API coming soon...'}; } //// TEST
     const config = {
         method: 'get',
         url: `${apiUrl}/asteroid/${id}`,
@@ -208,7 +207,6 @@ async function fetchAsteroidMetadataById(id) {
 }
 
 async function fetchAsteroidsFromWallet() {
-    if (!apiUrl.includes('127.0.0.1')) { return {error: 'API coming soon...'}; } //// TEST
     const connectedAddress = getConnectedAddress();
     if (!connectedAddress) {
         return {error: 'No connected address'};
@@ -230,7 +228,6 @@ async function fetchAsteroidsFromWallet() {
 }
 
 async function fetchProductionPlanDataById(id) {
-    if (!apiUrl.includes('127.0.0.1')) { return {error: 'API coming soon...'}; } //// TEST
     const config = {
         method: 'get',
         url: `${apiUrl}/production-plan/${id}`,

@@ -1196,7 +1196,6 @@ function selectPlannedProductData(plannedProductData) {
 }
 
 async function postProductionPlanData(productionPlanData) {
-    if (!apiUrl.includes('127.0.0.1')) { return {error: 'API coming soon...'}; } //// TEST
     const config = {
         method: 'post',
         url: `${apiUrl}/production-plan/${productionPlanData.productionPlanId}`,

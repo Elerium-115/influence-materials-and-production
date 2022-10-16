@@ -10,8 +10,11 @@ document.querySelectorAll('.options label > input').forEach(elInput => {
     elInput.checked = elInput.parentElement.classList.contains('checked');
 });
 
-// Depending on the environment, the API URL will be "http://localhost:3000" or "https://materials.adalia.id:3000"
-const apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
+let apiUrl = `https://elerium-influence-api.vercel.app`;
+if (window.location.hostname === '127.0.0.1') {
+    // localhost API @ http://127.0.0.1:3000
+    apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
+}
 
 /**
  * e.g. "Thin-film Resistor" => "Thin-filmResistor"
