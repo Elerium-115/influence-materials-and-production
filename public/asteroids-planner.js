@@ -444,12 +444,16 @@ function refreshShoppingListTreeHtml() {
     if (shoppingListTree.inputs) {
         let inputsListHtml = '';
         shoppingListTree.inputs.forEach(inputData => {
-            inputsListHtml += /*html*/ `<li class="tree-label" data-input-name="${inputData.input_name}">${inputData.input_name}</li>`;
+            inputsListHtml += /*html*/ `
+                <li class="tree-label" data-input-name="${inputData.input_name}" onclick="onClickAddProductFromShoppingList('${inputData.input_name}')">
+                    ${inputData.input_name}
+                </li>
+            `;
         });
         inputsTreeHtml = /*html*/ `
             <li>
                 <div class="tree-label">Inputs</div>
-                <ul class="shopping-inputs-tree">
+                <ul class="shopping-inputs-tree can-add-product">
                     ${inputsListHtml}
                 </ul>
             </li>
@@ -459,12 +463,16 @@ function refreshShoppingListTreeHtml() {
     if (shoppingListTree.buildings) {
         let buildingsListHtml = '';
         shoppingListTree.buildings.forEach(buildingData => {
-            buildingsListHtml += /*html*/ `<li class="tree-label" data-building-name="${buildingData.building_name}">${buildingData.building_name}</li>`;
+            buildingsListHtml += /*html*/ `
+                <li class="tree-label" data-building-name="${buildingData.building_name}" onclick="onClickAddProductFromShoppingList('${buildingData.building_name}')">
+                    ${buildingData.building_name}
+                </li>
+            `;
         });
         buildingsTreeHtml = /*html*/ `
             <li>
                 <div class="tree-label">Buildings</div>
-                <ul class="shopping-buildings-tree">
+                <ul class="shopping-buildings-tree can-add-product">
                     ${buildingsListHtml}
                 </ul>
             </li>
@@ -475,15 +483,20 @@ function refreshShoppingListTreeHtml() {
         let modulesListHtml = '';
         if (!shoppingListTree.modules.length) {
             //// TO BE IMPLEMENTED, pending official details
+            //// -- THEN also add "onclick" handler for modules, similar to inputs and buildings
             shoppingListTree.modules = [{module_name: '[redacted]'}];
         }
         shoppingListTree.modules.forEach(moduleData => {
-            modulesListHtml += /*html*/ `<li class="tree-label" data-module-name="${moduleData.module_name}">${moduleData.module_name}</li>`;
+            modulesListHtml += /*html*/ `
+                <li class="tree-label" data-module-name="${moduleData.module_name}">
+                    ${moduleData.module_name}
+                </li>
+            `;
         });
         modulesTreeHtml = /*html*/ `
             <li>
                 <div class="tree-label">Modules</div>
-                <ul class="shopping-modules-tree">
+                <ul class="shopping-modules-tree can-add-product">
                     ${modulesListHtml}
                 </ul>
             </li>
@@ -508,6 +521,40 @@ function refreshShoppingListTreeHtml() {
     disconnectAsteroidsPlannerTree();
     elShoppingListTree.querySelector('.shopping-tree').innerHTML = shoppingListTreeHtml;
     connectAsteroidsPlannerTree();
+}
+
+function markTreesBasedOnAsteroidsPlannerSelection() {
+    // Mark optional spectral types, from among connected spectral types
+    const requiredSpectralTypes = [];
+    const {asteroidName, plannedProductName} = asteroidsPlannerSelection;
+    if (plannedProductName) {
+        // Planned product or intermediate product selected => keep the optionality of the spectral types for that planned product
+        const plannedProductData = getPlannedProductData(asteroidName, plannedProductName);
+        plannedProductData.shopping_list.spectral_types.forEach(spectralTypeData => {
+            if (!spectralTypeData.is_optional) {
+                requiredSpectralTypes.push(spectralTypeData.spectral_type_name);
+            }
+        });
+    } else if (asteroidName) {
+        // Asteroid selected => spectral types optional only if they are NOT required for any of the planned products on that asteroid
+        const asteroidData = getAsteroidData(asteroidName);
+        asteroidData.planned_products.forEach(plannedProductData => {
+            plannedProductData.shopping_list.spectral_types.forEach(spectralTypeData => {
+                if (!spectralTypeData.is_optional && !requiredSpectralTypes.includes(spectralTypeData.spectral_type_name)) {
+                    requiredSpectralTypes.push(spectralTypeData.spectral_type_name);
+                }
+            });
+        });
+    }
+    elShoppingListTree.querySelectorAll(`[data-base-spectral]`).forEach(el => {
+        el.classList.remove('optional');
+        if (!requiredSpectralTypes.includes(el.dataset.baseSpectral) && el.classList.contains('connected')) {
+            el.classList.add('optional');
+        }
+    });
+    //// TO DO: show warning if the shopping list for the current selection (asteroid / planned product)
+    //// -- includes NON-optional spectral types which are NOT found on that asteroid
+    //// ____
 }
 
 /**
@@ -637,13 +684,6 @@ function regenerateShoppingListTree() {
             shoppingListTree.spectral_types = mergeAndSortArraysWithUniqueValuesForKey(shoppingListTree.spectral_types, shoppingList.spectral_types, 'spectral_type_name');
         });
     });
-    //// TO DO: how to highlight optional spectral types in tree + content?
-    //// -- NOTE: if the selected asteroid has multiple planned products, with different optionality for C / I types
-    //// ---- => the NON-optional status takes precedence
-    //// ____
-    //// TO DO: show warning if the shopping list for the current selection (asteroid / planned product)
-    //// -- includes NON-optional spectral types which are NOT found on that asteroid
-    //// ____
 }
 
 function refreshTreesHtml() {
@@ -1271,6 +1311,13 @@ function onClickProductImage(el, productName) {
     elOverlayProductImageImg.src = getProductImageSrc(productName, 'original');
 }
 
+function onClickAddProductFromShoppingList(productName) {
+    //// TO DO: show overlay to add this product as a planned product, on one of the planned asteroids
+    //// -- show summary of this product + list of asteroids (with filters?), similar to wallet-asteroids
+    //// -- after an asteroid is selected => redirect to that selection (asteroid + product)
+    //// ____
+}
+
 /**
  * Note that "productionPlanId" is a string, NOT a number,
  * because the mock production plans have IDs like "mock1".
@@ -1576,35 +1623,53 @@ function updateContent() {
             }
             let inputsHtml = '';
             plannedProductData.shopping_list.inputs.forEach(inputData => {
-                inputsHtml += /*html*/ `<div class="row"><span class="name">${inputData.input_name}</span><span class="qty">${inputData.qty}</span></div>`;
+                inputsHtml += /*html*/ `
+                    <div class="row" onclick="onClickAddProductFromShoppingList('${inputData.input_name}')">
+                        <span class="name">${inputData.input_name}</span><span class="qty">${inputData.qty}</span>
+                    </div>
+                `;
             });
+            if (!inputsHtml) {
+                inputsHtml = /*html*/ `<div class="row none"><span class="name">[none]</span></div>`;
+            }
             let buildingsHtml = '';
             plannedProductData.shopping_list.buildings.forEach(buildingData => {
-                buildingsHtml += /*html*/ `<div class="row"><span class="name">${buildingData.building_name}</span><span class="qty">${buildingData.qty}</span></div>`;
+                buildingsHtml += /*html*/ `
+                    <div class="row" onclick="onClickAddProductFromShoppingList('${buildingData.building_name}')">
+                        <span class="name">${buildingData.building_name}</span><span class="qty">${buildingData.qty}</span>
+                    </div>
+                `;
             });
+            if (!buildingsHtml) {
+                buildingsHtml = /*html*/ `<div class="row none"><span class="name">[none]</span></div>`;
+            }
             //// TO BE IMPLEMENTED, pending official details
-            const modulesHtml = /*html*/ `<div class="row"><span class="name">[redacted]</span></div>`;
+            const modulesHtml = /*html*/ `<div class="row none"><span class="name">[redacted]</span></div>`;
             let spectralTypesHtml = '';
             plannedProductData.shopping_list.spectral_types.forEach(spectralTypeData => {
                 const optionalClass = spectralTypeData.is_optional ? 'optional' : '';
-                spectralTypesHtml += /*html*/ `<div class="row"><span class="name ${optionalClass}">${spectralTypeData.spectral_type_name}</span></div>`;
+                spectralTypesHtml += /*html*/ `
+                    <div class="row">
+                        <span class="name ${optionalClass}" data-base-spectral="${spectralTypeData.spectral_type_name}">${spectralTypeData.spectral_type_name}</span>
+                    </div>
+                `;
             });
             intermediateProductsAndShoppingListHtml += /*html*/ `
-                <div class="content-subtitle">Shopping list:</div>
+                <div class="content-subtitle shopping-list-subtitle">Shopping List</div>
                 <div class="shopping-list">
-                    <div>
+                    <div class="required-cell required-inputs can-add-product">
                         <div class="title">Inputs</div>
                         ${inputsHtml}
                     </div>
-                    <div>
+                    <div class="required-cell required-buildings can-add-product">
                         <div class="title">Buildings</div>
                         ${buildingsHtml}
                     </div>
-                    <div>
+                    <div class="required-cell required-modules can-add-product">
                         <div class="title">Modules</div>
                         ${modulesHtml}
                     </div>
-                    <div>
+                    <div class="required-cell required-spectral-types">
                         <div class="title">Spectral Types</div>
                         ${spectralTypesHtml}
                     </div>
@@ -1665,6 +1730,7 @@ function updateContent() {
 function goHome() {
     asteroidsPlannerSelection = {asteroidName: null, plannedProductName: null, intermediateProductName: null};
     disconnectAsteroidsPlannerTree();
+    markTreesBasedOnAsteroidsPlannerSelection();
     updateContent();
 }
 
@@ -1703,6 +1769,7 @@ function onClickTreeItem(asteroidName, plannedProductName, intermediateProductNa
     }
     asteroidsPlannerSelection = {asteroidName, plannedProductName, intermediateProductName};
     reconnectAsteroidsPlannerTree();
+    markTreesBasedOnAsteroidsPlannerSelection();
     updateContent();
 }
 
@@ -1858,8 +1925,6 @@ handleAsteroidsPlannerTreeChanged();
 
 //// TO DO PRIO
 /*
-- click on a shopping-list-input (either from the tree, or from the planned-product contents)
-    => overlay with summary of that input-product + option to plan it on one of the asteroids (then redirect to that selection)
 - auto-load the asteroids plan associated with the connected address, if any
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree
