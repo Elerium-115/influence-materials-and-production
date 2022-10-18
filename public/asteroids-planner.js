@@ -526,6 +526,7 @@ function refreshShoppingListTreeHtml() {
 function markTreesBasedOnAsteroidsPlannerSelection() {
     // Mark optional spectral types, from among connected spectral types
     const requiredSpectralTypes = [];
+    const optionalSpectralTypes = [];
     const {asteroidName, plannedProductName} = asteroidsPlannerSelection;
     if (plannedProductName) {
         // Planned product or intermediate product selected => keep the optionality of the spectral types for that planned product
@@ -550,11 +551,37 @@ function markTreesBasedOnAsteroidsPlannerSelection() {
         el.classList.remove('optional');
         if (!requiredSpectralTypes.includes(el.dataset.baseSpectral) && el.classList.contains('connected')) {
             el.classList.add('optional');
+            optionalSpectralTypes.push(el.dataset.baseSpectral);
         }
     });
-    //// TO DO: show warning if the shopping list for the current selection (asteroid / planned product)
-    //// -- includes NON-optional spectral types which are NOT found on that asteroid
-    //// ____
+    // Clear any previous warning re: missing spectral types
+    const elAsteroidWithMissingTypes = elAsteroidsPlannerTree.querySelector('.missing-types');
+    if (elAsteroidWithMissingTypes) {
+        const elWarning = elAsteroidWithMissingTypes.querySelector('.warning');
+        elWarning.parentElement.removeChild(elWarning);
+        elAsteroidWithMissingTypes.classList.remove('missing-types');
+    }
+    // Show warning if the selected asteroid is missing any required spectral types
+    if (asteroidName) {
+        const asteroidData = getAsteroidData(asteroidName);
+        const missingSpectralTypes = requiredSpectralTypes.filter(requiredSpectralType => !asteroidData.asteroid_type.includes(requiredSpectralType));
+        /**
+         * Mark the pseudo-type "(C or I)" as required, if all of these conditions are met:
+         * - the spectral types "C" and "I" are both marked as optional
+         * - the selected asteroid type is neither "C", nor "I"
+         */
+        const isOptionalTypeBothCI = optionalSpectralTypes.includes('C') && optionalSpectralTypes.includes('I');
+        const isAsteroidTypeNeitherCI = !asteroidData.asteroid_type.includes('C') && !asteroidData.asteroid_type.includes('I');
+        if (isOptionalTypeBothCI && isAsteroidTypeNeitherCI) {
+            missingSpectralTypes.push('(C or I)');
+        }
+        if (missingSpectralTypes.length) {
+            const elSelectedAsteroid = elAsteroidsPlannerTree.querySelector(`[data-asteroid-name="${asteroidName}"]`).closest('.asteroids-tree-item');
+            elSelectedAsteroid.classList.add('missing-types');
+            const typeText = missingSpectralTypes.length == 1 ? 'TYPE' : 'TYPES';
+            elSelectedAsteroid.innerHTML += /*html*/ `<div class="warning">MISSING ${typeText}: ${missingSpectralTypes.join(', ')}</div>`;
+        }
+    }
 }
 
 /**

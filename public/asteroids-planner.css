@@ -278,6 +278,28 @@
     display: none;
 }
 
+#asteroids-planner-tree .asteroids-tree-item.missing-types {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    filter: drop-shadow(0 -0.25rem 0.25rem var(--dark-bg));
+}
+
+#asteroids-planner-tree .asteroids-tree-item.missing-types .warning {
+    position: absolute;
+    top: -1.5rem;
+    left: -1px;
+    right: -1px;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-align: center;
+    background: var(--brand-text);
+    color: black;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
 
 /* Asteroids Planner tree actions */
 
