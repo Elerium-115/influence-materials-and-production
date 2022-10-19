@@ -523,10 +523,8 @@ function refreshShoppingListTreeHtml() {
     connectAsteroidsPlannerTree();
 }
 
-function markTreesBasedOnAsteroidsPlannerSelection() {
-    // Mark optional spectral types, from among connected spectral types
+function markTreesBasedOnRequiredSpectralTypes() {
     const requiredSpectralTypes = [];
-    const optionalSpectralTypes = [];
     const {asteroidName, plannedProductName} = asteroidsPlannerSelection;
     if (plannedProductName) {
         // Planned product or intermediate product selected => keep the optionality of the spectral types for that planned product
@@ -547,6 +545,8 @@ function markTreesBasedOnAsteroidsPlannerSelection() {
             });
         });
     }
+    // Mark optional spectral types, from among connected spectral types
+    const optionalSpectralTypes = [];
     elShoppingListTree.querySelectorAll(`[data-base-spectral]`).forEach(el => {
         el.classList.remove('optional');
         if (!requiredSpectralTypes.includes(el.dataset.baseSpectral) && el.classList.contains('connected')) {
@@ -579,7 +579,14 @@ function markTreesBasedOnAsteroidsPlannerSelection() {
             const elSelectedAsteroid = elAsteroidsPlannerTree.querySelector(`[data-asteroid-name="${asteroidName}"]`).closest('.asteroids-tree-item');
             elSelectedAsteroid.classList.add('missing-types');
             const typeText = missingSpectralTypes.length == 1 ? 'TYPE' : 'TYPES';
-            elSelectedAsteroid.innerHTML += /*html*/ `<div class="warning">MISSING ${typeText}: ${missingSpectralTypes.join(', ')}</div>`;
+            /**
+             * NOTE: Injecting warning via "elSelectedAsteroid.appendChild(...)", NOT via "elSelectedAsteroid.innerHTML += ...",
+             * otherwise "leader-line.min.js" triggers ERROR: "A disconnected element was passed",
+             * when closing the production plan WITHOUT saving, while the selected asteroid has missing spectral types.
+             */
+            const elWarning = document.createElement('div');
+            elWarning.innerHTML = /*html*/ `<div class="warning">MISSING ${typeText}: ${missingSpectralTypes.join(', ')}</div>`;
+            elSelectedAsteroid.appendChild(elWarning);
         }
     }
 }
@@ -1406,6 +1413,7 @@ async function onClickProductionPlanActions(actions) {
              * during "handleSavedProductionPlanData", when the asteroids planner was still hidden.
              */
             repositionAsteroidsPlannerConnections();
+            markTreesBasedOnRequiredSpectralTypes();
         }, 500); // Match the animation duration for "enabling"
     }
 }
@@ -1757,7 +1765,7 @@ function updateContent() {
 function goHome() {
     asteroidsPlannerSelection = {asteroidName: null, plannedProductName: null, intermediateProductName: null};
     disconnectAsteroidsPlannerTree();
-    markTreesBasedOnAsteroidsPlannerSelection();
+    markTreesBasedOnRequiredSpectralTypes();
     updateContent();
 }
 
@@ -1796,7 +1804,7 @@ function onClickTreeItem(asteroidName, plannedProductName, intermediateProductNa
     }
     asteroidsPlannerSelection = {asteroidName, plannedProductName, intermediateProductName};
     reconnectAsteroidsPlannerTree();
-    markTreesBasedOnAsteroidsPlannerSelection();
+    markTreesBasedOnRequiredSpectralTypes();
     updateContent();
 }
 
@@ -1808,16 +1816,18 @@ function updateAsteroidsPlanOnAccountsChanged() {
                 /**
                  * If the wallet becomes connected while using the "example" asteroids plan, then:
                  * - close the production plan (if open)
-                 * - reset the asteroids plan
+                 * - load the asteroids plan that was previously saved for that account, if any (otherwise reset the asteroids plan)
                  */
                 onClickProductionPlanActions(['close']);
                 resetAsteroidsPlan();
             } else {
-                //// TO DO: if the wallet becomes connected while using a NON-example asteroids plan
-                //// => auto-save it for the newly-connected account
+                //// TO DO: if the wallet becomes connected while using a NON-example asteroids plan, then:
+                //// - auto-save it for the newly-connected address, IFF that address does NOT already have a saved asteroids plan
+                //// - otherwise load the previously-saved asteroids plan for that address (and warn re: loaded different plan?)
                 //// ____
-                //// TO DO: if the connected address changes, while the wallet is connected
-                //// => auto-switch to the asteroids plan for the new address
+                //// TO DO: if the connected address changes, while the wallet is connected, then:
+                //// - auto-switch to the asteroids plan for the new address, if it had any previously-saved plan
+                //// - or reset the plan, if none saved for the new address
                 //// ____
             }
         } else {

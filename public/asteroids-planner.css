@@ -13,6 +13,7 @@
 	0% { filter: drop-shadow(0 0 0 var(--brand-text)); }
 	25% { filter: drop-shadow(0 0 0.4rem var(--brand-text)); }
 	50% { filter: drop-shadow(0 0 0 var(--brand-text)); }
+	100% { filter: drop-shadow(0 0 0 var(--brand-text)); }
 }
 
 .pulse-brand:not(:hover) {
@@ -162,7 +163,7 @@
 
 #asteroids-planner-tree .asteroids-tree-item {
     position: relative;
-    margin-top: 1rem;
+    margin-top: 2rem;
     border-left: 1px solid var(--default-text);
     border-right: 1px solid transparent;
 }
@@ -410,12 +411,13 @@
 }
 
 #shopping-list-tree .shopping-tree > li {
-    margin-top: 1rem;
+    margin-top: 2rem;
     border-right: 1px solid var(--link);
 }
 
 #shopping-list-tree .shopping-tree > li > .tree-label {
     color: var(--link);
+    margin-bottom: 0.5rem;
 }
 
 #shopping-list-tree .shopping-tree ul .tree-label {
