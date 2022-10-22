@@ -1,4 +1,9 @@
 /**
+ * WARNING: This "caching" system turns out to be very short-lived, at least on Vercel.
+ * Any logic that uses this cache, should assume that the data will be gone within seconds.
+ */
+
+/**
  * Supported keys:
  * - influencethIo
  */

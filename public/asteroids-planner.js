@@ -1802,25 +1802,16 @@ function updateContent() {
                     </div>
                 `;
             });
+            if (!spectralTypesHtml) {
+                spectralTypesHtml = /*html*/ `<div class="row none"><span class="name">[none]</span></div>`;
+            }
             intermediateProductsAndShoppingListHtml += /*html*/ `
                 <div class="content-subtitle shopping-list-subtitle">Shopping List</div>
                 <div class="shopping-list">
-                    <div class="required-cell required-inputs can-add-product">
-                        <div class="title">Inputs</div>
-                        ${inputsHtml}
-                    </div>
-                    <div class="required-cell required-buildings can-add-product">
-                        <div class="title">Buildings</div>
-                        ${buildingsHtml}
-                    </div>
-                    <div class="required-cell required-modules can-add-product">
-                        <div class="title">Modules</div>
-                        ${modulesHtml}
-                    </div>
-                    <div class="required-cell required-spectral-types">
-                        <div class="title">Spectral Types</div>
-                        ${spectralTypesHtml}
-                    </div>
+                    <div class="required-cell required-inputs can-add-product">${inputsHtml}</div>
+                    <div class="required-cell required-buildings can-add-product">${buildingsHtml}</div>
+                    <div class="required-cell required-modules can-add-product">${modulesHtml}</div>
+                    <div class="required-cell required-spectral-types">${spectralTypesHtml}</div>
                 </div>
             `;
         } else {
@@ -1851,6 +1842,21 @@ function updateContent() {
                 </div>
             </div>
         `;
+        /**
+         * For each shopping list category, wrap the first ".row" into a ".row-with-title",
+         * which will contain the title of that category (injected via CSS "::before").
+         * This ensures that the title does not remain at the bottom of a column,
+         * when the shopping list is split into multiple columns.
+         */
+        elContent.querySelectorAll('.required-cell').forEach(el => {
+            const elFirstRow = el.querySelector('.row');
+            elFirstRow.classList.remove('row');
+            elFirstRow.classList.add('row-with-title');
+            elFirstRow.innerHTML = /*html*/ `
+                <div class="row" onclick="${elFirstRow.getAttribute('onclick')}">${elFirstRow.innerHTML}</div>
+            `;
+            elFirstRow.removeAttribute('onclick');
+        });
     } else {
         // Intermediate product
         elContent.innerHTML = /*html*/ `
@@ -2079,10 +2085,23 @@ if (!refreshWallet()) {
 }
 
 
+//// FIX PRIO
+/*
+- add asteroid from wallet
+- disconnect wallet
+- open the add-asteroid overlay (while wallet NOT connected)
+- connect wallet from within the add-asteroid overlay
+    => BUG #1: the asteroid that was previously added, can be selected again
+- add the same asteroid from wallet
+    => BUG #2: duplicated asteroids allowed to be added
+- TEST FIX by adding a single asteroid, as well as 2+ asteroids
+*/
+
 //// TO DO PRIO
 /*
+- replace example asteroids with scanned ones + high rarity
 - spin-on-hover @ Influence logo in footer
-- auto-load the asteroids plan associated with the connected address, if any
+- "loading" overlay during API calls?
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree
     - "alert" re: API coming soon / asteroid # already planned
