@@ -45,13 +45,6 @@ const elTemplateProductionPlan = document.getElementById('template-production-pl
 const elsConnectWalletCta = document.querySelectorAll('.connect-wallet-cta');
 const elsConnectedAddress = document.querySelectorAll('.connected-address');
 
-/**
- * "asteroidsPlan" is a reduced representation of "asteroidsPlannerTree",
- * using the same format, but excluding the details that can be inferred.
- * See "asteroids-planner-mock.js" for a comparison between them.
- */
-let asteroidsPlan = [];
-
 let asteroidsPlannerTree = [];
 let shoppingListTree = {};
 
@@ -68,7 +61,7 @@ let isExampleAsteroidsPlan = false;
 let onClickAsteroidActionInProgress = false;
 
 const cacheAsteroidsMetadataById = {};
-const cacheAsteroidsByWallet = {}; // Note: each key is a lowercase address
+const cacheAsteroidsByAddress = {}; // NOTE: Each key is a lowercase address
 const cacheProductionPlanDataById = {};
 
 const productImgOnError = `
@@ -190,6 +183,27 @@ function getWalletAsteroidCardHtml(metadata) {
     `;
 }
 
+/**
+ * "asteroidsPlan" is a reduced representation of "asteroidsPlannerTree", using the same format,
+ * but excluding the details that can be inferred from the production plan IDs on each asteroid.
+ */
+function getAsteroidsPlanFromTree() {
+    const asteroidsPlan = [];
+    asteroidsPlannerTree.forEach(asteroidData => {
+        let asteroidDataForPlan = {...asteroidData};
+        // For each planned product, keep only the "planned_product_name" and "production_plan_id"
+        asteroidDataForPlan.planned_products = asteroidDataForPlan.planned_products.map(plannedProductData => {
+            const {planned_product_name, production_plan_id} = plannedProductData;
+            return {
+                planned_product_name,
+                production_plan_id,
+            };
+        });
+        asteroidsPlan.push(asteroidDataForPlan);
+    });
+    return asteroidsPlan;
+}
+
 async function fetchAsteroidMetadataById(id) {
     const config = {
         method: 'get',
@@ -211,7 +225,6 @@ async function fetchAsteroidsFromWallet() {
     if (!connectedAddress) {
         return {error: 'No connected address'};
     }
-    // console.log(`--- fetchAsteroidsFromWallet @ ${connectedAddress}`); //// TEST
     const config = {
         method: 'get',
         url: `${apiUrl}/asteroids/owned-by/${connectedAddress}`,
@@ -227,10 +240,51 @@ async function fetchAsteroidsFromWallet() {
     }
 }
 
+async function fetchAsteroidsPlanForConnectedAddress() {
+    const connectedAddress = getConnectedAddress();
+    if (!connectedAddress) {
+        return {error: 'No connected address'};
+    }
+    const config = {
+        method: 'get',
+        url: `${apiUrl}/asteroids-plan/${connectedAddress}`,
+    };
+    try {
+        const response = await axios(config);
+        const asteroidsPlan = response.data;
+        // console.log(`--- asteroidsPlan from API:`, asteroidsPlan); //// TEST
+        return asteroidsPlan;
+    } catch (error) {
+        console.log(`--- ERROR from API:`, error); //// TEST
+        return {error};
+    }
+}
+
 async function fetchProductionPlanDataById(id) {
     const config = {
         method: 'get',
         url: `${apiUrl}/production-plan/${id}`,
+    };
+    try {
+        const response = await axios(config);
+        const data = response.data;
+        // console.log(`--- data from API:`, data); //// TEST
+        return data;
+    } catch (error) {
+        console.log(`--- ERROR from API:`, error); //// TEST
+        return {error};
+    }
+}
+
+async function postAsteroidsPlanForConnectedAddress(asteroidsPlan) {
+    const connectedAddress = getConnectedAddress();
+    if (!connectedAddress) {
+        return {error: 'No connected address'};
+    }
+    const config = {
+        method: 'post',
+        url: `${apiUrl}/asteroids-plan/${connectedAddress}`,
+        data: asteroidsPlan,
     };
     try {
         const response = await axios(config);
@@ -256,6 +310,17 @@ async function loadAsteroidMetadataById(id) {
         cacheAsteroidsMetadataById[id] = metadata;
     }
     return metadata;
+}
+
+async function loadAsteroidsPlanForConnectedAddress() {
+    // Do NOT cache the asteroids plans by address (i.e. ALWAYS call my API)
+    const asteroidsPlan = await fetchAsteroidsPlanForConnectedAddress();
+    if (asteroidsPlan.error) {
+        // Inform the user re: API error
+        alert(asteroidsPlan.error);
+        return;
+    }
+    return asteroidsPlan;
 }
 
 async function loadProductionPlanDataById(id) {
@@ -297,7 +362,7 @@ function proxyActionForAsteroid(event, action, asteroidName) {
 
 function onClickAsteroidAction(action, el) {
     if (onClickAsteroidActionInProgress) {
-        console.log(`%c--- ABORT onClickAsteroidAction b/c another action is in progress`, 'background: chocolate'); //// TEST
+        // console.log(`%c--- ABORT onClickAsteroidAction b/c another action is in progress`, 'background: chocolate'); //// TEST
         return;
     }
     onClickAsteroidActionInProgress = true;
@@ -345,6 +410,7 @@ function onClickAsteroidAction(action, el) {
         elAsteroidTreeItem.classList.add('flash-interaction');
         // Swap in array (move up or down)
         asteroidsPlannerTree.splice(indexToSwap, 2, asteroidsPlannerTree[indexToSwap + 1], asteroidsPlannerTree[indexToSwap]);
+        saveAsteroidsPlan();
         updateContent();
         setTimeout(() => {
             elAsteroidTreeItem.classList.remove('flash-interaction');
@@ -363,28 +429,46 @@ function deletePlannedProduct(asteroidName, plannedProductName) {
     handleAsteroidsPlannerTreeChanged();
 }
 
-function regenerateAndSaveAsteroidsPlan() {
-    asteroidsPlan = [];
-    asteroidsPlannerTree.forEach(asteroidData => {
-        let asteroidDataForPlan = {...asteroidData};
-        // For each planned product, keep only the "planned_product_name" and "production_plan_id"
-        asteroidDataForPlan.planned_products = asteroidDataForPlan.planned_products.map(plannedProductData => {
-            const {planned_product_name, production_plan_id} = plannedProductData;
-            return {
-                planned_product_name,
-                production_plan_id,
-            };
-        });
-        asteroidsPlan.push(asteroidDataForPlan);
-    });
-    //// TO DO: if wallet connected => save the asteroids plan via API
-    //// ____
+function saveAsteroidsPlan() {
+    const asteroidsPlan = getAsteroidsPlanFromTree();
+    if (getConnectedAddress()) {
+        // If wallet connected => save the asteroids plan via API
+        const response = postAsteroidsPlanForConnectedAddress(asteroidsPlan);
+        if (response.error) {
+            // Inform the user re: API error
+            alert(asteroidsPlan.error);
+            return;
+        }
+    }
 }
 
-function regenerateAsteroidsTreeFromPlan() {
-    //// TO BE IMPLEMENTED
-    //// -- call this when connecting a wallet, to auto-load the asteroids plan from data storage, then regen the tree & stuff here
-    //// ____
+/**
+ * Regenerate "asteroidsPlannerTree" from "asteroidsPlan",
+ * by parsing each production plan ID, on each asteroid.
+ */
+async function regenerateAsteroidsTreeFromPlan(asteroidsPlan) {
+    asteroidsPlannerTree = [...asteroidsPlan];
+    for (const asteroidData of asteroidsPlannerTree) {
+        for (const plannedProductData of asteroidData.planned_products) {
+            const plannedProductName = plannedProductData.planned_product_name;
+            const productionPlanId = plannedProductData.production_plan_id;
+            let productionPlanData;
+            if (productionPlanId) {
+                // Load the production plan associated with "productionPlanId"
+                productionPlanData = await loadProductionPlanDataById(productionPlanId);
+            } else {
+                // Initialize blank production plan for "plannedProductName"
+                productionPlanData = {
+                    plannedProductName,
+                    productionPlanId: null,
+                    itemDataById: null,
+                };
+            }
+            updatePlannedProductDataBasedOnProductionPlanData(plannedProductData, productionPlanData);
+        }
+    }
+    // Do NOT save the asteroids plan during "handleAsteroidsPlannerTreeChanged", b/c it was freshly loaded
+    handleAsteroidsPlannerTreeChanged(true, false);
 }
 
 function refreshAsteroidsPlannerTreeHtml() {
@@ -725,21 +809,27 @@ function refreshTreesHtml() {
     refreshShoppingListTreeHtml();
     if (asteroidsPlannerTree.length) {
         elAsteroidsPlannerWrapper.classList.remove('empty-planner');
-        if (elButtonAddAsteroid.line) {
-            elButtonAddAsteroid.line.remove();
-            delete elButtonAddAsteroid.line;
-        }
-        if (elButtonSeeExample.line) {
-            elButtonSeeExample.line.remove();
-            delete elButtonSeeExample.line;
-        }
     } else {
         elAsteroidsPlannerWrapper.classList.add('empty-planner');
     }
+    deleteButtonConnections();
 }
 
-function handleAsteroidsPlannerTreeChanged(shouldUpdateContent = true) {
-    regenerateAndSaveAsteroidsPlan();
+function deleteButtonConnections() {
+    if (elButtonAddAsteroid.line) {
+        elButtonAddAsteroid.line.remove();
+        delete elButtonAddAsteroid.line;
+    }
+    if (elButtonSeeExample.line) {
+        elButtonSeeExample.line.remove();
+        delete elButtonSeeExample.line;
+    }
+}
+
+function handleAsteroidsPlannerTreeChanged(shouldUpdateContent = true, shouldSaveAsteroidsPlan = true) {
+    if (shouldSaveAsteroidsPlan) {
+        saveAsteroidsPlan();
+    }
     refreshAsteroidsPlannerSelection();
     sortProductsInAsteroidsPlannerTree();
     regenerateShoppingListTree();
@@ -969,9 +1059,15 @@ function closeOverlay() {
 function onClickAddAsteroid() {
     // Update state for "Import asteroids from wallet"
     updateWalletAsteroidsPanel();
-    // Reset state for "Add an in-game asteroid"
-    resetAsteroidMetadataHtml();
-    elInputAsteroidId.value = '';
+    // Check if asteroid ID 1 already planned
+    if (asteroidsPlannerTree.find(asteroidData => asteroidData.asteroid_name === 'Asteroid #1')) {
+        // Reset state for "Add an in-game asteroid"
+        resetAsteroidMetadataHtml();
+        elInputAsteroidId.value = '';
+    } else {
+        // Pre-load asteroid ID 1 (Adalia Prime) for "Add an in-game asteroid"
+        requestAsteroidDetails(1);
+    }
     // Reset state for "Create a mock rock"
     const elSelected = elOverlayAddAsteroid.querySelector('.mock-spectral-types .selected');
     if (elSelected) {
@@ -995,7 +1091,7 @@ async function updateWalletAsteroidsPanel() {
         return;
     }
     // Wallet is connected => show asteroids from wallet, if any
-    let asteroids = cacheAsteroidsByWallet[connectedAddress.toLowerCase()];
+    let asteroids = cacheAsteroidsByAddress[connectedAddress.toLowerCase()];
     if (!asteroids) {
         // Data NOT cached => call to my API
         elWalletAsteroidsStatus.classList.add('loading-asteroids');
@@ -1006,7 +1102,7 @@ async function updateWalletAsteroidsPanel() {
             alert(asteroids.error);
             return;
         }
-        cacheAsteroidsByWallet[connectedAddress.toLowerCase()] = asteroids;
+        cacheAsteroidsByAddress[connectedAddress.toLowerCase()] = asteroids;
         asteroids.forEach(metadata => {
             cacheAsteroidsMetadataById[metadata.id] = metadata;
         });
@@ -1186,14 +1282,14 @@ function resetAsteroidMetadataHtml() {
     `;
 }
 
-async function requestAsteroidDetails() {
-    if (elAsteroidDetailsCta.classList.contains('disabled')) {
-        // Do not call the API if the CTA is disabled
+async function requestAsteroidDetails(forceAsteroidId = null) {
+    if (elAsteroidDetailsCta.classList.contains('disabled') && !forceAsteroidId) {
+        // Do not call the API if the CTA is disabled, unless forcing an asteroid ID
         return;
     }
     resetAsteroidMetadataHtml();
     toggleAsteroidMetadataCta(false); // Disable the CTA
-    const asteroidId = elInputAsteroidId.value;
+    const asteroidId = forceAsteroidId || elInputAsteroidId.value;
     const metadata = await loadAsteroidMetadataById(asteroidId);
     elInputAsteroidId.value = '';
     const elSpectralType = elOverlayAddAsteroid.querySelector('.asteroid-metadata-wrapper .spectral-types-circle');
@@ -1215,7 +1311,6 @@ function addAsteroidId(id) {
     const asteroidName = `Asteroid #${id}`;
     // Check if already added
     if (asteroidsPlannerTree.find(asteroidData => asteroidData.asteroid_name === asteroidName)) {
-        console.log(`%c--- WARNING: asteroid #${id} already exists in "asteroidsPlannerTree"`, 'background: chocolate'); //// TEST
         alert(`Asteroid #${id} is already planned`);
         return;
     }
@@ -1398,7 +1493,11 @@ async function onClickProductionPlanActions(actions) {
         cacheProductionPlanDataById[savedProductionPlanData.productionPlanId] = savedProductionPlanData;
         handleSavedProductionPlanData(savedProductionPlanData);
     }
-    if (actions.includes('close')) {
+    /**
+     * NOTE: This function may be called to close the Production Plan
+     * template "just in case", even if it is not actually open.
+     */
+    if (actions.includes('close') && document.body.classList.contains('hidden-asteroids-planner')) {
         // Show the Asteroids Planner tool, and hide the Production Plan template
         elAsteroidsPlanner.classList.remove('hidden');
         document.body.classList.remove('hidden-asteroids-planner');
@@ -1427,14 +1526,19 @@ function handleSavedProductionPlanData(savedProductionPlanData) {
     const plannedProductData = getPlannedProductData(asteroidName, plannedProductName);
     // The ID needs to be updated, in case it was null (when saved for the first time).
     plannedProductData.production_plan_id = savedProductionPlanData.productionPlanId;
+    updatePlannedProductDataBasedOnProductionPlanData(plannedProductData, savedProductionPlanData);
+    handleAsteroidsPlannerTreeChanged();
+}
+
+function updatePlannedProductDataBasedOnProductionPlanData(plannedProductData, productionPlanData) {
     // The intermediate products and the shopping list need to be inferred.
-    const intermediateProducts = getIntermediateProductsForProductionPlan(savedProductionPlanData.itemDataById);
+    const intermediateProducts = getIntermediateProductsForProductionPlan(productionPlanData.itemDataById);
     plannedProductData.intermediate_products = intermediateProducts.map(intermediateProductData => {
         return {
             intermediate_product_name: intermediateProductData.name,
         };
     });
-    const shoppingList = getShoppingListForProductionPlan(savedProductionPlanData.itemDataById);
+    const shoppingList = getShoppingListForProductionPlan(productionPlanData.itemDataById);
     if (!shoppingList) {
         console.log(`%c--- ERROR: production plan was saved with process variants waiting selection`, 'background: maroon'); //// TEST
         return;
@@ -1459,14 +1563,12 @@ function handleSavedProductionPlanData(savedProductionPlanData) {
             is_optional: spectralTypeData.isOptional,
         };
     });
-
     plannedProductData.shopping_list = {
         inputs: shoppingListInputs,
         buildings: shoppingListBuildings,
         modules: shoppingListModules,
         spectral_types: shoppingListSpectralTypes,
     };
-    handleAsteroidsPlannerTreeChanged();
 }
 
 function resetContent() {
@@ -1475,15 +1577,26 @@ function resetContent() {
         <ul>
             <li>Add in-game asteroids, or create "mock rocks".</li>
             <li>Plan one or more production chains, on each asteroid.</li>
+            <li>Connect your wallet, to automatically save your plan.</li>
         </ul>
         <h3 id="example-title" class="hidden">First time here? See an example with some mock data.</h3>
     `;
     const elStartTitle = document.getElementById('start-title');
-    if (elButtonAddAsteroid.line || elButtonSeeExample.line) {
-        console.log(`%c--- ERROR: "resetContent" called twice, without deleting the lines between calls`, 'background: maroon'); //// TEST
+    // Delete any potential button-connections from previous calls of this function
+    deleteButtonConnections();
+    if (getConnectedAddress()) {
+        // Connected address => do NOT show the see-example button (the example-title is already hidden at this point)
+        elButtonSeeExample.classList.add('hidden');
+    } else {
+        // Wallet NOT connected => SHOW the example-title, and connected it to the button
+        elButtonSeeExample.classList.remove('hidden');
+        const elExampleTitle = document.getElementById('example-title');
+        elExampleTitle.classList.remove('hidden');
+        elButtonSeeExample.line = connectElements(elExampleTitle, elButtonSeeExample, leaderLineOptionsRightToLeftGradient);
     }
+    // (Re-)connect the add-asteroid button, regardless of wallet not/connected
     elButtonAddAsteroid.line = connectElements(elStartTitle, elButtonAddAsteroid, leaderLineOptionsRightToLeftGradient);
-    updateAsteroidsPlanOnAccountsChanged();
+    // By connecting the buttons in this order, there is no need to call "repositionAsteroidsPlannerConnections"
 }
 
 /**
@@ -1787,14 +1900,9 @@ function resetAsteroidsPlan(shouldConfirm = false) {
     goHome();
 }
 
-function setupExample() {
+async function setupExample() {
     isExampleAsteroidsPlan = true;
-    //// TO DO: remove "mockAsteroidsPlannerTree"
-    //// -- instead, generate "asteroidsPlannerTree" from "regenerateAsteroidsTreeFromPlan(mockAsteroidsPlan)"
-    //// -- also remove comment in mock file re: "mockAsteroidsPlan" not being used
-    //// ____
-    asteroidsPlannerTree = [...mockAsteroidsPlannerTree];
-    handleAsteroidsPlannerTreeChanged();
+    await regenerateAsteroidsTreeFromPlan(mockAsteroidsPlan);
 }
 
 function onClickTreeItem(asteroidName, plannedProductName, intermediateProductName) {
@@ -1808,61 +1916,67 @@ function onClickTreeItem(asteroidName, plannedProductName, intermediateProductNa
     updateContent();
 }
 
-function updateAsteroidsPlanOnAccountsChanged() {
-    if (asteroidsPlannerTree.length) {
-        // Non-empty asteroids plan
-        if (getConnectedAddress()) {
-            if (isExampleAsteroidsPlan) {
+async function updateAsteroidsPlanOnAccountsChanged() {
+    const currentAsteroidsPlannerTree = [...asteroidsPlannerTree];
+    if (getConnectedAddress()) {
+        // CONNECTED address (wallet has become connected, or connected address has changed)
+        const savedAsteroidsPlan = await loadAsteroidsPlanForConnectedAddress();
+        if (savedAsteroidsPlan && savedAsteroidsPlan.length) {
+            // Previously-saved asteroids plan NON-empty => close production plan, if open
+            onClickProductionPlanActions(['close']);
+            /**
+             * Use previously-saved asteroids plan.
+             * Ignore any currently-selected asteroids plan, regardless if EXAMPLE or NON-example.
+             */
+            await regenerateAsteroidsTreeFromPlan(savedAsteroidsPlan);
+            if (currentAsteroidsPlannerTree.length) {
                 /**
-                 * If the wallet becomes connected while using the "example" asteroids plan, then:
-                 * - close the production plan (if open)
-                 * - load the asteroids plan that was previously saved for that account, if any (otherwise reset the asteroids plan)
+                 * Currently-selected asteroids plan NON-empty (regardless if EXAMPLE or NON-example)
+                 * => warn re: loaded different plan.
                  */
-                onClickProductionPlanActions(['close']);
-                resetAsteroidsPlan();
-            } else {
-                //// TO DO: if the wallet becomes connected while using a NON-example asteroids plan, then:
-                //// - auto-save it for the newly-connected address, IFF that address does NOT already have a saved asteroids plan
-                //// - otherwise load the previously-saved asteroids plan for that address (and warn re: loaded different plan?)
-                //// ____
-                //// TO DO: if the connected address changes, while the wallet is connected, then:
-                //// - auto-switch to the asteroids plan for the new address, if it had any previously-saved plan
-                //// - or reset the plan, if none saved for the new address
-                //// ____
+                alert('Loaded a different asteroids plan, that was already saved for your newly connected wallet');
             }
         } else {
             /**
-             * If the wallet becomes disconnected while using a non-empty asteroids plan, then:
-             * - close the production plan (if open)
-             * - reset the asteroids plan
+             * Previously-saved asteroids plan EMPTY
+             * => check if ALL of these conditions are met:
+             * - currently-selected asteroids plan is NON-empty
+             * - currently-selected asteroids plan is NON-example
+             * - wallet was NOT previously connected to a different address
+             */
+            if (currentAsteroidsPlannerTree.length && !isExampleAsteroidsPlan && !walletStatus.hasAddressChangedWhileWalletConnected) {
+                // Save currently-selected asteroids plan
+                saveAsteroidsPlan();
+                // Do NOT close production plan, if open
+            } else {
+                /**
+                 * Currently-selected asteroids plan EMPTY / EXAMPLE, or wallet was previously
+                 * connected to a different address => close production plan, if open.
+                 */
+                onClickProductionPlanActions(['close']);
+                /**
+                 * Reset asteroids plan.
+                 * NOTE: This ignores any currently-selected EXAMPLE asteroids
+                 * plan (if any), given that a wallet is now connected.
+                 */
+                resetAsteroidsPlan();
+            }
+        }
+    } else {
+        // NO connected address (wallet has become disconnected, or initial page load with NO connected address)
+        if (currentAsteroidsPlannerTree.length) {
+            // Currently-selected asteroids plan NON-empty => close production plan, if open
+            onClickProductionPlanActions(['close']);
+            /**
+             * Reset asteroids plan.
              * NOTE: This prevents keeping the asteroids plan from wallet "A",
              * and then auto-saving it for wallet "B" if connected afterwards.
              */
-            onClickProductionPlanActions(['close']);
             resetAsteroidsPlan();
-        }
-    } else {
-        // Empty asteroids plan => content is / has just been reset
-        const elExampleTitle = document.getElementById('example-title');
-        if (getConnectedAddress()) {
-            // Wallet connected => do NOT show the example button + title
-            elButtonSeeExample.classList.add('hidden');
-            if (elExampleTitle && !elExampleTitle.classList.contains('hidden')) {
-                elExampleTitle.classList.add('hidden');
-                if (elButtonSeeExample.line) {
-                    elButtonSeeExample.line.remove();
-                    delete elButtonSeeExample.line;
-                }
-            }
         } else {
-            // Wallet NOT connected => DO show the example button + title
-            elButtonSeeExample.classList.remove('hidden');
-            if (elExampleTitle && elExampleTitle.classList.contains('hidden')) {
-                elExampleTitle.classList.remove('hidden');
-                elButtonSeeExample.line = connectElements(elExampleTitle, elButtonSeeExample, leaderLineOptionsRightToLeftGradient);
-            }
+            // Currently-selected asteroids plan EMPTY => reset content
+            resetContent();
         }
-        repositionAsteroidsPlannerConnections();
     }
 }
 
@@ -1954,14 +2068,20 @@ walletEventsHandlers.accountsChanged.push(
     updateWalletAsteroidsPanel,
 );
 
-refreshWallet();
-
-// Initialize everything
-handleAsteroidsPlannerTreeChanged();
+/**
+ * If a wallet is installed (regardless if not/connected), this check will trigger
+ * the "walletEventsHandlers" for "accountsChanged", which will also initialize
+ * the asteroids plan (or empty-planner) via "updateAsteroidsPlanOnAccountsChanged".
+ */
+if (!refreshWallet()) {
+    // Wallet NOT installed => initialize everything
+    handleAsteroidsPlannerTreeChanged();
+}
 
 
 //// TO DO PRIO
 /*
+- spin-on-hover @ Influence logo in footer
 - auto-load the asteroids plan associated with the connected address, if any
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree

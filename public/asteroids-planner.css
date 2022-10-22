@@ -282,7 +282,6 @@
 #asteroids-planner-tree .asteroids-tree-item.missing-types {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    filter: drop-shadow(0 -0.25rem 0.25rem var(--dark-bg));
 }
 
 #asteroids-planner-tree .asteroids-tree-item.missing-types .warning {

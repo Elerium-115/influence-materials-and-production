@@ -1,4 +1,13 @@
 /**
+ * Wallet status
+ */
+const walletStatus = {
+    connectedAddress: null,
+    hasAddressChangedWhileWalletConnected: false,
+    isConnected: false,
+};
+
+/**
  * List of handler functions to be called, for each wallet event
  */
 const walletEventsHandlers = {
@@ -6,11 +15,14 @@ const walletEventsHandlers = {
     chainChanged: [],
 };
 
-// Add debugging handlers for wallet events
-/* DISABLED
+// Add default handler for wallet event "accountsChanged"
 walletEventsHandlers.accountsChanged.push(accounts => {
-    console.log(`--- accountsChanged:`, accounts); //// TEST
+    // Call "getConnectedAddress" to ensure "walletStatus" ends up being updated, if needed
+    getConnectedAddress();
 });
+
+/* DISABLED
+// Add default handler for wallet event "chainChanged"
 walletEventsHandlers.chainChanged.push(chainIdHex => {
     console.log(`--- chainChanged:`, chainIdHex); //// TEST
 });
@@ -63,20 +75,51 @@ async function connectWallet(isExampleAsteroidsPlan = false) {
 }
 
 /**
- * Refresh wallet by triggering "walletEventsHandlers" for "accountsChanged"
+ * Refresh wallet by triggering "walletEventsHandlers" for "accountsChanged".
+ * Returns "true" if wallet installed, otherwise "false".
  */
-async function refreshWallet() {
+function refreshWallet() {
     if (window.ethereum) {
-        // Wait until the connected address can be retrieved
-        await window.ethereum.request({
-            method: 'eth_accounts',
+        setTimeout(async () => {
+            // Wait until the connected address can be retrieved
+            await window.ethereum.request({
+                method: 'eth_accounts',
+            });
+            // Then trigger the "walletEventsHandlers" for "accountsChanged"
+            window.ethereum.emit('accountsChanged');
         });
-        // Then trigger the "walletEventsHandlers" for "accountsChanged"
-        window.ethereum.emit('accountsChanged');
+        return true;
+    } else {
+        return false;
     }
 }
 
+/**
+ * NOTE: This function may return a connected address even if the latest "accountsChanged" event indicated NO connected address.
+ * This is happening e.g. on the initial page load, when the wallet is connected, but the actual address is not retrieved immediately.
+ */
 function getConnectedAddress() {
     // WARNING: "ethereum.selectedAddress" is deprecated?
-    return window.ethereum?.selectedAddress;
+    const connectedAddressNew = window.ethereum?.selectedAddress;
+    updateWalletStatusForConnectedAddress(connectedAddressNew);
+    return connectedAddressNew;
+}
+
+function updateWalletStatusForConnectedAddress(connectedAddressNew) {
+    const connectedAddressOld = walletStatus.connectedAddress;
+    if (connectedAddressNew != connectedAddressOld) {
+        /**
+         * The wallet was connected / disconnected, or the connected address has changed
+         * (while wallet connected), since the last time this function was called.
+         */
+        if (connectedAddressNew) {
+            walletStatus.connectedAddress = connectedAddressNew;
+            walletStatus.hasAddressChangedWhileWalletConnected = Boolean(connectedAddressNew && connectedAddressOld);
+            walletStatus.isConnected = true;
+        } else {
+            walletStatus.connectedAddress = null;
+            walletStatus.hasAddressChangedWhileWalletConnected = false;
+            walletStatus.isConnected = false;
+        }
+    }
 }

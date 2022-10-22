@@ -192,6 +192,9 @@ function getArraySortedByNameFromObjectValues(obj) {
  */
 function getIntermediateProductsForProductionPlan(itemDataById) {
     const intermediateProductsData = {};
+    if (!itemDataById) {
+        return [];
+    }
     Object.values(itemDataById)
         .filter(itemData => itemData.productId !== null && itemData.isSelected && itemData.level > 1)
         .map(itemData => {
@@ -211,6 +214,14 @@ function getIntermediateProductsForProductionPlan(itemDataById) {
 }
 
 function getShoppingListForProductionPlan(itemDataById) {
+    if (!itemDataById) {
+        return {
+            inputs: [],
+            buildings: [],
+            modules: [],
+            spectralTypes: [],
+        };
+    }
     if (isProcessVariantWaitingSelection(itemDataById)) {
         // Waiting for user to select a required process variant => NO shopping list
         // if (doDebug) console.log(`--- NO shopping list, waiting for user to select a required process variant`);

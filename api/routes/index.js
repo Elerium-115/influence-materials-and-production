@@ -31,7 +31,7 @@ router.get(
 router.get(
     '/asteroid/:id',
     async (req, res) => {
-        console.log(`--- [router] GET /asteroid/:id`); //// TEST
+        console.log(`--- [router] GET /asteroid/${req.params.id}`); //// TEST
         const asteroidId = req.params.id;
         const cachedMetadata = cache.asteroidsMetadataById[asteroidId];
         if (cachedMetadata) {
@@ -56,7 +56,7 @@ router.get(
 router.get(
     '/asteroids/owned-by/:address',
     async (req, res) => {
-        console.log(`--- [router] GET /asteroids/owned-by/:address`); //// TEST
+        console.log(`--- [router] GET /asteroids/owned-by/${req.params.address}`); //// TEST
         const address = toChecksumAddress(req.params.address);
         console.log(`---> address = ${address}`); //// TEST
         /* DISABLED call to Influence API for "asteroidsCount" b/c this can be derived from "asteroidsIds"
@@ -138,7 +138,7 @@ router.get(
 router.get(
     '/production-plan/:id',
     async (req, res) => {
-        console.log(`--- [router] GET /production-plan/:id`); //// TEST
+        console.log(`--- [router] GET /production-plan/${req.params.id}`); //// TEST
         const productionPlanId = req.params.id;
         const cachedData = cache.productionPlanDataById[productionPlanId];
         if (cachedData) {
@@ -165,7 +165,7 @@ router.get(
 router.post(
     '/production-plan/:id',
     async (req, res) => {
-        console.log(`--- [router] POST /production-plan/:id`); //// TEST
+        console.log(`--- [router] POST /production-plan/${req.params.id}`); //// TEST
         // console.log(`---> request body:`, req.body); //// TEST
         const productionPlanData = req.body;
         if (!utils.isValidProductionPlanData(productionPlanData)) {
@@ -197,6 +197,51 @@ router.post(
         }
         cache.productionPlanDataById[productionPlanData.productionPlanId] = productionPlanData;
         res.send(productionPlanData);
+    }
+);
+
+/**
+ * @desc        Get asteroids plan saved for address
+ * @route       GET /asteroids-plan/:address
+ */
+router.get(
+    '/asteroids-plan/:address',
+    async (req, res) => {
+        console.log(`--- [router] GET /asteroids-plan/${req.params.address}`); //// TEST
+        const address = toChecksumAddress(req.params.address);
+        const cachedAsteroidsPlan = cache.asteroidsPlanByAddress[address.toLowerCase()];
+        if (cachedAsteroidsPlan) {
+            console.log(`---> found CACHED asteroids plan = ${cachedAsteroidsPlan.length} asteroids`); //// TEST
+            res.json(cachedAsteroidsPlan);
+            return;
+        }
+        let asteroidsPlan = []; //// TEST
+        //// TO DO: get asteroids plan from data storage
+        //// ____
+        cache.asteroidsPlanByAddress[address.toLowerCase()] = asteroidsPlan;
+        res.json(asteroidsPlan);
+        //// ____
+    }
+);
+
+/**
+ * @desc        Save asteroids plan for address
+ * @route       POST /asteroids-plan/:address
+ */
+router.post(
+    '/asteroids-plan/:address',
+    async (req, res) => {
+        console.log(`--- [router] POST /asteroids-plan/${req.params.address}`); //// TEST
+        const address = toChecksumAddress(req.params.address);
+        // console.log(`---> request body:`, req.body); //// TEST
+        const asteroidsPlan = req.body;
+        //// TO DO: validate the asteroids plan, similar to "isValidProductionPlanData"?
+        //// ____
+        //// TO DO: insert / update the asteroids plan for address (NOT lowercase) in data storage
+        //// ____
+        cache.asteroidsPlanByAddress[address.toLowerCase()] = asteroidsPlan;
+        console.log(`---> saved CACHED asteroids plan = ${asteroidsPlan.length} asteroids`); //// TEST
+        res.send(true);
     }
 );
 
