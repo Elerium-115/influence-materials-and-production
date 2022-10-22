@@ -324,7 +324,7 @@ async function loadAsteroidsPlanForConnectedAddress() {
 }
 
 async function loadProductionPlanDataById(id) {
-    let data = cacheProductionPlanDataById[id];
+    let data = cacheProductionPlanDataById[id] || mockProductionPlanDataById[id];
     if (!data) {
         // Data NOT cached => call to my API
         data = await fetchProductionPlanDataById(id);
@@ -1227,6 +1227,11 @@ function onClickAddSelectedAsteroids(el) {
     elSelectedASteroids.forEach(elSelectedAsteroid => {
         const id = elSelectedAsteroid.querySelector('.id').textContent;
         selectedAsteroidName = `Asteroid #${id}`;
+        // Check if already added
+        if (asteroidsPlannerTree.find(asteroidData => asteroidData.asteroid_name === selectedAsteroidName)) {
+            alert(`Asteroid #${id} is already planned`);
+            return;
+        }
         const asteroidData = {
             asteroid_name: selectedAsteroidName,
             asteroid_type: cacheAsteroidsMetadataById[id].type,
@@ -2066,7 +2071,12 @@ document.fonts.onloadingdone = function(fontFaceSetEvent) {
 /**
  * Add handlers for wallet events, affecting:
  * - all wallet instances (in the topbar, and in the "Add asteroid" overlay)
+ * - the asteroids plan
  * - the wallet-asteroids (in the "Add asteroid" overlay)
+ * 
+ * NOTE: "updateWalletAsteroidsPanel" must be called after "updateAsteroidsPlanOnAccountsChanged"
+ * has finished regenerating "asteroidsPlannerTree", in order for the wallet-asteroids to be
+ * properly marked as ".planned", if they were previously saved in the asteroids plan.
  */
 walletEventsHandlers.accountsChanged.push(
     updateWalletCtaInstancesOnAccountsChanged,
@@ -2084,18 +2094,6 @@ if (!refreshWallet()) {
     handleAsteroidsPlannerTreeChanged();
 }
 
-
-//// FIX PRIO
-/*
-- add asteroid from wallet
-- disconnect wallet
-- open the add-asteroid overlay (while wallet NOT connected)
-- connect wallet from within the add-asteroid overlay
-    => BUG #1: the asteroid that was previously added, can be selected again
-- add the same asteroid from wallet
-    => BUG #2: duplicated asteroids allowed to be added
-- TEST FIX by adding a single asteroid, as well as 2+ asteroids
-*/
 
 //// TO DO PRIO
 /*
