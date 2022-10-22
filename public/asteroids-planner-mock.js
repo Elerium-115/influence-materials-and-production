@@ -1,8 +1,8 @@
 const mockAsteroidsPlan = [
 	{
-		"asteroid_name": "Asteroid #39744",
+		"asteroid_name": "Asteroid #40291",
 		"asteroid_type": "M",
-		"asteroid_area": 75,
+		"asteroid_area": 74,
 		"planned_products": [
 			{
 				"planned_product_name": "Aluminium",
@@ -15,9 +15,9 @@ const mockAsteroidsPlan = [
 		],
 	},
 	{
-		"asteroid_name": "Asteroid #60980",
+		"asteroid_name": "Asteroid #63980",
 		"asteroid_type": "CIS",
-		"asteroid_area": 50,
+		"asteroid_area": 48,
 		"planned_products": [
 			{
 				"planned_product_name": "Carbon Monoxide",
