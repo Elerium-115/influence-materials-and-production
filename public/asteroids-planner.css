@@ -2,8 +2,81 @@
 
 @keyframes flash-interaction { 50% { background: var(--overactive-bg); } }
 
-.asteroid-info .area::after {
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+@keyframes leftright {
+    0%, 5% { transform: translateX(0%); left: 0%; }
+    95%, 100% { transform: translateX(-100%); left: 100%; }
+}
+
+@keyframes pulse-brand {
+	0% { filter: drop-shadow(0 0 0 var(--brand-text)); }
+	25% { filter: drop-shadow(0 0 0.4rem var(--brand-text)); }
+	50% { filter: drop-shadow(0 0 0 var(--brand-text)); }
+	100% { filter: drop-shadow(0 0 0 var(--brand-text)); }
+}
+
+.pulse-brand:not(:hover) {
+    filter: drop-shadow(0 0 0 var(--brand-text));
+	animation: pulse-brand 2s infinite;
+}
+
+.area-km2::after {
     content: ' km²';
+}
+
+/* CTA */
+.cta {
+    display: inline-block;
+    white-space: nowrap;
+    background: var(--dark-bg);
+    color: var(--brand-text);
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+.cta.disabled {
+    color: var(--default-text);
+    cursor: not-allowed;
+}
+.cta:not(.disabled):hover {
+    background: var(--brand-text);
+    color: black;
+}
+.cta.connected-address {
+    display: flex;
+    align-items: center;
+}
+.cta.connected-address .identicon {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 1rem;
+}
+.cta-remove-text {
+    line-height: 2rem;
+    color: white;
+    cursor: pointer;
+    padding: 0 0.5rem;
+    border-radius: 1rem;
+    opacity: 0.25;
+}
+.cta-remove-text:hover {
+    background: red;
+    opacity: 1;
+}
+
+
+.influence-logo-icon {
+    width: 2rem;
+    height: 2rem;
+    background-image: url("./img/influence-logo.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+}
+
+.influence-logo-icon:hover {
+    animation: spin 500ms ease-in-out;
 }
 
 #asteroids-planner-wrapper {
@@ -17,19 +90,10 @@
     gap: 10rem; /* compensate for "#shopping-list-tree" hidden if ".empty-planner" */
 }
 
-#asteroids-planner-tree {
-    margin-left: 1rem;
-}
-
-.empty-planner #asteroids-planner-tree {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
 #asteroids-planner-tree h3,
 #shopping-list-tree h3 {
     line-height: 2rem;
+    white-space: nowrap;
 }
 
 .empty-planner #asteroids-planner-tree h3,
@@ -82,15 +146,30 @@
 
 /* Asteroids Planner tree */
 
+#asteroids-planner-tree {
+    max-width: 14rem;
+    margin-left: 1rem;
+}
+
+.empty-planner #asteroids-planner-tree {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 #asteroids-planner-tree h3 {
     color: var(--brand-text);
 }
 
 #asteroids-planner-tree .asteroids-tree-item {
     position: relative;
-    margin-top: 1rem;
+    margin-top: 2rem;
     border-left: 1px solid var(--default-text);
     border-right: 1px solid transparent;
+}
+
+#asteroids-planner-tree .asteroid-name {
+    white-space: nowrap;
 }
 
 #asteroids-planner-tree .asteroid-info {
@@ -200,6 +279,27 @@
     display: none;
 }
 
+#asteroids-planner-tree .asteroids-tree-item.missing-types {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#asteroids-planner-tree .asteroids-tree-item.missing-types .warning {
+    position: absolute;
+    top: -1.5rem;
+    left: -1px;
+    right: -1px;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-align: center;
+    background: var(--brand-text);
+    color: black;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
 
 /* Asteroids Planner tree actions */
 
@@ -275,30 +375,16 @@
     text-align: center;
 }
 
-#asteroids-planner-tree .asteroids-tree-button {
-    display: inline-block;
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    border: 1px solid transparent;
-    border-radius: 0.5rem;
+#asteroids-planner-tree .cta {
+    margin: 2rem auto 0 auto;
 }
 
-#asteroids-planner-tree .asteroids-tree-cta {
-    background: var(--dark-bg);
-    color: var(--brand-text);
-    margin-top: 2rem;
-}
-
-#asteroids-planner-tree .asteroids-tree-cta:hover {
-    background: var(--brand-text);
-    color: black;
-}
-
-.empty-planner #asteroids-planner-tree .asteroids-tree-cta {
+.empty-planner #asteroids-planner-tree .cta {
     margin-top: 0;
 }
 
-.empty-planner #asteroids-planner-tree .asteroids-tree-cta:not(:hover) {
+.empty-planner #asteroids-planner-tree .cta:not(:hover) {
+    /* copy-paste from ".pulse-brand" */
     filter: drop-shadow(0 0 0 var(--brand-text));
 	animation: pulse-brand 2s infinite;
 }
@@ -307,16 +393,11 @@
     display: none;
 }
 
-@keyframes pulse-brand {
-	0% { filter: drop-shadow(0 0 0 var(--brand-text)); }
-	25% { filter: drop-shadow(0 0 0.4rem var(--brand-text)); }
-	50% { filter: drop-shadow(0 0 0 var(--brand-text)); }
-}
-
 
 /* Shopping List tree */
 
 #shopping-list-tree {
+    max-width: 14rem;
     text-align: right;
 }
 
@@ -329,15 +410,17 @@
 }
 
 #shopping-list-tree .shopping-tree > li {
-    margin-top: 1rem;
+    margin-top: 2rem;
     border-right: 1px solid var(--link);
 }
 
 #shopping-list-tree .shopping-tree > li > .tree-label {
     color: var(--link);
+    margin-bottom: 0.5rem;
 }
 
 #shopping-list-tree .shopping-tree ul .tree-label {
+    position: relative;
     font-size: 0.8rem;
     padding: 0.25rem 0.5rem;
     border-left: 1px solid transparent;
@@ -345,13 +428,40 @@
 
 #shopping-list-tree .shopping-tree ul .tree-label:hover {
     color: white;
-    text-decoration: underline;
     cursor: pointer;
 }
 
 #shopping-list-tree .shopping-tree ul .tree-label.connected {
     background: linear-gradient(-90deg, transparent 50%, var(--overactive-bg) 100%); 
     border-color: var(--link);
+}
+
+#shopping-list-tree .shopping-spectral-types-tree .tree-label.optional:not(:hover)::before {
+    content: 'optional';
+    position: absolute;
+    right: 2.5rem;
+    opacity: 0.5;
+}
+
+#shopping-list-tree .shopping-spectral-types-tree .tree-label.optional[data-base-spectral='C']:hover::before {
+    content: 'required I or ';
+}
+
+#shopping-list-tree .shopping-spectral-types-tree .tree-label.optional[data-base-spectral='I']:hover::before {
+    content: 'required C or ';
+}
+
+#shopping-list-tree .can-add-product > .tree-label:hover::after {
+    content: '+';
+    position: absolute;
+    right: -2.5rem;
+    width: 1rem;
+    height: 1rem;
+    line-height: 0.9rem;
+    text-align: center;
+    font-size: 1.2rem;
+    background: var(--link);
+    border-radius: 50%;
 }
 
 #shopping-list-tree .options {
@@ -361,13 +471,6 @@
 #shopping-list-tree.hide-unselected.has-connections .shopping-tree ul .tree-label:not(.connected),
 #shopping-list-tree:not(.has-connections) .options {
     display: none;
-}
-
-
-/* Leader Line */
-
-.leader-line-areaAnchor:hover {
-    z-index: -1; /* WARNING: Some area-anchors still remain "on top" during hover? */
 }
 
 
@@ -384,12 +487,17 @@
     margin-left: -1rem;
 }
 
-.breadcrumbs .separator::before {
-    content: '⧟';
-    opacity: 0.25;
+.breadcrumbs .separator {
+    width: 1rem;
+    background-image: url("./img/arrow.svg");
+    background-repeat: no-repeat;
+    background-position-y: center;
+    margin-bottom: -0.2rem;
+    opacity: 0.2;
 }
 
 .breadcrumbs .breadcrumb {
+    max-width: 14rem;
     border-radius: 0.5rem;
 }
 
@@ -401,10 +509,14 @@
 
 .breadcrumbs .breadcrumb .breadcrumb-name {
     position: relative;
+    overflow: hidden;
+    white-space: nowrap;
     padding: 0 1rem;
 }
 
-.breadcrumbs .breadcrumb .breadcrumb-name:hover {
+.breadcrumbs .breadcrumb .breadcrumb-name:hover,
+.breadcrumbs .breadcrumb *:hover > .breadcrumb-name-inner {
+    color: var(--brand-text);
     text-decoration: underline;
 }
 
@@ -412,10 +524,23 @@
     color: var(--brand-text);
 }
 
+.breadcrumbs .breadcrumb .breadcrumb-name-inner {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.breadcrumbs .breadcrumb .breadcrumb-name-inner.overflowing {
+    display: inline-block;
+    position: relative;
+    animation: leftright 2s infinite alternate ease-in-out;
+    overflow: visible; /* avoid extra margin on hover */
+}
+
 .breadcrumbs .breadcrumb ul {
     position: absolute;
+    max-width: 14rem; /* same as for ".breadcrumbs .breadcrumb" */
     background: var(--active-bg);
-    /* color: var(--default-text); */
     padding-top: 2rem;
     border-radius: 0.5rem;
     filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
@@ -426,6 +551,7 @@
 }
 
 .breadcrumbs .breadcrumb ul li {
+    overflow: hidden;
     padding: 0 1rem;
 }
 
@@ -489,13 +615,174 @@
 }
 
 .empty-planner #content ul li::before {
-    content: '⧟';
-    margin-right: 1.5rem;
-    opacity: 0.25;
+    content: '';
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    background-image: url("./img/arrow.svg");
+    background-repeat: no-repeat;
+    background-position-y: center;
+    margin-right: 1rem;
+    margin-bottom: -0.2rem;
+    opacity: 0.2;
 }
 
-.content-title {
+#content a {
+    cursor: pointer;
+}
+
+#content .content-title {
     margin-bottom: 2rem;
+}
+
+#content .content-title:not(:first-child) {
+    margin-top: 2rem;
+}
+
+#content .content-columns {
+    display: flex;
+    gap: 3rem;
+}
+
+#content .content-info-wrapper {
+    position: relative;
+    min-width: 11rem; /* same as ".content-cards" grid minmax value */
+    background: var(--active-bg);
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+#content .content-subtitle {
+    margin: 2rem 0 0.5rem 0;
+}
+
+#content .shopping-list-subtitle {
+    color: var(--link);
+}
+
+#content .influence-logo-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+#content .influence-logo-icon.loading {
+    animation: spin 500ms linear infinite;
+    opacity: 0.5;
+}
+
+#content .asteroid-details {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+}
+
+#content .asteroid-details > * {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    margin: 0 -0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+}
+
+#content .asteroid-details > *:hover {
+    background: var(--overactive-bg);
+    color: white;
+}
+
+#content .asteroid-details .bonus-volatiles { color: var(--volatiles); }
+#content .asteroid-details .bonus-organics { color: var(--organics); }
+#content .asteroid-details .bonus-metals { color: var(--metals); }
+#content .asteroid-details .bonus-rare-earth { color: var(--rare-earth); }
+#content .asteroid-details .bonus-fissiles { color: var(--fissiles); }
+
+#content .intermediate-products a {
+    color: var(--brand-text);
+}
+
+#content .shopping-list {
+    display: grid;
+    grid-template-rows: 50% 50%;
+    grid-auto-flow: column;
+    gap: 1rem 3rem;
+    font-size: 0.8rem;
+    margin-top: 1rem;
+}
+
+#content .shopping-list .title {
+    color: var(--link);
+    font-size: 0.9rem;
+}
+
+#content .shopping-list .required-cell {
+    position: relative;
+}
+
+#content .shopping-list .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 -0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+}
+
+#content .shopping-list .row:hover {
+    background: var(--overactive-bg);
+    cursor: pointer;
+}
+
+#content .shopping-list .can-add-product .row:not(.none):hover::after {
+    content: '+';
+    position: absolute;
+    right: -2rem;
+    width: 1rem;
+    height: 1rem;
+    line-height: 0.9rem;
+    text-align: center;
+    font-size: 1.2rem;
+    background: var(--link);
+    color: white;
+    border-radius: 50%;
+}
+
+#content .shopping-list .required-modules .row:hover::after {
+    right: unset;
+    left: -2rem;
+}
+
+#content .shopping-list .row .name {
+    position: relative;
+}
+
+#content .shopping-list .row:hover .name {
+    color: white;
+}
+
+#content .shopping-list .row .qty::before {
+    content: '✕';
+    font-size: 0.5rem;
+    margin-right: 0.2rem;
+}
+
+#content .shopping-list .row:not(:hover) .name.optional::after {
+    content: 'optional';
+    position: absolute;
+    left: 2rem;
+    opacity: 0.5;
+}
+
+#content .shopping-list .row:hover .name.optional[data-base-spectral='C']::after {
+    content: ' or I required';
+}
+
+#content .shopping-list .row:hover .name.optional[data-base-spectral='I']::after {
+    content: ' or C required';
+}
+
+#content .remove-all-asteroids {
+    display: inline-block;
+    margin-top: 2rem;
 }
 
 
@@ -507,12 +794,21 @@
     gap: 3rem;
 }
 
+.content-cards .content-card {
+    position: relative;
+}
+
 .content-cards .asteroid-card .spectral-types-circle::before {
     padding: 0.4rem;
     opacity: 0.5;
 }
 
-.content-cards .asteroid-card .spectral-types-circle:hover::before {
+.content-cards .asteroid-card .spectral-types-circle.selected {
+    cursor: unset;
+}
+
+.content-cards .asteroid-card .spectral-types-circle:hover::before,
+.content-cards .asteroid-card .spectral-types-circle.selected::before {
     opacity: 1;
 }
 
@@ -569,6 +865,12 @@
     cursor: pointer;
 }
 
+.content-cards .product-card.product-add {
+    font-size: 8rem;
+    line-height: 12rem;
+    color: var(--default-text_semifaded);
+}
+
 .content-cards .product-card img {
     width: 100%;
 }
@@ -579,14 +881,105 @@
 }
 
 .content-cards .product-card .product-name {
-    padding-bottom: 1rem;
+    padding: 0 0.5rem 1rem 0.5rem;
 }
 
-.content-cards .product-card.product-add {
-    font-size: 8rem;
-    line-height: 12rem;
-    color: var(--default-text_semifaded);
+/* Content card icons */
+
+.content-cards .content-card .card-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    opacity: 0.5;
+    filter: drop-shadow(0.25rem 0.25rem 0.25rem var(--dark-bg));
 }
+
+.content-cards .content-card .card-icon:hover {
+    opacity: 1;
+}
+
+.content-cards .content-card:not(:hover) .card-icon {
+    display: none;
+}
+
+.content-cards .content-card .card-icon.delete:hover {
+    background: red;
+}
+
+.content-cards .content-card .card-icon.delete::after {
+    content: '✕';
+}
+
+.content-cards .content-card .card-icon.move {
+    right: unset;
+    left: 0;
+}
+
+.content-cards .content-card .card-icon.move:hover {
+    background: var(--brand-text);
+    color: black;
+}
+
+.content-cards .content-card .card-icon.move-up::after {
+    content: '▲';
+    padding-bottom: 0.2rem;
+}
+
+.content-cards .content-card .card-icon.move-down {
+    top: unset;
+    bottom: 0;
+}
+
+.content-cards .content-card .card-icon.move-down::after {
+    content: '▼';
+    padding-top: 0.2rem;
+}
+
+.content-cards .content-card .card-icon.zoom-image {
+    opacity: 1;
+}
+
+.content-cards .content-card .card-icon.zoom-image::after {
+    content: '+';
+    font-size: 2rem;
+    padding-bottom: 0.2rem;
+}
+
+.content-cards .product-card.parent-missing-image {
+    /* use both classes in the selector, for higher specificity */
+    cursor: unset;
+}
+
+.content-cards .product-card.parent-missing-image .card-icon.zoom-image {
+    display: none;
+}
+
+/* Single card */
+
+.content-cards.single-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* min/max width same as ".content-cards" grid minmax value */
+    min-width: 11rem;
+    max-width: 11rem;
+}
+
+.content-cards.single-card .delete-card {
+    margin: 0 auto;
+}
+
+.content-cards.single-card .delete-card::after {
+    content: 'Remove';
+}
+
 
 /* Overlays */
 
@@ -596,35 +989,35 @@
     bottom: 0;
     left: 0;
     right: 0;
-    display: flex;
+    /* do NOT use "display: flex" b/c an ".overlay-panel" taller than the window height can NOT be fully scrolled up/down */
+    display: grid;
     align-items: center;
-    justify-content: center;
     background: var(--default-overlay-bg);
+    overflow-y: auto;
     z-index: 1;
 }
 
-#ovrelay-close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    line-height: 1.6rem;
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--default-text);
-    cursor: pointer;
-    padding: 1rem;
+body:not(.overlay-visible) #overlay-wrapper {
+    display: none;
 }
 
-#ovrelay-close:hover {
-    color: white;
+body.overlay-visible {
+    overflow: hidden;
 }
+
+#overlay-wrapper .overlay-panel {
+    margin: 3rem auto;
+}
+
+#overlay-wrapper h3 {
+    margin-bottom: 1rem;
+}
+
+/* Overlay - Add asteroid */
 
 #overlay-add-asteroid {
-    min-width: 66%;
-}
-
-#overlay-add-asteroid h3 {
-    margin-bottom: 1.5rem;
+    min-width: 35rem;
+    width: 66%;
 }
 
 #overlay-add-asteroid .hr {
@@ -671,27 +1064,9 @@
 }
 
 #overlay-add-asteroid .spectral-types-circle:hover::before,
+#overlay-add-asteroid .wallet-asteroid-card:hover .spectral-types-circle::before,
 #overlay-add-asteroid .spectral-types-circle.selected::before {
     opacity: 1;
-}
-
-#overlay-add-asteroid .overlay-cta {
-    display: inline-block;
-    background: var(--dark-bg);
-    color: var(--brand-text);
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-}
-
-#overlay-add-asteroid .overlay-cta.disabled {
-    color: var(--default-text);
-    cursor: not-allowed;
-}
-
-#overlay-add-asteroid .overlay-cta:not(.disabled):hover {
-    background: var(--brand-text);
-    color: black;
 }
 
 #overlay-add-asteroid .title-and-wallet-wrapper {
@@ -703,6 +1078,300 @@
 
 #overlay-add-asteroid .title-and-wallet-wrapper h3 {
     margin-bottom: 0;
+}
+
+#overlay-add-asteroid #wallet-asteroids-status.not-connected::after {
+    content: 'Wallet not connected';
+}
+
+#overlay-add-asteroid #wallet-asteroids-status.loading-asteroids::after {
+    content: 'Loading asteroids from connected wallet...';
+}
+
+#overlay-add-asteroid #wallet-asteroids-status.no-asteroids::after {
+    content: 'No asteroids in connected wallet';
+}
+
+#overlay-add-asteroid .wallet-asteroids-wrapper-outer,
+#overlay-add-asteroid .wallet-asteroids-wrapper {
+    background: var(--dark-bg);
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroids-wrapper-outer {
+    position: relative;
+    height: 11rem;
+}
+
+#overlay-add-asteroid .wallet-asteroids-wrapper {
+    width: 100%;
+    height: 11rem;
+    overflow: hidden;
+}
+
+#overlay-add-asteroid .wallet-asteroids-wrapper:hover {
+    position: absolute;
+    height: auto;
+    min-height: 11rem;
+    filter: drop-shadow(0.25rem 0.25rem 0.25rem var(--dark-bg));
+    z-index: 1;
+}
+
+#overlay-add-asteroid .wallet-asteroids-wrapper:not(:hover)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 3rem;
+    background: linear-gradient(180deg, transparent 0%, var(--dark-bg) 100%);
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem 1rem 0 1rem;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters-wrapper {
+    display: flex;
+    gap: 2rem;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters {
+    background: var(--default-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters-category:hover .filters {
+    position: absolute;
+    filter: drop-shadow(0.25rem 0.25rem 0.25rem var(--dark-bg));
+    z-index: 2; /* ensure overlay above planned asteroids */
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filter-label-wrapper {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters:not(:hover) .filter-toggle-all,
+#overlay-add-asteroid .wallet-asteroids-filters .filters:not(:hover) .filter-options {
+    display: none;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters a {
+    cursor: pointer;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filter-options {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 1rem 0 0.5rem 0;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filter-spectral-type {
+    display: inline-block;
+    min-width: 2.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-radius: 0.5rem;
+    opacity: 0.5;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filter-spectral-type:hover {
+    background: var(--overactive-bg) !important;
+    color: white;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filter-spectral-type.selected {
+    background: var(--active-bg);
+    border-color: var(--default-text);
+    opacity: 1;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filter-spectral-type.selected:hover {
+    border-color: white;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters-category-area .filter-options {
+    align-items: center;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters-category-area input {
+    width: 5rem;
+    margin: 0;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .filters-reset {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .selected-asteroids-cta:not(:hover) {
+    background: var(--default-bg);
+    white-space: nowrap;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .selected-asteroids-cta::before {
+    content: 'Add selected';
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters .selected-asteroids-cta.disabled::before {
+    content: 'Select asteroids';
+}
+
+#overlay-add-asteroid .wallet-asteroids {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10.5rem, 10.5rem));
+    justify-content: space-evenly;
+    gap: 0.5rem;
+    margin: 1rem;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 3.5rem 5rem;
+    gap: 1rem;
+    align-items: center;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:hover {
+    color: white;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:not(.planned):hover {
+    background: var(--active-bg);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1rem;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 0%, var(--dark-bg) 100%);
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:not(.planned):hover::after {
+    background: linear-gradient(90deg, transparent 0%, var(--active-bg) 100%) !important;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.selected {
+    background: var(--default-bg);
+    border-color: var(--brand-text);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.selected::after {
+    background: linear-gradient(90deg, transparent 0%, var(--default-bg) 100%);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.planned {
+    cursor: not-allowed;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.planned::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+    border-radius: 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.planned:hover::before {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:hover .spectral-types-circle {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .spectral-types-circle::before {
+    opacity: 0.5;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .wallet-asteroid-metadata {
+    overflow: hidden;
+    color: var(--default-text_semifaded);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:hover .wallet-asteroid-metadata {
+    color: var(--default-text);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .id::before {
+    content: '# ';
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .name-wrapper {
+    margin: 0.2rem 0;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .name {
+    display: inline-block;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.planned:not(:hover) .name {
+    color: transparent;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.planned:not(:hover) .name-wrapper::before {
+    content: 'Planned';
+    position: relative;
+    color: var(--brand-text);
+    margin-right: 0.5rem;
+    z-index: 1;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:hover .name.overflowing {
+    position: relative;
+    animation: leftright 2s infinite alternate ease-in-out;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .area {
+    color: var(--default-text);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:hover .area {
+    color: white;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:hover .influence-logo-icon {
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    z-index: 1;
+}
+
+#overlay-add-asteroid .asteroid-tools {
+    float: right;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    margin-left: 2rem;
 }
 
 #overlay-add-asteroid .asteroid-id-and-cta .asteroid-id input,
@@ -724,16 +1393,12 @@
     margin-top: 2rem;
 }
 
-#overlay-add-asteroid .overlay-cta.asteroid-details-cta {
+#overlay-add-asteroid .asteroid-details-cta {
     margin-left: 1.5rem;
 }
 
 #overlay-add-asteroid .asteroid-metadata-details .metadata {
     color: white;
-}
-
-#overlay-add-asteroid #asteroid-metadata-area::after {
-    content: ' km²';
 }
 
 #overlay-add-asteroid .mock-spectral-types {
@@ -751,6 +1416,112 @@
     border-radius: 0.5rem;
 }
 
-#overlay-add-asteroid .overlay-cta.asteroid-mock-cta {
+#overlay-add-asteroid .asteroid-mock-cta {
     margin-left: 2rem;
+}
+
+/* Overlay - Add planned product */
+
+#overlay-add-product h3 {
+    margin-bottom: 2rem;
+}
+
+#overlay-add-product #products-list-wrapper {
+    font-size: 0.8rem;
+}
+
+/* Overlay - Product image */
+
+#overlay-product-image {
+    position: absolute;
+    display: grid;
+    align-items: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 !important;
+}
+
+#overlay-product-image img {
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+}
+
+/* Overlay - Close */
+
+#ovrelay-close {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    line-height: 1.6rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--default-text);
+    cursor: pointer;
+    padding: 1rem;
+}
+
+#ovrelay-close:hover {
+    color: white;
+}
+
+
+/* Template - Production plan */
+
+#template-production-plan {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--default-bg);
+}
+
+/**
+ * "z-index" = 1 required for correct animation,
+ * but must NOT be set when the template-production-plan is shown,
+ * otherwise the production-plan-lines remain hidden below this element.
+ */
+#template-production-plan.enabling,
+#template-production-plan.disabling {
+    z-index: 1;
+}
+
+#template-production-plan.enabling { animation: enabling-template 500ms; }
+#template-production-plan.disabling { animation: disabling-template 500ms; }
+#template-production-plan.enabling .topbar { animation: enabling-topbar 500ms; }
+#template-production-plan.disabling .topbar { animation: disabling-topbar 500ms; }
+#template-production-plan.enabling #production-wrapper { position: absolute; animation: enabling-production-wrapper 500ms; }
+#template-production-plan.disabling #production-wrapper { position: absolute; animation: disabling-production-wrapper 500ms; }
+#template-production-plan.enabling #minimap-wrapper { animation: enabling-minimap-wrapper 500ms; }
+#template-production-plan.disabling #minimap-wrapper { animation: disabling-minimap-wrapper 500ms; }
+
+@keyframes enabling-template { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes disabling-template { 0% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes enabling-topbar { 0% { top: -3rem; } 100% { top: 0; } }
+@keyframes disabling-topbar { 0% { top: 0; } 100% { top: -3rem; } }
+@keyframes enabling-production-wrapper { 0% { left: -100%; } 100% { left: 0; } }
+@keyframes disabling-production-wrapper { 0% { left: 0; } 100% { left: -100%; } }
+@keyframes enabling-minimap-wrapper { 0% { right: -50%; } 100% { right: 0; } }
+@keyframes disabling-minimap-wrapper { 0% { right: 0; } 100% { right: -50%; } }
+
+#template-production-plan .topbar .options {
+    padding-left: 2rem;
+}
+
+#template-production-plan .topbar .topbar-section-right {
+    margin-left: 0;
+}
+
+#template-production-plan #selected-production-chain {
+    margin-top: unset;
+}
+
+
+/* Leader Lines */
+
+.hidden-asteroids-planner .leader-line-asteroids-planner {
+    display: none;
 }

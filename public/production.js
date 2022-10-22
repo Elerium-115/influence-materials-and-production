@@ -394,7 +394,7 @@ function createProductContainer(itemName, itemData, parentContainerId) {
     itemContainer.dataset.itemName = itemName;
     itemContainer.innerHTML = `<a href="#${getCompactName(itemName)}" class="item-name">${itemName}</a>`;
     itemContainer.innerHTML += `<div class="item-qty">1</div>`;
-    itemContainer.innerHTML += `<img class="thumb" src="./img/thumbs/${getItemNameSafe(itemName)}.png" alt="" onerror="this.src='./img/site-icon.png';">`;
+    itemContainer.innerHTML += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png';">`;
     itemContainer.classList.add(getItemTypeClass(itemData.itemType));
     return itemContainer;
 }
@@ -960,12 +960,12 @@ async function selectItemByName(itemName) {
     // hide-and-reset products-list, and highlight the selected item
     hideAndResetProductsList();
     productsListWrapper.querySelector('input').placeholder = itemName;
-    document.getElementById('selected-item-name').textContent = itemName;
+    selectedItemNameContainer.textContent = itemName;
     updateTierSlider();
     // default tier-limit such that only the minimal sub-chain is shown for the selected item (i.e. only its direct inputs)
     updateProductionChainForTierLimit(Math.max(0, selectedItemTier - 1));
     requiredProductImage.classList.remove('missing-image');
-    requiredProductImage.src = `./img/products/${getItemNameSafe(itemName)}.png`;
+    requiredProductImage.src = getProductImageSrc(itemName);
     const itemNameCompact = getCompactName(itemName);
     window.location.hash = `#${itemNameCompact}`;
 }
@@ -1148,8 +1148,9 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => {
     selectItemByName(itemNamesByHash[hashToPreselect]);
-    initializeMinimap();
+    resetMinimap();
 }, 10);
+
 
 //// FIX BUG re: raw materials should also support process variants (e.g. Hydrogen)
 

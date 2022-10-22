@@ -1,8 +1,14 @@
 const express = require('express');
+const { toChecksumAddress } = require('ethereum-checksum-address');
 const cache = require('../cache/index');
 const providerInfluencethIo = require('../providers/influenceth.io/index');
+const providerMock = require('../providers/mock/index');
+const providerMongoDB = require('../providers/mongodb/index');
+const utils = require('../utils/index');
 
 const router = express.Router();
+
+const ONE_HOUR = 1000 * 60 * 60;
 
 /**
  * @desc        Homepage (Test)
@@ -25,15 +31,15 @@ router.get(
 router.get(
     '/asteroid/:id',
     async (req, res) => {
-        console.log(`--- [router] GET /asteroid/:id`); //// TEST
+        console.log(`--- [router] GET /asteroid/${req.params.id}`); //// TEST
         const asteroidId = req.params.id;
         const cachedMetadata = cache.asteroidsMetadataById[asteroidId];
         if (cachedMetadata) {
-            console.log(`---> found CACHED metadata:`, cachedMetadata); //// TEST
+            console.log(`---> found CACHED metadata`); //// TEST
             res.json(cachedMetadata);
             return;
         }
-        const metadata = await providerInfluencethIo.getAsteroidMetadata(asteroidId);
+        const metadata = await providerInfluencethIo.fetchAsteroidMetadata(asteroidId);
         if (metadata.error) {
             res.json({error: metadata.error});
             return;
@@ -47,25 +53,40 @@ router.get(
  * @desc        Get count and metadata for asteroids owned by address
  * @route       GET /asteroids/owned-by/:address
  */
- router.get(
+router.get(
     '/asteroids/owned-by/:address',
     async (req, res) => {
-        console.log(`--- [router] GET /asteroids/owned-by/:address`); //// TEST
-        const address = req.params.address;
+        console.log(`--- [router] GET /asteroids/owned-by/${req.params.address}`); //// TEST
+        const address = toChecksumAddress(req.params.address);
         console.log(`---> address = ${address}`); //// TEST
+        /* DISABLED call to Influence API for "asteroidsCount" b/c this can be derived from "asteroidsIds"
         // Count ALL owned asteroids
-        const asteroidsCount = await providerInfluencethIo.getAsteroidsCountOwnedBy(address);
+        const asteroidsCount = await providerInfluencethIo.fetchAsteroidsCountOwnedBy(address);
         if (asteroidsCount.error) {
             res.json({error: asteroidsCount.error});
             return;
         }
+        */
         // Get IDs of ALL owned asteroids (TBC for higher numbers, e.g. +100 owned asteroids?)
-        const asteroidsIds = await providerInfluencethIo.getAsteroidsIdsOwnedBy(address);
-        if (asteroidsIds.error) {
-            res.json({error: asteroidsIds.error});
-            return;
+        let asteroidsIds;
+        let cachedAsteroidsIds = cache.ownedAsteroidsIdsByAddress[address.toLowerCase()];
+        if (cachedAsteroidsIds && (Date.now() - cachedAsteroidsIds.date) < ONE_HOUR) {
+            // Use cache if not older than ONE_HOUR
+            asteroidsIds = cachedAsteroidsIds.asteroidsIds;
+            console.log(`---> found CACHED asteroidsIds`); //// TEST
+        } else {
+            asteroidsIds = await providerInfluencethIo.fetchAsteroidsIdsOwnedBy(address);
+            if (asteroidsIds.error) {
+                res.json({error: asteroidsIds.error});
+                return;
+            }
+            console.log(`---> asteroidsIds:`, asteroidsIds); //// TEST
+            cache.ownedAsteroidsIdsByAddress[address.toLowerCase()] = {
+                asteroidsIds,
+                date: Date.now(),
+            };
         }
-        console.log(`---> asteroidsIds:`, asteroidsIds); //// TEST
+        const asteroidsCount = asteroidsIds.length;
         // Try to get cached metadata for ALL owned asteroids
         const asteroidsMetadataCached = [];
         asteroidsIds.forEach(asteroidId => {
@@ -74,7 +95,7 @@ router.get(
             }
         });
         if (asteroidsMetadataCached.length === asteroidsCount) {
-            // Found cached metadata for ALL owned asteroids => no need to call "getAsteroidsMetadataOwnedBy"
+            // Found cached metadata for ALL owned asteroids
             console.log(`---> found CACHED metadata for ALL asteroids`); //// TEST
             res.json(asteroidsMetadataCached);
             return;
@@ -96,7 +117,7 @@ router.get(
                 // Pause for 1 second before each subsequent request, to not spam the API
                 await new Promise(r => setTimeout(r, 1000));
             }
-            const asteroidsMetadata = await providerInfluencethIo.getAsteroidsMetadataOwnedBy(address, page);
+            const asteroidsMetadata = await providerInfluencethIo.fetchAsteroidsMetadataOwnedBy(address, page);
             if (asteroidsMetadata.error) {
                 res.json({error: asteroidsMetadata.error});
                 return;
@@ -107,6 +128,120 @@ router.get(
             });
         }
         res.json(asteroidsMetadataFresh);
+    }
+);
+
+/**
+ * @desc        Get data for production plan ID
+ * @route       GET /production-plan/:id
+ */
+router.get(
+    '/production-plan/:id',
+    async (req, res) => {
+        console.log(`--- [router] GET /production-plan/${req.params.id}`); //// TEST
+        const productionPlanId = req.params.id;
+        const cachedData = cache.productionPlanDataById[productionPlanId];
+        if (cachedData) {
+            console.log(`---> found CACHED data`); //// TEST
+            res.json(cachedData);
+            return;
+        }
+        // First check if the requested ID is a "mock" production plan
+        let productionPlanData = providerMock.mockProductionPlanDataById[productionPlanId];
+        if (!productionPlanData) {
+            // The requested ID is not a "mock" production plan => use the data storage
+            //// TO DO: get production plan data from data storage
+            //// ____
+        }
+        cache.productionPlanDataById[productionPlanId] = productionPlanData;
+        res.json(productionPlanData);
+    }
+);
+
+/**
+ * @desc        Save data for production plan ID
+ * @route       POST /production-plan/:id
+ */
+router.post(
+    '/production-plan/:id',
+    async (req, res) => {
+        console.log(`--- [router] POST /production-plan/${req.params.id}`); //// TEST
+        // console.log(`---> request body:`, req.body); //// TEST
+        const productionPlanData = req.body;
+        if (!utils.isValidProductionPlanData(productionPlanData)) {
+            res.json({error: 'Invalid production plan data'});
+            return;
+        }
+        const productionPlanId = req.params.id;
+        // Do NOT allow saving a "mock" production plan, to avoid mutating it for other users
+        if (providerMock.mockProductionPlanDataById[productionPlanId]) {
+            res.json({error: 'Saving an "example" production plan is not allowed'});
+            return;
+        }
+        if (isNaN(Number(productionPlanId))) {
+            /**
+             * Insert new production plan in data storage.
+             * Then update the local "productionPlanData", with the new "productionPlanId" inserted in data storage.
+             */
+            const nextProductionPlanId = await providerMongoDB.getNextProductionPlanId();
+            productionPlanData.productionPlanId = nextProductionPlanId;
+            //// TO BE IMPLEMENTED
+            //// ____
+        } else {
+            // Update existing production plan in data storage.
+            //// TO DO: check that the production plan being updated corresponds to the same planned product (else respond with error)
+            //// -- i.e. compare "productionPlanData.itemDataById[1].productId", between plan from "req.body", and existing plan from data storage
+            //// ____
+            //// TO BE IMPLEMENTED
+            //// ____
+        }
+        cache.productionPlanDataById[productionPlanData.productionPlanId] = productionPlanData;
+        res.send(productionPlanData);
+    }
+);
+
+/**
+ * @desc        Get asteroids plan saved for address
+ * @route       GET /asteroids-plan/:address
+ */
+router.get(
+    '/asteroids-plan/:address',
+    async (req, res) => {
+        console.log(`--- [router] GET /asteroids-plan/${req.params.address}`); //// TEST
+        const address = toChecksumAddress(req.params.address);
+        const cachedAsteroidsPlan = cache.asteroidsPlanByAddress[address.toLowerCase()];
+        if (cachedAsteroidsPlan) {
+            console.log(`---> found CACHED asteroids plan = ${cachedAsteroidsPlan.length} asteroids`); //// TEST
+            res.json(cachedAsteroidsPlan);
+            return;
+        }
+        let asteroidsPlan = []; //// TEST
+        //// TO DO: get asteroids plan from data storage
+        //// ____
+        cache.asteroidsPlanByAddress[address.toLowerCase()] = asteroidsPlan;
+        res.json(asteroidsPlan);
+        //// ____
+    }
+);
+
+/**
+ * @desc        Save asteroids plan for address
+ * @route       POST /asteroids-plan/:address
+ */
+router.post(
+    '/asteroids-plan/:address',
+    async (req, res) => {
+        console.log(`--- [router] POST /asteroids-plan/${req.params.address}`); //// TEST
+        const address = toChecksumAddress(req.params.address);
+        // console.log(`---> request body:`, req.body); //// TEST
+        const asteroidsPlan = req.body;
+        //// TO DO: validate the asteroids plan, similar to "isValidProductionPlanData"?
+        //// ____
+        //// TO DO: insert / update the asteroids plan for address (NOT lowercase) in data storage
+        //// ____
+        cache.asteroidsPlanByAddress[address.toLowerCase()] = asteroidsPlan;
+        console.log(`---> saved CACHED asteroids plan = ${asteroidsPlan.length} asteroids`); //// TEST
+        res.send(true);
     }
 );
 

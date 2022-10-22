@@ -1,5 +1,4 @@
-
-const mockAsteroidsPlannerTree = [
+const mockAsteroidsPlan = [
 	{
 		"asteroid_name": "Asteroid #39744",
 		"asteroid_type": "M",
@@ -7,79 +6,11 @@ const mockAsteroidsPlannerTree = [
 		"planned_products": [
 			{
 				"planned_product_name": "Aluminium",
-				"intermediate_products": [
-					{
-						"intermediate_product_name": "Alumina"
-					},
-					{
-						"intermediate_product_name": "Graphite"
-					},
-				],
-				"shopping_list":
-				{
-					"inputs": [
-						{
-							"input_name": "Ammonia"
-						},
-						{
-							"input_name": "Feldspar"
-						},
-						{
-							"input_name": "Sulfuric Acid"
-						},
-					],
-					"buildings": [
-						{
-							"building_name": "Extractor"
-						},
-						{
-							"building_name": "Refinery"
-						},
-					],
-					"modules": [],
-					"spectral_types": ["M"],
-				},
+				"production_plan_id": "mock1",
 			},
 			{
 				"planned_product_name": "Steel",
-				"intermediate_products": [
-					{
-						"intermediate_product_name": "Graphite"
-					},
-					{
-						"intermediate_product_name": "Iron"
-					},
-					{
-						"intermediate_product_name": "Iron Oxide"
-					},
-					{
-						"intermediate_product_name": "Iron Sulfide"
-					},
-					{
-						"intermediate_product_name": "Troilite"
-					},
-				],
-				"shopping_list":
-				{
-					"inputs": [
-						{
-							"input_name": "Carbon Monoxide"
-						},
-						{
-							"input_name": "Oxygen"
-						},
-					],
-					"buildings": [
-						{
-							"building_name": "Extractor"
-						},
-						{
-							"building_name": "Refinery"
-						},
-					],
-					"modules": [],
-					"spectral_types": ["M"],
-				},
+				"production_plan_id": "mock2",
 			},
 		],
 	},
@@ -90,18 +21,11 @@ const mockAsteroidsPlannerTree = [
 		"planned_products": [
 			{
 				"planned_product_name": "Carbon Monoxide",
-				"intermediate_products": [],
-				"shopping_list":
-				{
-					"inputs": [],
-					"buildings": [
-						{
-							"building_name": "Extractor"
-						},
-					],
-					"modules": [],
-					"spectral_types": ["C", "I"],
-				},
+				"production_plan_id": "mock3",
+			},
+			{
+				"planned_product_name": "Sulfuric Acid",
+				"production_plan_id": null,
 			},
 		],
 	},
@@ -112,18 +36,7 @@ const mockAsteroidsPlannerTree = [
 		"planned_products": [
 			{
 				"planned_product_name": "Feldspar",
-				"intermediate_products": [],
-				"shopping_list":
-				{
-					"inputs": [],
-					"buildings": [
-						{
-							"building_name": "Extractor"
-						},
-					],
-					"modules": [],
-					"spectral_types": ["S"],
-				},
+				"production_plan_id": "mock4",
 			},
 		],
 	},
@@ -134,67 +47,16 @@ const mockAsteroidsPlannerTree = [
 		"planned_products": [
 			{
 				"planned_product_name": "Hydrolox Fuel",
-				"intermediate_products": [
-					{
-						"intermediate_product_name": "Hydrogen"
-					},
-					{
-						"intermediate_product_name": "Oxygen"
-					},
-				],
-				"shopping_list":
-				{
-					"inputs": [
-						{
-							"input_name": "Water"
-						},
-					],
-					"buildings": [
-						{
-							"building_name": "Extractor"
-						},
-						{
-							"building_name": "Refinery"
-						},
-					],
-					"modules": [],
-					"spectral_types": ["I"],
-				},
+				"production_plan_id": "mock5",
 			},
 			{
 				"planned_product_name": "Oxygen",
-				"intermediate_products": [],
-				"shopping_list":
-				{
-					"inputs": [
-						{
-							"input_name": "Water"
-						},
-					],
-					"buildings": [
-						{
-							"building_name": "Refinery"
-						},
-					],
-					"modules": [],
-					"spectral_types": [],
-				},
+				"production_plan_id": "mock6",
 			},
 			{
 				"planned_product_name": "Water",
-				"intermediate_products": [],
-				"shopping_list":
-				{
-					"inputs": [],
-					"buildings": [
-						{
-							"building_name": "Extractor"
-						},
-					],
-					"modules": [],
-					"spectral_types": ["C", "I"],
-				},
+				"production_plan_id": "mock7",
 			},
 		],
-	}
+	},
 ];

@@ -1,14 +1,27 @@
+/*
+Common code used in:
+- Production Chains tool
+- Production Planner tool + any other tool that includes "template-production-plan"
+- Asteroids Planner tool
+*/
 
 const doDebug = location.href.includes('127.0.0.1');
 
 let maxLevel = 0;
 
-let horizontalLayout = document.getElementById('toggle-horizontal-layout').checked; // true vs. false
+let horizontalLayout = true;
+const elToggleHorizontalLayout = document.getElementById('toggle-horizontal-layout');
+if (elToggleHorizontalLayout) {
+    horizontalLayout = elToggleHorizontalLayout.checked;
+}
 
 const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
+const productSearchInput = productsListWrapper.querySelector('input');
 const productsListContainer = document.getElementById('products-list');
+const selectedItemNameContainer = document.getElementById('selected-item-name');
 const productChainItemsContainer = document.getElementById('production-chain-items');
+const elMinimapWrapper = document.getElementById('minimap-wrapper');
 
 function getItemContainerById(itemContainerId) {
     return productChainItemsContainer.querySelector(`[data-container-id='${itemContainerId}']`);
@@ -116,6 +129,10 @@ function sortLevels(startLevel = 1) {
     for (let i = startLevel; i <= maxLevel; i++) {
         const levelContainer = document.getElementById(`level_${i}`);
         const itemContainersOnLevel = [...levelContainer.querySelectorAll('[data-container-id]')];
+        /**
+         * NOTE: "compareItemContainers" has different definitions
+         * in "production.js" vs. "production-planner-core.js"
+         */
         itemContainersOnLevel.sort(compareItemContainers);
         levelContainer.textContent = '';
         itemContainersOnLevel.forEach(el => {
@@ -124,9 +141,18 @@ function sortLevels(startLevel = 1) {
     }
 }
 
-function initializeMinimap() {
+function resetMinimap() {
+    const elMinimapCanvasOld = document.getElementById('minimap-canvas');
+    if (elMinimapCanvasOld) {
+        elMinimapCanvasOld.parentElement.removeChild(elMinimapCanvasOld);
+    }
+    // The new minimap canvas must be visible when initialized
+    elMinimapWrapper.classList.remove('minimized');
+    const elMinimapCanvasNew = document.createElement('canvas');
+    elMinimapCanvasNew.id = 'minimap-canvas';
+    elMinimapWrapper.appendChild(elMinimapCanvasNew);
     // Source: https://larsjung.de/pagemap/
-    pagemap(document.getElementById('minimap-canvas'), {
+    pagemap(elMinimapCanvasNew, {
         // viewport: productChainItemsContainer,
         styles: {
             'div.item-type-raw-material': 'rgba(55, 55, 55, 1)', // var(--raw-material) + alpha
@@ -146,7 +172,7 @@ function initializeMinimap() {
 }
 
 function toggleMinimap() {
-    document.getElementById('minimap-wrapper').classList.toggle('minimized');
+    elMinimapWrapper.classList.toggle('minimized');
 }
 
 function toggleHorizontalLayout(el) {
@@ -208,11 +234,19 @@ on('click', '#filters-list .option', el => {
 
 // Highlight all occurrences of a product, on hover over a product name from any list
 on('mouseenter', '.list-product-name', el => {
+    if (!productChainItemsContainer) {
+        // Does not exist in the "Asteroids Planner"
+        return;
+    }
     productChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
         itemContainer.classList.add('hover');
     });
 });
 on('mouseleave', '.list-product-name', el => {
+    if (!productChainItemsContainer) {
+        // Does not exist in the "Asteroids Planner"
+        return;
+    }
     productChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
         itemContainer.classList.remove('hover');
     });
@@ -221,7 +255,6 @@ on('mouseleave', '.list-product-name', el => {
 window.addEventListener('keydown', event => {
     // Pressing "Enter" while the product-search input is focused, selects the first matching product
     if (event.key === 'Enter') {
-        const productSearchInput = document.querySelector('#products-list-wrapper input');
         const firstSearchMatch = productsListContainer.querySelector('*:not(.not-matching-search)');
         if (productSearchInput === document.activeElement && productSearchInput.value.length && firstSearchMatch) {
             productSearchInput.blur();

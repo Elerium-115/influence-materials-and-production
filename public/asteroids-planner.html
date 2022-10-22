@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./production.css">
     <link rel="stylesheet" href="./asteroids-planner.css">
+    <link rel="stylesheet" href="./template-footer-about.css">
     <link rel="icon" href="./img/site-icon.png" type="image/png">
     <title>Influence Asteroids Planner</title>
     <meta name="twitter:card" content="summary">
@@ -16,29 +17,35 @@
     <meta name="twitter:description" content="Plan your production chains across multiple asteroids.">
 </head>
 <body>
-    <div class="main">
-        <nav id="topbar">
-            <a href="https://my.adalia.id/" target="_blank" id="dalia-id-logo" title="my.adalia.id">
-                <img src="./img/adalia-id-logo.png" alt="my.adalia.id" class="logo-small">
-                <img src="./img/adalia-id-logo-text.webp" alt="my.adalia.id" class="logo-large">
-            </a>
-            <a href="./">Raw Materials</a>
-            <a href="./ratios.html">Materials Ratios</a>
-            <a href="./production.html">Production Chains</a>
-            <a href="./production-planner.html">Production Planner</a>
-            <a href="./asteroids-planner.html" class="active">Asteroids Planner</a>
+    <div class="main asteroids-planner">
+        <nav class="topbar topbar-sections">
+            <div class="topbar-section-left">
+                <a href="https://my.adalia.id/" target="_blank" id="dalia-id-logo" title="my.adalia.id">
+                    <img src="./img/adalia-id-logo.png" alt="my.adalia.id" class="logo-small">
+                    <img src="./img/adalia-id-logo-text.webp" alt="my.adalia.id" class="logo-large">
+                </a>
+                <a href="./">Raw Materials</a>
+                <a href="./ratios.html">Materials Ratios</a>
+                <a href="./production.html">Production Chains</a>
+                <a href="./production-planner.html">Production Planner</a>
+                <a href="./asteroids-planner.html" class="active">Asteroids Planner</a>
+            </div>
+            <div class="topbar-section-right">
+                <div class="cta connect-wallet-cta" onclick="connectWallet(isExampleAsteroidsPlan)">Connect wallet</div>
+                <div class="cta connected-address disabled hidden"></div>
+            </div>
         </nav>
 
         <div id="asteroids-planner-wrapper" class="empty-planner">
             <div id="asteroids-planner-tree" class="tree-list">
-                <h3 onclick="goHome()">Asteroids Planner</h3>
+                <h3 onclick="goHome()">Asteroids Plan</h3>
                 <ul class="asteroids-tree"></ul>
                 <div class="options">
                     <label for="toggle-hide-subproducts"><input type="checkbox" id="toggle-hide-subproducts">Hide Sub-products</label>
                 </div>
                 <div class="asteroids-tree-buttons-wrapper">
-                    <div class="asteroids-tree-button asteroids-tree-cta add-asteroid" onclick="onClickAddAsteroid()">Add asteroid</div>
-                    <div class="asteroids-tree-button asteroids-tree-cta see-example" onclick="setupExample()">See example</div>
+                    <div class="cta add-asteroid" onclick="onClickAddAsteroid()">Add asteroid</div>
+                    <div class="cta see-example hidden" onclick="setupExample()">See example</div>
                 </div>
             </div>
             <div id="shopping-list-tree" class="tree-list">
@@ -54,47 +61,80 @@
             </div>
         </div>
 
-        <div class="footer-about">
-            <div class="title">
-                Materials & Production Tools
-            </div>
-            <div class="primary">
-                created by <a href="https://twitter.com/elerium115" target="_blank" title="Elerium115">@elerium115</a>
-            </div>
-            <div class="secondary extra-info">
-                for <a href="https://twitter.com/influenceth" target="_blank" title="Influence">@influenceth</a>
-                <br>
-                <a href="https://wiki.influenceth.io/en/community/user-guides/ACC" target="_blank" title="Adalian Creator Collective">
-                    <img src="./img/acc-logo.png" alt="ACC" class="footer-logo">
-                </a>
-            </div>
-            <div class="secondary">
-                hosted by <a href="https://my.adalia.id" target="_blank" title="my.adalia.id">
-                    my.adalia.id
-                    <br>
-                    <img src="./img/adalia-id-logo.png" alt="my.adalia.id" class="footer-logo">
-                </a>
-            </div>
-        </div>
+        <div id="template-footer-about"></div>
+        <script type="module">
+            import {templateFooterAbout} from './template-footer-about.js';
+            document.getElementById('template-footer-about').innerHTML = templateFooterAbout;
+        </script>
 
-        <div id="overlay-wrapper" class="hidden">
+        <div id="overlay-wrapper">
             <div id="overlay-add-asteroid" class="overlay-panel hidden">
+                <!-- Import asteroids from wallet -->
                 <div class="title-and-wallet-wrapper">
                     <h3 class="brand-text">Import asteroids from wallet</h3>
                     <div>
-                        <div class="overlay-cta connect-wallet-cta" onclick="connectWalletAndGetAsteroids()">Connect wallet</div>
-                        <div class="overlay-cta connected-address disabled hidden"></div>
+                        <div class="cta connect-wallet-cta" onclick="connectWallet(isExampleAsteroidsPlan)">Connect wallet</div>
+                        <div class="cta connected-address disabled hidden"></div>
                     </div>
                 </div>
-                <div>Coming soon...</div>
+                <div id="wallet-asteroids-status"></div>
+                <div class="wallet-asteroids-wrapper-outer hidden">
+                    <div class="wallet-asteroids-wrapper">
+                        <div class="wallet-asteroids-filters">
+                            <div class="filters-wrapper">
+                                <div class="filters-category filters-category-spectral-types">
+                                    <div class="filters">
+                                        <div class="filter-label-wrapper">
+                                            <span class="filter-label">Spectral Types</span>
+                                            <span class="filter-toggle-all"><a onclick="toggleAllWalletSpectralTypes()">Toggle All</a></span>
+                                        </div>
+                                        <div class="filter-options">
+                                            <span class="filter-spectral-type type-C selected" onclick="toggleWalletSpectralType(this)">C</span>
+                                            <span class="filter-spectral-type type-CI selected" onclick="toggleWalletSpectralType(this)">CI</span>
+                                            <span class="filter-spectral-type type-CIS selected" onclick="toggleWalletSpectralType(this)">CIS</span>
+                                            <span class="filter-spectral-type type-CM selected" onclick="toggleWalletSpectralType(this)">CM</span>
+                                            <span class="filter-spectral-type type-CMS selected" onclick="toggleWalletSpectralType(this)">CMS</span>
+                                            <span class="filter-spectral-type type-CS selected" onclick="toggleWalletSpectralType(this)">CS</span>
+                                            <span class="filter-spectral-type type-I selected" onclick="toggleWalletSpectralType(this)">I</span>
+                                            <span class="filter-spectral-type type-M selected" onclick="toggleWalletSpectralType(this)">M</span>
+                                            <span class="filter-spectral-type type-S selected" onclick="toggleWalletSpectralType(this)">S</span>
+                                            <span class="filter-spectral-type type-SI selected" onclick="toggleWalletSpectralType(this)">SI</span>
+                                            <span class="filter-spectral-type type-SM selected" onclick="toggleWalletSpectralType(this)">SM</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="filters-category filters-category-area">
+                                    <div class="filters" onmouseleave="filterWalletAsteroids()">
+                                        <div class="filter-label">Area</div>
+                                        <div class="filter-options">
+                                            <input id="input-filter-area-min" class="input-area" type="text" placeholder="Min" onchange="onChangeInputFilterArea(this)">
+                                            <span>to</span>
+                                            <input id="input-filter-area-max" class="input-area" type="text" placeholder="Max" onchange="onChangeInputFilterArea(this)">
+                                            <span>km²</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="filters-reset hidden" onclick="resetWalletAsteroidsFilters(true)">Reset filters</a>
+                            </div>
+                            <div class="cta selected-asteroids-cta disabled" onclick="onClickAddSelectedAsteroids(this)"></div>
+                        </div>
+                        <div class="wallet-asteroids"></div>
+                    </div>
+                </div>
                 <div class="hr">OR</div>
+                <!-- Add an in-game asteroid -->
                 <h3 class="brand-text">Add an in-game asteroid</h3>
+                <div class="asteroid-tools">
+                    <a href="https://adalia.coorbital.rocks/coorbital-search" target="_blank">Find co-orbital asteroids</a>
+                    <a href="https://tyrell-yutani.app/#/asteroid/rankings" target="_blank">Find highest MER asteroids</a>
+                </div>
                 <div class="asteroid-id-and-cta">
                     <div class="asteroid-id">Asteroid ID:<input id="input-asteroid-id" type="text" oninput="toggleAsteroidMetadataCta(true);"></div>
-                    <div class="overlay-cta asteroid-details-cta disabled" onclick="requestAsteroidDetails()">Get details</div>
+                    <div class="cta asteroid-details-cta disabled" onclick="requestAsteroidDetails()">Get details</div>
                 </div>
                 <div class="asteroid-metadata-wrapper"></div>
                 <div class="hr">OR</div>
+                <!-- Create a "mock rock" -->
                 <h3 class="brand-text">Create a "mock rock"</h3>
                 <div>Spectral Type:</div>
                 <div class="mock-spectral-types">
@@ -112,19 +152,51 @@
                 </div>
                 <input type="hidden" id="input-mock-spectral-type" value="">
                 <div class="mock-area-and-cta">
-                    <div class="mock-area">Area:<input id="input-mock-area" type="text" placeholder="min. 13">km²</div>
-                    <div class="overlay-cta asteroid-mock-cta" onclick="createMockRock()">Mock it</div>
+                    <div class="mock-area">Area:<input id="input-mock-area" class="input-area" type="text" placeholder="min. 13" onchange="validateInputArea(this)">km²</div>
+                    <div class="cta asteroid-mock-cta" onclick="createMockRock()">Mock it</div>
                 </div>
+            </div>
+            <div id="overlay-add-product" class="overlay-panel hidden">
+                <h3 class="brand-text">Plan a product on <span class="asteroid-name"></span></h3>
+                <div id="products-list-wrapper" class="list-hidden">
+                    <input type="text" placeholder="Search product">
+                    <div id="products-list"></div>
+                    <div id="filters-list">
+                        <span class="header">Filter</span>
+                        <span id="filter-raw-materials" class="option checked">Raw Materials</span>
+                        <span id="filter-refined-materials" class="option checked">Refined Materials</span>
+                        <span id="filter-components" class="option checked">Components</span>
+                        <span id="filter-ship-components" class="option checked">Ship Components</span>
+                        <span id="filter-finished-goods" class="option checked">Finished Goods</span>
+                    </div>
+                </div>
+            </div>
+            <div id="overlay-product-image" class="overlay-panel hidden" onclick="closeOverlay()">
+                <img src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
             </div>
             <div id="ovrelay-close" onclick="closeOverlay()">✕</div>
         </div>
     </div>
 
+    <div id="template-production-plan" class="hidden"></div>
+    <script src="./template-production-plan.js"></script>
+    <script>
+        document.getElementById('template-production-plan').innerHTML = templateProductionPlan;
+    </script>
+
+    <!-- Third-party and "core" scripts, loaded first -->
     <script src="./leader-line.min.js"></script>
     <script src="./axios.min.js"></script>
-    <script src="./web3.min.js"></script>
+    <script src="./influence-production-chains.js"></script>
     <script src="./abstract-core.js"></script>
+    <script src="./production-core.js"></script>
     <script src="./wallet-core.js"></script>
+
+    <!-- Scripts required for "template-production-plan" -->
+    <script src="./pagemap-1.4.0.min.js"></script>
+    <script src="./production-planner-core.js"></script>
+
+    <!-- Scripts specific to this tool, loaded at the very end -->
     <script src="./asteroids-planner-mock.js"></script>
     <script src="./asteroids-planner.js"></script>
 </body>
