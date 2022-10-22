@@ -8,6 +8,8 @@
     src: url("font/Jura-Bold.ttf");
 }
 
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
 :root {
     --default-bg: #202634;
     --default-overlay-bg: rgba(32, 38, 52, 0.95);
@@ -152,6 +154,19 @@ label {
 
 .brand-text {
     color: var(--brand-text);
+}
+
+.influence-logo-icon {
+    width: 2rem;
+    height: 2rem;
+    background-image: url("./img/influence-logo.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+}
+
+.influence-logo-icon:hover {
+    animation: spin 500ms ease-in-out;
 }
 
 body {

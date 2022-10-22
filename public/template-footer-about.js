@@ -9,12 +9,12 @@ export const templateFooterAbout = /*html*/ `
         Materials & Production Tools
     </div>
     <div class="primary">
-        created by <a href="https://twitter.com/elerium115" target="_blank" title="Elerium115">@elerium115</a>
+        created by <a href="https://twitter.com/elerium115" target="_blank" title="Elerium115">Elerium115</a>
     </div>
     <div class="secondary extra-info">
-        for <a href="https://twitter.com/influenceth" target="_blank" title="Influence">
-            @influenceth<br>
-            <img src="./img/influence-logo.svg" alt="Influence" class="footer-logo">
+        for <a href="https://www.influenceth.io/" target="_blank" title="Influence">
+            Influence<br>
+            <span class="influence-logo-icon"></span>
         </a>
     </div>
     <div class="secondary">

@@ -2097,8 +2097,6 @@ if (!refreshWallet()) {
 
 //// TO DO PRIO
 /*
-- replace example asteroids with scanned ones + high rarity
-- spin-on-hover @ Influence logo in footer
 - "loading" overlay during API calls?
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree

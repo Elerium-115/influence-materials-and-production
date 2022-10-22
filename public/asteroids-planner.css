@@ -2,8 +2,6 @@
 
 @keyframes flash-interaction { 50% { background: var(--overactive-bg); } }
 
-@keyframes spin { 100% { transform: rotate(360deg); } }
-
 @keyframes leftright {
     0%, 5% { transform: translateX(0%); left: 0%; }
     95%, 100% { transform: translateX(-100%); left: 100%; }
@@ -63,20 +61,6 @@
 .cta-remove-text:hover {
     background: red;
     opacity: 1;
-}
-
-
-.influence-logo-icon {
-    width: 2rem;
-    height: 2rem;
-    background-image: url("./img/influence-logo.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    border-radius: 50%;
-}
-
-.influence-logo-icon:hover {
-    animation: spin 500ms ease-in-out;
 }
 
 #asteroids-planner-wrapper {
