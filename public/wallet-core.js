@@ -30,13 +30,20 @@ walletEventsHandlers.chainChanged.push(chainIdHex => {
 
 document.addEventListener('DOMContentLoaded', () => {
     if (window.ethereum) {
-        // Execute all handlers assigned to each wallet event, when such an event is triggered
-        window.ethereum.on('accountsChanged', accounts => {
-            walletEventsHandlers.accountsChanged.forEach(handler => handler(accounts));
+        /**
+         * Execute all handlers assigned to each wallet event, when such an event is triggered.
+         * Chain the handlers synchronously, because the order in which they are executed is relevant!
+         */
+        window.ethereum.on('accountsChanged', async accounts => {
+            for (handler of walletEventsHandlers.accountsChanged) {
+                await handler(accounts);
+            }
         });
         // Using "chainChanged" b/c "networkChanged" is deprecated
-        window.ethereum.on('chainChanged', chainIdHex => {
-            walletEventsHandlers.chainChanged.forEach(handler => handler(chainIdHex));
+        window.ethereum.on('chainChanged', async chainIdHex => {
+            for (handler of walletEventsHandlers.chainChanged) {
+                await handler(chainIdHex);
+            }
         });
     }
 });
