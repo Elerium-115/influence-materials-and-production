@@ -1752,6 +1752,7 @@ function updateContent() {
         // Planned product
         let intermediateProductsAndShoppingListHtml = '';
         let intermediateProductsListHtml = '';
+        let intermediateProductCardsHtml = '';
         const listOfIntermediateProducts = getListOfIntermediateProducts(asteroidName, plannedProductName);
         listOfIntermediateProducts.forEach(intermediateProductName => {
             if (intermediateProductsListHtml.length) {
@@ -1760,6 +1761,14 @@ function updateContent() {
             intermediateProductsListHtml += /*html*/ `
                 <a onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}', '${intermediateProductName}')">${intermediateProductName}</a>
             `.trim(); // Trim to avoid spacing before ","
+            intermediateProductCardsHtml += /*html*/ `
+                <div class="content-card product-card">
+                    <div onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}', '${intermediateProductName}')">
+                        <img src="${getProductImageSrc(intermediateProductName)}" alt="" ${productImgOnError}>
+                        <div class="product-name">${intermediateProductName}</div>
+                    </div>
+                </div>
+            `;
         });
         const plannedProductData = getPlannedProductData(asteroidName, plannedProductName);
         const productionPlanId = plannedProductData.production_plan_id;
@@ -1847,6 +1856,14 @@ function updateContent() {
                 </div>
             </div>
         `;
+        if (intermediateProductCardsHtml.length) {
+            elContent.innerHTML += /*html*/ `
+                <h3 class="content-title">Intermediate products selected for this planned product</h3>
+                <div class="content-cards">
+                    ${intermediateProductCardsHtml}
+                </div>
+            `;
+        }
         /**
          * For each shopping list category, wrap the first ".row" into a ".row-with-title",
          * which will contain the title of that category (injected via CSS "::before").
