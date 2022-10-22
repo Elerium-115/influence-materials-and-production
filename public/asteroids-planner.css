@@ -454,6 +454,7 @@
 #shopping-list-tree .can-add-product > .tree-label:hover::after {
     content: '+';
     position: absolute;
+    top: calc(50% - 0.5rem); /* center vertically by subtracting half of height */
     right: -2.5rem;
     width: 1rem;
     height: 1rem;
@@ -701,24 +702,38 @@
 }
 
 #content .shopping-list {
-    display: grid;
-    grid-template-rows: 50% 50%;
-    grid-auto-flow: column;
-    gap: 1rem 3rem;
+    column-width: 11rem;
+    column-gap: 3rem;
     font-size: 0.8rem;
     margin-top: 1rem;
-}
-
-#content .shopping-list .title {
-    color: var(--link);
-    font-size: 0.9rem;
 }
 
 #content .shopping-list .required-cell {
     position: relative;
 }
 
+#content .shopping-list .required-cell:not(:first-child) {
+    margin-top: 1rem;
+}
+
+#content .shopping-list .row-with-title {
+    padding-top: 1.5rem; /* allow room for category ".title" with "position: absolute" */
+}
+
+#content .shopping-list .row-with-title::before {
+    position: absolute;
+    top: 0;
+    color: var(--link);
+    font-size: 0.9rem;
+}
+
+#content .shopping-list .required-inputs .row-with-title::before { content: 'Inputs'; }
+#content .shopping-list .required-buildings .row-with-title::before { content: 'Buildings'; }
+#content .shopping-list .required-modules .row-with-title::before { content: 'Modules'; }
+#content .shopping-list .required-spectral-types .row-with-title::before { content: 'Spectral Types'; }
+
 #content .shopping-list .row {
+    position: relative;
     display: flex;
     justify-content: space-between;
     gap: 1rem;
@@ -735,7 +750,8 @@
 #content .shopping-list .can-add-product .row:not(.none):hover::after {
     content: '+';
     position: absolute;
-    right: -2rem;
+    top: calc(50% - 0.5rem); /* center vertically by subtracting half of height */
+    left: -1.5rem;
     width: 1rem;
     height: 1rem;
     line-height: 0.9rem;
@@ -746,14 +762,6 @@
     border-radius: 50%;
 }
 
-#content .shopping-list .required-modules .row:hover::after {
-    right: unset;
-    left: -2rem;
-}
-
-#content .shopping-list .row .name {
-    position: relative;
-}
 
 #content .shopping-list .row:hover .name {
     color: white;
