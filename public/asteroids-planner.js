@@ -1033,13 +1033,19 @@ function refreshAsteroidsPlannerBreadcrumbsHtml() {
                 getListOfIntermediateProducts(asteroidName, plannedProductName).forEach(name => {
                     const classHtml = name === intermediateProductName ? 'class="selected"' : '';
                     const onClickHtml = name === intermediateProductName ? '' : `onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}', '${name}')"`;
-                    itermediateProductsListHtml += /*html*/ `<li ${classHtml} ${onClickHtml}>${name}</li>`;
+                    itermediateProductsListHtml += /*html*/ `
+                    <li ${classHtml} ${onClickHtml}>
+                        <div class="breadcrumb-name-inner">${name}</div>
+                    </li>
+                `;
                 });
                 breadcrumbsHtml += /*html*/ `
                     <div class="separator"></div>
                     <div class="breadcrumb">
                         <ul>${itermediateProductsListHtml}</ul>
-                        <div class="breadcrumb-name">${intermediateProductName}</div>
+                        <div class="breadcrumb-name">
+                            <div class="breadcrumb-name-inner">${intermediateProductName}</div>
+                        </div>
                     </div>
                 `;
             }
@@ -1859,7 +1865,7 @@ function updateContent() {
         if (intermediateProductCardsHtml.length) {
             elContent.innerHTML += /*html*/ `
                 <h3 class="content-title">Intermediate products selected for this planned product</h3>
-                <div class="content-cards">
+                <div class="content-cards intermediate-product-cards">
                     ${intermediateProductCardsHtml}
                 </div>
             `;
@@ -2114,125 +2120,70 @@ if (!refreshWallet()) {
 
 //// TO DO PRIO
 /*
+- SAVE asteroids plans + production plans to MongoDB
 - "loading" overlay during API calls?
 - replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
     - "confirm" re: deleting asteroids from the tree
     - "alert" re: API coming soon / asteroid # already planned
 - search all occurrences of "____" => to do
-*/
-
-//// TO TEST
-/*
-- use "mouseHoverAnchor" to connect elements between the asteroids planner tree, and the shopping list tree?
+- implement a way to SHARE an asteroids plan via a short URL
+    - the shared plan must be viewable by anyone (even if no wallet installed / connected)
+    - it should be read-only, and NOT saved for the currently connected address, either?
+- TEST: use "mouseHoverAnchor" to connect elements between the asteroids planner tree, and the shopping list tree?
     https://anseki.github.io/leader-line/#mousehoveranchor
 */
 
 //// TO DO
 /*
-- NEXT TOOL: "Asteroids Planner"
-    - use D3.js
-    - button to connect wallet (MetaMask)
-        https://docs.metamask.io/guide/getting-started.html
-        https://docs.metamask.io/guide/create-dapp.html
-    - select "planned asteroids" from either:
-        - connected wallet (web3 + official / adalia.id API)
-            https://www.npmjs.com/package/influence-utils
-        - input asteroid ID and fetch metadata (web3 / adalia.id API)
-            - alternative sources:
-                influenceth.io
-                    https://api.influenceth.io/v1/metadata/asteroids/1
-                        => area = 4 * pi * ((diameter / 2) ^ 2) / 1000000
-                [1ST] DrJones | Tyrell-Yutani
-                    https://github.com/influenceth/influence-utils
-                        - downloaded JSONs from their Dropbox, into "_work/_data/influence-utils-master-plus-JSONs"
-                [1ST] Denker | adalia.info
-                    https://adalia.info/
-                        - exported CSV + JSON files from their website, into "_work/_data"
-                            - imported CSV into my MongoDB
-                        - repo
-                        https://github.com/jisensee/influence-asset-export
-            - CREDIT the data source
-        [done] - create "dummy asteroids" with a given area + spectral type
-    - allow multiple planned chains to be configured for each asteroid
-        - allow the user to select raw materials from the chain only if they can be mined on that asteroid
-        - ensure that the associated chains' total required area does not exceed the asteroid's area
-    - tree-navigation (1st column on the left)
-        - level 0 = root
-            - label = "Asteroids Planner"
-            - click => show all planned asteroids, with the planned product(s) around each asteroid (see "visualize" notes below)
-            - features:
-                - add / remove planned asteroids
-                - click on asteroid to show it (i.e. level 1 > click)
-                - click on planned product to show it (i.e. level 2 > click)
-                - show "unified shopping list" (for all chains, from all asteroids)
-            - implementation ideas:
-                https://observablehq.com/@d3/zoomable-circle-packing?collection=@d3/d3-hierarchy
-                https://observablehq.com/@d3/pack?collection=@d3/d3-hierarchy
-                https://observablehq.com/@d3/bubble-chart?collection=@d3/d3-hierarchy
-                https://observablehq.com/@d3/radial-tree?collection=@d3/d3-hierarchy
-                https://observablehq.com/@d3/radial-cluster?collection=@d3/d3-hierarchy
-                https://observablehq.com/@antonlecock/our-solar-system-using-d3-js-and-three-js
-                https://github.com/ofrohn/d3-orrery
-                https://bl.ocks.org/vasturiano/54dd054d22be863da5afe2db02e033e2
-                https://vimeo.com/449618596
-                https://adalia.coorbital.rocks/coorbital-search
-        - level 1 = planned asteroids
-            - label = asteroid ID (or asteroid name?) / dummy name
-                - also include spectral type and area?
-            - click => show selected asteroid
-            - features:
-                - add / remove planned chains
-                - show "asteroid shopping list" (for all chains from this asteroid)
-                - drag to reorder asteroids?
-                - link to in-game asteroid?
-        - level 2 = planned chains for that asteroid
-            - label = planned product name
-            - click => show planned chain
-            - hover => arrows to other chains where this planned product is a required input?
-            - features:
-                - configure the planned chain, similar to the "Production Planner" tool?
-                - show shopping list
-                    - highlight inputs which are produced on other asteroids / chains?
-                - also show which other asteroids / planned chains - (1) require or (2) are producing - this planned product
-                    - including other planned chains from the same asteroid
-                    - differentiate between this planned product being a - (1) planned or (2) intermediate - product, in other chains?
-                [NOT] - also show the relevant piece of the planned chain having this planned product as an output?
-                    ^^ NOT, b/c different occurrences of this product can have different process variants selected
-        - level 3 = intermediate products for that planned chain
-            - label = intermediate product name
-            - click => ???
-            - hover => arrows to other chains where this intermediate product is a required input?
-            - features:
-                - ???
-                [NOT] - also show the relevant piece of the planned chain having this intermediate product as an output?
-                    ^^ NOT, b/c different occurrences of this product can have different process variants selected
-        - toggle to show / hide all level 3 lists
+- use D3.js
+- button to connect wallet (MetaMask)
+    https://docs.metamask.io/guide/getting-started.html
+    https://docs.metamask.io/guide/create-dapp.html
+- allow multiple planned chains to be configured for each asteroid
+    - ensure that the associated chains' total required area does not exceed the asteroid's area
+- tree-navigation (1st column on the left)
+    - level 0 = root
+        - label = "Asteroids Planner"
+        - click => show all planned asteroids, with the planned product(s) around each asteroid (see "visualize" notes below)
+        - features:
+            - add / remove planned asteroids
+            - click on asteroid to show it (i.e. level 1 > click)
+            - click on planned product to show it (i.e. level 2 > click)
+            - show "unified shopping list" (for all chains, from all asteroids)
         - implementation ideas:
-            - indented tree
-                https://observablehq.com/@d3/indented-tree?collection=@d3/d3-hierarchy
-            - collapsible tree
-                https://observablehq.com/@d3/collapsible-tree?collection=@d3/d3-hierarchy
-            => try to make a "collapsible indented tree"
-    - shopping list (2nd column on the left)
-        - dynamic shopping list, required for the currently active "path" (see breadcrumbs below)
-            - "Asteroids Planner" (root) selected => "unified shopping list" for all planned chains, from all asteroids (see level 0 features)
-            - single asteroid selected => "asteroid shopping lists" for all planned chains on that asteroid (see level 1 features)
-        - highlight products in the shopping list(s) which are planned-or-intermediate products from other chains?
-            - e.g. asteroid X produces Steel, asteroid Y requires Steel
-            => Steel only needs to be transported from X to Y
-        - hover over shopping list item => arrows to the planned products where it is a required input
-        - click over shopping list item => "stick / unstick" arrows to the planned products where it is a required input
-            - i.e. allow multiple sets of arrows to be shown at the same time, if multiple shopping list items are clicked
-    - breadcrumbs
-        - e.g.: Asteroids Planner > Asteroid #1234 > Steel - Production Planner
-        - based on the currently active "path" from the breadcrumbs, highlight the corresponding group from the tree-navigation
-            - or fade everything else
-    - visualize all planned asteroids, with the planned product(s) around each asteroid
-        - arrows from each planned product, to the other asteroids where it is a required input
-        - arrows from each product in the unified shopping list, to the asteroids where it is a required input
-        - e.g. similar to this?
-            https://observablehq.com/@d3/mobile-patent-suits
-    - save the planned chains associated with each asteroid, for the current user
-        - login via wallet / adalia.id API
-        - free DB service?
+            https://observablehq.com/@d3/zoomable-circle-packing?collection=@d3/d3-hierarchy
+            https://observablehq.com/@d3/pack?collection=@d3/d3-hierarchy
+            https://observablehq.com/@d3/bubble-chart?collection=@d3/d3-hierarchy
+            https://observablehq.com/@d3/radial-tree?collection=@d3/d3-hierarchy
+            https://observablehq.com/@d3/radial-cluster?collection=@d3/d3-hierarchy
+            https://observablehq.com/@antonlecock/our-solar-system-using-d3-js-and-three-js
+            https://github.com/ofrohn/d3-orrery
+            https://bl.ocks.org/vasturiano/54dd054d22be863da5afe2db02e033e2
+            https://vimeo.com/449618596
+            https://adalia.coorbital.rocks/coorbital-search
+    - level 1 = planned asteroids
+    - level 2 = planned chains for that asteroid
+        - links to other asteroids / planned products, where this planned product is a required input?
+        - features:
+            - also show which other asteroids / planned chains - (1) require or (2) are producing - this planned product
+                - including other planned chains from the same asteroid
+                - differentiate between this planned product being a - (1) planned or (2) intermediate - product, in other chains?
+            [NOT] - also show the relevant piece of the planned chain having this planned product as an output?
+                ^^ NOT, b/c different occurrences of this product can have different process variants selected
+    - level 3 = intermediate products for that planned product
+    - implementation ideas:
+        - indented tree
+            https://observablehq.com/@d3/indented-tree?collection=@d3/d3-hierarchy
+        - collapsible tree
+            https://observablehq.com/@d3/collapsible-tree?collection=@d3/d3-hierarchy
+        => try to make a "collapsible indented tree"
+- shopping list (2nd column on the left)
+    - hover over shopping list item => arrows to the planned products where it is a required input
+    - click over shopping list item => "stick / unstick" arrows to the planned products where it is a required input
+        - i.e. allow multiple sets of arrows to be shown at the same time, if multiple shopping list items are clicked
+- visualize all planned asteroids, with the planned product(s) around each asteroid
+    - arrows from each planned product, to the other asteroids where it is a required input
+    - arrows from each product in the unified shopping list, to the asteroids where it is a required input
+    - e.g. similar to this?
+        https://observablehq.com/@d3/mobile-patent-suits
 */
