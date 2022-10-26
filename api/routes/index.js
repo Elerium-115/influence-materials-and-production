@@ -142,7 +142,7 @@ router.get(
         const productionPlanId = req.params.id;
         const cachedData = cache.productionPlanDataById[productionPlanId];
         if (cachedData) {
-            console.log(`---> found CACHED data`); //// TEST
+            // console.log(`---> found CACHED data`); //// TEST
             res.json(cachedData);
             return;
         }
@@ -150,9 +150,14 @@ router.get(
         let productionPlanData = providerMock.mockProductionPlanDataById[productionPlanId];
         if (!productionPlanData) {
             // The requested ID is not a "mock" production plan => use the data storage
-            //// TO DO: get production plan data from data storage
-            //// ____
+            productionPlanData = await providerMongoDB.fetchProductionPlan(productionPlanId);
+            if (productionPlanData.error) {
+                res.json({error: productionPlanData.error});
+                return;
+            }
+            // console.log(`--- FETCHED production plan ID ${productionPlanData.productionPlanId} (${productionPlanData.plannedProductName})`); //// TEST
         }
+        // Production plan found in data storage (or mock) => update it in cache
         cache.productionPlanDataById[productionPlanId] = productionPlanData;
         res.json(productionPlanData);
     }
@@ -168,35 +173,21 @@ router.post(
         console.log(`--- [router] POST /production-plan/${req.params.id}`); //// TEST
         // console.log(`---> request body:`, req.body); //// TEST
         const productionPlanData = req.body;
-        if (!utils.isValidProductionPlanData(productionPlanData)) {
-            res.json({error: 'Invalid production plan data'});
-            return;
-        }
         const productionPlanId = req.params.id;
         // Do NOT allow saving a "mock" production plan, to avoid mutating it for other users
         if (providerMock.mockProductionPlanDataById[productionPlanId]) {
             res.json({error: 'Saving an "example" production plan is not allowed'});
             return;
         }
-        if (isNaN(Number(productionPlanId))) {
-            /**
-             * Insert new production plan in data storage.
-             * Then update the local "productionPlanData", with the new "productionPlanId" inserted in data storage.
-             */
-            const nextProductionPlanId = await providerMongoDB.getNextProductionPlanId();
-            productionPlanData.productionPlanId = nextProductionPlanId;
-            //// TO BE IMPLEMENTED
-            //// ____
-        } else {
-            // Update existing production plan in data storage.
-            //// TO DO: check that the production plan being updated corresponds to the same planned product (else respond with error)
-            //// -- i.e. compare "productionPlanData.itemDataById[1].productId", between plan from "req.body", and existing plan from data storage
-            //// ____
-            //// TO BE IMPLEMENTED
-            //// ____
+        const savedProductionPlan = await providerMongoDB.saveProductionPlan(productionPlanData, productionPlanId);
+        if (savedProductionPlan.error) {
+            res.json({error: savedProductionPlan.error});
+            return;
         }
-        cache.productionPlanDataById[productionPlanData.productionPlanId] = productionPlanData;
-        res.send(productionPlanData);
+        // Production plan saved in data storage => update it in cache
+        console.log(`---> SAVED production plan ID ${savedProductionPlan.productionPlanId} (${savedProductionPlan.plannedProductName})`); //// TEST
+        cache.productionPlanDataById[savedProductionPlan.productionPlanId] = savedProductionPlan;
+        res.send(savedProductionPlan);
     }
 );
 
@@ -208,19 +199,22 @@ router.get(
     '/asteroids-plan/:address',
     async (req, res) => {
         console.log(`--- [router] GET /asteroids-plan/${req.params.address}`); //// TEST
-        const address = toChecksumAddress(req.params.address);
-        const cachedAsteroidsPlan = cache.asteroidsPlanByAddress[address.toLowerCase()];
+        const address = req.params.address.toLowerCase();
+        const cachedAsteroidsPlan = cache.asteroidsPlanByAddress[address];
         if (cachedAsteroidsPlan) {
-            console.log(`---> found CACHED asteroids plan = ${cachedAsteroidsPlan.length} asteroids`); //// TEST
+            // console.log(`---> found CACHED asteroids plan = ${cachedAsteroidsPlan.length} asteroids`); //// TEST
             res.json(cachedAsteroidsPlan);
             return;
         }
-        let asteroidsPlan = []; //// TEST
-        //// TO DO: get asteroids plan from data storage
-        //// ____
+        const asteroidsPlan = await providerMongoDB.fetchAsteroidsPlan(address);
+        // console.log(`--- FETCHED asteroids plan = ${asteroidsPlan.length} asteroids`); //// TEST
+        if (asteroidsPlan.error) {
+            res.json({error: asteroidsPlan.error});
+            return;
+        }
+        // Asteroids plan found for address in data storage => update it in cache
         cache.asteroidsPlanByAddress[address.toLowerCase()] = asteroidsPlan;
         res.json(asteroidsPlan);
-        //// ____
     }
 );
 
@@ -232,15 +226,17 @@ router.post(
     '/asteroids-plan/:address',
     async (req, res) => {
         console.log(`--- [router] POST /asteroids-plan/${req.params.address}`); //// TEST
-        const address = toChecksumAddress(req.params.address);
+        const address = req.params.address.toLowerCase();
         // console.log(`---> request body:`, req.body); //// TEST
         const asteroidsPlan = req.body;
-        //// TO DO: validate the asteroids plan, similar to "isValidProductionPlanData"?
-        //// ____
-        //// TO DO: insert / update the asteroids plan for address (NOT lowercase) in data storage
-        //// ____
+        const savedRecord = await providerMongoDB.saveAsteroidsPlan(asteroidsPlan, address);
+        if (savedRecord.error) {
+            res.json({error: savedRecord.error});
+            return;
+        }
+        // Asteroids plan saved for address in data storage => update it in cache
         cache.asteroidsPlanByAddress[address.toLowerCase()] = asteroidsPlan;
-        console.log(`---> saved CACHED asteroids plan = ${asteroidsPlan.length} asteroids`); //// TEST
+        console.log(`---> SAVED asteroids plan = ${asteroidsPlan.length} asteroids`); //// TEST
         res.send(true);
     }
 );

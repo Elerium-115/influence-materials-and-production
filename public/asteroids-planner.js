@@ -429,14 +429,22 @@ function deletePlannedProduct(asteroidName, plannedProductName) {
     handleAsteroidsPlannerTreeChanged();
 }
 
-function saveAsteroidsPlan() {
+async function saveAsteroidsPlan() {
     const asteroidsPlan = getAsteroidsPlanFromTree();
     if (getConnectedAddress()) {
         // If wallet connected => save the asteroids plan via API
-        const response = postAsteroidsPlanForConnectedAddress(asteroidsPlan);
+        const response = await postAsteroidsPlanForConnectedAddress(asteroidsPlan);
         if (response.error) {
             // Inform the user re: API error
-            alert(asteroidsPlan.error);
+            alert(response.error);
+            /**
+             * Reload the asteroids plan from the API. This is required if e.g. deleting an orphan
+             * production plan fails in the API, but it was already deleted in the client.
+             * NOTE: Do NOT call "updateAsteroidsPlanOnAccountsChanged" to achieve this,
+             * because it would trigger an infinite loop when the API is down.
+             */
+            const savedAsteroidsPlan = await loadAsteroidsPlanForConnectedAddress();
+            await regenerateAsteroidsTreeFromPlan(savedAsteroidsPlan);
             return;
         }
     }
