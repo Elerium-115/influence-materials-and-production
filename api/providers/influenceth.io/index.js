@@ -62,7 +62,7 @@ async function fetchAsteroidMetadata(asteroidId) {
         };
         console.log(`--- [fetchAsteroidMetadata] ${config.method.toUpperCase()} ${config.url}`); //// TEST
         const response = await axios(config);
-        console.log(`--- [fetchAsteroidMetadata] response.data KEYS:`, Object.keys(response.data)); //// TEST
+        // console.log(`--- [fetchAsteroidMetadata] response.data KEYS:`, Object.keys(response.data)); //// TEST
         return parseAsteroidMetadata(response.data);
     } catch (error) {
         console.log(`--- [fetchAsteroidMetadata] ERROR:`, error); //// TEST
@@ -99,9 +99,9 @@ async function fetchAsteroidsCountOwnedBy(address) {
 
 /**
  * Get IDs for ALL (TBC?) asteroids owned by address
- * @param address WARNING: case-sensitive on mainnet as of Sep 2022 (case-insensitive on testnet
+ * @param address WARNING: case-sensitive on mainnet as of Sep 2022 (case-insensitive on testnet)
  */
- async function fetchAsteroidsIdsOwnedBy(address) {
+async function fetchAsteroidsIdsOwnedBy(address) {
     try {
         var config = {
             method: 'get',
@@ -127,7 +127,7 @@ async function fetchAsteroidsCountOwnedBy(address) {
 
 /**
  * Get metadata for max "ASTEROIDS_PER_PAGE_MAX" asteroids owned by address, per "page"
- * @param address WARNING: case-sensitive on mainnet as of Sep 2022 (case-insensitive on testnet
+ * @param address WARNING: case-sensitive on mainnet as of Sep 2022 (case-insensitive on testnet)
  */
 async function fetchAsteroidsMetadataOwnedBy(address, page) {
     try {

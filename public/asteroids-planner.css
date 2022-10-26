@@ -382,7 +382,7 @@
 /* Shopping List tree */
 
 #shopping-list-tree {
-    min-width: 12rem;
+    min-width: 11rem;
     max-width: 15vw;
     text-align: right;
 }
