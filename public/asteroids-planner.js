@@ -212,7 +212,9 @@ async function fetchAsteroidMetadataById(id) {
         url: `${apiUrl}/asteroid/${id}`,
     };
     try {
+        toggleLoading(true, 'fetchAsteroidMetadataById');
         const response = await axios(config);
+        toggleLoading(false, 'fetchAsteroidMetadataById');
         const metadata = response.data;
         // console.log(`--- metadata from API:`, metadata); //// TEST
         return metadata;
@@ -232,7 +234,9 @@ async function fetchAsteroidsFromWallet() {
         url: `${apiUrl}/asteroids/owned-by/${connectedAddress}`,
     };
     try {
+        toggleLoading(true, 'fetchAsteroidsFromWallet');
         const response = await axios(config);
+        toggleLoading(false, 'fetchAsteroidsFromWallet');
         const asteroids = response.data;
         // console.log(`--- asteroids from API:`, asteroids); //// TEST
         return asteroids;
@@ -252,7 +256,9 @@ async function fetchAsteroidsPlanForConnectedAddress() {
         url: `${apiUrl}/asteroids-plan/${connectedAddress}`,
     };
     try {
+        toggleLoading(true, 'fetchAsteroidsPlanForConnectedAddress');
         const response = await axios(config);
+        toggleLoading(false, 'fetchAsteroidsPlanForConnectedAddress');
         const asteroidsPlan = response.data;
         // console.log(`--- asteroidsPlan from API:`, asteroidsPlan); //// TEST
         return asteroidsPlan;
@@ -268,7 +274,9 @@ async function fetchProductionPlanDataById(id) {
         url: `${apiUrl}/production-plan/${id}`,
     };
     try {
+        toggleLoading(true, 'fetchProductionPlanDataById');
         const response = await axios(config);
+        toggleLoading(false, 'fetchProductionPlanDataById');
         const data = response.data;
         // console.log(`--- data from API:`, data); //// TEST
         return data;
@@ -289,7 +297,9 @@ async function postAsteroidsPlanForConnectedAddress(asteroidsPlan) {
         data: asteroidsPlan,
     };
     try {
+        toggleLoading(true, 'postAsteroidsPlanForConnectedAddress');
         const response = await axios(config);
+        toggleLoading(false, 'postAsteroidsPlanForConnectedAddress');
         const data = response.data;
         // console.log(`--- data from API:`, data); //// TEST
         return data;
