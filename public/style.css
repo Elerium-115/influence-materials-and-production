@@ -376,6 +376,7 @@ body {
     justify-content: center;
     background: var(--default-overlay-bg);
     z-index: 3;
+    opacity: 0.8;
 }
 
 #loading-overlay[class*="visible"] {
@@ -386,7 +387,6 @@ body {
     width: 5rem;
     height: 5rem;
     animation: spin 1000ms linear infinite;
-    opacity: 0.5;
 }
 
 
