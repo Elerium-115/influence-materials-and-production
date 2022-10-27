@@ -60,6 +60,8 @@ let isExampleAsteroidsPlan = false;
 
 let onClickAsteroidActionInProgress = false;
 
+let apiErrorOnLoadAsteroidsPlan = null;
+
 const cacheAsteroidsMetadataById = {};
 const cacheAsteroidsByAddress = {}; // NOTE: Each key is a lowercase address
 const cacheProductionPlanDataById = {};
@@ -316,10 +318,12 @@ async function loadAsteroidsPlanForConnectedAddress() {
     // Do NOT cache the asteroids plans by address (i.e. ALWAYS call my API)
     const asteroidsPlan = await fetchAsteroidsPlanForConnectedAddress();
     if (asteroidsPlan.error) {
+        apiErrorOnLoadAsteroidsPlan = asteroidsPlan.error;
         // Inform the user re: API error
         alert(asteroidsPlan.error);
         return;
     }
+    apiErrorOnLoadAsteroidsPlan = null;
     return asteroidsPlan;
 }
 
@@ -432,6 +436,14 @@ function deletePlannedProduct(asteroidName, plannedProductName) {
 async function saveAsteroidsPlan() {
     const asteroidsPlan = getAsteroidsPlanFromTree();
     if (getConnectedAddress()) {
+        if (!asteroidsPlan.length && apiErrorOnLoadAsteroidsPlan !== null) {
+            /**
+             * Do NOT save an empty asteroids plan, if there was an API error when loading the existing asteroids plan.
+             * This prevents overwriting a valid non-empty asteroids plan, due to an API error.
+             */
+            console.log(`%c--- WARNING: [saveAsteroidsPlan] aborted due to empty asteroids plan after API error`, 'background: yellow; color: black;'); //// TEST
+            return;
+        }
         // If wallet connected => save the asteroids plan via API
         const response = await postAsteroidsPlanForConnectedAddress(asteroidsPlan);
         if (response.error) {
@@ -464,6 +476,10 @@ async function regenerateAsteroidsTreeFromPlan(asteroidsPlan) {
             if (productionPlanId) {
                 // Load the production plan associated with "productionPlanId"
                 productionPlanData = await loadProductionPlanDataById(productionPlanId);
+                //// TO DO: rework this to avoid individual API calls for each
+                ////        production plan (and thus individual queries to mongoDB),
+                ////        and instead batch them in a single request (thus single DB query).
+                //// ____
             } else {
                 // Initialize blank production plan for "plannedProductName"
                 productionPlanData = {
@@ -1949,7 +1965,7 @@ async function setupExample() {
 
 function onClickTreeItem(asteroidName, plannedProductName, intermediateProductName) {
     if (!asteroidName) {
-        console.log(`%c--- WARNING: [onClickTreeItem] called WITHOUT asteroidName`, 'background: chocolate'); //// TEST
+        console.log(`%c--- WARNING: [onClickTreeItem] called WITHOUT asteroidName`, 'background: yellow; color: black;'); //// TEST
         return;
     }
     asteroidsPlannerSelection = {asteroidName, plannedProductName, intermediateProductName};
@@ -2124,74 +2140,3 @@ if (!refreshWallet()) {
     // Wallet NOT installed => initialize everything
     handleAsteroidsPlannerTreeChanged();
 }
-
-
-//// TO DO PRIO
-/*
-- SAVE asteroids plans + production plans to MongoDB
-- "loading" overlay during API calls?
-- replace "confirm" and "alert" calls with (over-)overlay? ("uberlay"?)
-    - "confirm" re: deleting asteroids from the tree
-    - "alert" re: API coming soon / asteroid # already planned
-- search all occurrences of "____" => to do
-- implement a way to SHARE an asteroids plan via a short URL
-    - the shared plan must be viewable by anyone (even if no wallet installed / connected)
-    - it should be read-only, and NOT saved for the currently connected address, either?
-- TEST: use "mouseHoverAnchor" to connect elements between the asteroids planner tree, and the shopping list tree?
-    https://anseki.github.io/leader-line/#mousehoveranchor
-*/
-
-//// TO DO
-/*
-- use D3.js
-- button to connect wallet (MetaMask)
-    https://docs.metamask.io/guide/getting-started.html
-    https://docs.metamask.io/guide/create-dapp.html
-- allow multiple planned chains to be configured for each asteroid
-    - ensure that the associated chains' total required area does not exceed the asteroid's area
-- tree-navigation (1st column on the left)
-    - level 0 = root
-        - label = "Asteroids Planner"
-        - click => show all planned asteroids, with the planned product(s) around each asteroid (see "visualize" notes below)
-        - features:
-            - add / remove planned asteroids
-            - click on asteroid to show it (i.e. level 1 > click)
-            - click on planned product to show it (i.e. level 2 > click)
-            - show "unified shopping list" (for all chains, from all asteroids)
-        - implementation ideas:
-            https://observablehq.com/@d3/zoomable-circle-packing?collection=@d3/d3-hierarchy
-            https://observablehq.com/@d3/pack?collection=@d3/d3-hierarchy
-            https://observablehq.com/@d3/bubble-chart?collection=@d3/d3-hierarchy
-            https://observablehq.com/@d3/radial-tree?collection=@d3/d3-hierarchy
-            https://observablehq.com/@d3/radial-cluster?collection=@d3/d3-hierarchy
-            https://observablehq.com/@antonlecock/our-solar-system-using-d3-js-and-three-js
-            https://github.com/ofrohn/d3-orrery
-            https://bl.ocks.org/vasturiano/54dd054d22be863da5afe2db02e033e2
-            https://vimeo.com/449618596
-            https://adalia.coorbital.rocks/coorbital-search
-    - level 1 = planned asteroids
-    - level 2 = planned chains for that asteroid
-        - links to other asteroids / planned products, where this planned product is a required input?
-        - features:
-            - also show which other asteroids / planned chains - (1) require or (2) are producing - this planned product
-                - including other planned chains from the same asteroid
-                - differentiate between this planned product being a - (1) planned or (2) intermediate - product, in other chains?
-            [NOT] - also show the relevant piece of the planned chain having this planned product as an output?
-                ^^ NOT, b/c different occurrences of this product can have different process variants selected
-    - level 3 = intermediate products for that planned product
-    - implementation ideas:
-        - indented tree
-            https://observablehq.com/@d3/indented-tree?collection=@d3/d3-hierarchy
-        - collapsible tree
-            https://observablehq.com/@d3/collapsible-tree?collection=@d3/d3-hierarchy
-        => try to make a "collapsible indented tree"
-- shopping list (2nd column on the left)
-    - hover over shopping list item => arrows to the planned products where it is a required input
-    - click over shopping list item => "stick / unstick" arrows to the planned products where it is a required input
-        - i.e. allow multiple sets of arrows to be shown at the same time, if multiple shopping list items are clicked
-- visualize all planned asteroids, with the planned product(s) around each asteroid
-    - arrows from each planned product, to the other asteroids where it is a required input
-    - arrows from each product in the unified shopping list, to the asteroids where it is a required input
-    - e.g. similar to this?
-        https://observablehq.com/@d3/mobile-patent-suits
-*/

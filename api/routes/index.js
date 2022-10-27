@@ -80,7 +80,7 @@ router.get(
                 res.json({error: asteroidsIds.error});
                 return;
             }
-            console.log(`---> asteroidsIds:`, asteroidsIds); //// TEST
+            // console.log(`---> asteroidsIds:`, asteroidsIds); //// TEST
             cache.ownedAsteroidsIdsByAddress[address.toLowerCase()] = {
                 asteroidsIds,
                 date: Date.now(),
