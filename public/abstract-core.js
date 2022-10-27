@@ -16,6 +16,9 @@ if (window.location.hostname === '127.0.0.1') {
     apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
 }
 
+// Loading overlay
+const elLoadingOverlay = document.getElementById('loading-overlay');
+
 /**
  * e.g. "Thin-film Resistor" => "Thin-filmResistor"
  */
@@ -43,6 +46,14 @@ function getProductImageSrc(productName, format = 'default') {
  */
 function getItemTypeClass(itemType) {
     return `item-type-${getItemNameSafe(itemType)}`;
+}
+
+function toggleLoading(enable, operation) {
+    if (enable) {
+        elLoadingOverlay?.classList.add(`visible-${operation}`);
+    } else {
+        elLoadingOverlay?.classList.remove(`visible-${operation}`);
+    }
 }
 
 function validateInputArea(el) {

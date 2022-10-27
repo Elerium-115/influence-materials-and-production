@@ -1213,7 +1213,9 @@ async function postProductionPlanData(productionPlanData) {
         data: productionPlanData,
     };
     try {
+        toggleLoading(true, 'postProductionPlanData');
         const response = await axios(config);
+        toggleLoading(false, 'postProductionPlanData');
         const data = response.data;
         // console.log(`--- data from API:`, data); //// TEST
         return data;
