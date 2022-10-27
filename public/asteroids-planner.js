@@ -8,6 +8,7 @@ const elContent = document.getElementById('content');
 const elOverlayWrapper = document.getElementById('overlay-wrapper');
 const elOverlayAddAsteroid = document.getElementById('overlay-add-asteroid');
 const elOverlayAddProduct = document.getElementById('overlay-add-product');
+const elOverlayAddFromShoppingList = document.getElementById('overlay-add-from-shopping-list');
 const elOverlayProductImage = document.getElementById('overlay-product-image');
 
 // Buttons in the asteroids-planner-tree
@@ -34,6 +35,10 @@ const elInputMockArea = document.getElementById('input-mock-area');
 // Elements in the overlay for "Add product"
 const elOverlayAddProductAsteroidName = elOverlayAddProduct.querySelector('.asteroid-name');
 const elOverlayAddProductInput = elOverlayAddProduct.querySelector('#products-list-wrapper input');
+
+// Elements in the overlay for "Add from shopping list"
+const elOverlayAddFromShoppingListProductName = elOverlayAddFromShoppingList.querySelector('.product-name');
+const elOverlayAddFromShoppingListContentCards = elOverlayAddFromShoppingList.querySelector('.content-cards');
 
 // Elements in the overlay for "Product image"
 const elOverlayProductImageImg = elOverlayProductImage.querySelector('img');
@@ -219,6 +224,7 @@ async function fetchAsteroidMetadataById(id) {
         // console.log(`--- metadata from API:`, metadata); //// TEST
         return metadata;
     } catch (error) {
+        toggleLoading(false, 'fetchAsteroidMetadataById');
         console.log(`--- ERROR from API:`, error); //// TEST
         return {error};
     }
@@ -241,6 +247,7 @@ async function fetchAsteroidsFromWallet() {
         // console.log(`--- asteroids from API:`, asteroids); //// TEST
         return asteroids;
     } catch (error) {
+        toggleLoading(false, 'fetchAsteroidsFromWallet');
         console.log(`--- ERROR from API:`, error); //// TEST
         return {error};
     }
@@ -263,6 +270,7 @@ async function fetchAsteroidsPlanForConnectedAddress() {
         // console.log(`--- asteroidsPlan from API:`, asteroidsPlan); //// TEST
         return asteroidsPlan;
     } catch (error) {
+        toggleLoading(false, 'fetchAsteroidsPlanForConnectedAddress');
         console.log(`--- ERROR from API:`, error); //// TEST
         return {error};
     }
@@ -281,6 +289,7 @@ async function fetchProductionPlanDataById(id) {
         // console.log(`--- data from API:`, data); //// TEST
         return data;
     } catch (error) {
+        toggleLoading(false, 'fetchProductionPlanDataById');
         console.log(`--- ERROR from API:`, error); //// TEST
         return {error};
     }
@@ -304,6 +313,7 @@ async function postAsteroidsPlanForConnectedAddress(asteroidsPlan) {
         // console.log(`--- data from API:`, data); //// TEST
         return data;
     } catch (error) {
+        toggleLoading(false, 'postAsteroidsPlanForConnectedAddress');
         console.log(`--- ERROR from API:`, error); //// TEST
         return {error};
     }
@@ -486,7 +496,7 @@ async function regenerateAsteroidsTreeFromPlan(asteroidsPlan) {
             if (productionPlanId) {
                 // Load the production plan associated with "productionPlanId"
                 productionPlanData = await loadProductionPlanDataById(productionPlanId);
-                //// TO DO: rework this to avoid individual API calls for each
+                //// TO DO: (low prio) rework this to avoid individual API calls for each
                 ////        production plan (and thus individual queries to mongoDB),
                 ////        and instead batch them in a single request (thus single DB query).
                 //// ____
@@ -1445,6 +1455,37 @@ function onClickAddPlannedProductForAsteroid(asteroidName) {
 function selectPlannedProduct(productNameCompact) {
     const asteroidName = elOverlayAddProductAsteroidName.textContent;
     const productName = productNamesByHash[productNameCompact];
+    addPlannedProductToAsteroidFromOverlay(asteroidName, productName);
+}
+
+function onClickAddProductFromShoppingList(productName) {
+    if (productName === 'Empty Lot') {
+        return;
+    }
+    elOverlayAddFromShoppingListProductName.textContent = productName;
+    let asteroidCardsHtml = '';
+    asteroidsPlannerTree.forEach(asteroidData => {
+        asteroidCardsHtml += /*html*/ `
+            <div class="content-card asteroid-card">
+                <div class="spectral-types-circle type-${asteroidData.asteroid_type}" onclick="addPlannedProductToAsteroidFromOverlay('${asteroidData.asteroid_name}', '${productName}')">
+                    <div class="asteroid-info">
+                        <div class="asteroid-type">
+                            ${asteroidData.asteroid_type}-type
+                        </div>
+                        <div class="asteroid-name">${asteroidData.asteroid_name}</div>
+                        <div class="area area-km2">${asteroidData.asteroid_area}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    elOverlayAddFromShoppingListContentCards.innerHTML = asteroidCardsHtml;
+    // Show overlay for "Add from shopping list"
+    document.body.classList.add('overlay-visible');
+    elOverlayAddFromShoppingList.classList.remove('hidden');
+}
+
+function addPlannedProductToAsteroidFromOverlay(asteroidName, productName) {
     const asteroidData = getAsteroidData(asteroidName);
     if (asteroidData.planned_products.find(productData => productData.planned_product_name === productName)) {
         alert(`${productName} is already planned on ${asteroidName}`);
@@ -1483,13 +1524,6 @@ function onClickProductImage(el, productName) {
     // Prevent the previous product image from being shown, while the new image is loading
     elOverlayProductImageImg.src = '';
     elOverlayProductImageImg.src = getProductImageSrc(productName, 'original');
-}
-
-function onClickAddProductFromShoppingList(productName) {
-    //// TO DO: show overlay to add this product as a planned product, on one of the planned asteroids
-    //// -- show summary of this product + list of asteroids (with filters?), similar to wallet-asteroids
-    //// -- after an asteroid is selected => redirect to that selection (asteroid + product)
-    //// ____
 }
 
 /**
@@ -1742,6 +1776,11 @@ function updateContent() {
                 const elGameLink = elContent.querySelector('.influence-logo-icon');
                 elGameLink.href = metadata.url;
                 elGameLink.classList.remove('loading');
+                /**
+                 * Repositioning connections may be required e.g. after loading
+                 * the asteroid details, while the trees contain products with long names.
+                 */
+                repositionAsteroidsPlannerConnections();
             });
         } else {
             // Mock rock
@@ -1982,6 +2021,11 @@ function onClickTreeItem(asteroidName, plannedProductName, intermediateProductNa
     reconnectAsteroidsPlannerTree();
     markTreesBasedOnRequiredSpectralTypes();
     updateContent();
+    /**
+     * Repositioning connections may be required e.g. after selecting
+     * a product, while the trees contain products with long names.
+     */
+    repositionAsteroidsPlannerConnections();
 }
 
 async function updateAsteroidsPlanOnAccountsChanged() {

@@ -1220,6 +1220,7 @@ async function postProductionPlanData(productionPlanData) {
         // console.log(`--- data from API:`, data); //// TEST
         return data;
     } catch (error) {
+        toggleLoading(false, 'postProductionPlanData');
         console.log(`--- ERROR from API:`, error); //// TEST
         return {error};
     }

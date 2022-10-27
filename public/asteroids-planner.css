@@ -1451,6 +1451,21 @@ body.overlay-visible {
     font-size: 0.8rem;
 }
 
+/* Overlay - Add from shopping list */
+
+#overlay-add-from-shopping-list {
+    width: 66%;
+}
+
+#overlay-add-from-shopping-list h3 {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+#overlay-add-from-shopping-list .content-cards {
+    justify-content: center;
+}
+
 /* Overlay - Product image */
 
 #overlay-product-image {
