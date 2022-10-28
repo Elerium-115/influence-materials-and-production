@@ -50,17 +50,24 @@
     height: 1rem;
     margin-right: 1rem;
 }
-.cta-remove-text {
-    line-height: 2rem;
+.cta-text {
     color: white;
+    text-align: center;
     cursor: pointer;
-    padding: 0 0.5rem;
+    margin: 0 auto;
+    padding: 0.5rem;
     border-radius: 1rem;
     opacity: 0.25;
 }
+.cta-text:hover {
+    opacity: 1;
+}
 .cta-remove-text:hover {
     background: red;
-    opacity: 1;
+}
+.cta-move-text:hover {
+    background: var(--brand-text);
+    color: black;
 }
 
 #asteroids-planner-wrapper {
@@ -993,12 +1000,16 @@
     max-width: 11rem;
 }
 
-.content-cards.single-card .delete-card {
-    margin: 0 auto;
-}
-
 .content-cards.single-card .delete-card::after {
     content: 'Remove';
+}
+
+.single-asteroid .content-cards.single-card .move-to-different-asteroid {
+    display: none;
+}
+
+.content-cards.single-card .move-to-different-asteroid::after {
+    content: 'Move the production to another asteroid';
 }
 
 
@@ -1451,18 +1462,18 @@ body.overlay-visible {
     font-size: 0.8rem;
 }
 
-/* Overlay - Add from shopping list */
+/* Overlay - Select asteroid for product */
 
-#overlay-add-from-shopping-list {
+#overlay-select-asteroid-for-product {
     width: 66%;
 }
 
-#overlay-add-from-shopping-list h3 {
+#overlay-select-asteroid-for-product h3 {
     text-align: center;
     margin-bottom: 3rem;
 }
 
-#overlay-add-from-shopping-list .content-cards {
+#overlay-select-asteroid-for-product .content-cards {
     justify-content: center;
 }
 

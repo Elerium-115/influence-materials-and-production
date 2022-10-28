@@ -8,7 +8,7 @@ const elContent = document.getElementById('content');
 const elOverlayWrapper = document.getElementById('overlay-wrapper');
 const elOverlayAddAsteroid = document.getElementById('overlay-add-asteroid');
 const elOverlayAddProduct = document.getElementById('overlay-add-product');
-const elOverlayAddFromShoppingList = document.getElementById('overlay-add-from-shopping-list');
+const elOverlaySelectAsteroidForProduct = document.getElementById('overlay-select-asteroid-for-product');
 const elOverlayProductImage = document.getElementById('overlay-product-image');
 
 // Buttons in the asteroids-planner-tree
@@ -36,9 +36,10 @@ const elInputMockArea = document.getElementById('input-mock-area');
 const elOverlayAddProductAsteroidName = elOverlayAddProduct.querySelector('.asteroid-name');
 const elOverlayAddProductInput = elOverlayAddProduct.querySelector('#products-list-wrapper input');
 
-// Elements in the overlay for "Add from shopping list"
-const elOverlayAddFromShoppingListProductName = elOverlayAddFromShoppingList.querySelector('.product-name');
-const elOverlayAddFromShoppingListContentCards = elOverlayAddFromShoppingList.querySelector('.content-cards');
+// Elements in the overlay for "Select asteroid for product"
+const elOverlaySelectAsteroidForProductSelectAsteroidText = elOverlaySelectAsteroidForProduct.querySelector('.select-asteroid-text');
+const elOverlaySelectAsteroidForProductName = elOverlaySelectAsteroidForProduct.querySelector('.product-name');
+const elOverlaySelectAsteroidForProductContentCards = elOverlaySelectAsteroidForProduct.querySelector('.content-cards');
 
 // Elements in the overlay for "Product image"
 const elOverlayProductImageImg = elOverlayProductImage.querySelector('img');
@@ -447,10 +448,14 @@ function deletePlannedProduct(asteroidName, plannedProductName) {
     if (!confirm(`Are you sure you want to remove this planned product, and its production chain?`)) {
         return; // Abort deletion
     }
+    deletePlannedProductRaw(asteroidName, plannedProductName);
+    handleAsteroidsPlannerTreeChanged();
+}
+
+function deletePlannedProductRaw(asteroidName, plannedProductName) {
     const asteroidData = getAsteroidData(asteroidName);
     // Delete from array
     asteroidData.planned_products = asteroidData.planned_products.filter(plannedProductData => plannedProductData.planned_product_name !== plannedProductName);
-    handleAsteroidsPlannerTreeChanged();
 }
 
 async function saveAsteroidsPlan() {
@@ -573,7 +578,7 @@ function refreshShoppingListTreeHtml() {
         let inputsListHtml = '';
         shoppingListTree.inputs.forEach(inputData => {
             inputsListHtml += /*html*/ `
-                <li class="tree-label" data-input-name="${inputData.input_name}" onclick="onClickAddProductFromShoppingList('${inputData.input_name}')">
+                <li class="tree-label" data-input-name="${inputData.input_name}" onclick="onClickSelectAsteroidForProduct('${inputData.input_name}')">
                     ${inputData.input_name}
                 </li>
             `;
@@ -592,7 +597,7 @@ function refreshShoppingListTreeHtml() {
         let buildingsListHtml = '';
         shoppingListTree.buildings.forEach(buildingData => {
             buildingsListHtml += /*html*/ `
-                <li class="tree-label" data-building-name="${buildingData.building_name}" onclick="onClickAddProductFromShoppingList('${buildingData.building_name}')">
+                <li class="tree-label" data-building-name="${buildingData.building_name}" onclick="onClickSelectAsteroidForProduct('${buildingData.building_name}')">
                     ${buildingData.building_name}
                 </li>
             `;
@@ -871,6 +876,11 @@ function deleteButtonConnections() {
 }
 
 function handleAsteroidsPlannerTreeChanged(shouldUpdateContent = true, shouldSaveAsteroidsPlan = true) {
+    if (asteroidsPlannerTree.length === 1) {
+        elAsteroidsPlannerWrapper.classList.add('single-asteroid');
+    } else {
+        elAsteroidsPlannerWrapper.classList.remove('single-asteroid');
+    }
     if (shouldSaveAsteroidsPlan) {
         saveAsteroidsPlan();
     }
@@ -1453,21 +1463,49 @@ function onClickAddPlannedProductForAsteroid(asteroidName) {
 }
 
 function selectPlannedProduct(productNameCompact) {
-    const asteroidName = elOverlayAddProductAsteroidName.textContent;
     const productName = productNamesByHash[productNameCompact];
-    addPlannedProductToAsteroidFromOverlay(asteroidName, productName);
+    const asteroidName = elOverlayAddProductAsteroidName.textContent;
+    addPlannedProductToAsteroid(productName, asteroidName);
 }
 
-function onClickAddProductFromShoppingList(productName) {
+/**
+ * Valid "context" values:
+ * - "add_from_shopping_list"
+ * - "move_to_different_asteroid"
+ */
+function onClickSelectAsteroidForProduct(productName, context = 'add_from_shopping_list') {
     if (productName === 'Empty Lot') {
         return;
     }
-    elOverlayAddFromShoppingListProductName.textContent = productName;
+    let selectAsteroidText = '';
+    switch (context) {
+        case 'add_from_shopping_list':
+            selectAsteroidText = 'Select an asteroid where you plan to produce';
+            break;
+        case 'move_to_different_asteroid':
+            selectAsteroidText = 'Select a different asteroid where you want to move the production of';
+            break;
+    }
+    elOverlaySelectAsteroidForProductSelectAsteroidText.textContent = selectAsteroidText;
+    elOverlaySelectAsteroidForProductName.textContent = productName;
     let asteroidCardsHtml = '';
+    let onClickValue = '';
     asteroidsPlannerTree.forEach(asteroidData => {
+        switch (context) {
+            case 'add_from_shopping_list':
+                onClickValue = `addPlannedProductToAsteroid('${productName}', '${asteroidData.asteroid_name}')`;
+                break;
+            case 'move_to_different_asteroid':
+                // Skip currently selected asteroid
+                if (asteroidData.asteroid_name === asteroidsPlannerSelection.asteroidName) {
+                    return;
+                }
+                onClickValue = `movePlannedProductFromAsteroidToAsteroid('${productName}', '${asteroidsPlannerSelection.asteroidName}', '${asteroidData.asteroid_name}')`;
+                break;
+        }
         asteroidCardsHtml += /*html*/ `
             <div class="content-card asteroid-card">
-                <div class="spectral-types-circle type-${asteroidData.asteroid_type}" onclick="addPlannedProductToAsteroidFromOverlay('${asteroidData.asteroid_name}', '${productName}')">
+                <div class="spectral-types-circle type-${asteroidData.asteroid_type}" onclick="${onClickValue}">
                     <div class="asteroid-info">
                         <div class="asteroid-type">
                             ${asteroidData.asteroid_type}-type
@@ -1479,13 +1517,13 @@ function onClickAddProductFromShoppingList(productName) {
             </div>
         `;
     });
-    elOverlayAddFromShoppingListContentCards.innerHTML = asteroidCardsHtml;
-    // Show overlay for "Add from shopping list"
+    elOverlaySelectAsteroidForProductContentCards.innerHTML = asteroidCardsHtml;
+    // Show overlay for "Select asteroid for product"
     document.body.classList.add('overlay-visible');
-    elOverlayAddFromShoppingList.classList.remove('hidden');
+    elOverlaySelectAsteroidForProduct.classList.remove('hidden');
 }
 
-function addPlannedProductToAsteroidFromOverlay(asteroidName, productName) {
+function addPlannedProductToAsteroid(productName, asteroidName) {
     const asteroidData = getAsteroidData(asteroidName);
     if (asteroidData.planned_products.find(productData => productData.planned_product_name === productName)) {
         alert(`${productName} is already planned on ${asteroidName}`);
@@ -1502,6 +1540,18 @@ function addPlannedProductToAsteroidFromOverlay(asteroidName, productName) {
             spectral_types: [],
         },
     });
+    closeOverlayAndSelectProductOnAsteroid(productName, asteroidName);
+}
+
+function movePlannedProductFromAsteroidToAsteroid(productName, fromAsteroidName, toAsteroidName) {
+    const plannedProductData = getPlannedProductData(fromAsteroidName, productName);
+    const toAsteroidData = getAsteroidData(toAsteroidName);
+    toAsteroidData.planned_products.push(plannedProductData);
+    deletePlannedProductRaw(fromAsteroidName, productName);
+    closeOverlayAndSelectProductOnAsteroid(productName, toAsteroidName);
+}
+
+function closeOverlayAndSelectProductOnAsteroid(productName, asteroidName) {
     closeOverlay();
     /**
      * Do NOT call "updateContent" on this execution of "handleAsteroidsPlannerTreeChanged",
@@ -1731,7 +1781,7 @@ function updateContent() {
                 </div>
                 ${asteroidCardsHtml}
             </div>
-            <div class="cta-remove-text remove-all-asteroids" onclick="resetAsteroidsPlan(true)">Remove all asteroids</div>
+            <div class="cta-text cta-remove-text remove-all-asteroids" onclick="resetAsteroidsPlan(true)">Remove all asteroids</div>
         `;
     } else if (!plannedProductName) {
         // Asteroid
@@ -1814,7 +1864,7 @@ function updateContent() {
                             </div>
                         </div>
                     </div>
-                    <div class="cta-remove-text delete-card" onclick="proxyActionForAsteroid(event, 'delete', '${asteroidName}')"></div>
+                    <div class="cta-text cta-remove-text delete-card" onclick="proxyActionForAsteroid(event, 'delete', '${asteroidName}')"></div>
                 </div>
                 <div class="content-info-wrapper">
                     <h3 class="content-title">Asteroid info</h3>
@@ -1865,7 +1915,7 @@ function updateContent() {
             let inputsHtml = '';
             plannedProductData.shopping_list.inputs.forEach(inputData => {
                 inputsHtml += /*html*/ `
-                    <div class="row" onclick="onClickAddProductFromShoppingList('${inputData.input_name}')">
+                    <div class="row" onclick="onClickSelectAsteroidForProduct('${inputData.input_name}')">
                         <span class="name">${inputData.input_name}</span><span class="qty">${inputData.qty}</span>
                     </div>
                 `;
@@ -1876,7 +1926,7 @@ function updateContent() {
             let buildingsHtml = '';
             plannedProductData.shopping_list.buildings.forEach(buildingData => {
                 buildingsHtml += /*html*/ `
-                    <div class="row" onclick="onClickAddProductFromShoppingList('${buildingData.building_name}')">
+                    <div class="row" onclick="onClickSelectAsteroidForProduct('${buildingData.building_name}')">
                         <span class="name">${buildingData.building_name}</span><span class="qty">${buildingData.qty}</span>
                     </div>
                 `;
@@ -1927,7 +1977,8 @@ function updateContent() {
                         <div class="product-name">${plannedProductName}</div>
                         <div class="card-icon zoom-image"></div>
                     </div>
-                    <div class="cta-remove-text delete-card" onclick="deletePlannedProduct('${asteroidName}', '${plannedProductName}')"></div>
+                    <div class="cta-text cta-move-text move-to-different-asteroid" onclick="onClickSelectAsteroidForProduct('${plannedProductName}', 'move_to_different_asteroid')"></div>
+                    <div class="cta-text cta-remove-text delete-card" onclick="deletePlannedProduct('${asteroidName}', '${plannedProductName}')"></div>
                 </div>
                 <div class="content-info-wrapper">
                     ${ctaProductionChainHtml}
