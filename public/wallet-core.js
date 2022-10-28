@@ -15,6 +15,8 @@ const walletEventsHandlers = {
     chainChanged: [],
 };
 
+let isRegisteredWalletEventsHandlers = false;
+
 // Add default handler for wallet event "accountsChanged"
 walletEventsHandlers.accountsChanged.push(accounts => {
     // Call "getConnectedAddress" to ensure "walletStatus" ends up being updated, if needed
@@ -45,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 await handler(chainIdHex);
             }
         });
+        isRegisteredWalletEventsHandlers = true;
     }
 });
 
@@ -92,13 +95,34 @@ function refreshWallet() {
             await window.ethereum.request({
                 method: 'eth_accounts',
             });
-            // Then trigger the "walletEventsHandlers" for "accountsChanged"
-            window.ethereum.emit('accountsChanged');
+            /**
+             * Then trigger the "walletEventsHandlers" for "accountsChanged",
+             * AFTER those handlers are registered on "DOMContentLoaded".
+             */
+            emitAccountsChangedAfterRegisteredWalletEventsHandlers();
         });
         return true;
     } else {
         return false;
     }
+}
+
+/**
+ * This method is required for the (random / slow network) situation when "refreshWallet" would
+ * emit "accountsChanged" BEFORE the handlers for that event are registerd in "DOMContentLoaded".
+ * (i.e. "DOMContentLoaded" is triggered AFTER the wallet responds with the connected address)
+ */
+function emitAccountsChangedAfterRegisteredWalletEventsHandlers() {
+    if (isRegisteredWalletEventsHandlers) {
+        window.ethereum.emit('accountsChanged');
+        return;
+    }
+    const interval = setInterval(() => {
+        if (isRegisteredWalletEventsHandlers) {
+            clearInterval(interval);
+            window.ethereum.emit('accountsChanged');
+        }
+    }, 100);
 }
 
 /**
