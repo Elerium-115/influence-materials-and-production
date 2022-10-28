@@ -1471,6 +1471,7 @@ function selectPlannedProduct(productNameCompact) {
 /**
  * Valid "context" values:
  * - "add_from_shopping_list"
+ * - "copy_to_different_asteroid"
  * - "move_to_different_asteroid"
  */
 function onClickSelectAsteroidForProduct(productName, context = 'add_from_shopping_list') {
@@ -1482,6 +1483,9 @@ function onClickSelectAsteroidForProduct(productName, context = 'add_from_shoppi
         case 'add_from_shopping_list':
             selectAsteroidText = 'Select an asteroid where you plan to produce';
             break;
+        case 'copy_to_different_asteroid':
+            selectAsteroidText = 'Select a different asteroid where you want to copy the production of';
+            break;
         case 'move_to_different_asteroid':
             selectAsteroidText = 'Select a different asteroid where you want to move the production of';
             break;
@@ -1491,16 +1495,21 @@ function onClickSelectAsteroidForProduct(productName, context = 'add_from_shoppi
     let asteroidCardsHtml = '';
     let onClickValue = '';
     asteroidsPlannerTree.forEach(asteroidData => {
+        if (context === 'copy_to_different_asteroid' || context === 'move_to_different_asteroid') {
+            // Skip currently selected asteroid
+            if (asteroidData.asteroid_name === asteroidsPlannerSelection.asteroidName) {
+                return;
+            }
+        }
         switch (context) {
             case 'add_from_shopping_list':
                 onClickValue = `addPlannedProductToAsteroid('${productName}', '${asteroidData.asteroid_name}')`;
                 break;
+            case 'copy_to_different_asteroid':
+                onClickValue = `copyPlannedProductFromAsteroidToAsteroid('${productName}', '${asteroidsPlannerSelection.asteroidName}', '${asteroidData.asteroid_name}', false)`;
+                break;
             case 'move_to_different_asteroid':
-                // Skip currently selected asteroid
-                if (asteroidData.asteroid_name === asteroidsPlannerSelection.asteroidName) {
-                    return;
-                }
-                onClickValue = `movePlannedProductFromAsteroidToAsteroid('${productName}', '${asteroidsPlannerSelection.asteroidName}', '${asteroidData.asteroid_name}')`;
+                onClickValue = `copyPlannedProductFromAsteroidToAsteroid('${productName}', '${asteroidsPlannerSelection.asteroidName}', '${asteroidData.asteroid_name}', true)`;
                 break;
         }
         asteroidCardsHtml += /*html*/ `
@@ -1543,11 +1552,13 @@ function addPlannedProductToAsteroid(productName, asteroidName) {
     closeOverlayAndSelectProductOnAsteroid(productName, asteroidName);
 }
 
-function movePlannedProductFromAsteroidToAsteroid(productName, fromAsteroidName, toAsteroidName) {
+function copyPlannedProductFromAsteroidToAsteroid(productName, fromAsteroidName, toAsteroidName, deleteOriginal) {
     const plannedProductData = getPlannedProductData(fromAsteroidName, productName);
     const toAsteroidData = getAsteroidData(toAsteroidName);
     toAsteroidData.planned_products.push(plannedProductData);
-    deletePlannedProductRaw(fromAsteroidName, productName);
+    if (deleteOriginal) {
+        deletePlannedProductRaw(fromAsteroidName, productName);
+    }
     closeOverlayAndSelectProductOnAsteroid(productName, toAsteroidName);
 }
 
@@ -1977,8 +1988,11 @@ function updateContent() {
                         <div class="product-name">${plannedProductName}</div>
                         <div class="card-icon zoom-image"></div>
                     </div>
-                    <div class="cta-text cta-move-text move-to-different-asteroid" onclick="onClickSelectAsteroidForProduct('${plannedProductName}', 'move_to_different_asteroid')"></div>
-                    <div class="cta-text cta-remove-text delete-card" onclick="deletePlannedProduct('${asteroidName}', '${plannedProductName}')"></div>
+                    <div class="cta-texts">
+                        <div class="cta-text cta-copy-text copy-to-different-asteroid" onclick="onClickSelectAsteroidForProduct('${plannedProductName}', 'copy_to_different_asteroid')"></div>
+                        <div class="cta-text cta-move-text move-to-different-asteroid" onclick="onClickSelectAsteroidForProduct('${plannedProductName}', 'move_to_different_asteroid')"></div>
+                        <div class="cta-text cta-remove-text delete-card" onclick="deletePlannedProduct('${asteroidName}', '${plannedProductName}')"></div>
+                    </div>
                 </div>
                 <div class="content-info-wrapper">
                     ${ctaProductionChainHtml}

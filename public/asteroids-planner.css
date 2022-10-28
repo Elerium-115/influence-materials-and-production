@@ -50,24 +50,29 @@
     height: 1rem;
     margin-right: 1rem;
 }
+.cta-texts {
+    display: flex;
+}
 .cta-text {
     color: white;
+    font-size: 0.9rem;
     text-align: center;
     cursor: pointer;
     margin: 0 auto;
-    padding: 0.5rem;
+    padding: 0.25rem 0.5rem;
     border-radius: 1rem;
     opacity: 0.25;
 }
 .cta-text:hover {
     opacity: 1;
 }
-.cta-remove-text:hover {
-    background: red;
-}
+.cta-copy-text:hover,
 .cta-move-text:hover {
     background: var(--brand-text);
     color: black;
+}
+.cta-remove-text:hover {
+    background: red;
 }
 
 #asteroids-planner-wrapper {
@@ -787,6 +792,7 @@
 
 #content .remove-all-asteroids {
     display: inline-block;
+    width: 11rem; /* same as ".content-cards" minmax */
     margin-top: 2rem;
 }
 
@@ -1000,16 +1006,21 @@
     max-width: 11rem;
 }
 
-.content-cards.single-card .delete-card::after {
-    content: 'Remove';
-}
-
+.single-asteroid .content-cards.single-card .replicate-on-different-asteroid,
 .single-asteroid .content-cards.single-card .move-to-different-asteroid {
     display: none;
 }
 
+.content-cards.single-card .copy-to-different-asteroid::after {
+    content: 'Copy';
+}
+
 .content-cards.single-card .move-to-different-asteroid::after {
-    content: 'Move the production to another asteroid';
+    content: 'Move';
+}
+
+.content-cards.single-card .delete-card::after {
+    content: 'Remove';
 }
 
 
