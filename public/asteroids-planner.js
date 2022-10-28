@@ -1555,6 +1555,10 @@ function addPlannedProductToAsteroid(productName, asteroidName) {
 function copyPlannedProductFromAsteroidToAsteroid(productName, fromAsteroidName, toAsteroidName, deleteOriginal) {
     const plannedProductData = getPlannedProductData(fromAsteroidName, productName);
     const toAsteroidData = getAsteroidData(toAsteroidName);
+    if (toAsteroidData.planned_products.find(productData => productData.planned_product_name === productName)) {
+        alert(`${productName} is already planned on ${toAsteroidName}`);
+        return;
+    }
     toAsteroidData.planned_products.push(plannedProductData);
     if (deleteOriginal) {
         deletePlannedProductRaw(fromAsteroidName, productName);
