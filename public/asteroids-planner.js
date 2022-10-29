@@ -322,7 +322,13 @@ async function postAsteroidsPlanForConnectedAddress(asteroidsPlan) {
 
 async function loadAsteroidMetadataById(id) {
     let metadata = cacheAsteroidsMetadataById[id];
-    if (!metadata) {
+    if (metadata) {
+        /**
+         * Make a DEEP copy, to break all references to the cached data. This ensures that the cache
+         * will NOT be mutated by reference, if this newly assigned data gets mutated later on.
+         */
+        metadata = JSON.parse(JSON.stringify(metadata));
+    } else {
         // Data NOT cached => call to my API
         metadata = await fetchAsteroidMetadataById(id);
         if (metadata.error) {
@@ -350,7 +356,13 @@ async function loadAsteroidsPlanForConnectedAddress() {
 
 async function loadProductionPlanDataById(id) {
     let data = cacheProductionPlanDataById[id] || mockProductionPlanDataById[id];
-    if (!data) {
+    if (data) {
+        /**
+         * Make a DEEP copy, to break all references to the cached data. This ensures that the cache
+         * will NOT be mutated by reference, if this newly assigned data gets mutated later on.
+         */
+        data = JSON.parse(JSON.stringify(data));
+    } else {
         // Data NOT cached => call to my API
         data = await fetchProductionPlanDataById(id);
         if (data.error) {
@@ -1152,7 +1164,13 @@ async function updateWalletAsteroidsPanel() {
     }
     // Wallet is connected => show asteroids from wallet, if any
     let asteroids = cacheAsteroidsByAddress[connectedAddress.toLowerCase()];
-    if (!asteroids) {
+    if (asteroids) {
+        /**
+         * Make a DEEP copy, to break all references to the cached data. This ensures that the cache
+         * will NOT be mutated by reference, if this newly assigned data gets mutated later on.
+         */
+        asteroids = JSON.parse(JSON.stringify(asteroids));
+    } else {
         // Data NOT cached => call to my API
         elWalletAsteroidsStatus.classList.add('loading-asteroids');
         asteroids = await fetchAsteroidsFromWallet();
