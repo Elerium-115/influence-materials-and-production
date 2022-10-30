@@ -18,9 +18,9 @@ const walletEventsHandlers = {
 let isRegisteredWalletEventsHandlers = false;
 
 // Add default handler for wallet event "accountsChanged"
-walletEventsHandlers.accountsChanged.push(accounts => {
+walletEventsHandlers.accountsChanged.push(async (accounts) => {
     // Call "getConnectedAddress" to ensure "walletStatus" ends up being updated, if needed
-    getConnectedAddress();
+    await getConnectedAddress();
 });
 
 /* DISABLED
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Source: https://ethereum.org/en/developers/tutorials/hello-world-smart-contract-fullstack/#the-connectWallet-function
 async function connectWallet(isExampleAsteroidsPlan = false) {
-    if (!getConnectedAddress() && isExampleAsteroidsPlan) {
+    if (!await getConnectedAddress() && isExampleAsteroidsPlan) {
         /**
          * Attempting to connect a wallet while using the "example" asteroids plan
          * => require confirmation, before resetting the asteroids plan.
@@ -70,7 +70,7 @@ async function connectWallet(isExampleAsteroidsPlan = false) {
             });
             /**
              * NOT using the address returned by this request.
-             * Instead, "ethereum.selectedAddress" will be used.
+             * Instead, "getConnectedAddress" will be used.
              */
             return;
         } catch (error) {
@@ -129,9 +129,19 @@ function emitAccountsChangedAfterRegisteredWalletEventsHandlers() {
  * NOTE: This function may return a connected address even if the latest "accountsChanged" event indicated NO connected address.
  * This is happening e.g. on the initial page load, when the wallet is connected, but the actual address is not retrieved immediately.
  */
-function getConnectedAddress() {
+async function getConnectedAddress() {
     // WARNING: "ethereum.selectedAddress" is deprecated?
-    const connectedAddressNew = window.ethereum?.selectedAddress;
+    let connectedAddressNew = window.ethereum?.selectedAddress;
+    if (!connectedAddressNew && window.ethereum) {
+        /**
+         * Fix for Brave wallet re: "ethereum.selectedAddress" undefined
+         * after navigating back to a page where the wallet is already connected.
+         */
+        const ethAccounts = await window.ethereum.request({
+            method: 'eth_accounts',
+        });
+        connectedAddressNew = ethAccounts[0];
+    }
     updateWalletStatusForConnectedAddress(connectedAddressNew);
     return connectedAddressNew;
 }

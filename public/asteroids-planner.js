@@ -232,7 +232,7 @@ async function fetchAsteroidMetadataById(id) {
 }
 
 async function fetchAsteroidsFromWallet() {
-    const connectedAddress = getConnectedAddress();
+    const connectedAddress = await getConnectedAddress();
     if (!connectedAddress) {
         return {error: 'No connected address'};
     }
@@ -255,7 +255,7 @@ async function fetchAsteroidsFromWallet() {
 }
 
 async function fetchAsteroidsPlanForConnectedAddress() {
-    const connectedAddress = getConnectedAddress();
+    const connectedAddress = await getConnectedAddress();
     if (!connectedAddress) {
         return {error: 'No connected address'};
     }
@@ -297,7 +297,7 @@ async function fetchProductionPlanDataById(id) {
 }
 
 async function postAsteroidsPlanForConnectedAddress(asteroidsPlan) {
-    const connectedAddress = getConnectedAddress();
+    const connectedAddress = await getConnectedAddress();
     if (!connectedAddress) {
         return {error: 'No connected address'};
     }
@@ -472,7 +472,7 @@ function deletePlannedProductRaw(asteroidName, plannedProductName) {
 
 async function saveAsteroidsPlan() {
     const asteroidsPlan = getAsteroidsPlanFromTree();
-    if (getConnectedAddress()) {
+    if (await getConnectedAddress()) {
         if (!asteroidsPlan.length && apiErrorOnLoadAsteroidsPlan !== null) {
             /**
              * Do NOT save an empty asteroids plan, if there was an API error when loading the existing asteroids plan.
@@ -1157,7 +1157,7 @@ async function updateWalletAsteroidsPanel() {
     resetWalletAsteroidsFilters();
     elSelectedAsteroidsCta.classList.add('disabled');
     elWalletAsteroids.innerHTML = '';
-    const connectedAddress = getConnectedAddress();
+    const connectedAddress = await getConnectedAddress();
     if (!connectedAddress) {
         elWalletAsteroidsStatus.classList.add('not-connected');
         return;
@@ -1644,7 +1644,7 @@ async function onClickProductionPlanActions(actions) {
          * Saving a production plan requires a connected wallet.
          * NOTE: The "mock" production plans (from the "example" asteroids plan) are read-only.
          */
-        if (!getConnectedAddress()) {
+        if (!await getConnectedAddress()) {
             alert('Please connect a wallet such as MetaMask, in order to save production plans');
             return;
         }
@@ -1733,7 +1733,7 @@ function updatePlannedProductDataBasedOnProductionPlanData(plannedProductData, p
     };
 }
 
-function resetContent() {
+async function resetContent() {
     elContent.innerHTML = /*html*/ `
         <h3 id="start-title">Start planning your production chains across asteroids.</h3>
         <ul>
@@ -1746,7 +1746,7 @@ function resetContent() {
     const elStartTitle = document.getElementById('start-title');
     // Delete any potential button-connections from previous calls of this function
     deleteButtonConnections();
-    if (getConnectedAddress()) {
+    if (await getConnectedAddress()) {
         // Connected address => do NOT show the see-example button (the example-title is already hidden at this point)
         elButtonSeeExample.classList.add('hidden');
     } else {
@@ -1767,12 +1767,13 @@ function resetContent() {
 function updateContent() {
     const {asteroidName, plannedProductName, intermediateProductName} = asteroidsPlannerSelection;
     if (!asteroidsPlannerTree.length) {
-        resetContent();
+        resetContent(); // NOTE: async function, should be ok to call without "await" in this context
         isExampleAsteroidsPlan = false;
         return;
     }
     refreshAsteroidsPlannerBreadcrumbsHtml();
     elContent.innerHTML = '';
+    const qtyNoteHtml = /*html*/ `<div class="qty-note">Quantities are not final. They are only an example, assuming a required quantity of x2 for each input, of each process.</div>`;
     if (!asteroidName) {
         // Home
         let asteroidCardsHtml = '';
@@ -1989,6 +1990,7 @@ function updateContent() {
                     <div class="required-cell required-modules can-add-product">${modulesHtml}</div>
                     <div class="required-cell required-spectral-types">${spectralTypesHtml}</div>
                 </div>
+                ${qtyNoteHtml}
             `;
         } else {
             intermediateProductsAndShoppingListHtml = /*html*/ `
@@ -2061,10 +2063,11 @@ function updateContent() {
                 <div class="content-info-wrapper">
                     This is an intermediate product, selected for the planned product <a onclick="${onClickPlannedProductValue}">${plannedProductName}</a>.
                     <br><br>
-                    <span class="brand-text">x<span class="required-qty">...</span> ${intermediateProductName} (self-produced)</span> required for the production of <span class="brand-text">x1 ${plannedProductName}</span>, with the current production plan.
+                    <span class="brand-text">x<span class="required-qty">...</span> ${intermediateProductName}</span> (self-produced) required for the production of <span class="brand-text">x1 ${plannedProductName}</span>, with the current production plan.
                     <span class="required-qty-disclaimer"></span>
                     <br><br>
                     To add or remove intermediate products, <a onclick="${onClickPlannedProductValue}">edit the production chain</a> for the planned product.
+                    ${qtyNoteHtml}
                 </div>
             </div>
         `;
@@ -2082,7 +2085,7 @@ function updateContent() {
             const sameProductInShoppingList = shoppingList.inputs.find(product => product.name === intermediateProductName);
             if (sameProductInShoppingList) {
                 elContent.querySelector('.required-qty-disclaimer').innerHTML = /*html*/ `
-                    <br><br>Additionally, <a onclick="${onClickPlannedProductValue}">x${sameProductInShoppingList.qty} ${intermediateProductName} (outsourced)</a> also required as part of the Shopping List for the current production plan.
+                    <br><br>Additionally, <a onclick="${onClickPlannedProductValue}">x${sameProductInShoppingList.qty} ${intermediateProductName}</a> (outsourced) also required as part of the Shopping List for the current production plan.
                 `;
             }
         });
@@ -2137,7 +2140,7 @@ function onClickTreeItem(asteroidName, plannedProductName, intermediateProductNa
 
 async function updateAsteroidsPlanOnAccountsChanged() {
     const currentAsteroidsPlannerTree = [...asteroidsPlannerTree];
-    if (getConnectedAddress()) {
+    if (await getConnectedAddress()) {
         // CONNECTED address (wallet has become connected, or connected address has changed)
         const savedAsteroidsPlan = await loadAsteroidsPlanForConnectedAddress();
         if (savedAsteroidsPlan && savedAsteroidsPlan.length) {
@@ -2194,13 +2197,13 @@ async function updateAsteroidsPlanOnAccountsChanged() {
             resetAsteroidsPlan();
         } else {
             // Currently-selected asteroids plan EMPTY => reset content
-            resetContent();
+            await resetContent();
         }
     }
 }
 
-function updateWalletCtaInstancesOnAccountsChanged() {
-    const connectedAddress = getConnectedAddress();
+async function updateWalletCtaInstancesOnAccountsChanged() {
+    const connectedAddress = await getConnectedAddress();
     if (connectedAddress) {
         // Hide the "Connect wallet" buttons, and show the buttons with the connected address
         elsConnectWalletCta.forEach(el => el.classList.add('hidden'));
