@@ -790,6 +790,12 @@
     content: ' or C required';
 }
 
+#content .qty-note {
+    font-size: 0.8rem;
+    margin-top: 2rem;
+    opacity: 0.5;
+}
+
 #content .remove-all-asteroids {
     display: inline-block;
     width: 11rem; /* same as ".content-cards" minmax */
@@ -1006,7 +1012,7 @@
     max-width: 11rem;
 }
 
-.single-asteroid .content-cards.single-card .replicate-on-different-asteroid,
+.single-asteroid .content-cards.single-card .copy-to-different-asteroid,
 .single-asteroid .content-cards.single-card .move-to-different-asteroid {
     display: none;
 }
