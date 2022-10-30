@@ -2047,6 +2047,7 @@ function updateContent() {
         });
     } else {
         // Intermediate product
+        const onClickPlannedProductValue = `onClickTreeItem('${asteroidName}', '${plannedProductName}')`;
         elContent.innerHTML = /*html*/ `
             <h3 class="content-title">Intermediate product</h3>
             <div class="content-columns">
@@ -2058,14 +2059,33 @@ function updateContent() {
                     </div>
                 </div>
                 <div class="content-info-wrapper">
-                    This is an intermediate product, selected for the planned product <a onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}')">${plannedProductName}</a>.
+                    This is an intermediate product, selected for the planned product <a onclick="${onClickPlannedProductValue}">${plannedProductName}</a>.
                     <br><br>
-                    <span class="brand-text">x2 ${intermediateProductName}</span> required for the production of <span class="brand-text">x1 ${plannedProductName}</span>, with the current production plan.
+                    <span class="brand-text">x<span class="required-qty">...</span> ${intermediateProductName} (self-produced)</span> required for the production of <span class="brand-text">x1 ${plannedProductName}</span>, with the current production plan.
+                    <span class="required-qty-disclaimer"></span>
                     <br><br>
-                    To add or remove intermediate products, <a onclick="onClickTreeItem('${asteroidName}', '${plannedProductName}')">edit the production chain</a> for the planned product.
+                    To add or remove intermediate products, <a onclick="${onClickPlannedProductValue}">edit the production chain</a> for the planned product.
                 </div>
             </div>
         `;
+        // Load production plan and calculate required qty for this intermediate product
+        const plannedProductData = getPlannedProductData(asteroidName, plannedProductName);
+        loadProductionPlanDataById(plannedProductData.production_plan_id).then(productionPlanData => {
+            const itemDataById = productionPlanData.itemDataById;
+            const requiredQty = getTotalQtyForAllSelectedOccurrencesOfProductName(intermediateProductName, itemDataById);
+            elContent.querySelector('.required-qty').textContent = requiredQty;
+            /**
+             * Show disclaimer re: qty, if the same intermediate product name
+             * also appears in the shopping list for this production plan.
+             */
+            const shoppingList = getShoppingListForProductionPlan(itemDataById);
+            const sameProductInShoppingList = shoppingList.inputs.find(product => product.name === intermediateProductName);
+            if (sameProductInShoppingList) {
+                elContent.querySelector('.required-qty-disclaimer').innerHTML = /*html*/ `
+                    <br><br>Additionally, <a onclick="${onClickPlannedProductValue}">x${sameProductInShoppingList.qty} ${intermediateProductName} (outsourced)</a> also required as part of the Shopping List for the current production plan.
+                `;
+            }
+        });
     }
 }
 

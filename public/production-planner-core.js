@@ -314,6 +314,51 @@ function getShoppingListForProductionPlan(itemDataById) {
     return shoppingList;
 }
 
+/**
+ * Get input-qty required for an input of a process
+ */
+ function getInputQtyForProcess(processId, inputProductId) {
+    const processData = processDataById[processId];
+    let inputQty = 0;
+    processData.inputs.forEach(inputData => {
+        if (Number(inputData.productId) === inputProductId) {
+            inputQty = inputData.qty;
+        }
+    });
+    return inputQty;
+}
+
+/**
+ * Get total-qty required for a product-item from the given production chain,
+ * by recursively multiplying each input-qty from that sub-chain, up to the planned-product
+ */
+function getTotalQtyForItemId(itemId, itemDataById) {
+    let totalQty = 1;
+    const inputItemData = itemDataById[itemId];
+    const inputProductId = inputItemData.productId;
+    const processItemId = inputItemData.parentItemId;
+    if (processItemId) {
+        const processItemData = itemDataById[processItemId];
+        const processId = processItemData.processId;
+        const inputQty = getInputQtyForProcess(processId, inputProductId);
+        totalQty = inputQty;
+        totalQty *= getTotalQtyForItemId(processItemData.parentItemId, itemDataById);
+    }
+    return totalQty;
+}
+
+function getTotalQtyForAllSelectedOccurrencesOfProductName(productName, itemDataById) {
+    let qty = 0;
+    const productId = Number(productDataByName[productName].id);
+    for (const [itemId, itemData] of Object.entries(itemDataById)) {
+        // Parse only SELECTED occurrences of this product ID
+        if (itemData.isSelected && itemData.productId === productId) {
+            qty += getTotalQtyForItemId(itemId, itemDataById);
+        }
+    }
+    return qty;
+}
+
 function isAlwaysConfirmChecked() {
     return document.getElementById('toggle-always-confirm').checked;
 }
@@ -873,39 +918,6 @@ function markProcessNotWaitingSelection(itemId) {
     getChildContainersOfItemId(itemId).forEach(inputContainer => {
         inputContainer.classList.remove('waiting-selection');
     });
-}
-
-/**
- * Get input-qty required for an input of a process
- */
-function getInputQtyForProcess(processId, inputProductId) {
-    const processData = processDataById[processId];
-    let inputQty = 0;
-    processData.inputs.forEach(inputData => {
-        if (Number(inputData.productId) === inputProductId) {
-            inputQty = inputData.qty;
-        }
-    });
-    return inputQty;
-}
-
-/**
- * Get total-qty required for a product-item from the given production chain,
- * by recursively multiplying each input-qty from that sub-chain, up to the planned-product
- */
-function getTotalQtyForItemId(itemId, itemDataById) {
-    let totalQty = 1;
-    const inputItemData = itemDataById[itemId];
-    const inputProductId = inputItemData.productId;
-    const processItemId = inputItemData.parentItemId;
-    if (processItemId) {
-        const processItemData = itemDataById[processItemId];
-        const processId = processItemData.processId;
-        const inputQty = getInputQtyForProcess(processId, inputProductId);
-        totalQty = inputQty;
-        totalQty *= getTotalQtyForItemId(processItemData.parentItemId, itemDataById);
-    }
-    return totalQty;
 }
 
 function setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById) {
