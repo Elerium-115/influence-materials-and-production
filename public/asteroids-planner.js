@@ -124,6 +124,11 @@ function getAsteroidData(asteroidName) {
     return asteroidsPlannerTree.find(data => data.asteroid_name === asteroidName);
 }
 
+function getInGameAsteroidIdFromName(asteroidName) {
+    const asteroidIdMatches = asteroidName.match(/Asteroid #(\d+)/);
+    return asteroidIdMatches ? asteroidIdMatches[1] : null;
+}
+
 function getListOfPlannedProducts(asteroidName) {
     const asteroidData = getAsteroidData(asteroidName);
     if (!asteroidData) {
@@ -1777,6 +1782,7 @@ function updateContent() {
     if (!asteroidName) {
         // Home
         let asteroidCardsHtml = '';
+        let inGameAsteroidIds = [];
         asteroidsPlannerTree.forEach(asteroidData => {
             let cardIconMoveUpHtml = '';
             let cardIconMoveDownHtml = '';
@@ -1802,7 +1808,27 @@ function updateContent() {
                     </div>
                 </div>
             `;
+            const inGameAsteroidId = getInGameAsteroidIdFromName(asteroidData.asteroid_name);
+            if (inGameAsteroidId) {
+                inGameAsteroidIds.push(inGameAsteroidId);
+            }
         });
+        let tyrellYutaniWidgetHtml = '';
+        let excludingMockRocksHtml = '';
+        if (asteroidsPlannerTree.length > inGameAsteroidIds.length) {
+            excludingMockRocksHtml = /*html*/ `<span class="excluding-mock-rocks">(excluding mock rocks)</span>`;
+        }
+        if (inGameAsteroidIds.length) {
+            tyrellYutaniWidgetHtml = /*html*/ `
+                <div id="tyrell-yutani-widget">
+                    <h3>In-game asteroids map${excludingMockRocksHtml}</h3>
+                    <div class="iframe-wrapper">
+                        <iframe src="https://tyrell-yutani.app/#/widgets/coastin?id=${inGameAsteroidIds.join('_')}&lookahead=3"></iframe>
+                    </div>
+                    <div class="credits">Asteroids map by <a href="https://tyrell-yutani.app/" target="_blank">Tyrell-Yutani</a></div>
+                </div>
+            `;
+        }
         elContent.innerHTML = /*html*/ `
             <h3 class="content-title">Asteroids with planned production chains</h3>
             <div class="content-cards">
@@ -1816,21 +1842,22 @@ function updateContent() {
                 ${asteroidCardsHtml}
             </div>
             <div class="cta-text cta-remove-text remove-all-asteroids" onclick="resetAsteroidsPlan(true)">Remove all asteroids</div>
+            ${tyrellYutaniWidgetHtml}
         `;
     } else if (!plannedProductName) {
         // Asteroid
         let productCardsHtml = '';
         const asteroidData = getAsteroidData(asteroidName);
-        const asteroidIdMatches = asteroidName.match(/Asteroid #(\d+)/);
+        const inGameAsteroidId = getInGameAsteroidIdFromName(asteroidName);
         let asteroidInfoHtml = '';
-        if (asteroidIdMatches) {
+        if (inGameAsteroidId) {
             // In-game asteroid
             asteroidInfoHtml = /*html*/ `
                 <a class="influence-logo-icon loading" target="_blank" title="View in-game"></a>
                 <div class="asteroid-details">Loading...</div>
             `;
             // Show full asteroid details, after they are loaded from cache / API (async)
-            loadAsteroidMetadataById(asteroidIdMatches[1]).then(metadata => {
+            loadAsteroidMetadataById(inGameAsteroidId).then(metadata => {
                 const elAsteroidDetails = elContent.querySelector('.asteroid-details');
                 if (!elAsteroidDetails) {
                     /**
