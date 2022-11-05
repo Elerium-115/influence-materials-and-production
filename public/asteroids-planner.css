@@ -1030,6 +1030,39 @@
 }
 
 
+/* Tyrell-Yutani asteroids map */
+
+#tyrell-yutani-widget {
+    margin-top: 2rem;
+}
+
+#tyrell-yutani-widget h3 .excluding-mock-rocks {
+    margin-left: 0.5rem;
+    opacity: 0.5;
+}
+
+#tyrell-yutani-widget .iframe-wrapper {
+    position: relative;
+    background: #222;
+    margin-top: 1rem;
+    padding-bottom: 100%; /* ensure 1:1 ratio */
+    border: 1px solid var(--default-text_semifaded);
+}
+
+#tyrell-yutani-widget .iframe-wrapper iframe {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 2px);
+    border: none;
+}
+
+#tyrell-yutani-widget .credits {
+    font-size: 0.9rem;
+    text-align: right;
+    margin-top: 0.5rem;
+}
+
+
 /* Overlays */
 
 #overlay-wrapper {
