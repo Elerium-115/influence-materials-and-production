@@ -1819,11 +1819,17 @@ function updateContent() {
             excludingMockRocksHtml = /*html*/ `<span class="excluding-mock-rocks">(excluding mock rocks)</span>`;
         }
         if (inGameAsteroidIds.length) {
+            /** URL parameters for Tyrell-Yutani iframe src:
+             * - id = list of asteroid IDs, separated by "_" (e.g. "1_22_333")
+             * - lookahead = number of future days to indicate (e.g. "3")
+             * - time = UNIX time input
+             * - dph = playback speed, as Adalian days per real hour (e.g. "86400" = 60 sec * 60 min * 24 hours => 1 day per second)
+             */
             tyrellYutaniWidgetHtml = /*html*/ `
                 <div id="tyrell-yutani-widget">
                     <h3>In-game asteroids map${excludingMockRocksHtml}</h3>
                     <div class="iframe-wrapper">
-                        <iframe src="https://tyrell-yutani.app/#/widgets/coastin?id=${inGameAsteroidIds.join('_')}&lookahead=3"></iframe>
+                        <iframe src="https://tyrell-yutani.app/#/widgets/coastin?id=${inGameAsteroidIds.join('_')}&lookahead=0&dph=86400"></iframe>
                     </div>
                     <div class="credits">Asteroids map by <a href="https://tyrell-yutani.app/" target="_blank">Tyrell-Yutani</a></div>
                 </div>
