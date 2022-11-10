@@ -1044,9 +1044,11 @@
 #tyrell-yutani-widget .iframe-wrapper {
     position: relative;
     background: #222;
+    overflow: hidden;
     margin-top: 1rem;
     padding-bottom: 100%; /* ensure 1:1 ratio */
     border: 1px solid var(--default-text_semifaded);
+    border-radius: 1rem;
 }
 
 #tyrell-yutani-widget .iframe-wrapper iframe {
