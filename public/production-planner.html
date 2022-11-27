@@ -16,6 +16,13 @@
     <meta name="twitter:description" content="Plan your production chain for a specific product.">
 </head>
 <body>
+    <script>
+        // Run embedding logic ASAP, instead of requesting it via a script file
+        const queryParams = new URLSearchParams(window.location.search);
+        if (queryParams.has('embed')) {
+            document.body.classList.add('embed');
+        }
+    </script>
     <div class="main production-planner">
         <nav class="topbar">
             <a href="https://my.adalia.id/" target="_blank" id="dalia-id-logo" title="my.adalia.id">
@@ -117,7 +124,6 @@
     <script src="./abstract-core.js"></script>
     <script src="./production-core.js"></script>
     <script src="./production-planner-core.js"></script>
-    <script src="./embed-core.js"></script>
 
     <!-- Scripts specific to this tool, loaded at the very end -->
     <script src="./production-planner.js"></script>
