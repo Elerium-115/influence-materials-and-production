@@ -1578,6 +1578,10 @@ body.overlay-visible {
     background: var(--default-bg);
 }
 
+.embed #template-production-plan {
+    background: unset;
+}
+
 /**
  * "z-index" = 1 required for correct animation,
  * but must NOT be set when the template-production-plan is shown,

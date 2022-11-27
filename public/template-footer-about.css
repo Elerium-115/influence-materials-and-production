@@ -1,4 +1,8 @@
 
+.embed #template-footer-about {
+    display: none;
+}
+
 .footer-about {
     display: flex;
     justify-content: space-evenly;

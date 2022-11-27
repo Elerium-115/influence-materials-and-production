@@ -3,16 +3,16 @@ const tools = [
         category_short: 'Mining',
         category: 'Mining Tools',
         items: [
-            {title: 'Raw Materials', author: 'Elerium115', url: 'https://materials.adalia.id/'},
-            {title: 'Materials Ratios', author: 'Elerium115', url: 'https://materials.adalia.id/ratios.html'},
+            {title: 'Raw Materials', author: 'Elerium115', url: 'https://materials.adalia.id/?embed'},
+            {title: 'Materials Ratios', author: 'Elerium115', url: 'https://materials.adalia.id/ratios.html?embed'},
         ],
     },
     {
         category_short: 'Production',
         category: 'Production Tools',
         items: [
-            {title: 'Production Planner', author: 'Elerium115', url: 'https://materials.adalia.id/production-planner.html'},
-            {title: 'Production Chains', author: 'Elerium115', url: 'https://materials.adalia.id/production.html'},
+            {title: 'Production Planner', author: 'Elerium115', url: 'https://materials.adalia.id/production-planner.html?embed'},
+            {title: 'Production Chains', author: 'Elerium115', url: 'https://materials.adalia.id/production.html?embed'},
             {title: 'Product List', author: 'Daharius', url: 'https://influence.daharius.com/ProductList'},
         ],
     },
@@ -20,7 +20,7 @@ const tools = [
         category_short: 'Asteroids',
         category: 'Asteroids Tools',
         items: [
-            {title: 'Asteroids Planner', author: 'Elerium115', url: 'https://materials.adalia.id/asteroids-planner.html'},
+            {title: 'Asteroids Planner', author: 'Elerium115', url: 'https://materials.adalia.id/asteroids-planner.html?embed'},
             {title: 'Asteroid Management', author: 'Tyrell-Yutani', url: 'https://tyrell-yutani.app/#/asteroid'},
             {title: 'Asteroid Tracker & Visualizer', author: 'Daharius', url: 'https://influence.daharius.com/AsteroidsTracker'},
             {title: 'Adalia Co-orbital Rocks', author: 'RGR', url: 'https://adalia.coorbital.rocks/'},
