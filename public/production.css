@@ -1165,6 +1165,11 @@
     border-radius: 0.5rem;
 }
 
+.embed #shopping-list-wrapper {
+    background: unset;
+    backdrop-filter: opacity(1);
+}
+
 #shopping-list {
     text-align: left;
     margin-top: 1rem;

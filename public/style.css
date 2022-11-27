@@ -175,6 +175,10 @@ body {
     font-family: Jura, sans-serif;
 }
 
+body.embed {
+    background-color: unset;
+}
+
 .rarity-common { color: var(--rarity-common); }
 .rarity-uncommon { color: var(--rarity-uncommon); }
 .rarity-rare { color: var(--rarity-rare); }
@@ -204,12 +208,21 @@ body {
     z-index: 1;
 }
 
+.embed > .main > .topbar:not(.topbar-sections) {
+    display: none;
+}
+
 .topbar-sections {
     justify-content: space-between;
 }
 
 .topbar-section-left {
     display: flex;
+}
+
+.embed .topbar-section-left {
+    width: 0;
+    overflow: hidden;
 }
 
 .topbar:not(.topbar-sections) > *,
