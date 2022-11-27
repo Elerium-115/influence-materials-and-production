@@ -16,6 +16,13 @@
     <meta name="twitter:description" content="View the ratios of raw materials from a collection of asteroids, relative to the surface area of each spectral-type.">
 </head>
 <body>
+    <script>
+        // Run embedding logic ASAP, instead of requesting it via a script file
+        const queryParams = new URLSearchParams(window.location.search);
+        if (queryParams.has('embed')) {
+            document.body.classList.add('embed');
+        }
+    </script>
     <div class="main">
         <nav class="topbar">
             <a href="https://my.adalia.id/" target="_blank" id="dalia-id-logo" title="my.adalia.id">
@@ -285,9 +292,6 @@
             document.getElementById('template-footer-about').innerHTML = templateFooterAbout;
         </script>
     </div>
-
-    <!-- Third-party and "core" scripts, loaded first -->
-    <script src="./embed-core.js"></script>
 
     <!-- Scripts specific to this tool, loaded at the very end -->
     <script src="./ratios.js"></script>

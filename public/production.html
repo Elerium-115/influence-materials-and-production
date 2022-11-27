@@ -16,6 +16,13 @@
     <meta name="twitter:description" content="View the production chains for each material and finished good.">
 </head>
 <body>
+    <script>
+        // Run embedding logic ASAP, instead of requesting it via a script file
+        const queryParams = new URLSearchParams(window.location.search);
+        if (queryParams.has('embed')) {
+            document.body.classList.add('embed');
+        }
+    </script>
     <div class="main">
         <nav class="topbar">
             <a href="https://my.adalia.id/" target="_blank" id="dalia-id-logo" title="my.adalia.id">
@@ -135,7 +142,6 @@
     <script src="./influence-production-chains.js"></script>
     <script src="./abstract-core.js"></script>
     <script src="./production-core.js"></script>
-    <script src="./embed-core.js"></script>
 
     <!-- Scripts specific to this tool, loaded at the very end -->
     <script src="./production.js"></script>

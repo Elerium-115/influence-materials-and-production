@@ -17,6 +17,13 @@
     <meta name="twitter:description" content="Plan your production chains across multiple asteroids.">
 </head>
 <body>
+    <script>
+        // Run embedding logic ASAP, instead of requesting it via a script file
+        const queryParams = new URLSearchParams(window.location.search);
+        if (queryParams.has('embed')) {
+            document.body.classList.add('embed');
+        }
+    </script>
     <div class="main asteroids-planner">
         <nav class="topbar topbar-sections">
             <div class="topbar-section-left">
@@ -201,7 +208,6 @@
     <script src="./abstract-core.js"></script>
     <script src="./production-core.js"></script>
     <script src="./wallet-core.js"></script>
-    <script src="./embed-core.js"></script>
 
     <!-- Scripts required for "template-production-plan" -->
     <script src="./pagemap-1.4.0.min.js"></script>
