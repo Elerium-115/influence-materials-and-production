@@ -57,23 +57,20 @@ const cls = {
     standardWindowTitle: ['sc-bRlCZA', 'epbBDP'], // h1
     standardWindowClose: ['sc-hHTYSt', 'fAiLNU', 'sc-edLOhm', 'eRqRVr'], // button, has child "svg.e115IconClose"
     // Side menu
-    // sideMenu: ['sc-dkcEsn', 'iRcpof'], // not used yet
     sideMenuPanel: ['sc-jfTVlA', 'joMUIB'],
-    sideMenuPanelBar: ['sc-lbVpMG', 'lonsSj'],
+    sideMenuPanelBar: ['sc-lbVpMG', 'lonsSj'], // has child "svg.e115IconShip"
     sideMenuPanelTitle: ['sc-iOeugr', 'iwOMEl'], // h2
-    sideMenuPanelClose: ['sc-hHTYSt', 'fAiLNU', 'sc-jfvxQR', 'ceJfqQ'], // button
+    sideMenuPanelClose: ['sc-hHTYSt', 'fAiLNU', 'sc-jfvxQR', 'ceJfqQ'], // button, has child "svg.e115IconClose"
     sideMenuPanelContent: ['sc-gScZFl', 'egtYcz'],
     // Bottom menu
-    // bottomMenu: ['eXrXkm'], // not used yet
     bottomMenuItem: ['sc-kgTSHT', 'bKznIm'],
     bottomMenuItemLabel: ['sc-bBABsx', 'fERzvQ'],
     bottomMenuItemList: ['sc-iveFHk', 'bwpfoI'],
-    bottomMenuItemListItem: ['jCUfva'], // has child "svg.e115IconTool" + text
+    bottomMenuItemListItem: ['jCUfva'], // has child "svg.e115IconShip" + text
 };
 
 const svg = {
-    // e115IconTool: `<svg viewBox="0 0 24 24"><path d="M14.79,10.62L3.5,21.9L2.1,20.5L13.38,9.21L14.79,10.62M19.27,7.73L19.86,7.14L19.07,6.35L19.71,5.71L18.29,4.29L17.65,4.93L16.86,4.14L16.27,4.73C14.53,3.31 12.57,2.17 10.47,1.37L9.64,3.16C11.39,4.08 13,5.19 14.5,6.5L14,7L17,10L17.5,9.5C18.81,11 19.92,12.61 20.84,14.36L22.63,13.53C21.83,11.43 20.69,9.47 19.27,7.73Z"></path></svg>`,
-    e115IconTool: `<svg viewBox="0 0 221.73 94.58"><g><g><path fill="#fff" d="M221.73,47.3L110.78,0H0L71.49,30.77l-22.68,16.53,22.68,16.53L0,94.58H110.78l110.95-47.28Z"/></g></g></svg>`,
+    e115IconShip: `<svg viewBox="0 0 221.73 94.58"><g><g><path fill="#fff" d="M221.73,47.3L110.78,0H0L71.49,30.77l-22.68,16.53,22.68,16.53L0,94.58H110.78l110.95-47.28Z"/></g></g></svg>`,
     e115IconClose: `<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0z"></path><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>`,
 };
 
@@ -157,12 +154,14 @@ elStyleE115.innerHTML = /*html*/ `
     }
 
     /* Fill custom SVG icon */
-    [data-e115-panel-id] .e115-side-menu-panel-bar svg,
-    [data-e115-menu-id] .e115-bottom-menu-item-list-item svg {
+    [data-e115-menu-id] .e115-bottom-menu-item-list-item svg path {
         fill: rgba(255, 255, 255, 0.75);
     }
-    [data-e115-panel-id]:hover .e115-side-menu-panel-bar svg,
-    [data-e115-menu-id] .e115-bottom-menu-item-list-item:hover svg {
+    [data-e115-panel-id] .e115-side-menu-panel-bar svg path {
+        fill: rgba(255, 255, 255, 0.5);
+    }
+    [data-e115-panel-id]:hover .e115-side-menu-panel-bar svg path,
+    [data-e115-menu-id] .e115-bottom-menu-item-list-item:hover svg path {
         fill: white;
     }
 
@@ -216,12 +215,14 @@ elStyleE115.innerHTML = /*html*/ `
         padding: 10px;
     }
     .e115-list li:hover {
-        background: rgba(40, 40, 40, 0.5);
+        background: var(--e115-highlight-faded-10);
+    }
+
+    .e115-faded {
+        opacity: 0.5;
     }
 `;
 document.head.appendChild(elStyleE115);
-
-let onClickById = {};
 
 function getElLastBottomMenuItem() {
     const elsBottomMenuItem = document.querySelectorAll(`.${cls.bottomMenuItem[1]}`);
@@ -308,7 +309,7 @@ function injectSideMenuPanel(title, items_stringify) {
     elNewSideMenuPanel.dataset.e115PanelId = title;
     // Prepare new side menu panel > bar
     const elNewSideMenuPanelBar = createEl('div', cls.sideMenuPanelBar, ['e115-side-menu-panel-bar']);
-    elNewSideMenuPanelBar.innerHTML = svg.e115IconTool;
+    elNewSideMenuPanelBar.innerHTML = svg.e115IconShip;
     elNewSideMenuPanel.appendChild(elNewSideMenuPanelBar);
     // Prepare new side menu panel > title
     const elNewSideMenuPanelTitle = createEl('h2', cls.sideMenuPanelTitle, ['e115-cursor-full']);
@@ -332,7 +333,7 @@ function injectSideMenuPanel(title, items_stringify) {
                     <a class="e115-cursor-full"
                         data-on-click-function="injectStandardWindow"
                         data-on-click-args='${JSON.stringify([itemData.title, itemData.url])}'
-                    >${itemData.title} (by ${itemData.author})</a>
+                    >${itemData.title} <span class="e115-faded">- by ${itemData.author}</span></a>
                 </li>
             `;
         });
@@ -375,7 +376,7 @@ function injectBottomMenuItem(label, list) {
     const elNewMenuItemList = createEl('div', cls.bottomMenuItemList);
     list.forEach(listItemData => {
         const elNewMenuItemListItem = createEl('div', cls.bottomMenuItemListItem, ['e115-bottom-menu-item-list-item']);
-        elNewMenuItemListItem.innerHTML = /*html*/ `${svg.e115IconTool}<span>${listItemData.category_short}</span>`;
+        elNewMenuItemListItem.innerHTML = /*html*/ `${svg.e115IconShip}<span>${listItemData.category_short}</span>`;
         elNewMenuItemListItem.dataset.e115SubmenuId = listItemData.category_short;
         // Define onclick handler to open side panel
         elNewMenuItemListItem.dataset.onClickFunction = 'injectSideMenuPanel';
