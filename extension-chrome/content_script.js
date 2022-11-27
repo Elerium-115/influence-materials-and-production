@@ -20,8 +20,8 @@ const tools = [
         category_short: 'Asteroids',
         category: 'Asteroids Tools',
         items: [
-            {title: 'Asteroid Management', author: 'Tyrell-Yutani', url: 'https://tyrell-yutani.app/#/asteroid'},
             {title: 'Asteroids Planner', author: 'Elerium115', url: 'https://materials.adalia.id/asteroids-planner.html'},
+            {title: 'Asteroid Management', author: 'Tyrell-Yutani', url: 'https://tyrell-yutani.app/#/asteroid'},
             {title: 'Asteroid Tracker & Visualizer', author: 'Daharius', url: 'https://influence.daharius.com/AsteroidsTracker'},
             {title: 'Adalia Co-orbital Rocks', author: 'RGR', url: 'https://adalia.coorbital.rocks/'},
         ],
@@ -34,7 +34,18 @@ const tools = [
             {title: 'Crew Member Services', author: 'Tyrell-Yutani', url: 'https://tyrell-yutani.app/#/crew'},
         ],
     },
-    /* DISABLED due to "medium.com" blocking iframes from other hosts
+    {
+        category_short: 'Information',
+        category: 'Information Tools',
+        items: [
+            {title: 'Influence Sales', author: 'Teandy', url: 'https://influence-sales.space/'},
+            {title: 'Adalia Guide', author: 'Korivak', url: 'https://adalia.guide/'},
+            {title: 'Adalia Info', author: 'Denker', url: 'https://adalia.info/'},
+            {title: 'Adalia.id', author: 'strwrsfrk & Myrhea', url: 'https://my.adalia.id/'},
+            // {title: 'Analytics on Dune', author: 'brakmaar', url: 'https://dune.com/brakmaar/Influence-asteroids'}, // blocked by "dune.com"
+        ],
+    },
+    /* DISABLED re: blocked by "medium.com"
     {
         category_short: 'Lore',
         category: 'Influence Lore',
@@ -211,11 +222,12 @@ elStyleE115.innerHTML = /*html*/ `
         margin: 0;
         padding: 0;
     }
-    .e115-list li {
-        padding: 10px;
-    }
     .e115-list li:hover {
         background: var(--e115-highlight-faded-10);
+    }
+    .e115-list li a {
+        display: block;
+        padding: 10px;
     }
 
     .e115-faded {
