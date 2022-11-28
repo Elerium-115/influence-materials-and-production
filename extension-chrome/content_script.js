@@ -78,11 +78,14 @@ const cls = {
     bottomMenuItemLabel: ['sc-bBABsx', 'fERzvQ'],
     bottomMenuItemList: ['sc-iveFHk', 'bwpfoI'],
     bottomMenuItemListItem: ['jCUfva'], // has child "svg.e115IconShip" + text
+    // etc.
+    button: ['laLRQl'],
 };
 
 const svg = {
     e115IconShip: `<svg viewBox="0 0 221.73 94.58"><g><g><path fill="#fff" d="M221.73,47.3L110.78,0H0L71.49,30.77l-22.68,16.53,22.68,16.53L0,94.58H110.78l110.95-47.28Z"/></g></g></svg>`,
     e115IconClose: `<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0z"></path><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>`,
+    e115ButtonCorner: `<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" class="sc-jSUZER ktYJwN e115-button-corner"><line x1="0" y1="10" x2="10" y2="0"></line></svg>`,
 };
 
 /**
@@ -182,6 +185,15 @@ elStyleE115.innerHTML = /*html*/ `
         color: white;
     }
 
+    .e115-window-header {
+        display: flex;
+    }
+    .e115-window-header .e115-button {
+        height: 35px;
+        text-decoration: none;
+        margin-left: auto;
+        margin-right: auto;
+    }
     .e115-window-title {
         border-left-color: var(--e115-highlight);
     }
@@ -230,6 +242,17 @@ elStyleE115.innerHTML = /*html*/ `
         padding: 10px;
     }
 
+    .e115-button {
+        color: var(--e115-highlight);
+        border-color: var(--e115-highlight);
+    }
+    .e115-button:hover:not(:disabled) {
+        background-color: var(--e115-highlight-faded-25);
+    }
+    .e115-button .e115-button-corner {
+        stroke: var(--e115-highlight);
+    }
+
     .e115-faded {
         opacity: 0.5;
     }
@@ -254,9 +277,11 @@ function delSel(selector) {
     el.parentElement.removeChild(el);
 }
 
-function createEl(nodeType, primaryClasses, secondaryClasses = null) {
+function createEl(nodeType, primaryClasses = null, secondaryClasses = null) {
     const el = document.createElement(nodeType);
-    addCls(el, primaryClasses);
+    if (primaryClasses) {
+        addCls(el, primaryClasses);
+    }
     if (secondaryClasses) {
         addCls(el, secondaryClasses);
     }
@@ -286,10 +311,19 @@ function injectStandardWindow(title, url) {
     // Prepare new standard window
     const elNewWindow = createEl('div', cls.standardWindow, ['e115-window']);
     elNewWindowWrapper.appendChild(elNewWindow);
-    // Prepare new standard window > title
-    const elNewWindowTitle = createEl('h1', cls.standardWindowTitle, ['e115-window-title']);
-    elNewWindowTitle.textContent = title;
-    elNewWindow.appendChild(elNewWindowTitle);
+    // Prepare new standard window > header
+    const elNewWindowHeader = createEl('div', null, ['e115-window-header']);
+    elNewWindow.appendChild(elNewWindowHeader);
+    // Prepare new standard window > header > title
+    const elNewWindowHeaderTitle = createEl('h1', cls.standardWindowTitle, ['e115-window-title']);
+    elNewWindowHeaderTitle.textContent = title;
+    elNewWindowHeader.appendChild(elNewWindowHeaderTitle);
+    // Prepare new standard window > header > button
+    const elNewWindowHeaderButton = createEl('a', cls.button, ['e115-button', 'e115-cursor-full']);
+    elNewWindowHeaderButton.href = url.replace(/([?&])embed=?[^?&]*/, '$1').replace('&&', '&').replace(/[?&]$/, ''); // remove "embed" query-param, if any
+    elNewWindowHeaderButton.target = '_blank';
+    elNewWindowHeaderButton.innerHTML = `Open in new window${svg.e115ButtonCorner}`;
+    elNewWindowHeader.appendChild(elNewWindowHeaderButton);
     // Prepare new standard window > close
     const elNewWindowClose = createEl('button', cls.standardWindowClose, ['e115-window-close', 'e115-cursor-full']);
     elNewWindowClose.innerHTML = svg.e115IconClose;
