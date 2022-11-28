@@ -15,6 +15,7 @@
     sideMenuPanelClose: ['sc-hHTYSt', 'fAiLNU', 'sc-jfvxQR', 'ceJfqQ'], // button, has child "svg.e115IconClose"
     sideMenuPanelContent: ['sc-gScZFl', 'egtYcz'],
     // Bottom menu
+    bottomMenuWrapper: ['sc-gikAfH', 'dnKgIn'],
     bottomMenuItem: ['sc-kgTSHT', 'bKznIm'],
     bottomMenuItemLabel: ['sc-bBABsx', 'fERzvQ'],
     bottomMenuItemList: ['sc-iveFHk', 'bwpfoI'],
@@ -128,12 +129,12 @@ elStyleE115.innerHTML = /*html*/ `
 
     .e115-window-header {
         display: flex;
+        justify-content: space-between;
+        margin-right: 90px;
     }
     .e115-window-header .e115-button {
         height: 35px;
         text-decoration: none;
-        margin-left: auto;
-        margin-right: auto;
     }
     .e115-window-title {
         border-left-color: var(--e115-highlight);

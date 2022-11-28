@@ -44,6 +44,16 @@ function flashSidePanel(el) {
 
 function injectStandardWindow(title, url) {
     // console.log(`--- [injectStandardWindow] title = ${title}`); //// TEST
+    // Check if window already exists with the same "title"
+    const elMatchingWindow = document.querySelector(`[data-e115-window-id="${title}"]`);
+    if (elMatchingWindow) {
+        return;
+    }
+    // Close any injected window (but keep any official window)
+    const elOldWindowClose = document.querySelector('.e115-window-close');
+    if (elOldWindowClose) {
+        elOldWindowClose.click();
+    }
     // Prepare new standard window > wrapper
     const elNewWindowWrapper = createEl('div', cls.standardWindowWrapper, ['e115-window-wrapper', 'e115-cursor']);
     elNewWindowWrapper.dataset.e115WindowId = title;
@@ -74,9 +84,9 @@ function injectStandardWindow(title, url) {
     const elNewWindowIframe = document.createElement('iframe');
     elNewWindowIframe.src = url;
     elNewWindow.appendChild(elNewWindowIframe);
-    // Inject new standard window, at the start of the main content
-    const elMain = document.querySelector(`.${cls.main[1]}`);
-    elMain.insertAdjacentHTML('afterbegin', elNewWindowWrapper.outerHTML);
+    // Inject new standard window, right before the bottom menu wrapper (i.e. after any "official" window)
+    const elBottomMenuWrapper = document.querySelector(`.${cls.bottomMenuWrapper[1]}`);
+    elBottomMenuWrapper.insertAdjacentHTML('beforebegin', elNewWindowWrapper.outerHTML);
     const elNewWindowWrapperInjected = document.querySelector(`[data-e115-window-id='${title}']`);
     return elNewWindowWrapperInjected;
 }
