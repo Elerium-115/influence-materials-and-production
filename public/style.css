@@ -179,6 +179,19 @@ body.embed {
     background-color: unset;
 }
 
+body.embed::-webkit-scrollbar {
+    height: 7px;
+    width: 7px;
+}
+
+body.embed::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body.embed::-webkit-scrollbar-thumb {
+    background: hsla(0, 0%, 100%, .25);
+}
+
 .rarity-common { color: var(--rarity-common); }
 .rarity-uncommon { color: var(--rarity-uncommon); }
 .rarity-rare { color: var(--rarity-rare); }
