@@ -42,17 +42,16 @@ const tools = [
             {title: 'Adalia Guide', author: 'Korivak', url: 'https://adalia.guide/'},
             {title: 'Adalia Info', author: 'Denker', url: 'https://adalia.info/'},
             {title: 'Adalia.id', author: 'strwrsfrk & Myrhea', url: 'https://my.adalia.id/'},
-            // {title: 'Analytics on Dune', author: 'brakmaar', url: 'https://dune.com/brakmaar/Influence-asteroids'}, // blocked by "dune.com"
+            {title: 'Analytics on Dune', author: 'brakmaar', url: 'https://dune.com/brakmaar/Influence-asteroids'}, // blocked by "dune.com"
         ],
     },
-    /* DISABLED re: blocked by "medium.com"
     {
         category_short: 'Lore',
         category: 'Influence Lore',
         items: [
-            {title: 'The Incident in Sixteen', author: 'Korivak', url: 'https://matthew.debarth.com/influence/the-incident-in-sixteen'},
-            {title: 'strwrsfrk Influence Lore', author: 'strwrsfrk', url: 'https://strwrsfrk.medium.com/'},
+            {title: 'The Incident in Sixteen', author: 'Korivak', url: 'https://matthew.debarth.com/influence/the-incident-in-sixteen'}, // blocked by "medium.com"
+            {title: 'strwrsfrk Influence Lore', author: 'strwrsfrk', url: 'https://strwrsfrk.medium.com/'}, // blocked by "medium.com"
+            {title: 'Last Night in Space', author: 'Korivak', url: 'https://lastnight.space/'},
         ],
     },
-    */
 ];

@@ -92,12 +92,13 @@ elStyleE115.innerHTML = /*html*/ `
     /* Custom styles */
 
     :root {
-        /* --e115-highlight: rgb(63, 128, 234); */ /* blue */
-        /* --e115-highlight: rgb(223, 67, 0); */ /* red */
-        --e115-highlight: rgb(163, 107, 247); /* violet */
-        --e115-highlight-faded-10: rgba(163, 107, 247, 0.1);
-        --e115-highlight-faded-15: rgba(163, 107, 247, 0.15);
-        --e115-highlight-faded-25: rgba(163, 107, 247, 0.25);
+        /* --e115-highlight-red: 63; --e115-highlight-green: 128; --e115-highlight-blue: 234; */ /* blue */
+        /* --e115-highlight-red: 223; --e115-highlight-green: 67; --e115-highlight-blue: 0; */ /* red */
+        --e115-highlight-red: 163; --e115-highlight-green: 107; --e115-highlight-blue: 247; /* violet */
+        --e115-highlight: rgb(var(--e115-highlight-red), var(--e115-highlight-green), var(--e115-highlight-blue));
+        --e115-highlight-faded-10: rgba(var(--e115-highlight-red), var(--e115-highlight-green), var(--e115-highlight-blue), 0.1);
+        --e115-highlight-faded-15: rgba(var(--e115-highlight-red), var(--e115-highlight-green), var(--e115-highlight-blue), 0.15);
+        --e115-highlight-faded-25: rgba(var(--e115-highlight-red), var(--e115-highlight-green), var(--e115-highlight-blue), 0.25);
     }
 
     .e115-cursor {
@@ -134,6 +135,7 @@ elStyleE115.innerHTML = /*html*/ `
     }
     .e115-window-header .e115-button {
         height: 35px;
+        color: var(--e115-highlight);
         text-decoration: none;
     }
     .e115-window-title {
