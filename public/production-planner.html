@@ -15,19 +15,19 @@
     <meta name="twitter:creator" content="@elerium115">
     <meta name="twitter:description" content="Plan your production chain for a specific product.">
 </head>
-<body>
+<body class="embed">
     <script>
         // Run embedding logic ASAP, instead of requesting it via a script file.
         // Source: https://stackoverflow.com/a/326076/11071601
-        function inIframe () {
+        function inIframe() {
             try {
                 return window.self !== window.top;
             } catch (e) {
                 return true;
             }
         }
-        if (inIframe ()) {
-            document.body.classList.add('embed');
+        if (!inIframe()) {
+            document.body.classList.remove('embed');
         }
     </script>
     <div class="main production-planner">
