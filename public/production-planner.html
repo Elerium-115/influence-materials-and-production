@@ -17,9 +17,16 @@
 </head>
 <body>
     <script>
-        // Run embedding logic ASAP, instead of requesting it via a script file
-        const queryParams = new URLSearchParams(window.location.search);
-        if (queryParams.has('embed')) {
+        // Run embedding logic ASAP, instead of requesting it via a script file.
+        // Source: https://stackoverflow.com/a/326076/11071601
+        function inIframe () {
+            try {
+                return window.self !== window.top;
+            } catch (e) {
+                return true;
+            }
+        }
+        if (inIframe ()) {
             document.body.classList.add('embed');
         }
     </script>
