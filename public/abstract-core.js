@@ -16,6 +16,14 @@ if (window.location.hostname === '127.0.0.1') {
     apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
 }
 
+/**
+ * Get asteroid ID injected from iframe parent, if any
+ * e.g. https://game.influenceth.io/asteroids/1234
+ * => https://materials.adalia.id/asteroids-planner?influence_asteroid=1234
+ */
+const urlParams = new URLSearchParams(location.search);
+const influenceAsteroidId = urlParams.get('influence_asteroid');
+
 // Loading overlay
 const elLoadingOverlay = document.getElementById('loading-overlay');
 
