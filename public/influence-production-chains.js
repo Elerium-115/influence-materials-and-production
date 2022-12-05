@@ -1218,7 +1218,7 @@ const InfluenceProductionChainsJSON = {
         },
         {
             "id": "235",
-            "name": "Fixed Habitation Module",
+            "name": "Habitation Module",
             "type": "Ship Component"
         },
         {
@@ -1248,7 +1248,7 @@ const InfluenceProductionChainsJSON = {
         },
         {
             "id": "241",
-            "name": "Habitation Module",
+            "name": "Escape Module",
             "type": "Ship Component"
         },
         {
@@ -5890,7 +5890,7 @@ const InfluenceProductionChainsJSON = {
         },
         {
             "id": "222",
-            "name": "Fixed Habitation Module Assembly",
+            "name": "Habitation Module Assembly",
             "buildingId": "5",
             "inputs":
             [
@@ -6046,7 +6046,7 @@ const InfluenceProductionChainsJSON = {
         },
         {
             "id": "228",
-            "name": "Habitation Module Assembly",
+            "name": "Escape Module Assembly",
             "buildingId": "5",
             "inputs":
             [
