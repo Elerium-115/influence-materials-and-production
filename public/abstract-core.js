@@ -18,8 +18,8 @@ if (window.location.hostname === '127.0.0.1') {
 
 /**
  * Get asteroid ID injected from iframe parent, if any
- * e.g. https://game.influenceth.io/asteroids/1234
- * => https://materials.adalia.id/asteroids-planner?influence_asteroid=1234
+ * e.g. game URL: https://game.influenceth.io/asteroids/1234
+ * => iframe URL: https://materials.adalia.id/tool.html?influence_asteroid=1234
  */
 const urlParams = new URLSearchParams(location.search);
 const influenceAsteroidId = urlParams.get('influence_asteroid');
