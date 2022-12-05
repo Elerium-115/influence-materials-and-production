@@ -30,14 +30,6 @@
         if (!inIframe()) {
             document.body.classList.remove('embed');
         }
-        let iframeAsteroidId = null;
-        if (inIframe()) {
-            // Check if asteroid selected in iframe parent - e.g. https://game.influenceth.io/asteroids/1
-            const iframeAsteroidMatches = window.top.location.pathname.match(/\/asteroids\/(\d+)/);
-            if (iframeAsteroidMatches) {
-                iframeAsteroidId = iframeAsteroidMatches[1];
-            }
-        }
     </script>
     <div class="main asteroids-planner">
         <nav class="topbar topbar-sections">

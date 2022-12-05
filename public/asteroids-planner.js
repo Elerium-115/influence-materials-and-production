@@ -2191,11 +2191,11 @@ async function updateAsteroidsPlanOnAccountsChanged() {
                  */
                 alert('Loaded a different asteroids plan, that was already saved for your newly connected wallet');
             }
-            if (iframeAsteroidId) {
+            if (influenceAsteroidId) {
                 // Asteroid selected in iframe parent => check if it exists in the asteroids plan
-                if (isPlannedAsteroidId(iframeAsteroidId)) {
+                if (isPlannedAsteroidId(influenceAsteroidId)) {
                     // Auto-select the asteroid from the iframe parent
-                    onClickTreeItem(`Asteroid #${iframeAsteroidId}`);
+                    onClickTreeItem(`Asteroid #${influenceAsteroidId}`);
                 }
             }
         } else {
