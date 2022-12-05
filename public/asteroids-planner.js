@@ -1137,7 +1137,7 @@ function onClickAddAsteroid() {
     // Update state for "Import asteroids from wallet"
     updateWalletAsteroidsPanel();
     // Check if asteroid ID 1 already planned
-    if (asteroidsPlannerTree.find(asteroidData => asteroidData.asteroid_name === 'Asteroid #1')) {
+    if (isPlannedAsteroidId(1)) {
         // Reset state for "Add an in-game asteroid"
         resetAsteroidMetadataHtml();
         elInputAsteroidId.value = '';
@@ -2190,6 +2190,13 @@ async function updateAsteroidsPlanOnAccountsChanged() {
                  * => warn re: loaded different plan.
                  */
                 alert('Loaded a different asteroids plan, that was already saved for your newly connected wallet');
+            }
+            if (iframeAsteroidId) {
+                // Asteroid selected in iframe parent => check if it exists in the asteroids plan
+                if (isPlannedAsteroidId(iframeAsteroidId)) {
+                    // Auto-select the asteroid from the iframe parent
+                    onClickTreeItem(`Asteroid #${iframeAsteroidId}`);
+                }
             }
         } else {
             /**
