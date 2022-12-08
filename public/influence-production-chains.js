@@ -1193,7 +1193,7 @@ const InfluenceProductionChainsJSON = {
         },
         {
             "id": "230",
-            "name": "Reactor Plumbing",
+            "name": "Reactor Plumbing Assembly",
             "type": "Ship Component"
         },
         {
