@@ -1168,12 +1168,12 @@ const InfluenceProductionChainsJSON = {
         },
         {
             "id": "225",
-            "name": "Fuel Make-up Tank Assembly",
+            "name": "Fuel Make-up Tank",
             "type": "Ship Component"
         },
         {
             "id": "226",
-            "name": "Neon Make-up Tank Assembly",
+            "name": "Neon Make-up Tank",
             "type": "Ship Component"
         },
         {
@@ -1193,7 +1193,7 @@ const InfluenceProductionChainsJSON = {
         },
         {
             "id": "230",
-            "name": "Reactor Plumbing Assembly",
+            "name": "Reactor Plumbing",
             "type": "Ship Component"
         },
         {
