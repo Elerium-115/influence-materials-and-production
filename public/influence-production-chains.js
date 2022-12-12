@@ -4413,7 +4413,7 @@ const InfluenceProductionChainsJSON = {
         },
         {
             "id": "157",
-            "name": "Hydrogen Cyrocooling and Reactor Consumables Stoichiometry",
+            "name": "Hydrogen Cryocooling and Reactor Consumables Stoichiometry",
             "buildingId": "5",
             "inputs":
             [

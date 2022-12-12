@@ -629,29 +629,30 @@ function refreshShoppingListTreeHtml() {
         `;
     }
     let modulesTreeHtml = '';
-    if (shoppingListTree.modules) {
-        let modulesListHtml = '';
-        if (!shoppingListTree.modules.length) {
-            //// TO BE IMPLEMENTED, pending official details
-            //// -- THEN also add "onclick" handler for modules, similar to inputs and buildings
-            shoppingListTree.modules = [{module_name: '[redacted]'}];
-        }
-        shoppingListTree.modules.forEach(moduleData => {
-            modulesListHtml += /*html*/ `
-                <li class="tree-label" data-module-name="${moduleData.module_name}">
-                    ${moduleData.module_name}
-                </li>
-            `;
-        });
-        modulesTreeHtml = /*html*/ `
-            <li>
-                <div class="tree-label">Modules</div>
-                <ul class="shopping-modules-tree can-add-product">
-                    ${modulesListHtml}
-                </ul>
-            </li>
-        `;
-    }
+    //// DISABLED re: no modules in Exploitation
+    // if (shoppingListTree.modules) {
+    //     let modulesListHtml = '';
+    //     if (!shoppingListTree.modules.length) {
+    //         //// TO BE IMPLEMENTED, pending official details
+    //         //// -- THEN also add "onclick" handler for modules, similar to inputs and buildings
+    //         shoppingListTree.modules = [{module_name: '[redacted]'}];
+    //     }
+    //     shoppingListTree.modules.forEach(moduleData => {
+    //         modulesListHtml += /*html*/ `
+    //             <li class="tree-label" data-module-name="${moduleData.module_name}">
+    //                 ${moduleData.module_name}
+    //             </li>
+    //         `;
+    //     });
+    //     modulesTreeHtml = /*html*/ `
+    //         <li>
+    //             <div class="tree-label">Modules</div>
+    //             <ul class="shopping-modules-tree can-add-product">
+    //                 ${modulesListHtml}
+    //             </ul>
+    //         </li>
+    //     `;
+    // }
     let spectralTypesTreeHtml = '';
     if (shoppingListTree.spectral_types) {
         let spectralTypesListHtml = '';
@@ -2020,7 +2021,7 @@ function updateContent() {
                 <div class="shopping-list">
                     <div class="required-cell required-inputs can-add-product">${inputsHtml}</div>
                     <div class="required-cell required-buildings can-add-product">${buildingsHtml}</div>
-                    <div class="required-cell required-modules can-add-product">${modulesHtml}</div>
+                    <!-- <div class="required-cell required-modules can-add-product">${modulesHtml}</div> -->
                     <div class="required-cell required-spectral-types">${spectralTypesHtml}</div>
                 </div>
                 ${qtyNoteHtml}
