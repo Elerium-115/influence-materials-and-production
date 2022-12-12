@@ -872,28 +872,29 @@
     margin-top: 1rem;
 }
 
-#production-chain-items .process-tooltip ul::before {
+/* #production-chain-items .process-tooltip ul::before {
     content: 'Module parts:';
     display: block;
     white-space: nowrap;
     margin-bottom: 0.5rem;
-}
+} */
 
 #production-chain-items .process-tooltip ul li {
-    margin-left: 1.25rem;
+    font-size: 0.7rem;
     line-height: 1rem;
+    /* margin-left: 1.25rem; */
 }
 
-#production-chain-items .process-tooltip ul li::before {
+/* #production-chain-items .process-tooltip ul li::before {
     content: "⎆";
     position: absolute;
     left: 0.75rem;
-}
+} */
 
-#production-chain-items .process-tooltip ul li:hover::before {
+/* #production-chain-items .process-tooltip ul li:hover::before {
     transform: scaleX(-1);
     left: 0.86rem;
-}
+} */
 
 /* required stuff */
 

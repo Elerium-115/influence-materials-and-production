@@ -504,16 +504,17 @@ function createProcessContainerV2(itemId) {
     processHexagon.innerHTML = `<span class="process-name">${getItemNameWithSmartLinebreaks(processName)}</span>`;
     processHexagon.classList.add('hexagon');
     processContainer.appendChild(processHexagon);
-    // tooltip for process-module parts
+    // tooltip for extra-info (durations, process-module parts)
     const processTooltipWrapper = document.createElement('div');
     processTooltipWrapper.classList.add('process-tooltip-wrapper');
     const processTooltip = document.createElement('div');
     processTooltip.classList.add('process-tooltip');
     processTooltipWrapper.appendChild(processTooltip);
     processContainer.appendChild(processTooltipWrapper);
-    // inject building and process-module parts into tooltip
+    // inject building and extra-info (durations, process-module parts) into tooltip
     let processTooltipHtml = '';
     processTooltipHtml += `<div class="building">${getBuildingNameForProcessId(itemData.processId)}</div>`;
+    /* DISABLED re: no modules in Exploitation
     // show process-module parts only for actual buildings, not for "Empty Lot" (buildingId "0")
     if (Number(processData.buildingId) !== 0) {
         processTooltipHtml += '<ul>';
@@ -521,6 +522,14 @@ function createProcessContainerV2(itemId) {
         parts.forEach(part => {
             processTooltipHtml += `<li>${part}</li>`;
         });
+        processTooltipHtml += '</ul>';
+    }
+    */
+    // show durations only for actual buildings, not for "Empty Lot" (buildingId "0")
+    if (Number(processData.buildingId) !== 0) {
+        processTooltipHtml += '<ul>';
+        processTooltipHtml += `<li>Startup: 4h</li>`;
+        processTooltipHtml += `<li>Runtime: 1h/unit</li>`;
         processTooltipHtml += '</ul>';
     }
     processTooltip.innerHTML = processTooltipHtml;
@@ -1090,10 +1099,10 @@ function renderShoppingList() {
     }
 
     // #3 - required process modules, for the required buildings
-    //// TO BE IMPLEMENTED, pending official details
-    shoppingListHtml += /*html*/ `<div class="line line-title">Modules</div>`;
-    shoppingListHtml += /*html*/ `<div class="line">[redacted]</div>`;
-    shoppingListHtml += `<hr>`;
+    //// DISABLED re: no modules in Exploitation
+    // shoppingListHtml += /*html*/ `<div class="line line-title">Modules</div>`;
+    // shoppingListHtml += /*html*/ `<div class="line">[redacted]</div>`;
+    // shoppingListHtml += `<hr>`;
 
     // #4 - required spectral types, only if the user selected to extract at least one raw material
     if (shoppingList.spectralTypes.length) {

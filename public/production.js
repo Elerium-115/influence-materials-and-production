@@ -428,6 +428,7 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     // inject building and process-module parts into tooltip
     let processTooltipHtml = '';
     processTooltipHtml += `<div class="building">${buildingNamesById[processData.buildingId]}</div>`;
+    /* DISABLED re: no modules in Exploitation
     // show process-module parts only for actual buildings, not for Empty Lot (buildingId '0')
     if (Number(processData.buildingId) !== 0) {
         processTooltipHtml += '<ul>';
@@ -435,6 +436,14 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
         parts.forEach(part => {
             processTooltipHtml += `<li>${part}</li>`;
         });
+        processTooltipHtml += '</ul>';
+    }
+    */
+    // show durations only for actual buildings, not for "Empty Lot" (buildingId "0")
+    if (Number(processData.buildingId) !== 0) {
+        processTooltipHtml += '<ul>';
+        processTooltipHtml += `<li>Startup: 4h</li>`;
+        processTooltipHtml += `<li>Runtime: 1h/unit</li>`;
         processTooltipHtml += '</ul>';
     }
     processTooltip.innerHTML = processTooltipHtml;
