@@ -6591,6 +6591,26 @@ const InfluenceProductionChainsJSON = {
                     "productId": "256"
                 }
             ]
+        },
+        {
+            "id": "244",
+            "name": "Carbon Dioxide Arc Decomposition",
+            "buildingId": "3",
+            "inputs":
+            [
+                {
+                    "productId": "5"
+                }
+            ],
+            "outputs":
+            [
+                {
+                    "productId": "6"
+                },
+                {
+                    "productId": "22"
+                }
+            ]
         }
     ]
 }
