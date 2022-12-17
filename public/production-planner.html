@@ -80,7 +80,10 @@
                 <div id="shopping-list-wrapper">
                     <h3>Shopping List</h3>
                     <div id="shopping-list"></div>
-                    <img id="shopping-list-product-image" src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
+                    <div id="shopping-list-product-image-wrapper" onclick="onClickProductImage(this)">
+                        <img id="shopping-list-product-image" src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image'); this.parentNode.classList.add('missing-image-wrapper');">
+                        <div id="shopping-list-product-name"></div>
+                    </div>
                 </div>
                 <div id="production-chain-items" class="horizontal-layout"></div>
             </div>
@@ -117,6 +120,13 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="overlay-wrapper">
+        <div id="overlay-product-image" class="overlay-panel hidden" onclick="closeOverlay()">
+            <img src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
+        </div>
+        <div id="ovrelay-close" onclick="closeOverlay()">✕</div>
     </div>
 
     <div id="debug" class="hidden"></div>

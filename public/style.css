@@ -389,6 +389,80 @@ body.embed::-webkit-scrollbar-thumb {
 }
 
 
+/* Overlays */
+
+#overlay-wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* do NOT use "display: flex" b/c an ".overlay-panel" taller than the window height can NOT be fully scrolled up/down */
+    display: grid;
+    align-items: center;
+    background: var(--default-overlay-bg);
+    overflow-y: auto;
+    z-index: 1;
+}
+
+#overlay-wrapper.uberlay {
+    z-index: 10; /* ensure ".uberlay" above all other overlays, EXCEPT "#loading-overlay" */
+}
+
+body:not(.overlay-visible) #overlay-wrapper {
+    display: none;
+}
+
+body.overlay-visible {
+    overflow: hidden;
+}
+
+#overlay-wrapper .overlay-panel {
+    margin: 3rem auto;
+}
+
+#overlay-wrapper h3 {
+    margin-bottom: 1rem;
+}
+
+/* Overlay - Product image */
+
+#overlay-product-image {
+    position: absolute;
+    display: grid;
+    align-items: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 !important;
+}
+
+#overlay-product-image img {
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+}
+
+/* Overlay - Close */
+
+#ovrelay-close {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    line-height: 1.6rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--default-text);
+    cursor: pointer;
+    padding: 1rem;
+}
+
+#ovrelay-close:hover {
+    color: white;
+}
+
+
 /* Loading overlay */
 
 #loading-overlay {
@@ -401,7 +475,7 @@ body.embed::-webkit-scrollbar-thumb {
     align-items: center;
     justify-content: center;
     background: var(--default-overlay-bg);
-    z-index: 3;
+    z-index: 20; /* ensure loading-overlay above ".uberlay" */
     opacity: 0.8;
 }
 

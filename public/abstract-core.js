@@ -24,6 +24,16 @@ if (window.location.hostname === '127.0.0.1') {
 const urlParams = new URLSearchParams(location.search);
 const influenceAsteroidId = urlParams.get('influence_asteroid');
 
+// Overlays
+const elOverlayWrapper = document.getElementById('overlay-wrapper');
+const elOverlayProductImage = document.getElementById('overlay-product-image');
+
+// Elements in the overlay for "Product image"
+let elOverlayProductImageImg;
+if (elOverlayProductImage) {
+    elOverlayProductImageImg = elOverlayProductImage.querySelector('img');
+}
+
 // Loading overlay
 const elLoadingOverlay = document.getElementById('loading-overlay');
 
@@ -54,6 +64,36 @@ function getProductImageSrc(productName, format = 'default') {
  */
 function getItemTypeClass(itemType) {
     return `item-type-${getItemNameSafe(itemType)}`;
+}
+
+function closeOverlay() {
+    if (!elOverlayWrapper) {
+        // Page without overlay
+        return;
+    }
+    elOverlayWrapper.querySelectorAll('.overlay-panel').forEach(el => {
+        el.classList.add('hidden');
+    });
+    elOverlayWrapper.classList.remove('uberlay');
+    document.body.classList.remove('overlay-visible');
+}
+
+function onClickProductImage(el, productName = null) {
+    const elImg = el.querySelector('img');
+    if (!elImg || elImg.classList.contains('missing-image')) {
+        // Do not show overlay for missing image
+        return;
+    }
+    productName = productName || elImg.dataset.productName;
+    elOverlayProductImageImg.classList.remove('missing-image');
+    // Prepare overlay as "uberlay" w/ highest z-index (e.g. above template-production-planner)
+    elOverlayWrapper.classList.add('uberlay');
+    // Show overlay for "Product image"
+    document.body.classList.add('overlay-visible');
+    elOverlayProductImage.classList.remove('hidden');
+    // Prevent the previous product image from being shown, while the new image is loading
+    elOverlayProductImageImg.src = '';
+    elOverlayProductImageImg.src = getProductImageSrc(productName, 'original');
 }
 
 function toggleLoading(enable, operation) {
@@ -92,5 +132,12 @@ on('change', 'label > input', el => {
         el.parentElement.classList.add('checked');
     } else {
         el.parentElement.classList.remove('checked');
+    }
+});
+
+window.addEventListener('keydown', event => {
+    // Pressing "Escape" while the overlay is visible, closes the overlay, without resetting any selections
+    if (event.key === 'Escape') {
+        closeOverlay();
     }
 });

@@ -126,8 +126,9 @@
                             <div id="required-tier-details">[redacted]</div>
                         </div>
                     </div>
-                    <div id="required-product-image-wrapper">
-                        <img id="required-product-image" src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
+                    <div id="required-product-image-wrapper" onclick="onClickProductImage(this)">
+                        <img id="required-product-image" src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image'); this.parentNode.classList.add('missing-image-wrapper');">
+                        <div id="required-product-name"></div>
                     </div>
                 </div>
             </div>
@@ -142,6 +143,13 @@
         <div id="minimap-wrapper">
             <div id="minimap-toggle" class="pointer" onclick="toggleMinimap()">Minimap</div>
         </div>
+    </div>
+
+    <div id="overlay-wrapper">
+        <div id="overlay-product-image" class="overlay-panel hidden" onclick="closeOverlay()">
+            <img src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
+        </div>
+        <div id="ovrelay-close" onclick="closeOverlay()">✕</div>
     </div>
 
     <!-- Third-party and "core" scripts, loaded first -->

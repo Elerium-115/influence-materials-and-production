@@ -5,11 +5,9 @@ const elShoppingListTree = document.getElementById('shopping-list-tree');
 const elBreadcrumbsWrapper = document.getElementById('breadcrumbs-wrapper');
 const elContentWrapper = document.getElementById('content-wrapper');
 const elContent = document.getElementById('content');
-const elOverlayWrapper = document.getElementById('overlay-wrapper');
 const elOverlayAddAsteroid = document.getElementById('overlay-add-asteroid');
 const elOverlayAddProduct = document.getElementById('overlay-add-product');
 const elOverlaySelectAsteroidForProduct = document.getElementById('overlay-select-asteroid-for-product');
-const elOverlayProductImage = document.getElementById('overlay-product-image');
 
 // Buttons in the asteroids-planner-tree
 const elButtonAddAsteroid = elAsteroidsPlannerTree.querySelector('#asteroids-planner-tree .add-asteroid');
@@ -40,9 +38,6 @@ const elOverlayAddProductInput = elOverlayAddProduct.querySelector('#products-li
 const elOverlaySelectAsteroidForProductSelectAsteroidText = elOverlaySelectAsteroidForProduct.querySelector('.select-asteroid-text');
 const elOverlaySelectAsteroidForProductName = elOverlaySelectAsteroidForProduct.querySelector('.product-name');
 const elOverlaySelectAsteroidForProductContentCards = elOverlaySelectAsteroidForProduct.querySelector('.content-cards');
-
-// Elements in the overlay for "Product image"
-const elOverlayProductImageImg = elOverlayProductImage.querySelector('img');
 
 // Template elements
 const elTemplateProductionPlan = document.getElementById('template-production-plan');
@@ -1127,13 +1122,6 @@ function refreshAsteroidsPlannerBreadcrumbsHtml() {
     elBreadcrumbsWrapper.innerHTML = breadcrumbsHtml;
 }
 
-function closeOverlay() {
-    elOverlayWrapper.querySelectorAll('.overlay-panel').forEach(el => {
-        el.classList.add('hidden');
-    });
-    document.body.classList.remove('overlay-visible');
-}
-
 function onClickAddAsteroid() {
     // Update state for "Import asteroids from wallet"
     updateWalletAsteroidsPanel();
@@ -1599,20 +1587,6 @@ function closeOverlayAndSelectProductOnAsteroid(productName, asteroidName) {
     handleAsteroidsPlannerTreeChanged(false);
     // select the newly-added product
     onClickTreeItem(asteroidName, productName);
-}
-
-function onClickProductImage(el, productName) {
-    if (el.querySelector('img').classList.contains('missing-image')) {
-        // Do not show overlay for missing image
-        return;
-    }
-    elOverlayProductImageImg.classList.remove('missing-image');
-    // Show overlay for "Product image"
-    document.body.classList.add('overlay-visible');
-    elOverlayProductImage.classList.remove('hidden');
-    // Prevent the previous product image from being shown, while the new image is loading
-    elOverlayProductImageImg.src = '';
-    elOverlayProductImageImg.src = getProductImageSrc(productName, 'original');
 }
 
 /**
@@ -2298,10 +2272,6 @@ on('mouseleave', selectorOverflowingBreadcrumbElements, el => {
 });
 
 window.addEventListener('keydown', event => {
-    // Pressing "Escape" while the overlay is visible, closes the overlay, without resetting any selections
-    if (event.key === 'Escape') {
-        closeOverlay();
-    }
     // Pressing "Enter" while the "#input-asteroid-id" input is focused, triggers the "onlick" handler for "Get details"
     if (event.key === 'Enter') {
         if (elInputAsteroidId === document.activeElement && elInputAsteroidId.value.length) {

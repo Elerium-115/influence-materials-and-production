@@ -80,122 +80,122 @@
             import {templateFooterAbout} from './template-footer-about.js';
             document.getElementById('template-footer-about').innerHTML = templateFooterAbout;
         </script>
+    </div>
 
-        <div id="overlay-wrapper">
-            <div id="overlay-add-asteroid" class="overlay-panel hidden">
-                <!-- Import asteroids from wallet -->
-                <div class="title-and-wallet-wrapper">
-                    <h3 class="brand-text">Import asteroids from wallet</h3>
-                    <div>
-                        <div class="cta connect-wallet-cta" onclick="connectWallet(isExampleAsteroidsPlan)">Connect wallet</div>
-                        <div class="cta connected-address disabled hidden"></div>
-                    </div>
+    <div id="overlay-wrapper">
+        <div id="overlay-add-asteroid" class="overlay-panel hidden">
+            <!-- Import asteroids from wallet -->
+            <div class="title-and-wallet-wrapper">
+                <h3 class="brand-text">Import asteroids from wallet</h3>
+                <div>
+                    <div class="cta connect-wallet-cta" onclick="connectWallet(isExampleAsteroidsPlan)">Connect wallet</div>
+                    <div class="cta connected-address disabled hidden"></div>
                 </div>
-                <div id="wallet-asteroids-status"></div>
-                <div class="wallet-asteroids-wrapper-outer hidden">
-                    <div class="wallet-asteroids-wrapper">
-                        <div class="wallet-asteroids-filters">
-                            <div class="filters-wrapper">
-                                <div class="filters-category filters-category-spectral-types">
-                                    <div class="filters">
-                                        <div class="filter-label-wrapper">
-                                            <span class="filter-label">Spectral Types</span>
-                                            <span class="filter-toggle-all"><a onclick="toggleAllWalletSpectralTypes()">Toggle All</a></span>
-                                        </div>
-                                        <div class="filter-options">
-                                            <span class="filter-spectral-type type-C selected" onclick="toggleWalletSpectralType(this)">C</span>
-                                            <span class="filter-spectral-type type-CI selected" onclick="toggleWalletSpectralType(this)">CI</span>
-                                            <span class="filter-spectral-type type-CIS selected" onclick="toggleWalletSpectralType(this)">CIS</span>
-                                            <span class="filter-spectral-type type-CM selected" onclick="toggleWalletSpectralType(this)">CM</span>
-                                            <span class="filter-spectral-type type-CMS selected" onclick="toggleWalletSpectralType(this)">CMS</span>
-                                            <span class="filter-spectral-type type-CS selected" onclick="toggleWalletSpectralType(this)">CS</span>
-                                            <span class="filter-spectral-type type-I selected" onclick="toggleWalletSpectralType(this)">I</span>
-                                            <span class="filter-spectral-type type-M selected" onclick="toggleWalletSpectralType(this)">M</span>
-                                            <span class="filter-spectral-type type-S selected" onclick="toggleWalletSpectralType(this)">S</span>
-                                            <span class="filter-spectral-type type-SI selected" onclick="toggleWalletSpectralType(this)">SI</span>
-                                            <span class="filter-spectral-type type-SM selected" onclick="toggleWalletSpectralType(this)">SM</span>
-                                        </div>
+            </div>
+            <div id="wallet-asteroids-status"></div>
+            <div class="wallet-asteroids-wrapper-outer hidden">
+                <div class="wallet-asteroids-wrapper">
+                    <div class="wallet-asteroids-filters">
+                        <div class="filters-wrapper">
+                            <div class="filters-category filters-category-spectral-types">
+                                <div class="filters">
+                                    <div class="filter-label-wrapper">
+                                        <span class="filter-label">Spectral Types</span>
+                                        <span class="filter-toggle-all"><a onclick="toggleAllWalletSpectralTypes()">Toggle All</a></span>
+                                    </div>
+                                    <div class="filter-options">
+                                        <span class="filter-spectral-type type-C selected" onclick="toggleWalletSpectralType(this)">C</span>
+                                        <span class="filter-spectral-type type-CI selected" onclick="toggleWalletSpectralType(this)">CI</span>
+                                        <span class="filter-spectral-type type-CIS selected" onclick="toggleWalletSpectralType(this)">CIS</span>
+                                        <span class="filter-spectral-type type-CM selected" onclick="toggleWalletSpectralType(this)">CM</span>
+                                        <span class="filter-spectral-type type-CMS selected" onclick="toggleWalletSpectralType(this)">CMS</span>
+                                        <span class="filter-spectral-type type-CS selected" onclick="toggleWalletSpectralType(this)">CS</span>
+                                        <span class="filter-spectral-type type-I selected" onclick="toggleWalletSpectralType(this)">I</span>
+                                        <span class="filter-spectral-type type-M selected" onclick="toggleWalletSpectralType(this)">M</span>
+                                        <span class="filter-spectral-type type-S selected" onclick="toggleWalletSpectralType(this)">S</span>
+                                        <span class="filter-spectral-type type-SI selected" onclick="toggleWalletSpectralType(this)">SI</span>
+                                        <span class="filter-spectral-type type-SM selected" onclick="toggleWalletSpectralType(this)">SM</span>
                                     </div>
                                 </div>
-                                <div class="filters-category filters-category-area">
-                                    <div class="filters" onmouseleave="filterWalletAsteroids()">
-                                        <div class="filter-label">Area</div>
-                                        <div class="filter-options">
-                                            <input id="input-filter-area-min" class="input-area" type="text" placeholder="Min" onchange="onChangeInputFilterArea(this)">
-                                            <span>to</span>
-                                            <input id="input-filter-area-max" class="input-area" type="text" placeholder="Max" onchange="onChangeInputFilterArea(this)">
-                                            <span>km²</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a class="filters-reset hidden" onclick="resetWalletAsteroidsFilters(true)">Reset filters</a>
                             </div>
-                            <div class="cta selected-asteroids-cta disabled" onclick="onClickAddSelectedAsteroids(this)"></div>
+                            <div class="filters-category filters-category-area">
+                                <div class="filters" onmouseleave="filterWalletAsteroids()">
+                                    <div class="filter-label">Area</div>
+                                    <div class="filter-options">
+                                        <input id="input-filter-area-min" class="input-area" type="text" placeholder="Min" onchange="onChangeInputFilterArea(this)">
+                                        <span>to</span>
+                                        <input id="input-filter-area-max" class="input-area" type="text" placeholder="Max" onchange="onChangeInputFilterArea(this)">
+                                        <span>km²</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="filters-reset hidden" onclick="resetWalletAsteroidsFilters(true)">Reset filters</a>
                         </div>
-                        <div class="wallet-asteroids"></div>
+                        <div class="cta selected-asteroids-cta disabled" onclick="onClickAddSelectedAsteroids(this)"></div>
                     </div>
-                </div>
-                <div class="hr">OR</div>
-                <!-- Add an in-game asteroid -->
-                <h3 class="brand-text">Add an in-game asteroid</h3>
-                <div class="asteroid-tools">
-                    <a href="https://adalia.coorbital.rocks/coorbital-search" target="_blank">Find co-orbital asteroids</a>
-                    <a href="https://tyrell-yutani.app/#/asteroid/rankings" target="_blank">Find highest MER asteroids</a>
-                </div>
-                <div class="asteroid-id-and-cta">
-                    <div class="asteroid-id">Asteroid ID:<input id="input-asteroid-id" type="text" oninput="toggleAsteroidMetadataCta(true);"></div>
-                    <div class="cta asteroid-details-cta disabled" onclick="requestAsteroidDetails()">Get details</div>
-                </div>
-                <div class="asteroid-metadata-wrapper"></div>
-                <div class="hr">OR</div>
-                <!-- Create a "mock rock" -->
-                <h3 class="brand-text">Create a "mock rock"</h3>
-                <div>Spectral Type:</div>
-                <div class="mock-spectral-types">
-                    <span class="spectral-types-circle type-C" onclick="setMockRockSpectralType(this, 'C')">C</span>
-                    <span class="spectral-types-circle type-CI" onclick="setMockRockSpectralType(this, 'CI')">CI</span>
-                    <span class="spectral-types-circle type-CIS" onclick="setMockRockSpectralType(this, 'CIS')">CIS</span>
-                    <span class="spectral-types-circle type-CM" onclick="setMockRockSpectralType(this, 'CM')">CM</span>
-                    <span class="spectral-types-circle type-CMS" onclick="setMockRockSpectralType(this, 'CMS')">CMS</span>
-                    <span class="spectral-types-circle type-CS" onclick="setMockRockSpectralType(this, 'CS')">CS</span>
-                    <span class="spectral-types-circle type-I" onclick="setMockRockSpectralType(this, 'I')">I</span>
-                    <span class="spectral-types-circle type-M" onclick="setMockRockSpectralType(this, 'M')">M</span>
-                    <span class="spectral-types-circle type-S" onclick="setMockRockSpectralType(this, 'S')">S</span>
-                    <span class="spectral-types-circle type-SI" onclick="setMockRockSpectralType(this, 'SI')">SI</span>
-                    <span class="spectral-types-circle type-SM" onclick="setMockRockSpectralType(this, 'SM')">SM</span>
-                </div>
-                <input type="hidden" id="input-mock-spectral-type" value="">
-                <div class="mock-area-and-cta">
-                    <div class="mock-area">Area:<input id="input-mock-area" class="input-area" type="text" placeholder="min. 13" onchange="validateInputArea(this)">km²</div>
-                    <div class="cta asteroid-mock-cta" onclick="createMockRock()">Mock it</div>
+                    <div class="wallet-asteroids"></div>
                 </div>
             </div>
-            <div id="overlay-add-product" class="overlay-panel hidden">
-                <h3 class="brand-text">Plan a product on <span class="asteroid-name"></span></h3>
-                <div id="products-list-wrapper" class="list-hidden">
-                    <input type="text" placeholder="Search product">
-                    <div id="products-list"></div>
-                    <div id="filters-list">
-                        <span class="header">Filter</span>
-                        <span id="filter-raw-materials" class="option checked">Raw Materials</span>
-                        <span id="filter-refined-materials" class="option checked">Refined Materials</span>
-                        <span id="filter-components" class="option checked">Components</span>
-                        <span id="filter-ship-components" class="option checked">Ship Components</span>
-                        <span id="filter-finished-goods" class="option checked">Finished Goods</span>
-                    </div>
-                </div>
+            <div class="hr">OR</div>
+            <!-- Add an in-game asteroid -->
+            <h3 class="brand-text">Add an in-game asteroid</h3>
+            <div class="asteroid-tools">
+                <a href="https://adalia.coorbital.rocks/coorbital-search" target="_blank">Find co-orbital asteroids</a>
+                <a href="https://tyrell-yutani.app/#/asteroid/rankings" target="_blank">Find highest MER asteroids</a>
             </div>
-            <div id="overlay-select-asteroid-for-product" class="overlay-panel hidden">
-                <h3 class="brand-text">
-                    <span class="select-asteroid-text"></span> "<span class="product-name"></span>"
-                </h3>
-                <div class="content-cards"></div>
+            <div class="asteroid-id-and-cta">
+                <div class="asteroid-id">Asteroid ID:<input id="input-asteroid-id" type="text" oninput="toggleAsteroidMetadataCta(true);"></div>
+                <div class="cta asteroid-details-cta disabled" onclick="requestAsteroidDetails()">Get details</div>
             </div>
-            <div id="overlay-product-image" class="overlay-panel hidden" onclick="closeOverlay()">
-                <img src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
+            <div class="asteroid-metadata-wrapper"></div>
+            <div class="hr">OR</div>
+            <!-- Create a "mock rock" -->
+            <h3 class="brand-text">Create a "mock rock"</h3>
+            <div>Spectral Type:</div>
+            <div class="mock-spectral-types">
+                <span class="spectral-types-circle type-C" onclick="setMockRockSpectralType(this, 'C')">C</span>
+                <span class="spectral-types-circle type-CI" onclick="setMockRockSpectralType(this, 'CI')">CI</span>
+                <span class="spectral-types-circle type-CIS" onclick="setMockRockSpectralType(this, 'CIS')">CIS</span>
+                <span class="spectral-types-circle type-CM" onclick="setMockRockSpectralType(this, 'CM')">CM</span>
+                <span class="spectral-types-circle type-CMS" onclick="setMockRockSpectralType(this, 'CMS')">CMS</span>
+                <span class="spectral-types-circle type-CS" onclick="setMockRockSpectralType(this, 'CS')">CS</span>
+                <span class="spectral-types-circle type-I" onclick="setMockRockSpectralType(this, 'I')">I</span>
+                <span class="spectral-types-circle type-M" onclick="setMockRockSpectralType(this, 'M')">M</span>
+                <span class="spectral-types-circle type-S" onclick="setMockRockSpectralType(this, 'S')">S</span>
+                <span class="spectral-types-circle type-SI" onclick="setMockRockSpectralType(this, 'SI')">SI</span>
+                <span class="spectral-types-circle type-SM" onclick="setMockRockSpectralType(this, 'SM')">SM</span>
             </div>
-            <div id="ovrelay-close" onclick="closeOverlay()">✕</div>
+            <input type="hidden" id="input-mock-spectral-type" value="">
+            <div class="mock-area-and-cta">
+                <div class="mock-area">Area:<input id="input-mock-area" class="input-area" type="text" placeholder="min. 13" onchange="validateInputArea(this)">km²</div>
+                <div class="cta asteroid-mock-cta" onclick="createMockRock()">Mock it</div>
+            </div>
         </div>
+        <div id="overlay-add-product" class="overlay-panel hidden">
+            <h3 class="brand-text">Plan a product on <span class="asteroid-name"></span></h3>
+            <div id="products-list-wrapper" class="list-hidden">
+                <input type="text" placeholder="Search product">
+                <div id="products-list"></div>
+                <div id="filters-list">
+                    <span class="header">Filter</span>
+                    <span id="filter-raw-materials" class="option checked">Raw Materials</span>
+                    <span id="filter-refined-materials" class="option checked">Refined Materials</span>
+                    <span id="filter-components" class="option checked">Components</span>
+                    <span id="filter-ship-components" class="option checked">Ship Components</span>
+                    <span id="filter-finished-goods" class="option checked">Finished Goods</span>
+                </div>
+            </div>
+        </div>
+        <div id="overlay-select-asteroid-for-product" class="overlay-panel hidden">
+            <h3 class="brand-text">
+                <span class="select-asteroid-text"></span> "<span class="product-name"></span>"
+            </h3>
+            <div class="content-cards"></div>
+        </div>
+        <div id="overlay-product-image" class="overlay-panel hidden" onclick="closeOverlay()">
+            <img src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
+        </div>
+        <div id="ovrelay-close" onclick="closeOverlay()">✕</div>
     </div>
 
     <div id="template-production-plan" class="hidden"></div>

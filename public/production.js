@@ -214,6 +214,7 @@ const requiredSpectralsContainer = document.getElementById('required-spectrals')
 const requiredTextContainer = document.getElementById('required-text');
 const requiredRawMaterialsContainer = document.getElementById('required-raw-materials');
 const requiredProductImage = document.getElementById('required-product-image');
+const requiredProductName = document.getElementById('required-product-name');
 
 // let chainType = document.querySelector('input[name="chain-type"][checked]').value; // 'production' / 'derivatives' / 'combined'
 let chainType = 'combined'; // 'production' / 'derivatives' / 'combined'
@@ -973,8 +974,11 @@ async function selectItemByName(itemName) {
     updateTierSlider();
     // default tier-limit such that only the minimal sub-chain is shown for the selected item (i.e. only its direct inputs)
     updateProductionChainForTierLimit(Math.max(0, selectedItemTier - 1));
+    requiredProductImage.parentNode.classList.remove('missing-image-wrapper');
     requiredProductImage.classList.remove('missing-image');
     requiredProductImage.src = getProductImageSrc(itemName);
+    requiredProductImage.dataset.productName = itemName;
+    requiredProductName.textContent = itemName;
     const itemNameCompact = getCompactName(itemName);
     window.location.hash = `#${itemNameCompact}`;
 }

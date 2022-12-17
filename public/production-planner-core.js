@@ -112,6 +112,7 @@ let shouldHandleHashchange = true;
 const shareLinkContainer = document.getElementById('share-link');
 const shoppingListContainer = document.getElementById('shopping-list');
 const shoppingListProductImage = document.getElementById('shopping-list-product-image');
+const shoppingListProductName = document.getElementById('shopping-list-product-name');
 const productionChainOverlayContainer = document.getElementById('production-chain-overlay');
 const overlaySelectedProcessNameContainer = document.getElementById('overlay-selected-process-name');
 
@@ -1155,8 +1156,11 @@ function injectPlannedProductNameAndImage(plannedProductId) {
         productsListWrapper.querySelector('input').placeholder = productName;
     }
     selectedItemNameContainer.textContent = productName;
+    shoppingListProductImage.parentNode.classList.remove('missing-image-wrapper');
     shoppingListProductImage.classList.remove('missing-image');
     shoppingListProductImage.src = getProductImageSrc(productName);
+    shoppingListProductImage.dataset.productName = productName;
+    shoppingListProductName.textContent = productName;
 }
 
 /**

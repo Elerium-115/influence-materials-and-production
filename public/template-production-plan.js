@@ -36,7 +36,10 @@ const templateProductionPlan = /*html*/ `
                 <div id="shopping-list-wrapper">
                     <h3>Shopping List</h3>
                     <div id="shopping-list"></div>
-                    <img id="shopping-list-product-image" src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
+                    <div id="shopping-list-product-image-wrapper" onclick="onClickProductImage(this)">
+                        <img id="shopping-list-product-image" src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image'); this.parentNode.classList.add('missing-image-wrapper');">
+                        <div id="shopping-list-product-name"></div>
+                    </div>
                 </div>
                 <div id="production-chain-items" class="horizontal-layout"></div>
             </div>
@@ -68,6 +71,8 @@ const templateProductionPlan = /*html*/ `
             </div>
         </div>
     </div>
+
+    <!-- NO "#overlay-wrapper" here, using the one from the parent template -->
 
     <div id="debug" class="hidden"></div>
 `;

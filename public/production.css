@@ -926,6 +926,7 @@
 
 #required-content-wrapper {
     display: flex;
+    align-items: flex-start;
     gap: 1rem;
     background: var(--active-bg);
     padding: 1rem;
@@ -1100,13 +1101,42 @@
 }
 
 #required-product-image-wrapper {
-    display: flex;
-    align-items: center;
+    position: relative;
+    width: 11rem;
+    text-align: center;
+    border-radius: 1rem;
+}
+
+#required-product-image-wrapper:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+#required-product-image-wrapper:not(.missing-image-wrapper):hover {
+    cursor: pointer;
+}
+
+#required-product-image-wrapper:not(.missing-image-wrapper)::after {
+    content: '+';
+    position: absolute;
+    top: 0;
+    right: 0.5rem;
+    font-size: 2rem;
+    opacity: 0;
+}
+
+#required-product-image-wrapper:not(.missing-image-wrapper):hover::after {
+    opacity: 1;
 }
 
 #required-product-image {
-    width: 12rem;
-    height: 12rem;
+    width: 100%;
+}
+
+#required-product-name {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0 0.5rem 1rem 0.5rem;
 }
 
 /* production planner - user selected products list */
@@ -1233,9 +1263,42 @@
     border-top: 1px solid var(--default-text_faded);
 }
 
+#shopping-list-product-image-wrapper {
+    position: relative;
+    margin-top: 1rem;
+    border-radius: 1rem;
+}
+
+#shopping-list-product-image-wrapper:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+#shopping-list-product-image-wrapper:not(.missing-image-wrapper):hover {
+    cursor: pointer;
+}
+
+#shopping-list-product-image-wrapper:not(.missing-image-wrapper)::after {
+    content: '+';
+    position: absolute;
+    top: 0;
+    right: 0.5rem;
+    font-size: 2rem;
+    opacity: 0;
+}
+
+#shopping-list-product-image-wrapper:not(.missing-image-wrapper):hover::after {
+    opacity: 1;
+}
+
 #shopping-list-product-image {
     width: 100%;
-    margin-top: 1rem;
+}
+
+#shopping-list-product-name {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0 0.5rem 1rem 0.5rem;
 }
 
 /* production planner - minimap */
