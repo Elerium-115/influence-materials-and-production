@@ -440,8 +440,8 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
         processTooltipHtml += '</ul>';
     }
     */
-    // show durations only for Refinery (#3) / Factory (#4) / Shipyard (#5)
-    if ([3, 4, 5].includes(Number(processData.buildingId))) {
+    // show durations only for Refinery (#3) / Factory (#4) / Shipyard (#5) / Farm (#9)
+    if ([3, 4, 5, 9].includes(Number(processData.buildingId))) {
         processTooltipHtml += '<ul>';
         processTooltipHtml += `<li>Startup: 4h</li>`;
         processTooltipHtml += `<li>Runtime: 1h/unit</li>`;

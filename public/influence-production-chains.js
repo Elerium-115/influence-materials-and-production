@@ -37,6 +37,10 @@ const InfluenceProductionChainsJSON = {
         {
             "id": "8",
             "name": "Habitat"
+        },
+        {
+            "id": "9",
+            "name": "Farm"
         }
     ],
     "products":
@@ -6699,7 +6703,7 @@ const InfluenceProductionChainsJSON = {
         {
             "id": "247",
             "name": "Soybean / Potato / Natural Flavoring Growing",
-            "buildingId": "3",
+            "buildingId": "9",
             "inputs":
             [
                 {
@@ -6737,7 +6741,7 @@ const InfluenceProductionChainsJSON = {
         {
             "id": "248",
             "name": "Algae Growing",
-            "buildingId": "3",
+            "buildingId": "9",
             "inputs":
             [
                 {
@@ -6772,7 +6776,7 @@ const InfluenceProductionChainsJSON = {
         {
             "id": "249",
             "name": "Bioengineered Bacteria Growing",
-            "buildingId": "3",
+            "buildingId": "9",
             "inputs":
             [
                 {
