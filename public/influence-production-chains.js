@@ -1325,6 +1325,41 @@ const InfluenceProductionChainsJSON = {
             "id": "256",
             "name": "Habitat",
             "type": "Finished Good"
+        },
+        {
+            "id": "257",
+            "name": "Triple Superphosphate",
+            "type": "Refined Material"
+        },
+        {
+            "id": "258",
+            "name": "Phosphate and Sulfate Salts",
+            "type": "Refined Material"
+        },
+        {
+            "id": "259",
+            "name": "Soybeans",
+            "type": "Component"
+        },
+        {
+            "id": "260",
+            "name": "Potatoes",
+            "type": "Component"
+        },
+        {
+            "id": "261",
+            "name": "Natural Flavorings",
+            "type": "Component"
+        },
+        {
+            "id": "262",
+            "name": "Spirulina/Chlorella Algae",
+            "type": "Component"
+        },
+        {
+            "id": "263",
+            "name": "Sodium Bicarbonate",
+            "type": "Refined Material"
         }
     ],
     "processes":
@@ -2481,6 +2516,9 @@ const InfluenceProductionChainsJSON = {
                 },
                 {
                     "productId": "78"
+                },
+                {
+                    "productId": "263"
                 }
             ]
         },
@@ -6609,6 +6647,183 @@ const InfluenceProductionChainsJSON = {
                 },
                 {
                     "productId": "22"
+                }
+            ]
+        },
+        {
+            "id": "245",
+            "name": "Phosphoric Extraction",
+            "buildingId": "3",
+            "inputs":
+            [
+                {
+                    "productId": "8"
+                },
+                {
+                    "productId": "83"
+                }
+            ],
+            "outputs":
+            [
+                {
+                    "productId": "257"
+                }
+            ]
+        },
+        {
+            "id": "246",
+            "name": "Salt Sulfidization / Phosphorization",
+            "buildingId": "3",
+            "inputs":
+            [
+                {
+                    "productId": "24"
+                },
+                {
+                    "productId": "28"
+                },
+                {
+                    "productId": "55"
+                },
+                {
+                    "productId": "83"
+                }
+            ],
+            "outputs":
+            [
+                {
+                    "productId": "258"
+                }
+            ]
+        },
+        {
+            "id": "247",
+            "name": "Soybean / Potato / Natural Flavoring Growing",
+            "buildingId": "3",
+            "inputs":
+            [
+                {
+                    "productId": "2"
+                },
+                {
+                    "productId": "5"
+                },
+                {
+                    "productId": "23"
+                },
+                {
+                    "productId": "46"
+                },
+                {
+                    "productId": "257"
+                },
+                {
+                    "productId": "258"
+                }
+            ],
+            "outputs":
+            [
+                {
+                    "productId": "259"
+                },
+                {
+                    "productId": "260"
+                },
+                {
+                    "productId": "261"
+                }
+            ]
+        },
+        {
+            "id": "248",
+            "name": "Algae Growing",
+            "buildingId": "3",
+            "inputs":
+            [
+                {
+                    "productId": "2"
+                },
+                {
+                    "productId": "5"
+                },
+                {
+                    "productId": "22"
+                },
+                {
+                    "productId": "46"
+                },
+                {
+                    "productId": "263"
+                },
+                {
+                    "productId": "257"
+                },
+                {
+                    "productId": "258"
+                }
+            ],
+            "outputs":
+            [
+                {
+                    "productId": "262"
+                }
+            ]
+        },
+        {
+            "id": "249",
+            "name": "Bioengineered Bacteria Growing",
+            "buildingId": "3",
+            "inputs":
+            [
+                {
+                    "productId": "3"
+                },
+                {
+                    "productId": "5"
+                },
+                {
+                    "productId": "22"
+                },
+                {
+                    "productId": "258"
+                }
+            ],
+            "outputs":
+            [
+                {
+                    "productId": "108"
+                },
+                {
+                    "productId": "140"
+                },
+                {
+                    "productId": "200"
+                }
+            ]
+        },
+        {
+            "id": "250",
+            "name": "Basic Food Cooking and Packaging",
+            "buildingId": "4",
+            "inputs":
+            [
+                {
+                    "productId": "259"
+                },
+                {
+                    "productId": "260"
+                },
+                {
+                    "productId": "261"
+                },
+                {
+                    "productId": "262"
+                }
+            ],
+            "outputs":
+            [
+                {
+                    "productId": "129"
                 }
             ]
         }
