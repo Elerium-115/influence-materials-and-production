@@ -1338,7 +1338,7 @@ const InfluenceProductionChainsJSON = {
         {
             "id": "258",
             "name": "Phosphate and Sulfate Salts",
-            "type": "Component"
+            "type": "Refined Material"
         },
         {
             "id": "259",
@@ -6677,7 +6677,7 @@ const InfluenceProductionChainsJSON = {
         {
             "id": "246",
             "name": "Salt Sulfidization / Phosphorization",
-            "buildingId": "4",
+            "buildingId": "3",
             "inputs":
             [
                 {
