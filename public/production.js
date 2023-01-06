@@ -14,7 +14,7 @@ const rawMaterialsSorted = [
     "Apatite",
     "Bitumen",
     "Calcite",
-    "Magnesite",
+//  "Magnesite", // obsolete product, no longer exists
     // Metals
     "Feldspar",
     "Graphite",
@@ -43,7 +43,7 @@ const itemsOld = {
     "Apatite":                  { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Organics",     "baseSpectrals": ["C"]          },
     "Bitumen":                  { "itemType": "Raw Material",       "label": "Hydrocarbon", "materialType": "Organics",     "baseSpectrals": ["C"]          },
     "Calcite":                  { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Organics",     "baseSpectrals": ["C"]          },
-    "Magnesite":                { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Organics",     "baseSpectrals": ["C"]          },
+//  "Magnesite":                { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Organics",     "baseSpectrals": ["C"]          }, // obsolete product, no longer exists
     "Feldspar":                 { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["S"]          },
     "Graphite":                 { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["M"]          },
     "Olivine":                  { "itemType": "Raw Material",       "label": "Mineral",     "materialType": "Metals",       "baseSpectrals": ["S"]          },
