@@ -1,0 +1,52 @@
+.spectral-types .arrow {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    background-image: url("./img/arrow.svg");
+    background-repeat: no-repeat;
+    background-position-y: center;
+    margin-right: 0.5rem;
+    margin-bottom: -0.2rem;
+    opacity: 0.2;
+}
+
+#products-wrapper {
+    margin-top: 2rem;
+
+    > i {
+        font-style: normal;
+        font-size: 0.9rem;
+        opacity: 0.5;
+    }
+
+    #products-list {
+        margin-top: 25px;
+        columns: 11rem 8;
+        column-gap: 1rem;
+
+        li {
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0.25rem 0.5rem;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.05);
+                color: white;
+            }
+
+            &.impossible {
+                opacity: 0.25;
+            }
+
+            &.active {
+                background-color: var(--brand-text);
+                color: black;
+
+                &.impossible {
+                    opacity: 0.5;
+                }
+            }
+        }
+    }
+}
