@@ -32,16 +32,21 @@ const rawMaterialDataByName = {
 
 // Parse data from official JSON
 const productDataById = {};
+const productDataByName = {};
+const productNamesSorted = [];
 const processDataById = {};
 InfluenceProductionChainsJSON.products.forEach(product => {
     productDataById[product.id] = product;
+    productDataByName[product.name] = product;
+    productNamesSorted.push(product.name);
 });
+productNamesSorted.sort();
 InfluenceProductionChainsJSON.processes.forEach(process => {
     processDataById[process.id] = process;
     notParsedProcessIds.push(process.id);
 });
 
-console.log(`--- notParsedProcessIds INITIAL:`, notParsedProcessIds); //// TEST
+// console.log(`--- notParsedProcessIds INITIAL:`, notParsedProcessIds); //// TEST
 
 function removeFromArray(arr, value) {
     var index = arr.indexOf(value);
@@ -143,9 +148,9 @@ for (const processId of [...notParsedProcessIds]) {
     }
 }
 
-console.log(`%c--- DONE tier-0`, 'color: cyan;'); //// TEST
-console.log(`---> notParsedProcessIds:`, notParsedProcessIds); //// TEST
-console.log(`---> parsedProcessIds:`, parsedProcessIds); //// TEST
+// console.log(`%c--- DONE tier-0`, 'color: cyan;'); //// TEST
+// console.log(`---> notParsedProcessIds:`, notParsedProcessIds); //// TEST
+// console.log(`---> parsedProcessIds:`, parsedProcessIds); //// TEST
 
 /*
 - then parse increasingly-higher-tier processes = whose inputs are among "outputsOfParsedProcessIds"
@@ -187,7 +192,7 @@ function parseNextTierProcesses() {
         if (!allInputsOk) {
             continue; // skip this process, continue to the next one
         }
-        console.log(`--- tier-${processTier} process #${processId}: ${processData.name}`); //// TEST
+        // console.log(`--- tier-${processTier} process #${processId}: ${processData.name}`); //// TEST
         let abortProcess = false;
         let abortProcessReason = '';
         // Parse each spectral type
@@ -261,18 +266,18 @@ function parseNextTierProcesses() {
         }
         if (abortProcess) {
             delete processData.sustainingSpectralTypes;
-            console.log(`%c---> ... ABORT this process at this tier-level re: ${abortProcessReason}`, 'color: orange;'); //// TEST
+            // console.log(`%c---> ... ABORT this process at this tier-level re: ${abortProcessReason}`, 'color: orange;'); //// TEST
             continue; // skip this process, continue to the next one
         }
         // Done parsing all spectral types for this process
-        console.log(`---> ... sustainingSpectralTypes = ${JSON.stringify(processData.sustainingSpectralTypes)}`); //// TEST
+        // console.log(`---> ... sustainingSpectralTypes = ${JSON.stringify(processData.sustainingSpectralTypes)}`); //// TEST
         if (!processData.sustainingSpectralTypes.length) {
             /**
              * This process requires spectral types from multiple asteroids.
              * e.g. "Uraninite Acid Leaching" requires "I" (for "Sulfuric Acid")
              * and "M" (for "Uraninite"), which do not exist on a single asteroid.
              */
-            console.log(`%c---> ... IMPOSSIBLE to produce on a single asteroid`, 'color: yellow;'); //// TEST
+            // console.log(`%c---> ... IMPOSSIBLE to produce on a single asteroid`, 'color: yellow;'); //// TEST
         }
         // -- Unique-add the outputs (product IDs) of this process into "outputsOfParsedProcessIds"
         for (const outputId of getOutputIdsOfProcessId(processId)) {
@@ -290,9 +295,9 @@ let previousCountNotParsedProcessIds = notParsedProcessIds.length;
 function recursiveParseNextTierProcesses() {
     processTier++;
     parseNextTierProcesses();
-    console.log(`%c--- DONE tier-${processTier}`, 'color: cyan;'); //// TEST
-    console.log(`---> notParsedProcessIds:`, notParsedProcessIds); //// TEST
-    console.log(`---> parsedProcessIds:`, parsedProcessIds); //// TEST
+    // console.log(`%c--- DONE tier-${processTier}`, 'color: cyan;'); //// TEST
+    // console.log(`---> notParsedProcessIds:`, notParsedProcessIds); //// TEST
+    // console.log(`---> parsedProcessIds:`, parsedProcessIds); //// TEST
     /**
      * Before continuing the recursion, ensure that the length of "notParsedProcessIds" is
      * lower than in the previous cycle, otherwise it will likely enter an infinite loop.
@@ -304,7 +309,7 @@ function recursiveParseNextTierProcesses() {
     if (notParsedProcessIds.length > 0) {
         recursiveParseNextTierProcesses();
     } else {
-        console.log(`%c--- FINISHED`, 'color: lime;'); //// TEST
+        // console.log(`%c--- FINISHED`, 'color: lime;'); //// TEST
     }
 }
 
@@ -333,6 +338,39 @@ if (!hasFatalErrorTier0) {
         productNamesBySustainingSpectralType[spectralType].sort();
     }
     
-    console.log(`--- productNamesBySustainingSpectralType:`, productNamesBySustainingSpectralType); //// TEST
-    document.getElementById('test').textContent = JSON.stringify(productNamesBySustainingSpectralType, null, '\t');
+    // console.log(`--- productNamesBySustainingSpectralType:`, productNamesBySustainingSpectralType); //// TEST
+}
+
+const elSpectralTypesList = document.querySelector('.spectral-types ul');
+const elProductsList = document.getElementById('products-list');
+
+for (const productName of productNamesSorted) {
+    const elListItem = document.createElement('li');
+    elListItem.textContent = productName;
+
+    const productData = productDataByName[productName];
+    for (const spectralType of productData.sustainingSpectralTypes) {
+        elListItem.classList.add(spectralType);
+    }
+    if (!productData.sustainingSpectralTypes.length) {
+        elListItem.classList.add('impossible');
+    }
+
+    elListItem.addEventListener('click', (e) => {
+        for (const elActive of elProductsList.querySelectorAll('li.active')) {
+            elActive.classList.remove('active');
+        }
+        e.target.classList.add('active');
+        for (const elSpectralType of elSpectralTypesList.querySelectorAll('li')) {
+            const spectralType = elSpectralType.dataset.value.toUpperCase();
+            if (productData.sustainingSpectralTypes.includes(spectralType)) {
+                elSpectralType.classList.add('active');
+            } else {
+                elSpectralType.classList.remove('active');
+            }
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    elProductsList.appendChild(elListItem);
 }
