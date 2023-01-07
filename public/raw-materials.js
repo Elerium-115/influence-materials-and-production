@@ -83,13 +83,13 @@ function getSpectralTypesForRawMaterial(rawMaterial) {
 }
 
 function resetSelectionsExcept(skipEntity = null) {
-    if (skipEntity != 'spectral-types') {
+    if (skipEntity !== 'spectral-types') {
         elsSpectralTypes.forEach(el => el.classList.remove('active'));
     }
-    if (skipEntity != 'material-types') {
+    if (skipEntity !== 'material-types') {
         elsMaterialTypes.forEach(el => el.classList.remove('active'));
     }
-    if (skipEntity != 'raw-materials') {
+    if (skipEntity !== 'raw-materials') {
         elsRawMaterials.forEach(el => el.classList.remove('active'));
     }
     elTitleSpectralTypes.textContent = originalTitleSpectralTypes;
@@ -111,7 +111,7 @@ function updateRawMaterialsForActiveSpectralTypes() {
             document.querySelector(`.raw-material[data-value="${rawMaterial}"]`).classList.add('active');
         });
     });
-    elTitleRawMaterials.textContent = elsSpectralTypesActive.length ? originalTitleRawMaterials + ' that can be mined from the selected spectral types' : originalTitleRawMaterials;
+    elTitleRawMaterials.textContent = elsSpectralTypesActive.length ? `${originalTitleRawMaterials} that can be mined from the selected spectral types` : originalTitleRawMaterials;
 }
 
 function updateSpectralTypesForActiveRawMaterials() {
@@ -129,7 +129,7 @@ function updateSpectralTypesForActiveRawMaterials() {
             document.querySelector(`.spectral-types ul li[data-value="${spectralType}"]`).classList.add('active');
         });
     });
-    elTitleSpectralTypes.textContent = elsRawMaterialsActive.length ? originalTitleSpectralTypes + ' from which the selected raw material can be mined' : originalTitleSpectralTypes;
+    elTitleSpectralTypes.textContent = elsRawMaterialsActive.length ? `${originalTitleSpectralTypes} from which the selected raw material can be mined` : originalTitleSpectralTypes;
 }
 
 let lastSelectedItemType = ''; // 'spectral-type' or 'raw-material'
