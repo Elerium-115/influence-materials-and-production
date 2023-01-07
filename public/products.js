@@ -341,13 +341,21 @@ if (!hasFatalErrorTier0) {
     // console.log(`--- productNamesBySustainingSpectralType:`, productNamesBySustainingSpectralType); //// TEST
 }
 
+//// PAGE-SPECIFIC LOGIC BELOW
+
+const elTitleSpectralTypes = document.querySelector('.spectral-types h2');
+const elTitleProducts = document.querySelector('#products-wrapper h2');
+const originalTitleSpectralTypes = elTitleSpectralTypes.textContent;
+const originalTitleProducts = elTitleProducts.textContent;
+
 const elSpectralTypesList = document.querySelector('.spectral-types ul');
+const elsSpectralTypes = elSpectralTypesList.querySelectorAll('li');
 const elProductsList = document.getElementById('products-list');
 
 for (const productName of productNamesSorted) {
     const elListItem = document.createElement('li');
     elListItem.textContent = productName;
-
+    elListItem.dataset.value = productName;
     const productData = productDataByName[productName];
     for (const spectralType of productData.sustainingSpectralTypes) {
         elListItem.classList.add(spectralType);
@@ -355,13 +363,10 @@ for (const productName of productNamesSorted) {
     if (!productData.sustainingSpectralTypes.length) {
         elListItem.classList.add('impossible');
     }
-
-    elListItem.addEventListener('click', (e) => {
-        for (const elActive of elProductsList.querySelectorAll('li.active')) {
-            elActive.classList.remove('active');
-        }
-        e.target.classList.add('active');
-        for (const elSpectralType of elSpectralTypesList.querySelectorAll('li')) {
+    elListItem.addEventListener('click', (event) => {
+        resetSelectionsExcept();
+        event.currentTarget.classList.add('active');
+        for (const elSpectralType of elsSpectralTypes) {
             const spectralType = elSpectralType.dataset.value.toUpperCase();
             if (productData.sustainingSpectralTypes.includes(spectralType)) {
                 elSpectralType.classList.add('active');
@@ -369,8 +374,63 @@ for (const productName of productNamesSorted) {
                 elSpectralType.classList.remove('active');
             }
         }
+        elTitleSpectralTypes.textContent = `${originalTitleSpectralTypes} on which the selected product can be made`;
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        lastSelectedItemType = 'product';
     });
-
     elProductsList.appendChild(elListItem);
 }
+
+// Select the product elements AFTER having injected the product list
+const elsProducts = elProductsList.querySelectorAll('li');
+
+function resetSelectionsExcept(skipEntity = null) {
+    if (skipEntity !== 'spectral-types') {
+        elsSpectralTypes.forEach(el => el.classList.remove('active'));
+    }    
+    if (skipEntity !== 'products') {
+        elsProducts.forEach(el => el.classList.remove('active'));
+    }
+    elTitleSpectralTypes.textContent = originalTitleSpectralTypes;
+    elTitleProducts.textContent = originalTitleProducts;
+}
+
+function updateProductsForActiveSpectralTypes() {
+    resetSelectionsExcept('spectral-types');
+    const elsSpectralTypesActive = document.querySelectorAll('.spectral-types ul li.active');
+    elsSpectralTypesActive.forEach(el => {
+        const spectralType = el.dataset.value.toUpperCase();
+        const productNames = productNamesBySustainingSpectralType[spectralType]
+        productNames.forEach(productName => {
+            elProductsList.querySelector(`li[data-value="${productName}"]`).classList.add('active');
+        });
+    });
+    elTitleProducts.textContent = elsSpectralTypesActive.length ? `${originalTitleProducts} that can be made on the selected spectral types` : originalTitleProducts;
+}
+
+let lastSelectedItemType = ''; // 'spectral-type' or 'product'
+let lastSelectedSpectralType = '';
+
+elsSpectralTypes.forEach(el => {
+    el.addEventListener('click', function(event) {
+        const elSpectralType = event.currentTarget;
+        const spectralTypeWasSelected = elSpectralType.classList.contains('active');
+        const newlySelectedSpectralType = elSpectralType.dataset.value.toUpperCase();
+        if (lastSelectedItemType === 'product') {
+            // Switching from selecting products, to selecting spectral types
+            resetSelectionsExcept();
+            elSpectralType.classList.add('active');
+        } else {
+            //// TEMP logic to allow selecting a single spectral type at a time (after having selected another spectral type, OR after page-load)
+            resetSelectionsExcept();
+            if (newlySelectedSpectralType === lastSelectedSpectralType && spectralTypeWasSelected) {
+                elSpectralType.classList.remove('active');
+            } else {
+                elSpectralType.classList.add('active');
+            }
+        }
+        updateProductsForActiveSpectralTypes();
+        lastSelectedItemType = 'spectral-type';
+        lastSelectedSpectralType = newlySelectedSpectralType;
+    });
+});
