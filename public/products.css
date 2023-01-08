@@ -39,13 +39,13 @@
   background-color: rgba(255, 255, 255, 0.05);
   color: white;
 }
-#products-wrapper #products-list li.impossible {
+#products-wrapper #products-list li.multi-asteroid {
   opacity: 0.25;
 }
 #products-wrapper #products-list li.active {
   border-color: var(--brand-text);
   color: var(--brand-text);
 }
-#products-wrapper #products-list li.active.impossible {
+#products-wrapper #products-list li.active.multi-asteroid {
   opacity: 0.5;
 }/*# sourceMappingURL=products.css.map */

@@ -2,32 +2,92 @@ const notParsedProcessIds = []; // initially all process IDs
 const parsedProcessIds = [];
 const outputsOfParsedProcessIds = []; // product IDs
 
-const spectralTypes = ['C', 'CI', 'CIS', 'CM', 'CMS', 'CS', 'I', 'M', 'S', 'SI', 'SM'];
+/** Real spectral types */
+// const spectralTypes = ['C', 'CI', 'CIS', 'CM', 'CMS', 'CS', 'I', 'M', 'S', 'SI', 'SM'];
 
-const rawMaterialDataByName = {
-    "Ammonia":          { "label": "NH3",           "materialType": "Volatiles",    "baseSpectrals": ["I"],         sustainingSpectralTypes: ["CI", "CIS", "I", "SI"] },
-    "Carbon Dioxide":   { "label": "CO2",           "materialType": "Volatiles",    "baseSpectrals": ["C", "I"],    sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS", "I", "SI"] },
-    "Carbon Monoxide":  { "label": "CO",            "materialType": "Volatiles",    "baseSpectrals": ["C", "I"],    sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS", "I", "SI"] },
-    "Hydrogen":         { "label": "H",             "materialType": "Volatiles",    "baseSpectrals": ["I"],         sustainingSpectralTypes: ["CI", "CIS", "I", "SI"] },
-    "Methane":          { "label": "CH4",           "materialType": "Volatiles",    "baseSpectrals": ["C", "I"],    sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS", "I", "SI"] },
-    "Nitrogen":         { "label": "N",             "materialType": "Volatiles",    "baseSpectrals": ["I"],         sustainingSpectralTypes: ["CI", "CIS", "I", "SI"] },
-    "Sulfur Dioxide":   { "label": "SO2",           "materialType": "Volatiles",    "baseSpectrals": ["I"],         sustainingSpectralTypes: ["CI", "CIS", "I", "SI"] },
-    "Water":            { "label": "H2O",           "materialType": "Volatiles",    "baseSpectrals": ["C", "I"],    sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS", "I", "SI"] },
-    "Apatite":          { "label": "Mineral",       "materialType": "Organics",     "baseSpectrals": ["C"],         sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS"] },
-    "Bitumen":          { "label": "Hydrocarbon",   "materialType": "Organics",     "baseSpectrals": ["C"],         sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS"] },
-    "Calcite":          { "label": "Mineral",       "materialType": "Organics",     "baseSpectrals": ["C"],         sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS"] },
-//  "Magnesite":        { "label": "Mineral",       "materialType": "Organics",     "baseSpectrals": ["C"],         sustainingSpectralTypes: [] }, // obsolete product, no longer exists
-    "Feldspar":         { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["S"],         sustainingSpectralTypes: ["CIS", "CMS", "CS", "S", "SI", "SM"] },
-    "Graphite":         { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["M"],         sustainingSpectralTypes: ["CM", "CMS", "M", "SM"] },
-    "Olivine":          { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["S"],         sustainingSpectralTypes: ["CIS", "CMS", "CS", "S", "SI", "SM"] },
-    "Pyroxene":         { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["S"],         sustainingSpectralTypes: ["CIS", "CMS", "CS", "S", "SI", "SM"] },
-    "Rhabdite":         { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["M"],         sustainingSpectralTypes: ["CM", "CMS", "M", "SM"] },
-    "Taenite":          { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["M"],         sustainingSpectralTypes: ["CM", "CMS", "M", "SM"] },
-    "Troilite":         { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["M"],         sustainingSpectralTypes: ["CM", "CMS", "M", "SM"] },
-    "Merrillite":       { "label": "Mineral",       "materialType": "Rare-Earth",   "baseSpectrals": ["S"],         sustainingSpectralTypes: ["CIS", "CMS", "CS", "S", "SI", "SM"] },
-    "Xenotime":         { "label": "Mineral",       "materialType": "Rare-Earth",   "baseSpectrals": ["S"],         sustainingSpectralTypes: ["CIS", "CMS", "CS", "S", "SI", "SM"] },
-    "Coffinite":        { "label": "Mineral",       "materialType": "Fissiles",     "baseSpectrals": ["S"],         sustainingSpectralTypes: ["CIS", "CMS", "CS", "S", "SI", "SM"] },
-    "Uraninite":        { "label": "Mineral",       "materialType": "Fissiles",     "baseSpectrals": ["M"],         sustainingSpectralTypes: ["CM", "CMS", "M", "SM"] },
+/** All spectral types = Real spectral types + Virtual spectral types */
+const allSpectralTypes = [
+    'C',
+    'I',
+    'M',
+    'S',
+    'CI',
+    'CM',
+    'CS',
+    'IM', // virtual
+    'SI',
+    'SM',
+    'CIM', // virtual
+    'CIS',
+    'CMS',
+    'IMS', // virtual
+    'CIMS', // virtual
+];
+
+const isRealSpectralType = {
+    C: true,
+    I: true,
+    M: true,
+    S: true,
+    CI: true,
+    CM: true,
+    CS: true,
+    IM: false, // virtual
+    SI: true,
+    SM: true,
+    CIM: false, // virtual
+    CIS: true,
+    CMS: true,
+    IMS: false, // virtual
+    CIMS: false, // virtual
+};
+
+const mapAlphabeticalSpectralTypeToRealName = {
+    C: "C",
+    I: "I",
+    M: "M",
+    S: "S",
+    CI: "CI",
+    CM: "CM",
+    CS: "CS",
+    IM: "IM",
+    IS: "SI", // exception
+    MS: "SM", // exception
+    CIM: "CIM",
+    CIS: "CIS",
+    CMS: "CMS",
+    IMS: "IMS",
+    CIMS: "CIMS",
+}
+
+const allSpectralsByRawMaterial = {
+    // Volatiles
+    "Ammonia":          ["I", "CI", "IM", "SI", "CIM", "CIS", "IMS", "CIMS"],
+    "Carbon Dioxide":   ["C", "I", "CI", "CM", "CS", "IM", "SI", "CIM", "CIS", "CMS", "IMS", "CIMS"],
+    "Carbon Monoxide":  ["C", "I", "CI", "CM", "CS", "IM", "SI", "CIM", "CIS", "CMS", "IMS", "CIMS"],
+    "Hydrogen":         ["I", "CI", "IM", "SI", "CIM", "CIS", "IMS", "CIMS"],
+    "Methane":          ["C", "I", "CI", "CM", "CS", "IM", "SI", "CIM", "CIS", "CMS", "IMS", "CIMS"],
+    "Nitrogen":         ["I", "CI", "IM", "SI", "CIM", "CIS", "IMS", "CIMS"],
+    "Sulfur Dioxide":   ["I", "CI", "IM", "SI", "CIM", "CIS", "IMS", "CIMS"],
+    "Water":            ["C", "I", "CI", "CM", "CS", "IM", "SI", "CIM", "CIS", "CMS", "IMS", "CIMS"],
+    // Organics
+    "Apatite":          ["C", "CI", "CM", "CS", "CIM", "CIS", "CMS", "CIMS"],
+    "Bitumen":          ["C", "CI", "CM", "CS", "CIM", "CIS", "CMS", "CIMS"],
+    "Calcite":          ["C", "CI", "CM", "CS", "CIM", "CIS", "CMS", "CIMS"],
+    // Metals
+    "Feldspar":         ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
+    "Graphite":         ["M", "CM", "IM", "SM", "CIM", "CMS", "IMS", "CIMS"],
+    "Olivine":          ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
+    "Pyroxene":         ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
+    "Rhabdite":         ["M", "CM", "IM", "SM", "CIM", "CMS", "IMS", "CIMS"],
+    "Taenite":          ["M", "CM", "IM", "SM", "CIM", "CMS", "IMS", "CIMS"],
+    "Troilite":         ["M", "CM", "IM", "SM", "CIM", "CMS", "IMS", "CIMS"],
+    // Rare-Earth
+    "Merrillite":       ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
+    "Xenotime":         ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
+    // Fissiles
+    "Coffinite":        ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
+    "Uraninite":        ["M", "CM", "IM", "SM", "CIM", "CMS", "IMS", "CIMS"],
 }
 
 // Parse data from official JSON
@@ -114,38 +174,39 @@ function getProcessVariantIdsForOutputId(outputId) {
 let hasFatalErrorTier0 = false;
 for (const processId of [...notParsedProcessIds]) {
     const processData = processDataById[processId];
-    if (!processData.inputs.length) {
-        // console.log(`--- tier-0 process #${processId}: ${processData.name}`); //// TEST
-        // The outputs of a tier-0 process should always be a single raw material, otherwise something is wrong
-        const outputIdsOfProcessId = getOutputIdsOfProcessId(processId);
-        if (outputIdsOfProcessId.length !== 1) {
-            console.log(`%c--- ERROR: tier-0 process "${processData.name}" has non-single output IDs: ${JSON.stringify(outputIdsOfProcessId)}`, 'color: red;');
-            hasFatalErrorTier0 = true;
-            break; // skip remaining processes
-        }
-        const outputId = outputIdsOfProcessId[0];
-        const outputData = productDataById[outputId];
-        const outputName = outputData.name;
-        // console.log(`---> outputName = ${outputName}`); //// TEST
-        // Assign the spectral types that can sustain this process
-        const sustainingSpectralTypes = rawMaterialDataByName[outputName].sustainingSpectralTypes;
-        // console.log(`---> sustainingSpectralTypes = ${sustainingSpectralTypes}`); //// TEST
-        processData.sustainingSpectralTypes = sustainingSpectralTypes;
-        // Unique-add those spectral types to each of the outputs of this process
-        if (!outputData.sustainingSpectralTypes) {
-            outputData.sustainingSpectralTypes = [];
-        }
-        for (const spectralType of sustainingSpectralTypes) {
-            // console.log(`---> uniquePushToArray(outputData.sustainingSpectralTypes, ${spectralType})`); //// TEST
-            uniquePushToArray(outputData.sustainingSpectralTypes, spectralType);
-        }
-        // console.log(`---> outputData.sustainingSpectralTypes = ${outputData.sustainingSpectralTypes}`); //// TEST
-        // Unique-add the outputs (product IDs) of this process into "outputsOfParsedProcessIds"
-        uniquePushToArray(outputsOfParsedProcessIds, outputId);
-        // Move this process from "notParsedProcessIds", into "parsedProcessIds"
-        removeFromArray(notParsedProcessIds, processId);
-        parsedProcessIds.push(processId);
+    if (processData.inputs.length) {
+        continue; // skip this higher-tier process, continue to the next one
     }
+    // console.log(`--- tier-0 process #${processId}: ${processData.name}`); //// TEST
+    // The outputs of a tier-0 process should always be a single raw material, otherwise something is wrong
+    const outputIdsOfProcessId = getOutputIdsOfProcessId(processId);
+    if (outputIdsOfProcessId.length !== 1) {
+        console.log(`%c--- ERROR: tier-0 process "${processData.name}" has non-single output IDs: ${JSON.stringify(outputIdsOfProcessId)}`, 'color: red;');
+        hasFatalErrorTier0 = true;
+        break; // skip remaining processes
+    }
+    const outputId = outputIdsOfProcessId[0];
+    const outputData = productDataById[outputId];
+    const outputName = outputData.name;
+    // console.log(`---> outputName = ${outputName}`); //// TEST
+    // Assign the spectral types that can sustain this process
+    const sustainingSpectralTypes = allSpectralsByRawMaterial[outputName];
+    // console.log(`---> ... sustainingSpectralTypes = ${sustainingSpectralTypes}`); //// TEST
+    processData.sustainingSpectralTypes = sustainingSpectralTypes;
+    // Unique-add those spectral types to each of the outputs of this process
+    if (!outputData.sustainingSpectralTypes) {
+        outputData.sustainingSpectralTypes = [];
+    }
+    for (const spectralType of sustainingSpectralTypes) {
+        // console.log(`---> ... ... uniquePushToArray(outputData.sustainingSpectralTypes, ${spectralType})`); //// TEST
+        uniquePushToArray(outputData.sustainingSpectralTypes, spectralType);
+    }
+    // console.log(`---> ... outputData.sustainingSpectralTypes = ${outputData.sustainingSpectralTypes}`); //// TEST
+    // Unique-add the outputs (product IDs) of this process into "outputsOfParsedProcessIds"
+    uniquePushToArray(outputsOfParsedProcessIds, outputId);
+    // Move this process from "notParsedProcessIds", into "parsedProcessIds"
+    removeFromArray(notParsedProcessIds, processId);
+    parsedProcessIds.push(processId);
 }
 
 // console.log(`%c--- DONE tier-0`, 'color: cyan;'); //// TEST
@@ -196,7 +257,7 @@ function parseNextTierProcesses() {
         let abortProcess = false;
         let abortProcessReason = '';
         // Parse each spectral type
-        for (const spectralType of spectralTypes) {
+        for (const spectralType of allSpectralTypes) {
             // console.log(`---> CHECK spectralType = ${spectralType}`);
             // Check if this spectral type can sustain at-least-one process-variant, for each input of this process
             let canSustainAllInputs = true;
@@ -314,7 +375,7 @@ function recursiveParseNextTierProcesses() {
 }
 
 const productNamesBySustainingSpectralType = {};
-for (const spectralType of spectralTypes) {
+for (const spectralType of allSpectralTypes) {
     productNamesBySustainingSpectralType[spectralType] = [];
 }
 
@@ -334,7 +395,7 @@ if (!hasFatalErrorTier0) {
             productNamesBySustainingSpectralType[sustainingSpectralType].push(productData.name);
         }
     }
-    for (const spectralType of spectralTypes) {
+    for (const spectralType of allSpectralTypes) {
         productNamesBySustainingSpectralType[spectralType].sort();
     }
     
@@ -357,11 +418,14 @@ for (const productName of productNamesSorted) {
     elListItem.textContent = productName;
     elListItem.dataset.value = productName;
     const productData = productDataByName[productName];
+    // Mark product as "multi-asteroid" if it can not be sustained by any single "real" spectral type
+    let isSustainedByRealSpectralType = false;
     for (const spectralType of productData.sustainingSpectralTypes) {
         elListItem.classList.add(spectralType);
+        isSustainedByRealSpectralType = isSustainedByRealSpectralType || isRealSpectralType[spectralType];
     }
-    if (!productData.sustainingSpectralTypes.length) {
-        elListItem.classList.add('impossible');
+    if (!isSustainedByRealSpectralType) {
+        elListItem.classList.add('multi-asteroid');
     }
     elListItem.addEventListener('click', (event) => {
         resetSelectionsExcept();
@@ -396,41 +460,47 @@ function resetSelectionsExcept(skipEntity = null) {
 }
 
 function updateProductsForActiveSpectralTypes() {
-    resetSelectionsExcept('spectral-types');
     const elsSpectralTypesActive = document.querySelectorAll('.spectral-types ul li.active');
-    elsSpectralTypesActive.forEach(el => {
-        const spectralType = el.dataset.value.toUpperCase();
-        const productNames = productNamesBySustainingSpectralType[spectralType]
+    if (elsSpectralTypesActive.length) {
+        const selectedBaseSpectrals = [];
+        elsSpectralTypesActive.forEach(el => {
+            const spectralType = el.dataset.value.toUpperCase();
+            const baseSpectrals = spectralType.split('');
+            for (const baseSpectral of baseSpectrals) {
+                uniquePushToArray(selectedBaseSpectrals, baseSpectral);
+            }
+        });
+        const selectedAlphabeticalSpectralType = selectedBaseSpectrals.sort().join('')
+        const selectedVirtualSpectralType = mapAlphabeticalSpectralTypeToRealName[selectedAlphabeticalSpectralType];
+        const productNames = productNamesBySustainingSpectralType[selectedVirtualSpectralType]
         productNames.forEach(productName => {
             elProductsList.querySelector(`li[data-value="${productName}"]`).classList.add('active');
         });
-    });
-    elTitleProducts.textContent = elsSpectralTypesActive.length ? `${originalTitleProducts} that can be made on the selected spectral types` : originalTitleProducts;
+    }
+    if (!elsSpectralTypesActive.length) {
+        elTitleProducts.textContent = originalTitleProducts;
+    } else if (elsSpectralTypesActive.length === 1) {
+        elTitleProducts.textContent = `${originalTitleProducts} that can be made on the selected spectral type`;
+    } else {
+        elTitleProducts.innerHTML = /*html*/ `${originalTitleProducts} that can be made on the <span style="text-decoration: underline;">combined</span> selected spectral types`;
+    }
 }
 
 let lastSelectedItemType = ''; // 'spectral-type' or 'product'
-let lastSelectedSpectralType = '';
 
 elsSpectralTypes.forEach(el => {
     el.addEventListener('click', function(event) {
         const elSpectralType = event.currentTarget;
-        const spectralTypeWasSelected = elSpectralType.classList.contains('active');
-        const newlySelectedSpectralType = elSpectralType.dataset.value.toUpperCase();
         if (lastSelectedItemType === 'product') {
             // Switching from selecting products, to selecting spectral types
             resetSelectionsExcept();
             elSpectralType.classList.add('active');
         } else {
-            //// TEMP logic to allow selecting a single spectral type at a time (after having selected another spectral type, OR after page-load)
-            resetSelectionsExcept();
-            if (newlySelectedSpectralType === lastSelectedSpectralType && spectralTypeWasSelected) {
-                elSpectralType.classList.remove('active');
-            } else {
-                elSpectralType.classList.add('active');
-            }
+            // Continuing with selection among spectral types, OR immediately after page-load
+            elSpectralType.classList.toggle('active');
+            resetSelectionsExcept('spectral-types');
         }
         updateProductsForActiveSpectralTypes();
         lastSelectedItemType = 'spectral-type';
-        lastSelectedSpectralType = newlySelectedSpectralType;
     });
 });
