@@ -165,3 +165,11 @@ elsRawMaterials.forEach(el => {
         lastSelectedRawMaterial = event.currentTarget.classList.contains('active') ? newlySelectedRawMaterial : '';
     });
 });
+
+// Pre-select the asteroid type selected in-game, if any
+if (influenceAsteroidType) {
+    const elMatchingSpectralType = [...elsSpectralTypes].find(el => el.dataset.value === influenceAsteroidType.toLowerCase());
+    if (elMatchingSpectralType) {
+        elMatchingSpectralType.click();
+    }
+}
