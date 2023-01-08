@@ -17,12 +17,13 @@ if (window.location.hostname === '127.0.0.1') {
 }
 
 /**
- * Get asteroid ID injected from iframe parent, if any
+ * Get asteroid ID (and type) injected from iframe parent, if any
  * e.g. game URL: https://game.influenceth.io/asteroids/1234
- * => iframe URL: https://materials.adalia.id/tool.html?influence_asteroid=1234
+ * => iframe URL: https://materials.adalia.id/tool.html?influence_asteroid=1234&influence_asteroid_type=C
  */
 const urlParams = new URLSearchParams(location.search);
 const influenceAsteroidId = urlParams.get('influence_asteroid');
+const influenceAsteroidType = urlParams.get('influence_asteroid_type');
 
 // Overlays
 const elOverlayWrapper = document.getElementById('overlay-wrapper');
