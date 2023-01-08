@@ -38,7 +38,7 @@
                 color: white;
             }
 
-            &.impossible {
+            &.multi-asteroid {
                 opacity: 0.25;
             }
 
@@ -46,7 +46,7 @@
                 border-color: var(--brand-text);
                 color: var(--brand-text);
 
-                &.impossible {
+                &.multi-asteroid {
                     opacity: 0.5;
                 }
             }
