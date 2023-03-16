@@ -470,9 +470,9 @@ function updateProductsForActiveSpectralTypes() {
                 uniquePushToArray(selectedBaseSpectrals, baseSpectral);
             }
         });
-        const selectedAlphabeticalSpectralType = selectedBaseSpectrals.sort().join('')
+        const selectedAlphabeticalSpectralType = selectedBaseSpectrals.sort().join('');
         const selectedVirtualSpectralType = mapAlphabeticalSpectralTypeToRealName[selectedAlphabeticalSpectralType];
-        const productNames = productNamesBySustainingSpectralType[selectedVirtualSpectralType]
+        const productNames = productNamesBySustainingSpectralType[selectedVirtualSpectralType];
         productNames.forEach(productName => {
             elProductsList.querySelector(`li[data-value="${productName}"]`).classList.add('active');
         });
