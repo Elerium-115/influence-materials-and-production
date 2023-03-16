@@ -1271,6 +1271,16 @@
     cursor: pointer;
 }
 
+#overlay-add-asteroid .wallet-asteroids-filters #claimable-sway {
+    border: 1px solid var(--default-bg);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+}
+
+#overlay-add-asteroid .wallet-asteroids-filters #claimable-sway::before {
+    content: 'Claimable SWAY: ';
+}
+
 #overlay-add-asteroid .wallet-asteroids-filters .selected-asteroids-cta:not(:hover) {
     background: var(--default-bg);
     white-space: nowrap;

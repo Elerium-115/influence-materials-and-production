@@ -46,6 +46,8 @@ const elTemplateProductionPlan = document.getElementById('template-production-pl
 const elsConnectWalletCta = document.querySelectorAll('.connect-wallet-cta');
 const elsConnectedAddress = document.querySelectorAll('.connected-address');
 
+const swayPerLot = 6922; // as of 2023-03-16
+
 let asteroidsPlannerTree = [];
 let shoppingListTree = {};
 
@@ -186,6 +188,7 @@ function getWalletAsteroidCardHtml(metadata) {
             <div class="id">${metadata.id}</div>
             <div class="name-wrapper"><div class="name">${metadata.name}</div></div>
             <div class="area area-km2">${metadata.area}</div>
+            <div class="name-wrapper"><div class="name">${(metadata.area * swayPerLot).toLocaleString()} SWAY</div></div>
             <a class="influence-logo-icon" href="${metadata.url}" target="_blank" title="View in-game"></a>
         </div>
     `;
@@ -1185,6 +1188,7 @@ async function updateWalletAsteroidsPanel() {
     }
     // Connected wallet has asteroids
     elWalletAsteroidsStatus.classList.add('hidden');
+    let claimableSwayValue = 0;
     asteroids.forEach(metadata => {
         const classPlanned = isPlannedAsteroidId(metadata.id) ? 'planned' : '';
         elWalletAsteroids.innerHTML += /*html*/ `
@@ -1192,7 +1196,9 @@ async function updateWalletAsteroidsPanel() {
                 ${getWalletAsteroidCardHtml(metadata)}
             </div>
         `;
+        claimableSwayValue += metadata.area * swayPerLot;
     });
+    document.getElementById('claimable-sway').textContent = claimableSwayValue.toLocaleString();
     /**
      * Mark overflowing asteroid names, to be animated left-right via CSS.
      * This needs to be done after ALL wrappers (ancestors) are visible,
