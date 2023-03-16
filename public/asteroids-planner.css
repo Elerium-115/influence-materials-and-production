@@ -1421,6 +1421,36 @@
     color: white;
 }
 
+#overlay-add-asteroid .wallet-asteroid-card .sway-wrapper {
+    bottom: -0.85rem;
+    left: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    z-index: 1;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card:not(:hover) .sway-wrapper {
+    display: none;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .sway-wrapper .sway {
+    background-color: var(--active-bg);
+    border-radius: 0.5rem;
+    display: inline-block;
+    filter: drop-shadow(0 10px 5px black);
+    margin: 0 auto;
+    padding: 0.1rem 0.5rem 0.25rem 0.5rem;
+}
+
+#overlay-add-asteroid .wallet-asteroid-card.planned .sway-wrapper .sway {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#overlay-add-asteroid .wallet-asteroid-card .sway-wrapper .sway::after {
+    content: ' SWAY';
+}
+
 #overlay-add-asteroid .wallet-asteroid-card:hover .influence-logo-icon {
     position: absolute;
     top: -0.5rem;

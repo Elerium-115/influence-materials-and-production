@@ -188,9 +188,9 @@ function getWalletAsteroidCardHtml(metadata) {
             <div class="id">${metadata.id}</div>
             <div class="name-wrapper"><div class="name">${metadata.name}</div></div>
             <div class="area area-km2">${metadata.area}</div>
-            <div class="name-wrapper"><div class="name">${(metadata.area * swayPerLot).toLocaleString()} SWAY</div></div>
             <a class="influence-logo-icon" href="${metadata.url}" target="_blank" title="View in-game"></a>
         </div>
+        <div class="sway-wrapper"><div class="sway">${(metadata.area * swayPerLot).toLocaleString()}</div></div>
     `;
 }
 
