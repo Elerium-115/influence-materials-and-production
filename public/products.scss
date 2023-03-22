@@ -19,6 +19,14 @@
         opacity: 0.5;
     }
 
+    #selected-product {
+        margin-top: 25px;
+
+        #selected-product-name {
+            color: var(--brand-text);
+        }
+    }
+
     #products-list {
         columns: 11rem 8;
         column-gap: 1rem;

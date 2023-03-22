@@ -411,6 +411,10 @@ const originalTitleProducts = elTitleProducts.textContent;
 
 const elSpectralTypesList = document.querySelector('.spectral-types ul');
 const elsSpectralTypes = elSpectralTypesList.querySelectorAll('li');
+const elSelectedProduct = document.getElementById('selected-product');
+const elSelectedProductChain = document.getElementById('selected-product-chain');
+const elSelectedProductPlanner = document.getElementById('selected-product-planner');
+const elSelectedProductName = document.getElementById('selected-product-name');
 const elProductsList = document.getElementById('products-list');
 
 for (const productName of productNamesSorted) {
@@ -439,6 +443,12 @@ for (const productName of productNamesSorted) {
             }
         }
         elTitleSpectralTypes.textContent = `${originalTitleSpectralTypes} on which the selected product can be made`;
+        // Show links to Production Chain / Production Planner for the selected product
+        elSelectedProductName.textContent = productName;
+        const productNameCompact = getCompactName(productName);
+        elSelectedProductChain.href = `./production.html#${productNameCompact}`;
+        elSelectedProductPlanner.href = `./production-planner.html#${productNameCompact}`;
+        elSelectedProduct.classList.remove('hidden');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         lastSelectedItemType = 'product';
     });
@@ -484,6 +494,8 @@ function updateProductsForActiveSpectralTypes() {
     } else {
         elTitleProducts.innerHTML = /*html*/ `${originalTitleProducts} that can be made on the <span style="text-decoration: underline;">combined</span> selected spectral types`;
     }
+    // Hide links to Production Chain / Production Planner for the selected product
+    elSelectedProduct.classList.add('hidden');
 }
 
 let lastSelectedItemType = ''; // 'spectral-type' or 'product'
