@@ -18,6 +18,12 @@
   font-style: normal;
   opacity: 0.5;
 }
+#products-wrapper #selected-product {
+  margin-top: 25px;
+}
+#products-wrapper #selected-product #selected-product-name {
+  color: var(--brand-text);
+}
 #products-wrapper #products-list {
   -moz-columns: 11rem 8;
        columns: 11rem 8;
