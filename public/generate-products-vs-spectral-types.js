@@ -1,41 +1,87 @@
+/**
+ * This script only needs to be executed when there are changes in the production chains.
+ * Do this by loading the HTML, and check the dev-tools console.
+ * 
+ * Outputs:
+ * - "productNamesBySustainingSpectralType" for ALL spectral types, including the VIRTUAL spectral types: "IM", "CIM", "IMS", "CIMS"
+ * - "productDataByName" that includes "sustainingSpectralTypes"
+ * - "productDataById" that includes "sustainingSpectralTypes"
+ * - "productNamesSorted"
+ * 
+ * These outputs need to be saved (manually) into "products-vs-spectral-types.js",
+ * which is then used by other scripts - e.g. "products.js".
+ */
+
+const timeStart = new Date(); //// TEST
+
 const notParsedProcessIds = []; // initially all process IDs
 const parsedProcessIds = [];
 const outputsOfParsedProcessIds = []; // product IDs
 
-const spectralTypes = ['C', 'CI', 'CIS', 'CM', 'CMS', 'CS', 'I', 'M', 'S', 'SI', 'SM'];
+/** Real spectral types */
+// const spectralTypes = ['C', 'CI', 'CIS', 'CM', 'CMS', 'CS', 'I', 'M', 'S', 'SI', 'SM'];
 
-const rawMaterialDataByName = {
-    "Ammonia":          { "label": "NH3",           "materialType": "Volatiles",    "baseSpectrals": ["I"],         sustainingSpectralTypes: ["CI", "CIS", "I", "SI"] },
-    "Carbon Dioxide":   { "label": "CO2",           "materialType": "Volatiles",    "baseSpectrals": ["C", "I"],    sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS", "I", "SI"] },
-    "Carbon Monoxide":  { "label": "CO",            "materialType": "Volatiles",    "baseSpectrals": ["C", "I"],    sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS", "I", "SI"] },
-    "Hydrogen":         { "label": "H",             "materialType": "Volatiles",    "baseSpectrals": ["I"],         sustainingSpectralTypes: ["CI", "CIS", "I", "SI"] },
-    "Methane":          { "label": "CH4",           "materialType": "Volatiles",    "baseSpectrals": ["C", "I"],    sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS", "I", "SI"] },
-    "Nitrogen":         { "label": "N",             "materialType": "Volatiles",    "baseSpectrals": ["I"],         sustainingSpectralTypes: ["CI", "CIS", "I", "SI"] },
-    "Sulfur Dioxide":   { "label": "SO2",           "materialType": "Volatiles",    "baseSpectrals": ["I"],         sustainingSpectralTypes: ["CI", "CIS", "I", "SI"] },
-    "Water":            { "label": "H2O",           "materialType": "Volatiles",    "baseSpectrals": ["C", "I"],    sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS", "I", "SI"] },
-    "Apatite":          { "label": "Mineral",       "materialType": "Organics",     "baseSpectrals": ["C"],         sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS"] },
-    "Bitumen":          { "label": "Hydrocarbon",   "materialType": "Organics",     "baseSpectrals": ["C"],         sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS"] },
-    "Calcite":          { "label": "Mineral",       "materialType": "Organics",     "baseSpectrals": ["C"],         sustainingSpectralTypes: ["C", "CI", "CIS", "CM", "CMS", "CS"] },
-//  "Magnesite":        { "label": "Mineral",       "materialType": "Organics",     "baseSpectrals": ["C"],         sustainingSpectralTypes: [] }, // obsolete product, no longer exists
-    "Feldspar":         { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["S"],         sustainingSpectralTypes: ["CIS", "CMS", "CS", "S", "SI", "SM"] },
-    "Graphite":         { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["M"],         sustainingSpectralTypes: ["CM", "CMS", "M", "SM"] },
-    "Olivine":          { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["S"],         sustainingSpectralTypes: ["CIS", "CMS", "CS", "S", "SI", "SM"] },
-    "Pyroxene":         { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["S"],         sustainingSpectralTypes: ["CIS", "CMS", "CS", "S", "SI", "SM"] },
-    "Rhabdite":         { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["M"],         sustainingSpectralTypes: ["CM", "CMS", "M", "SM"] },
-    "Taenite":          { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["M"],         sustainingSpectralTypes: ["CM", "CMS", "M", "SM"] },
-    "Troilite":         { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["M"],         sustainingSpectralTypes: ["CM", "CMS", "M", "SM"] },
-    "Merrillite":       { "label": "Mineral",       "materialType": "Rare-Earth",   "baseSpectrals": ["S"],         sustainingSpectralTypes: ["CIS", "CMS", "CS", "S", "SI", "SM"] },
-    "Xenotime":         { "label": "Mineral",       "materialType": "Rare-Earth",   "baseSpectrals": ["S"],         sustainingSpectralTypes: ["CIS", "CMS", "CS", "S", "SI", "SM"] },
-    "Coffinite":        { "label": "Mineral",       "materialType": "Fissiles",     "baseSpectrals": ["S"],         sustainingSpectralTypes: ["CIS", "CMS", "CS", "S", "SI", "SM"] },
-    "Uraninite":        { "label": "Mineral",       "materialType": "Fissiles",     "baseSpectrals": ["M"],         sustainingSpectralTypes: ["CM", "CMS", "M", "SM"] },
+/** All spectral types = Real spectral types + Virtual spectral types */
+const allSpectralTypes = [
+    'C',
+    'I',
+    'M',
+    'S',
+    'CI',
+    'CM',
+    'CS',
+    'IM', // virtual
+    'SI',
+    'SM',
+    'CIM', // virtual
+    'CIS',
+    'CMS',
+    'IMS', // virtual
+    'CIMS', // virtual
+];
+
+const allSpectralsByRawMaterial = {
+    // Volatiles
+    "Ammonia":          ["I", "CI", "IM", "SI", "CIM", "CIS", "IMS", "CIMS"],
+    "Carbon Dioxide":   ["C", "I", "CI", "CM", "CS", "IM", "SI", "CIM", "CIS", "CMS", "IMS", "CIMS"],
+    "Carbon Monoxide":  ["C", "I", "CI", "CM", "CS", "IM", "SI", "CIM", "CIS", "CMS", "IMS", "CIMS"],
+    "Hydrogen":         ["I", "CI", "IM", "SI", "CIM", "CIS", "IMS", "CIMS"],
+    "Methane":          ["C", "I", "CI", "CM", "CS", "IM", "SI", "CIM", "CIS", "CMS", "IMS", "CIMS"],
+    "Nitrogen":         ["I", "CI", "IM", "SI", "CIM", "CIS", "IMS", "CIMS"],
+    "Sulfur Dioxide":   ["I", "CI", "IM", "SI", "CIM", "CIS", "IMS", "CIMS"],
+    "Water":            ["C", "I", "CI", "CM", "CS", "IM", "SI", "CIM", "CIS", "CMS", "IMS", "CIMS"],
+    // Organics
+    "Apatite":          ["C", "CI", "CM", "CS", "CIM", "CIS", "CMS", "CIMS"],
+    "Bitumen":          ["C", "CI", "CM", "CS", "CIM", "CIS", "CMS", "CIMS"],
+    "Calcite":          ["C", "CI", "CM", "CS", "CIM", "CIS", "CMS", "CIMS"],
+    // Metals
+    "Feldspar":         ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
+    "Graphite":         ["M", "CM", "IM", "SM", "CIM", "CMS", "IMS", "CIMS"],
+    "Olivine":          ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
+    "Pyroxene":         ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
+    "Rhabdite":         ["M", "CM", "IM", "SM", "CIM", "CMS", "IMS", "CIMS"],
+    "Taenite":          ["M", "CM", "IM", "SM", "CIM", "CMS", "IMS", "CIMS"],
+    "Troilite":         ["M", "CM", "IM", "SM", "CIM", "CMS", "IMS", "CIMS"],
+    // Rare-Earth
+    "Merrillite":       ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
+    "Xenotime":         ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
+    // Fissiles
+    "Coffinite":        ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
+    "Uraninite":        ["M", "CM", "IM", "SM", "CIM", "CMS", "IMS", "CIMS"],
 }
 
 // Parse data from official JSON
 const productDataById = {};
-const processDataById = {};
+const productDataByName = {};
+const productNamesSorted = [];
 InfluenceProductionChainsJSON.products.forEach(product => {
     productDataById[product.id] = product;
+    productDataByName[product.name] = product;
+    productNamesSorted.push(product.name);
 });
+productNamesSorted.sort();
+
+const processDataById = {};
 InfluenceProductionChainsJSON.processes.forEach(process => {
     processDataById[process.id] = process;
     notParsedProcessIds.push(process.id);
@@ -60,7 +106,7 @@ function uniquePushToArray(arr, value) {
 const cachedOutputIdsOfProcessId = {};
 /**
  * NOTE: processId = process ID as string, not number
-*/
+ */
 function getOutputIdsOfProcessId(processId) {
     if (!cachedOutputIdsOfProcessId[processId]) {
         const outputIds = [];
@@ -75,7 +121,7 @@ function getOutputIdsOfProcessId(processId) {
 const cachedProcessVariantIdsForOutputId = {};
 /**
  * NOTE: outputId = product ID as string, not number
-*/
+ */
 function getProcessVariantIdsForOutputId(outputId) {
     if (!cachedProcessVariantIdsForOutputId[outputId]) {
         const processVariantIds = [];
@@ -109,38 +155,39 @@ function getProcessVariantIdsForOutputId(outputId) {
 let hasFatalErrorTier0 = false;
 for (const processId of [...notParsedProcessIds]) {
     const processData = processDataById[processId];
-    if (!processData.inputs.length) {
-        // console.log(`--- tier-0 process #${processId}: ${processData.name}`); //// TEST
-        // The outputs of a tier-0 process should always be a single raw material, otherwise something is wrong
-        const outputIdsOfProcessId = getOutputIdsOfProcessId(processId);
-        if (outputIdsOfProcessId.length !== 1) {
-            console.log(`%c--- ERROR: tier-0 process "${processData.name}" has non-single output IDs: ${JSON.stringify(outputIdsOfProcessId)}`, 'color: red;');
-            hasFatalErrorTier0 = true;
-            break; // skip remaining processes
-        }
-        const outputId = outputIdsOfProcessId[0];
-        const outputData = productDataById[outputId];
-        const outputName = outputData.name;
-        // console.log(`---> outputName = ${outputName}`); //// TEST
-        // Assign the spectral types that can sustain this process
-        const sustainingSpectralTypes = rawMaterialDataByName[outputName].sustainingSpectralTypes;
-        // console.log(`---> sustainingSpectralTypes = ${sustainingSpectralTypes}`); //// TEST
-        processData.sustainingSpectralTypes = sustainingSpectralTypes;
-        // Unique-add those spectral types to each of the outputs of this process
-        if (!outputData.sustainingSpectralTypes) {
-            outputData.sustainingSpectralTypes = [];
-        }
-        for (const spectralType of sustainingSpectralTypes) {
-            // console.log(`---> uniquePushToArray(outputData.sustainingSpectralTypes, ${spectralType})`); //// TEST
-            uniquePushToArray(outputData.sustainingSpectralTypes, spectralType);
-        }
-        // console.log(`---> outputData.sustainingSpectralTypes = ${outputData.sustainingSpectralTypes}`); //// TEST
-        // Unique-add the outputs (product IDs) of this process into "outputsOfParsedProcessIds"
-        uniquePushToArray(outputsOfParsedProcessIds, outputId);
-        // Move this process from "notParsedProcessIds", into "parsedProcessIds"
-        removeFromArray(notParsedProcessIds, processId);
-        parsedProcessIds.push(processId);
+    if (processData.inputs.length) {
+        continue; // skip this higher-tier process, continue to the next one
     }
+    // console.log(`--- tier-0 process #${processId}: ${processData.name}`); //// TEST
+    // The outputs of a tier-0 process should always be a single raw material, otherwise something is wrong
+    const outputIdsOfProcessId = getOutputIdsOfProcessId(processId);
+    if (outputIdsOfProcessId.length !== 1) {
+        console.log(`%c--- ERROR: tier-0 process "${processData.name}" has non-single output IDs: ${JSON.stringify(outputIdsOfProcessId)}`, 'color: red;');
+        hasFatalErrorTier0 = true;
+        break; // skip remaining processes
+    }
+    const outputId = outputIdsOfProcessId[0];
+    const outputData = productDataById[outputId];
+    const outputName = outputData.name;
+    // console.log(`---> outputName = ${outputName}`); //// TEST
+    // Assign the spectral types that can sustain this process
+    const sustainingSpectralTypes = allSpectralsByRawMaterial[outputName];
+    // console.log(`---> ... sustainingSpectralTypes = ${sustainingSpectralTypes}`); //// TEST
+    processData.sustainingSpectralTypes = sustainingSpectralTypes;
+    // Unique-add those spectral types to each of the outputs of this process
+    if (!outputData.sustainingSpectralTypes) {
+        outputData.sustainingSpectralTypes = [];
+    }
+    for (const spectralType of sustainingSpectralTypes) {
+        // console.log(`---> ... ... uniquePushToArray(outputData.sustainingSpectralTypes, ${spectralType})`); //// TEST
+        uniquePushToArray(outputData.sustainingSpectralTypes, spectralType);
+    }
+    // console.log(`---> ... outputData.sustainingSpectralTypes = ${outputData.sustainingSpectralTypes}`); //// TEST
+    // Unique-add the outputs (product IDs) of this process into "outputsOfParsedProcessIds"
+    uniquePushToArray(outputsOfParsedProcessIds, outputId);
+    // Move this process from "notParsedProcessIds", into "parsedProcessIds"
+    removeFromArray(notParsedProcessIds, processId);
+    parsedProcessIds.push(processId);
 }
 
 console.log(`%c--- DONE tier-0`, 'color: cyan;'); //// TEST
@@ -191,7 +238,7 @@ function parseNextTierProcesses() {
         let abortProcess = false;
         let abortProcessReason = '';
         // Parse each spectral type
-        for (const spectralType of spectralTypes) {
+        for (const spectralType of allSpectralTypes) {
             // console.log(`---> CHECK spectralType = ${spectralType}`);
             // Check if this spectral type can sustain at-least-one process-variant, for each input of this process
             let canSustainAllInputs = true;
@@ -304,12 +351,13 @@ function recursiveParseNextTierProcesses() {
     if (notParsedProcessIds.length > 0) {
         recursiveParseNextTierProcesses();
     } else {
-        console.log(`%c--- FINISHED`, 'color: lime;'); //// TEST
+        const timeEnd = new Date(); //// TEST
+        console.log(`%c--- FINISHED in ${timeEnd.getTime() - timeStart.getTime()} ms`, 'color: lime;'); //// TEST
     }
 }
 
 const productNamesBySustainingSpectralType = {};
-for (const spectralType of spectralTypes) {
+for (const spectralType of allSpectralTypes) {
     productNamesBySustainingSpectralType[spectralType] = [];
 }
 
@@ -329,10 +377,13 @@ if (!hasFatalErrorTier0) {
             productNamesBySustainingSpectralType[sustainingSpectralType].push(productData.name);
         }
     }
-    for (const spectralType of spectralTypes) {
+    for (const spectralType of allSpectralTypes) {
         productNamesBySustainingSpectralType[spectralType].sort();
     }
-    
-    console.log(`--- productNamesBySustainingSpectralType:`, productNamesBySustainingSpectralType); //// TEST
-    document.getElementById('test').textContent = JSON.stringify(productNamesBySustainingSpectralType, null, '\t');
+
+    console.log(`%c--- SAVE THE OUTPUTS BELOW INTO "products-vs-spectral-types.js"`, 'background: red;');
+    console.log(`---> productNamesBySustainingSpectralType:`, productNamesBySustainingSpectralType);
+    console.log(`---> productDataByName:`, productDataByName);
+    console.log(`---> productDataById:`, productDataById);
+    console.log(`---> productNamesSorted:`, productNamesSorted);
 }
