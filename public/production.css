@@ -709,6 +709,38 @@
     display: none;
 }
 
+#production-chain-items [data-container-id] .sustaining-spectral-types {
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    left: 50%;
+    position: absolute;
+}
+
+#production-chain-items [data-container-id]:not(:hover) .sustaining-spectral-types {
+    display: none;
+}
+
+#production-chain-items [data-container-id] .sustaining-spectral-types span {
+    background: black;
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+    filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
+    padding: 0.5rem;
+    position: absolute;
+}
+
+#production-chain-items .selected-item[data-container-id] .sustaining-spectral-types span {
+    border-color: var(--brand-text);
+    color: var(--item-name);
+}
+
+#production-chain-items [data-container-id] .sustaining-spectral-types span::before {
+    content: 'Sustaining Spectral Types';
+    display: block;
+    white-space: nowrap;
+}
+
 #production-chain-connections > * {
     position: absolute; 
     line-height: 1px;

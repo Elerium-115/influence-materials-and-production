@@ -1,4 +1,30 @@
 
+const isRealSpectralType = {
+    C: true,
+    I: true,
+    M: true,
+    S: true,
+    CI: true,
+    CM: true,
+    CS: true,
+    IM: false, // virtual
+    SI: true,
+    SM: true,
+    CIM: false, // virtual
+    CIS: true,
+    CMS: true,
+    IMS: false, // virtual
+    CIMS: false, // virtual
+};
+
+/**
+ * Keep only the real spectral types, from a list of spectral types
+ * that may also include "virtual" spectral types (e.g. "IM").
+ */
+function getRealSpectralTypesSorted(spectralTypes) {
+    return spectralTypes.filter(spectralType => isRealSpectralType[spectralType]).sort();
+}
+
 // raw materials sorted by material-type (Volatiles > Organics > Metals > Rare-Earth > Fissiles)
 const rawMaterialsSorted = [
     // Volatiles
@@ -396,6 +422,9 @@ function createProductContainer(itemName, itemData, parentContainerId) {
     itemContainer.innerHTML = `<a href="#${getCompactName(itemName)}" class="item-name">${itemName}</a>`;
     itemContainer.innerHTML += `<div class="item-qty">1</div>`;
     itemContainer.innerHTML += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png';">`;
+    const sustainingSpectralTypes = getRealSpectralTypesSorted(productDataByName[itemName].sustainingSpectralTypes);
+    const sustainingSpectralTypesText = sustainingSpectralTypes.length ? sustainingSpectralTypes.join(', ') : 'N/A';
+    itemContainer.innerHTML += `<div class="sustaining-spectral-types"><span>${sustainingSpectralTypesText}</span></div>`;
     itemContainer.classList.add(getItemTypeClass(itemData.itemType));
     return itemContainer;
 }
