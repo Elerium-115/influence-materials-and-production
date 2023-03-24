@@ -1269,6 +1269,7 @@ const productNamesBySustainingSpectralType = {
     ]
 };
 
+// includes "sustainingSpectralTypes"
 const productDataByName = {
     "Water": {
       "id": "0",
@@ -4346,6 +4347,7 @@ const productDataByName = {
     }
 };
 
+// includes "sustainingSpectralTypes"
 const productDataById = {
     "0": {
       "id": "0",

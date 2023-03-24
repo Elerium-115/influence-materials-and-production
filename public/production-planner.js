@@ -1,3 +1,11 @@
+/**
+ * This script requires the inputs below, from "products-vs-spectral-types.js" (included via HTML).
+ * 
+ * Inputs:
+ * - "productDataByName"
+ * - "productNamesSorted"
+ */
+
 isToolProductionPlanner = true;
 
 // Ppopulate "productNamesByHash" and the products-list

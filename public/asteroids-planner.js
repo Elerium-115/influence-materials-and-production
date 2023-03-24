@@ -1,3 +1,11 @@
+/**
+ * This script requires the inputs below, from "products-vs-spectral-types.js" (included via HTML).
+ * 
+ * Inputs:
+ * - "productDataByName"
+ * - "productNamesSorted"
+ */
+
 const elAsteroidsPlanner = document.querySelector('.asteroids-planner');
 const elAsteroidsPlannerWrapper = document.getElementById('asteroids-planner-wrapper');
 const elAsteroidsPlannerTree = document.getElementById('asteroids-planner-tree');
