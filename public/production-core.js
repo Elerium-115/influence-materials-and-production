@@ -23,6 +23,32 @@ const selectedItemNameContainer = document.getElementById('selected-item-name');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const elMinimapWrapper = document.getElementById('minimap-wrapper');
 
+const isRealSpectralType = {
+    C: true,
+    I: true,
+    M: true,
+    S: true,
+    CI: true,
+    CM: true,
+    CS: true,
+    IM: false, // virtual
+    SI: true,
+    SM: true,
+    CIM: false, // virtual
+    CIS: true,
+    CMS: true,
+    IMS: false, // virtual
+    CIMS: false, // virtual
+};
+
+/**
+ * Keep only the real spectral types, from a list of spectral types
+ * that may also include "virtual" spectral types (e.g. "IM").
+ */
+function getRealSpectralTypesSorted(spectralTypes) {
+    return spectralTypes.filter(spectralType => isRealSpectralType[spectralType]).sort();
+}
+
 function getItemContainerById(itemContainerId) {
     return productChainItemsContainer.querySelector(`[data-container-id='${itemContainerId}']`);
 }

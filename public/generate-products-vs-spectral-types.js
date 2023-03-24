@@ -4,8 +4,8 @@
  * 
  * Outputs:
  * - "productNamesBySustainingSpectralType" for ALL spectral types, including the VIRTUAL spectral types: "IM", "CIM", "IMS", "CIMS"
- * - "productDataByName" that includes "sustainingSpectralTypes"
- * - "productDataById" that includes "sustainingSpectralTypes"
+ * - "productDataByName"
+ * - "productDataById"
  * - "productNamesSorted"
  * 
  * These outputs need to be saved (manually) into "products-vs-spectral-types.js",

@@ -1,8 +1,14 @@
-/*
-Common code used in:
-- Production Planner tool + any other tool that includes "template-production-plan"
-- Asteroids Planner tool
-*/
+/**
+ * This script requires the inputs below, from "products-vs-spectral-types.js" (included via HTML).
+ * 
+ * Inputs:
+ * - "productDataByName" ("items" in "production.js")
+ * - "productDataById"
+ * 
+ * Common code used in:
+ * - Production Planner tool + any other tool that includes "template-production-plan"
+ * - Asteroids Planner tool
+ */
 
 const rawMaterialDataByName = {
     "Ammonia":          { "label": "NH3",           "materialType": "Volatiles",    "baseSpectrals": ["I"]      },
@@ -33,22 +39,13 @@ const rawMaterialDataByName = {
 // Parse data from official JSON
 const buildingDataById = {};
 const buildingIdByName = {};
-const productDataById = {};
-const productDataByName = {}; // "items" in "production.js"
 const productNamesByHash = {}; // "itemNamesByHash" in "production.js"
-const productNamesSorted = []; // "itemNamesSorted" in "production.js"
 const processDataById = {};
 const processVariantIdsByProductId = {};
 InfluenceProductionChainsJSON.buildings.forEach(building => {
     buildingDataById[building.id] = building;
     buildingIdByName[building.name] = building.id;
 });
-InfluenceProductionChainsJSON.products.forEach(product => {
-    productDataById[product.id] = product;
-    productDataByName[product.name] = product;
-    productNamesSorted.push(product.name);
-});
-productNamesSorted.sort();
 InfluenceProductionChainsJSON.processes.forEach(process => {
     // Set qty for each input
     process.inputs = process.inputs.map(input => {
@@ -478,6 +475,9 @@ function createProductContainerV2(itemId) {
     productContainer.innerHTML = `<div class="item-name">${itemName}</div>`;
     productContainer.innerHTML += `<div class="item-qty"></div>`;
     // productContainer.innerHTML += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png';">`;
+    const sustainingSpectralTypes = getRealSpectralTypesSorted(productDataByName[itemName].sustainingSpectralTypes);
+    const sustainingSpectralTypesText = sustainingSpectralTypes.length ? sustainingSpectralTypes.join(', ') : 'N/A';
+    productContainer.innerHTML += `<div class="sustaining-spectral-types"><span>${sustainingSpectralTypesText}</span></div>`;
     productContainer.classList.add(getItemTypeClass(productData.type));
     productContainer.addEventListener('click', event => {
         toggleProductItemId(itemId); // the user may either select or deselect a product

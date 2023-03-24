@@ -1,29 +1,9 @@
-
-const isRealSpectralType = {
-    C: true,
-    I: true,
-    M: true,
-    S: true,
-    CI: true,
-    CM: true,
-    CS: true,
-    IM: false, // virtual
-    SI: true,
-    SM: true,
-    CIM: false, // virtual
-    CIS: true,
-    CMS: true,
-    IMS: false, // virtual
-    CIMS: false, // virtual
-};
-
 /**
- * Keep only the real spectral types, from a list of spectral types
- * that may also include "virtual" spectral types (e.g. "IM").
+ * This script requires the inputs below, from "products-vs-spectral-types.js" (included via HTML).
+ * 
+ * Inputs:
+ * - "productDataByName"
  */
-function getRealSpectralTypesSorted(spectralTypes) {
-    return spectralTypes.filter(spectralType => isRealSpectralType[spectralType]).sort();
-}
 
 // raw materials sorted by material-type (Volatiles > Organics > Metals > Rare-Earth > Fissiles)
 const rawMaterialsSorted = [

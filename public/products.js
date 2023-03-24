@@ -1,9 +1,9 @@
 /**
- * This script requires the inputs below, from "products-vs-spectral-types.js" included via the HTML:
+ * This script requires the inputs below, from "products-vs-spectral-types.js" (included via HTML).
  * 
  * Inputs:
  * - "productNamesBySustainingSpectralType" for ALL spectral types, including the VIRTUAL spectral types: "IM", "CIM", "IMS", "CIMS"
- * - "productDataByName" that includes "sustainingSpectralTypes"
+ * - "productDataByName"
  * - "productNamesSorted"
  */
 
