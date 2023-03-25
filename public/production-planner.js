@@ -8,7 +8,7 @@
 
 isToolProductionPlanner = true;
 
-// Ppopulate "productNamesByHash" and the products-list
+// Populate "productNamesByHash" and the products-list
 productNamesSorted.forEach(productName => {
     const productNameCompact = getCompactName(productName);
     productNamesByHash[productNameCompact] = productName;
