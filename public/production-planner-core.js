@@ -943,7 +943,7 @@ function setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById) 
     window.location.hash = `#${hash}`;
     // Reset the state of the "Share link" container
     shareLinkContainer.classList.remove('is-showing-url');
-    shareLinkContainer.querySelector('.share-text').textContent = 'Share link';
+    shareLinkContainer.querySelector('.link-text').textContent = 'Share Link';
     setTimeout(() => {
         /**
          * Resume the handler for "hashchange" with a small delay,

@@ -61,6 +61,8 @@ function setItemDataByIdDecodedFromHash(hashEncodedFromItemDataById) {
 function selectPlannedProductHash(hash) {
     hideAndResetProductsList();
     const [plannedProductCompactName, hashEncodedFromItemDataById] = hash.split('__');
+    // Update link to other production chain type, for the same product
+    chainTypeLinkContainer.querySelector('a').setAttribute('href', `./production.html#${plannedProductCompactName}`);
     // Re-render the entire planned chain on page-load, based on the decoded hash, if any
     if (hashEncodedFromItemDataById) {
         // if (doDebug) console.log(`%c--- RENDER the entire planned chain, based on the decoded hash`, 'background: blue');
@@ -90,8 +92,8 @@ function fetchShareLink() {
         // A short URL was already generated for the current state of the chain
         return;
     }
-    const shareTextContainer = shareLinkContainer.querySelector('.share-text');
-    shareTextContainer.textContent = 'Generating short URL...';
+    const shareTextContainer = shareLinkContainer.querySelector('.link-text');
+    shareTextContainer.textContent = 'Generating Short URL...';
     const url = location.href;
     // Encode URL special characters, e.g. "#" => "%23"
     const urlEncoded = encodeURIComponent(url);

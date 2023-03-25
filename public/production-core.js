@@ -20,6 +20,7 @@ const productsListWrapper = document.getElementById('products-list-wrapper');
 const productSearchInput = productsListWrapper.querySelector('input');
 const productsListContainer = document.getElementById('products-list');
 const selectedItemNameContainer = document.getElementById('selected-item-name');
+const chainTypeLinkContainer = document.getElementById('chain-type-link');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const elMinimapWrapper = document.getElementById('minimap-wrapper');
 
