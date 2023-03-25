@@ -132,7 +132,8 @@
     background: var(--dark-bg) !important;
 }
 
-#products-list a.not-matching-search {
+#products-list a.not-matching-search,
+#products-list a.not-matching-spectral-type {
     display: none;
 }
 

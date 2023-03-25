@@ -128,9 +128,10 @@ function filterProductsList() {
 function hideAndResetProductsList() {
     productsListWrapper.classList.add('list-hidden');
     productsListWrapper.querySelector('input').value = '';
-    // Re-show the list-items which did not match the previous search
-    productsListContainer.querySelectorAll('.not-matching-search').forEach(elListItem => {
+    // Re-show the list-items which did not match the previous search / spectral type
+    productsListContainer.querySelectorAll('*').forEach(elListItem => {
         elListItem.classList.remove('not-matching-search');
+        elListItem.classList.remove('not-matching-spectral-type');
     });
     // Re-filter the products list, required after a SOFT-reload which preserves the disabled filters
     filterProductsList();
@@ -281,7 +282,7 @@ on('mouseleave', '.list-product-name', el => {
 window.addEventListener('keydown', event => {
     // Pressing "Enter" while the product-search input is focused, selects the first matching product
     if (event.key === 'Enter') {
-        const firstSearchMatch = productsListContainer.querySelector('*:not(.not-matching-search)');
+        const firstSearchMatch = productsListContainer.querySelector('*:not(.not-matching-search):not(.not-matching-spectral-type)');
         if (productSearchInput === document.activeElement && productSearchInput.value.length && firstSearchMatch) {
             productSearchInput.blur();
             firstSearchMatch.click();

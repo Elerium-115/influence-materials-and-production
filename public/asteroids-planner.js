@@ -2,6 +2,7 @@
  * This script requires the inputs below, from "products-vs-spectral-types.js" (included via HTML).
  * 
  * Inputs:
+ * - "productNamesBySustainingSpectralType"
  * - "productDataByName"
  * - "productNamesSorted"
  */
@@ -40,6 +41,8 @@ const elInputMockArea = document.getElementById('input-mock-area');
 
 // Elements in the overlay for "Add product"
 const elOverlayAddProductAsteroidName = elOverlayAddProduct.querySelector('.asteroid-name');
+const elOverlayAddProductSpectralTypeCircle = elOverlayAddProduct.querySelector('.spectral-types-circle');
+const elOverlayAddProductToggleProductsForSpectralType = document.getElementById('toggle-only-products-for-spectral-type');
 const elOverlayAddProductInput = elOverlayAddProduct.querySelector('#products-list-wrapper input');
 
 // Elements in the overlay for "Select asteroid for product"
@@ -83,7 +86,7 @@ const productImgOnError = `
     this.parentElement.classList.add('parent-missing-image');"
 `;
 
-// Ppopulate "productNamesByHash" and the products-list
+// Populate "productNamesByHash" and the products-list
 productNamesSorted.forEach(productName => {
     const productNameCompact = getCompactName(productName);
     productNamesByHash[productNameCompact] = productName;
@@ -1479,6 +1482,16 @@ function addAsteroidData(asteroidData) {
 
 function onClickAddPlannedProductForAsteroid(asteroidName) {
     elOverlayAddProductAsteroidName.textContent = asteroidName;
+    // Update spectral type circle
+    const spectralClassOld = elOverlayAddProductSpectralTypeCircle.dataset.spectralClass;
+    if (spectralClassOld) {
+        elOverlayAddProductSpectralTypeCircle.classList.remove(spectralClassOld);
+    }
+    const spectralType = getAsteroidData(asteroidName).asteroid_type;
+    elOverlayAddProductSpectralTypeCircle.textContent = spectralType;
+    const spectralClassNew = `type-${spectralType}`;
+    elOverlayAddProductSpectralTypeCircle.classList.add(spectralClassNew);
+    elOverlayAddProductSpectralTypeCircle.dataset.spectralClass = spectralClassNew;
     // Show overlay for "Add planned product"
     document.body.classList.add('overlay-visible');
     elOverlayAddProduct.classList.remove('hidden');
@@ -1486,12 +1499,28 @@ function onClickAddPlannedProductForAsteroid(asteroidName) {
     hideAndResetProductsList();
     elOverlayAddProductInput.click();
     elOverlayAddProductInput.focus();
+    // Filter products for spectral type, if toggle checked
+    if (elOverlayAddProductToggleProductsForSpectralType.checked) {
+        toggleProductsForSpectralType(true);
+    }
 }
 
 function selectPlannedProduct(productNameCompact) {
     const productName = productNamesByHash[productNameCompact];
     const asteroidName = elOverlayAddProductAsteroidName.textContent;
     addPlannedProductToAsteroid(productName, asteroidName);
+}
+
+function toggleProductsForSpectralType(isChecked) {
+    const spectralType = elOverlayAddProductSpectralTypeCircle.textContent;
+    productsListContainer.querySelectorAll('*').forEach(elListItem => {
+        const isSustainedBySpectralType = productNamesBySustainingSpectralType[spectralType].includes(elListItem.textContent);
+        if (isChecked && !isSustainedBySpectralType) {
+            elListItem.classList.add('not-matching-spectral-type');
+        } else {
+            elListItem.classList.remove('not-matching-spectral-type');
+        }
+    });
 }
 
 /**
@@ -2256,7 +2285,7 @@ async function updateWalletCtaInstancesOnAccountsChanged() {
 }
 
 // Toggle hide / show intermediate products in the Shopping List tree
-on('change', '#toggle-hide-subproducts', elInput => {
+on('change', '#toggle-hide-subproducts', el => {
     elAsteroidsPlannerTree.classList.toggle('hide-subproducts');
     repositionAsteroidsPlannerConnections();
 });
@@ -2265,6 +2294,11 @@ on('change', '#toggle-hide-subproducts', elInput => {
 on('change', '#toggle-hide-unselected', el => {
     elShoppingListTree.classList.toggle('hide-unselected');
     repositionAsteroidsPlannerConnections();
+});
+
+// Toggle only products that can be produced entirely on the that spectral type, in the overlay for "Add product"
+on('change', '#toggle-only-products-for-spectral-type', el => {
+    toggleProductsForSpectralType(el.checked);
 });
 
 // Validate asteroid ID when requesting asteroid metadata
