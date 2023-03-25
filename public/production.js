@@ -990,6 +990,8 @@ async function selectItemByName(itemName) {
     requiredProductName.textContent = itemName;
     const itemNameCompact = getCompactName(itemName);
     window.location.hash = `#${itemNameCompact}`;
+    // Update link to other production chain type, for the same product
+    chainTypeLinkContainer.querySelector('a').setAttribute('href', `./production-planner.html#${itemNameCompact}`);
 }
 
 // update production chain (and text-input), based on tier-limit from range-input

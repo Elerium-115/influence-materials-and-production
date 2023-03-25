@@ -211,35 +211,35 @@
     color: var(--brand-text);
 }
 
-#selected-production-chain #share-link {
-    display: flex;
+#selected-production-chain .chain-link {
     align-items: center;
     color: var(--link);
+    cursor: pointer;
+    display: flex;
     font-size: 1rem;
     white-space: nowrap;
-    cursor: pointer;
 }
 
-#selected-production-chain #share-link:hover {
+#selected-production-chain .chain-link:hover {
     color: var(--link-hover);
     text-decoration: underline;
 }
 
-#selected-production-chain #share-link .share-icon-wrapper {
-    width: 1.4rem;
-    height: 1.4rem;
+#selected-production-chain .chain-link .link-icon-wrapper {
     background: var(--link);
+    border-radius: 50%;
+    height: 1.4rem;
     margin-right: 0.5rem;
     padding: 0.2rem 0.1rem 0.1rem 0.15rem;
-    border-radius: 50%;
+    width: 1.4rem;
 }
 
-#selected-production-chain #share-link:hover .share-icon-wrapper {
+#selected-production-chain .chain-link:hover .link-icon-wrapper {
     background: var(--link-hover);
 }
 
-#selected-production-chain #share-link.is-showing-url .share-icon-wrapper,
-#selected-production-chain #share-link.is-showing-url:hover .share-icon-wrapper {
+#selected-production-chain #share-link.is-showing-url .link-icon-wrapper,
+#selected-production-chain #share-link.is-showing-url:hover .link-icon-wrapper {
     background: var(--brand-text);
 }
 
@@ -739,6 +739,7 @@
 #production-chain-items [data-container-id] .sustaining-spectral-types span::before {
     content: 'Sustaining Spectral Types';
     display: block;
+    opacity: 0.5;
     white-space: nowrap;
 }
 
