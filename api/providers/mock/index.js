@@ -300,7 +300,7 @@ const mockProductionPlanDataById = {
 		},
 	},
 	"mock5": {
-		"plannedProductName": "Hydrolox Fuel",
+		"plannedProductName": "Oxygen",
 		"productionPlanId": "mock5",
 		"itemDataById": {
 			"1": {
@@ -309,115 +309,29 @@ const mockProductionPlanDataById = {
 			  "level": 1,
 			  "parentItemId": 0,
 			  "processId": null,
-			  "productId": 58
+			  "productId": 22
 			},
 			"2": {
 			  "isDisabled": false,
 			  "isSelected": true,
 			  "level": 2,
 			  "parentItemId": 1,
-			  "processId": 47,
+			  "processId": 22,
 			  "productId": null
 			},
 			"3": {
 			  "isDisabled": false,
-			  "isSelected": true,
+			  "isSelected": false,
 			  "level": 3,
 			  "parentItemId": 2,
-			  "processId": null,
-			  "productId": 1
-			},
-			"4": {
-			  "isDisabled": false,
-			  "isSelected": true,
-			  "level": 3,
-			  "parentItemId": 2,
-			  "processId": null,
-			  "productId": 22
-			},
-			"5": {
-			  "isDisabled": false,
-			  "isSelected": true,
-			  "level": 4,
-			  "parentItemId": 4,
-			  "processId": 22,
-			  "productId": null
-			},
-			"6": {
-			  "isDisabled": false,
-			  "isSelected": false,
-			  "level": 5,
-			  "parentItemId": 5,
-			  "processId": null,
-			  "productId": 0
-			},
-			"7": {
-			  "isDisabled": false,
-			  "isSelected": true,
-			  "level": 4,
-			  "parentItemId": 3,
-			  "processId": 1,
-			  "productId": null,
-			  "processVariantItemIds": [
-				7,
-				8
-			  ]
-			},
-			"8": {
-			  "isDisabled": true,
-			  "isSelected": false,
-			  "level": 4,
-			  "parentItemId": 3,
-			  "processId": 22,
-			  "productId": null,
-			  "processVariantItemIds": [
-				7,
-				8
-			  ]
-			},
-			"9": {
-			  "isDisabled": true,
-			  "isSelected": false,
-			  "level": 5,
-			  "parentItemId": 8,
 			  "processId": null,
 			  "productId": 0
 			}
 		},
 	},
 	"mock6": {
-		"plannedProductName": "Oxygen",
-		"productionPlanId": "mock6",
-		"itemDataById": {
-			"1": {
-			  "isDisabled": false,
-			  "isSelected": true,
-			  "level": 1,
-			  "parentItemId": 0,
-			  "processId": null,
-			  "productId": 22
-			},
-			"2": {
-			  "isDisabled": false,
-			  "isSelected": true,
-			  "level": 2,
-			  "parentItemId": 1,
-			  "processId": 22,
-			  "productId": null
-			},
-			"3": {
-			  "isDisabled": false,
-			  "isSelected": false,
-			  "level": 3,
-			  "parentItemId": 2,
-			  "processId": null,
-			  "productId": 0
-			}
-		},
-	},
-	"mock7": {
 		"plannedProductName": "Water",
-		"productionPlanId": "mock7",
+		"productionPlanId": "mock6",
 		"itemDataById": {
 			"1": {
 			  "isDisabled": false,
