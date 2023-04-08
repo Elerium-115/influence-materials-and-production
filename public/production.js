@@ -94,7 +94,7 @@ const itemsOld = {
     "Hydrogen Cyanide":         { "itemType": "Refined Material"    },
     "Hydrochloric Acid":        { "itemType": "Refined Material"    },
     "Hydrofluoric Acid":        { "itemType": "Refined Material"    },
-    "Hydrolox Fuel":            { "itemType": "Refined Material"    },
+    // "Hydrolox Fuel":            { "itemType": "Refined Material"    }, //// REMOVED from the game
     "Iron":                     { "itemType": "Refined Material"    },
     "Iron Oxide":               { "itemType": "Refined Material"    },
     "Lithium":                  { "itemType": "Refined Material"    },

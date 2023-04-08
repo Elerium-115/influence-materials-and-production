@@ -335,11 +335,11 @@ const InfluenceProductionChainsJSON = {
             "name": "Ferrosilicon",
             "type": "Refined Material"
         },
-        {
-            "id": "58",
-            "name": "Hydrolox Fuel",
-            "type": "Finished Good"
-        },
+        // {
+        //     "id": "58",
+        //     "name": "Hydrolox Fuel", //// REMOVED from the game
+        //     "type": "Finished Good"
+        // },
         {
             "id": "59",
             "name": "Oxalic Acid",
@@ -2166,26 +2166,26 @@ const InfluenceProductionChainsJSON = {
                 }
             ]
         },
-        {
-            "id": "47",
-            "name": "Hydrolox Stoichiometry and Cryocooling",
-            "buildingId": "3",
-            "inputs":
-            [
-                {
-                    "productId": "1"
-                },
-                {
-                    "productId": "22"
-                }
-            ],
-            "outputs":
-            [
-                {
-                    "productId": "58"
-                }
-            ]
-        },
+        // {
+        //     "id": "47",
+        //     "name": "Hydrolox Stoichiometry and Cryocooling", //// REMOVED from the game
+        //     "buildingId": "3",
+        //     "inputs":
+        //     [
+        //         {
+        //             "productId": "1"
+        //         },
+        //         {
+        //             "productId": "22"
+        //         }
+        //     ],
+        //     "outputs":
+        //     [
+        //         {
+        //             "productId": "58"
+        //         }
+        //     ]
+        // },
         {
             "id": "48",
             "name": "Oxalic Acid Process",
