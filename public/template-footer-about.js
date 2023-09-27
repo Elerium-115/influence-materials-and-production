@@ -17,7 +17,7 @@ export const templateFooterAbout = /*html*/ `
             <span class="influence-logo-icon"></span>
         </a>
     </div>
-    <div class="secondary">
+    <div class="secondary" style="display: none;">
         hosted by <a href="https://my.adalia.id" target="_blank" title="my.adalia.id">
             my.adalia.id<br>
             <img src="./img/adalia-id-logo.png" alt="my.adalia.id" class="footer-logo">

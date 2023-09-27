@@ -1,7401 +1,886 @@
 /**
  * To generate "productNamesBySustainingSpectralType",
- * see "generate-product-names-by-sustaining-spectral-type.js".
+ * see "generate-products-vs-spectral-types.js".
  */
 
 const productNamesBySustainingSpectralType = {
-    "C": [
-      "Acetone",
-      "Acetylene",
-      "Apatite",
-      "Benzene",
-      "Bitumen",
-      "Borax",
-      "Calcite",
-      "Calcium",
-      "Calcium Chloride",
-      "Carbon Dioxide",
-      "Carbon Monoxide",
-      "Chlorine",
-      "Cresol",
-      "Deionized Water",
-      "Diacetyl",
-      "Epichlorohydrin",
-      "Ethylene",
-      "Ethylene Glycol",
-      "Formaldehyde",
-      "Hydrogen",
-      "Lithium Carbonate",
-      "Magnesium",
-      "Magnesium Chloride",
-      "Methane",
-      "Methanol",
-      "Naphtha",
-      "Oxygen",
-      "Phenol",
-      "Polypropylene",
-      "Potassium Carbonate",
-      "Potassium Chloride",
-      "Potassium Hydroxide",
-      "Propylene",
-      "Quicklime",
-      "Salts",
-      "Sodium Bicarbonate",
-      "Sodium Carbonate",
-      "Sodium Chloride",
-      "Sodium Hydroxide",
-      "Soil",
-      "Water"
-    ],
-    "I": [
-      "Acetylene",
-      "Ammonia",
-      "Ammonium Carbonate",
-      "Ammonium Oxalate",
-      "Borax",
-      "Boron",
-      "Boron Trioxide",
-      "Carbon Dioxide",
-      "Carbon Monoxide",
-      "Chlorine",
-      "Deionized Water",
-      "Formaldehyde",
-      "Hydrogen",
-      "Hydrogen Cyanide",
-      "Lithium Carbonate",
-      "Magnesium",
-      "Magnesium Chloride",
-      "Methane",
-      "Methanol",
-      "Neon",
-      "Nitric Acid",
-      "Nitrogen",
-      "Oxalic Acid",
-      "Oxygen",
-      "Potassium Carbonate",
-      "Potassium Chloride",
-      "Potassium Hydroxide",
-      "Salts",
-      "Sodium Bisulfate",
-      "Sodium Chloride",
-      "Sodium Hydroxide",
-      "Sodium Persulfate",
-      "Sulfur",
-      "Sulfur Dioxide",
-      "Sulfuric Acid",
-      "Trimethyl Orthoformate",
-      "Water"
-    ],
-    "M": [
-      "Bare Copper Wire",
-      "Copper",
-      "Graphite",
-      "Iron",
-      "Iron Sulfide",
-      "Lead Sulfide",
-      "Molybdenum Disulfide",
-      "Nickel",
-      "Rhabdite",
-      "Steel",
-      "Steel Beam",
-      "Steel Cable",
-      "Steel Pipe",
-      "Steel Sheet",
-      "Steel Truss",
-      "Steel Wire",
-      "Taenite",
-      "Tin",
-      "Tin Sulfide",
-      "Troilite",
-      "Uraninite"
-    ],
-    "S": [
-      "Coffinite",
-      "Feldspar",
-      "Merrillite",
-      "Olivine",
-      "Pyroxene",
-      "Xenotime"
-    ],
-    "CI": [
-      "Acetone",
-      "Acetylene",
-      "Acrylonitrile",
-      "Ammonia",
-      "Ammonium Carbonate",
-      "Ammonium Chloride",
-      "Ammonium Oxalate",
-      "Apatite",
-      "Benzene",
-      "Bisphenol A",
-      "Bitumen",
-      "Borax",
-      "Boric Acid",
-      "Boron",
-      "Boron Trioxide",
-      "Calcite",
-      "Calcium",
-      "Calcium Chloride",
-      "Carbon Dioxide",
-      "Carbon Fiber",
-      "Carbon Monoxide",
-      "Chlorine",
-      "Cresol",
-      "Deionized Water",
-      "Diacetyl",
-      "Dioxane Pre-thiophene",
-      "EDOT",
-      "Epichlorohydrin",
-      "Epoxy",
-      "Ethylene",
-      "Ethylene Glycol",
-      "Fertilizer",
-      "Fluorine",
-      "Formaldehyde",
-      "Hydrochloric Acid",
-      "Hydrofluoric Acid",
-      "Hydrogen",
-      "Hydrogen Cyanide",
-      "Lithium",
-      "Lithium Carbonate",
-      "Lithium Chloride",
-      "Magnesium",
-      "Magnesium Chloride",
-      "Methane",
-      "Methanol",
-      "Naphtha",
-      "Neon",
-      "Nitric Acid",
-      "Nitrogen",
-      "Novolak",
-      "Oxalic Acid",
-      "Oxygen",
-      "PEDOT",
-      "Phenol",
-      "Phosphoric Acid",
-      "Photoresist Epoxy",
-      "Polyacrylonitrile",
-      "Polyacrylonitrile Fabric",
-      "Polypropylene",
-      "Potassium Carbonate",
-      "Potassium Chloride",
-      "Potassium Fluoride",
-      "Potassium Hydroxide",
-      "Propylene",
-      "Quicklime",
-      "Salts",
-      "Sodium Bicarbonate",
-      "Sodium Bisulfate",
-      "Sodium Carbonate",
-      "Sodium Chloride",
-      "Sodium Hydroxide",
-      "Sodium Persulfate",
-      "Soil",
-      "Sulfur",
-      "Sulfur Dioxide",
-      "Sulfuric Acid",
-      "Trimethyl Orthoformate",
-      "Triple Superphosphate",
-      "Water"
-    ],
-    "CM": [
-      "Acetone",
-      "Acetylene",
-      "Apatite",
-      "Bare Copper Wire",
-      "Benzene",
-      "Bitumen",
-      "Borax",
-      "Calcite",
-      "Calcium",
-      "Calcium Chloride",
-      "Carbon Dioxide",
-      "Carbon Monoxide",
-      "Chlorine",
-      "Copper",
-      "Copper Wire",
-      "Cresol",
-      "Deionized Water",
-      "Diacetyl",
-      "Epichlorohydrin",
-      "Ethylene",
-      "Ethylene Glycol",
-      "Formaldehyde",
-      "Gold",
-      "Graphite",
-      "Hydrogen",
-      "Iron",
-      "Iron Oxide",
-      "Iron Sulfide",
-      "Lead Sulfide",
-      "Lithium Carbonate",
-      "Magnesium",
-      "Magnesium Chloride",
-      "Methane",
-      "Methanol",
-      "Molybdenum Disulfide",
-      "Molybdenum Trioxide",
-      "Naphtha",
-      "Nickel",
-      "Oxygen",
-      "Phenol",
-      "Polypropylene",
-      "Potassium Carbonate",
-      "Potassium Chloride",
-      "Potassium Hydroxide",
-      "Propylene",
-      "Quicklime",
-      "Rhabdite",
-      "Salts",
-      "Silver",
-      "Sodium Bicarbonate",
-      "Sodium Carbonate",
-      "Sodium Chloride",
-      "Sodium Chromate",
-      "Sodium Hydroxide",
-      "Soil",
-      "Solder",
-      "Steel",
-      "Steel Beam",
-      "Steel Cable",
-      "Steel Pipe",
-      "Steel Sheet",
-      "Steel Truss",
-      "Steel Wire",
-      "Taenite",
-      "Tin",
-      "Tin Sulfide",
-      "Troilite",
-      "Uraninite",
-      "Water"
-    ],
-    "CS": [
-      "Acetone",
-      "Acetylene",
-      "Apatite",
-      "Benzene",
-      "Bitumen",
-      "Borax",
-      "Calcite",
-      "Calcium",
-      "Calcium Chloride",
-      "Carbon Dioxide",
-      "Carbon Monoxide",
-      "Chlorine",
-      "Coffinite",
-      "Concrete",
-      "Cresol",
-      "Deionized Water",
-      "Diacetyl",
-      "Epichlorohydrin",
-      "Ethylene",
-      "Ethylene Glycol",
-      "Feldspar",
-      "Fiber Optic Cable",
-      "Fiberglass",
-      "Formaldehyde",
-      "Fused Quartz",
-      "Fused Quartz Lightbulb Tube",
-      "Hydrogen",
-      "Lithium Carbonate",
-      "Magnesium",
-      "Magnesium Chloride",
-      "Merrillite",
-      "Methane",
-      "Methanol",
-      "Naphtha",
-      "Olivine",
-      "Oxygen",
-      "Phenol",
-      "Polypropylene",
-      "Potassium Carbonate",
-      "Potassium Chloride",
-      "Potassium Hydroxide",
-      "Propylene",
-      "Pyroxene",
-      "Quicklime",
-      "Salts",
-      "Silica",
-      "Silica Powder",
-      "Sodium Bicarbonate",
-      "Sodium Carbonate",
-      "Sodium Chloride",
-      "Sodium Hydroxide",
-      "Soil",
-      "Water",
-      "Xenotime"
-    ],
-    "IM": [
-      "Acetylene",
-      "Ammonia",
-      "Ammonium Carbonate",
-      "Ammonium Diuranate",
-      "Ammonium Oxalate",
-      "Bare Copper Wire",
-      "Borax",
-      "Boron",
-      "Boron Trioxide",
-      "Carbon Dioxide",
-      "Carbon Monoxide",
-      "Chlorine",
-      "Copper",
-      "Deionized Water",
-      "Formaldehyde",
-      "Graphite",
-      "Hydrogen",
-      "Hydrogen Cyanide",
-      "Iron",
-      "Iron Oxide",
-      "Iron Sulfide",
-      "Lead Sulfide",
-      "Lithium Carbonate",
-      "Magnesium",
-      "Magnesium Chloride",
-      "Methane",
-      "Methanol",
-      "Molybdenum Disulfide",
-      "Molybdenum Trioxide",
-      "Neon",
-      "Nickel",
-      "Nitric Acid",
-      "Nitrogen",
-      "Oxalic Acid",
-      "Oxygen",
-      "Potassium Carbonate",
-      "Potassium Chloride",
-      "Potassium Hydroxide",
-      "Rhabdite",
-      "Salts",
-      "Sodium Bisulfate",
-      "Sodium Chloride",
-      "Sodium Hydroxide",
-      "Sodium Persulfate",
-      "Steel",
-      "Steel Beam",
-      "Steel Cable",
-      "Steel Pipe",
-      "Steel Sheet",
-      "Steel Truss",
-      "Steel Wire",
-      "Sulfur",
-      "Sulfur Dioxide",
-      "Sulfuric Acid",
-      "Taenite",
-      "Tin",
-      "Tin Sulfide",
-      "Trimethyl Orthoformate",
-      "Troilite",
-      "Uraninite",
-      "Uranium Dioxide",
-      "Uranyl Nitrate",
-      "Water",
-      "Yellowcake"
-    ],
-    "SI": [
-      "Acetylene",
-      "Alumina",
-      "Alumina Ceramic",
-      "Ammonia",
-      "Ammonium Carbonate",
-      "Ammonium Diuranate",
-      "Ammonium Oxalate",
-      "Ammonium Paratungstate",
-      "Beryllia",
-      "Beryllia Ceramic",
-      "Beryllium Carbonate",
-      "Beryllium Sulfate",
-      "Borax",
-      "Boron",
-      "Boron Trioxide",
-      "Carbon Dioxide",
-      "Carbon Monoxide",
-      "Chlorine",
-      "Coffinite",
-      "Deionized Water",
-      "Feldspar",
-      "Ferrite",
-      "Fiber Optic Cable",
-      "Fiberglass",
-      "Formaldehyde",
-      "Fused Quartz",
-      "Fused Quartz Lightbulb Tube",
-      "Hydrogen",
-      "Hydrogen Cyanide",
-      "Hydrogen Propellant",
-      "Iron",
-      "Iron Oxide",
-      "Lithium Carbonate",
-      "Lithium Sulfate",
-      "Magnesium",
-      "Magnesium Chloride",
-      "Magnesium Oxide",
-      "Merrillite",
-      "Methane",
-      "Methanol",
-      "Neodymium Oxide",
-      "Neon",
-      "Nickel",
-      "Nickel Oxide",
-      "Nitric Acid",
-      "Nitrogen",
-      "Olivine",
-      "Oxalic Acid",
-      "Oxygen",
-      "Potassium Carbonate",
-      "Potassium Chloride",
-      "Potassium Hydroxide",
-      "Pyroxene",
-      "Rare Earth Oxides",
-      "Rare Earth Sulfates",
-      "Salts",
-      "Silica",
-      "Silica Powder",
-      "Sodium Bisulfate",
-      "Sodium Chloride",
-      "Sodium Hydroxide",
-      "Sodium Persulfate",
-      "Sodium Tungstate",
-      "Sulfur",
-      "Sulfur Dioxide",
-      "Sulfuric Acid",
-      "Trimethyl Orthoformate",
-      "Tungsten",
-      "Tungsten Powder",
-      "Uranium Dioxide",
-      "Uranyl Nitrate",
-      "Water",
-      "Xenotime",
-      "Yellowcake",
-      "Yttrium Oxide",
-      "Zinc",
-      "Zinc Oxide"
-    ],
-    "SM": [
-      "Bare Copper Wire",
-      "Coffinite",
-      "Copper",
-      "Feldspar",
-      "Graphite",
-      "Iron",
-      "Iron Sulfide",
-      "Lead Sulfide",
-      "Merrillite",
-      "Molybdenum Disulfide",
-      "Nickel",
-      "Olivine",
-      "Pyroxene",
-      "Rhabdite",
-      "Steel",
-      "Steel Beam",
-      "Steel Cable",
-      "Steel Pipe",
-      "Steel Sheet",
-      "Steel Truss",
-      "Steel Wire",
-      "Taenite",
-      "Tin",
-      "Tin Sulfide",
-      "Troilite",
-      "Uraninite",
-      "Xenotime"
-    ],
-    "CIM": [
-      "Acetone",
-      "Acetylene",
-      "Acrylonitrile",
-      "Ammonia",
-      "Ammonium Carbonate",
-      "Ammonium Chloride",
-      "Ammonium Diuranate",
-      "Ammonium Oxalate",
-      "Apatite",
-      "Ball Bearing",
-      "Bare Copper Wire",
-      "Benzene",
-      "Bisphenol A",
-      "Bitumen",
-      "Borax",
-      "Boric Acid",
-      "Boron",
-      "Boron Trioxide",
-      "Calcite",
-      "Calcium",
-      "Calcium Chloride",
-      "Carbon Dioxide",
-      "Carbon Fiber",
-      "Carbon Monoxide",
-      "Chlorine",
-      "Chromia",
-      "Copper",
-      "Copper Wire",
-      "Cresol",
-      "Deionized Water",
-      "Diacetyl",
-      "Dioxane Pre-thiophene",
-      "EDOT",
-      "Epichlorohydrin",
-      "Epoxy",
-      "Ethylene",
-      "Ethylene Glycol",
-      "Fertilizer",
-      "Fluorine",
-      "Food",
-      "Formaldehyde",
-      "Gold",
-      "Graphite",
-      "Highly Enriched Uranium Hexafluoride",
-      "Highly Enriched Uranium Powder",
-      "Hydrochloric Acid",
-      "Hydrofluoric Acid",
-      "Hydrogen",
-      "Hydrogen Cyanide",
-      "Hydrogen Heptafluorotantalate",
-      "Iron",
-      "Iron Oxide",
-      "Iron Sulfide",
-      "Large Thrust Bearing",
-      "Lead Sulfide",
-      "LiPo Battery",
-      "Lithium",
-      "Lithium Carbonate",
-      "Lithium Chloride",
-      "Magnesium",
-      "Magnesium Chloride",
-      "Methane",
-      "Methanol",
-      "Molybdenum Disulfide",
-      "Molybdenum Trioxide",
-      "Naphtha",
-      "Natural Flavorings",
-      "Neon",
-      "Nickel",
-      "Nitric Acid",
-      "Nitrogen",
-      "Novolak",
-      "Oxalic Acid",
-      "Oxygen",
-      "PEDOT",
-      "Phenol",
-      "Phosphate and Sulfate Salts",
-      "Phosphoric Acid",
-      "Photoresist Epoxy",
-      "Polyacrylonitrile",
-      "Polyacrylonitrile Fabric",
-      "Polymer Tantalum Capacitor",
-      "Polypropylene",
-      "Potassium Carbonate",
-      "Potassium Chloride",
-      "Potassium Fluoride",
-      "Potassium Hydroxide",
-      "Potatoes",
-      "Propylene",
-      "Quicklime",
-      "Rhabdite",
-      "Salts",
-      "Silver",
-      "Sodium Bicarbonate",
-      "Sodium Bisulfate",
-      "Sodium Carbonate",
-      "Sodium Chloride",
-      "Sodium Chromate",
-      "Sodium Dichromate",
-      "Sodium Hydroxide",
-      "Sodium Persulfate",
-      "Soil",
-      "Solder",
-      "Soybeans",
-      "Spirulina/Chlorella Algae",
-      "Steel",
-      "Steel Beam",
-      "Steel Cable",
-      "Steel Pipe",
-      "Steel Sheet",
-      "Steel Truss",
-      "Steel Wire",
-      "Sulfur",
-      "Sulfur Dioxide",
-      "Sulfuric Acid",
-      "Taenite",
-      "Tantalum",
-      "Tin",
-      "Tin Sulfide",
-      "Trimethyl Orthoformate",
-      "Triple Superphosphate",
-      "Troilite",
-      "Unenriched Uranium Hexafluoride",
-      "Uraninite",
-      "Uranium Dioxide",
-      "Uranium Tetrafluoride",
-      "Uranyl Nitrate",
-      "Water",
-      "Yellowcake"
-    ],
-    "CIS": [
-      "Acetone",
-      "Acetylene",
-      "Acrylonitrile",
-      "Alumina",
-      "Alumina Ceramic",
-      "Ammonia",
-      "Ammonium Carbonate",
-      "Ammonium Chloride",
-      "Ammonium Diuranate",
-      "Ammonium Oxalate",
-      "Ammonium Paratungstate",
-      "Apatite",
-      "Benzene",
-      "Beryllia",
-      "Beryllia Ceramic",
-      "Beryllium Carbonate",
-      "Beryllium Sulfate",
-      "Bisphenol A",
-      "Bitumen",
-      "Borax",
-      "Boric Acid",
-      "Boron",
-      "Boron Trioxide",
-      "Borosilicate Glass",
-      "Calcite",
-      "Calcium",
-      "Calcium Chloride",
-      "Carbon Dioxide",
-      "Carbon Fiber",
-      "Carbon Monoxide",
-      "Chlorine",
-      "Coffinite",
-      "Concrete",
-      "Cresol",
-      "Deionized Water",
-      "Diacetyl",
-      "Dioxane Pre-thiophene",
-      "EDOT",
-      "Epichlorohydrin",
-      "Epoxy",
-      "Ethylene",
-      "Ethylene Glycol",
-      "Feldspar",
-      "Ferrite",
-      "Fertilizer",
-      "Fiber Optic Cable",
-      "Fiberglass",
-      "Fluorine",
-      "Food",
-      "Formaldehyde",
-      "Fused Quartz",
-      "Fused Quartz Lightbulb Tube",
-      "Highly Enriched Uranium Hexafluoride",
-      "Highly Enriched Uranium Powder",
-      "Hydrochloric Acid",
-      "Hydrofluoric Acid",
-      "Hydrogen",
-      "Hydrogen Cyanide",
-      "Hydrogen Propellant",
-      "Iron",
-      "Iron Oxide",
-      "Lithium",
-      "Lithium Carbonate",
-      "Lithium Chloride",
-      "Lithium Sulfate",
-      "Magnesium",
-      "Magnesium Chloride",
-      "Magnesium Oxide",
-      "Merrillite",
-      "Methane",
-      "Methanol",
-      "Naphtha",
-      "Natural Flavorings",
-      "Neodymium",
-      "Neodymium Magnet",
-      "Neodymium Oxide",
-      "Neodymium(III) Chloride",
-      "Neon",
-      "Nickel",
-      "Nickel Oxide",
-      "Nitric Acid",
-      "Nitrogen",
-      "Novolak",
-      "Olivine",
-      "Oxalic Acid",
-      "Oxygen",
-      "PEDOT",
-      "Phenol",
-      "Phosphate and Sulfate Salts",
-      "Phosphoric Acid",
-      "Photoresist Epoxy",
-      "Polyacrylonitrile",
-      "Polyacrylonitrile Fabric",
-      "Polypropylene",
-      "Potassium Carbonate",
-      "Potassium Chloride",
-      "Potassium Fluoride",
-      "Potassium Hydroxide",
-      "Potatoes",
-      "Propylene",
-      "Pyroxene",
-      "Quicklime",
-      "Rare Earth Oxides",
-      "Rare Earth Sulfates",
-      "Salts",
-      "Silica",
-      "Silica Powder",
-      "Sodium Bicarbonate",
-      "Sodium Bisulfate",
-      "Sodium Carbonate",
-      "Sodium Chloride",
-      "Sodium Hydroxide",
-      "Sodium Persulfate",
-      "Sodium Tungstate",
-      "Soil",
-      "Soybeans",
-      "Spirulina/Chlorella Algae",
-      "Sulfur",
-      "Sulfur Dioxide",
-      "Sulfuric Acid",
-      "Trimethyl Orthoformate",
-      "Triple Superphosphate",
-      "Tungsten",
-      "Tungsten Powder",
-      "Unenriched Uranium Hexafluoride",
-      "Uranium Dioxide",
-      "Uranium Tetrafluoride",
-      "Uranyl Nitrate",
-      "Water",
-      "Xenotime",
-      "Yellowcake",
-      "Yttrium",
-      "Yttrium Fluoride",
-      "Yttrium Oxide",
-      "Zinc",
-      "Zinc Oxide"
-    ],
-    "CMS": [
-      "Acetone",
-      "Acetylene",
-      "Apatite",
-      "Bare Copper Wire",
-      "Benzene",
-      "Bitumen",
-      "Borax",
-      "Calcite",
-      "Calcium",
-      "Calcium Chloride",
-      "Carbon Dioxide",
-      "Carbon Monoxide",
-      "Chlorine",
-      "Coffinite",
-      "Concrete",
-      "Copper",
-      "Copper Wire",
-      "Cresol",
-      "Deionized Water",
-      "Diacetyl",
-      "Engine Bell",
-      "Epichlorohydrin",
-      "Ethylene",
-      "Ethylene Glycol",
-      "Feldspar",
-      "Ferrochromium",
-      "Ferrosilicon",
-      "Fiber Optic Cable",
-      "Fiberglass",
-      "Formaldehyde",
-      "Fused Quartz",
-      "Fused Quartz Lightbulb Tube",
-      "Gold",
-      "Graphite",
-      "Hydrogen",
-      "Inconel",
-      "Iron",
-      "Iron Oxide",
-      "Iron Sulfide",
-      "Lead Sulfide",
-      "Lithium Carbonate",
-      "Magnesium",
-      "Magnesium Chloride",
-      "Merrillite",
-      "Methane",
-      "Methanol",
-      "Molybdenum Disulfide",
-      "Molybdenum Trioxide",
-      "Naphtha",
-      "Nickel",
-      "Olivine",
-      "Oxygen",
-      "Phenol",
-      "Polypropylene",
-      "Potassium Carbonate",
-      "Potassium Chloride",
-      "Potassium Hydroxide",
-      "Propylene",
-      "Pyroxene",
-      "Quicklime",
-      "Rhabdite",
-      "Salts",
-      "Silica",
-      "Silica Powder",
-      "Silicon",
-      "Silver",
-      "Sodium Bicarbonate",
-      "Sodium Carbonate",
-      "Sodium Chloride",
-      "Sodium Chromate",
-      "Sodium Hydroxide",
-      "Soil",
-      "Solder",
-      "Steel",
-      "Steel Beam",
-      "Steel Cable",
-      "Steel Pipe",
-      "Steel Sheet",
-      "Steel Truss",
-      "Steel Wire",
-      "Taenite",
-      "Tin",
-      "Tin Sulfide",
-      "Troilite",
-      "Uraninite",
-      "Warehouse",
-      "Water",
-      "Xenotime"
-    ],
-    "IMS": [
-      "Acetylene",
-      "Alumina",
-      "Alumina Ceramic",
-      "Aluminium",
-      "Aluminium Beam",
-      "Aluminium Hull Plate",
-      "Aluminium Pipe",
-      "Aluminium Sheet",
-      "Aluminium Truss",
-      "Ammonia",
-      "Ammonium Carbonate",
-      "Ammonium Diuranate",
-      "Ammonium Oxalate",
-      "Ammonium Paratungstate",
-      "Ball Valve",
-      "Bare Copper Wire",
-      "Beryllia",
-      "Beryllia Ceramic",
-      "Beryllium Carbonate",
-      "Beryllium Sulfate",
-      "Borax",
-      "Boron",
-      "Boron Trioxide",
-      "Carbon Dioxide",
-      "Carbon Monoxide",
-      "Cargo Pod",
-      "Chlorine",
-      "Coffinite",
-      "Cold Gas Thruster",
-      "Cold Gas Torque Thruster",
-      "Copper",
-      "Core Sampler Thruster",
-      "Deionized Water",
-      "Engine Bell",
-      "Feldspar",
-      "Ferrite",
-      "Ferrochromium",
-      "Ferromolybdenum",
-      "Ferrosilicon",
-      "Fiber Optic Cable",
-      "Fiberglass",
-      "Flow Divider Moderator",
-      "Formaldehyde",
-      "Fuel Condensor",
-      "Fused Quartz",
-      "Fused Quartz Lightbulb Tube",
-      "Graphite",
-      "Habitation Module",
-      "Heat Exchanger",
-      "Hydrogen",
-      "Hydrogen Cyanide",
-      "Hydrogen Propellant",
-      "Inconel",
-      "Iron",
-      "Iron Oxide",
-      "Iron Sulfide",
-      "Lead Sulfide",
-      "Light Transport Hull",
-      "Lightbulb Lower End Moderator",
-      "Lightbulb Upper End Moderator",
-      "Lithium Carbonate",
-      "Lithium Sulfate",
-      "Magnesium",
-      "Magnesium Chloride",
-      "Magnesium Oxide",
-      "Merrillite",
-      "Methane",
-      "Methanol",
-      "Mobility Module",
-      "Molybdenum Disulfide",
-      "Molybdenum Trioxide",
-      "Neodymium Oxide",
-      "Neon",
-      "Neon Make-up Tank",
-      "Nickel",
-      "Nickel Oxide",
-      "Nitric Acid",
-      "Nitrogen",
-      "Nuclear Lightbulb",
-      "Olivine",
-      "Oxalic Acid",
-      "Oxygen",
-      "Potassium Carbonate",
-      "Potassium Chloride",
-      "Potassium Hydroxide",
-      "Pressure Vessel",
-      "Propellant Tank",
-      "Pyroxene",
-      "Rare Earth Oxides",
-      "Rare Earth Sulfates",
-      "Rhabdite",
-      "Salts",
-      "Shuttle Hull",
-      "Silica",
-      "Silica Powder",
-      "Silicon",
-      "Small Propellant Tank",
-      "Sodium Bisulfate",
-      "Sodium Chloride",
-      "Sodium Hydroxide",
-      "Sodium Persulfate",
-      "Sodium Tungstate",
-      "Stainless Steel",
-      "Stainless Steel Pipe",
-      "Stainless Steel Sheet",
-      "Steel",
-      "Steel Beam",
-      "Steel Cable",
-      "Steel Pipe",
-      "Steel Sheet",
-      "Steel Truss",
-      "Steel Wire",
-      "Sulfur",
-      "Sulfur Dioxide",
-      "Sulfuric Acid",
-      "Taenite",
-      "Tin",
-      "Tin Sulfide",
-      "Trimethyl Orthoformate",
-      "Troilite",
-      "Tungsten",
-      "Tungsten Powder",
-      "Uraninite",
-      "Uranium Dioxide",
-      "Uranyl Nitrate",
-      "Water",
-      "Xenotime",
-      "Yellowcake",
-      "Yttrium Oxide",
-      "Zinc",
-      "Zinc Oxide"
-    ],
-    "CIMS": [
-      "Acetone",
-      "Acetylene",
-      "Acrylonitrile",
-      "Alumina",
-      "Alumina Ceramic",
-      "Aluminium",
-      "Aluminium Beam",
-      "Aluminium Hull Plate",
-      "Aluminium Pipe",
-      "Aluminium Sheet",
-      "Aluminium Truss",
-      "Ammonia",
-      "Ammonium Carbonate",
-      "Ammonium Chloride",
-      "Ammonium Diuranate",
-      "Ammonium Oxalate",
-      "Ammonium Paratungstate",
-      "Apatite",
-      "Attitude Control Module",
-      "Avionics Module",
-      "Ball Bearing",
-      "Ball Valve",
-      "Bare Circuit Board",
-      "Bare Copper Wire",
-      "Benzene",
-      "Beryllia",
-      "Beryllia Ceramic",
-      "Beryllium Carbonate",
-      "Beryllium Sulfate",
-      "Bisphenol A",
-      "Bitumen",
-      "Borax",
-      "Boric Acid",
-      "Boron",
-      "Boron Trioxide",
-      "Borosilicate Glass",
-      "Brushless Motor",
-      "Brushless Motor Rotor",
-      "Brushless Motor Stator",
-      "CCD",
-      "Calcite",
-      "Calcium",
-      "Calcium Chloride",
-      "Carbon Dioxide",
-      "Carbon Fiber",
-      "Carbon Monoxide",
-      "Cargo Pod",
-      "Cargo Ring",
-      "Chlorine",
-      "Chromia",
-      "Chromium",
-      "Circuit Board",
-      "Closed-cycle Gas Core Nuclear Reactor Engine",
-      "Coffinite",
-      "Cold Gas Thruster",
-      "Cold Gas Torque Thruster",
-      "Composite-overwrapped Reactor Shell",
-      "Computer",
-      "Computer Chip",
-      "Concrete",
-      "Control Moment Gyroscope",
-      "Copper",
-      "Copper Wire",
-      "Core Sample",
-      "Core Sampler",
-      "Core Sampler Drill",
-      "Core Sampler Thruster",
-      "Cresol",
-      "Deionized Water",
-      "Diacetyl",
-      "Diode",
-      "Dioxane Pre-thiophene",
-      "EDOT",
-      "Engine Bell",
-      "Epichlorohydrin",
-      "Epoxy",
-      "Escape Module",
-      "Ethylene",
-      "Ethylene Glycol",
-      "Extractor",
-      "Factory",
-      "Feldspar",
-      "Ferrite",
-      "Ferrite-bead Inductor",
-      "Ferrochromium",
-      "Ferromolybdenum",
-      "Ferrosilicon",
-      "Fertilizer",
-      "Fiber Optic Cable",
-      "Fiber Optic Gyroscope",
-      "Fiberglass",
-      "Flow Divider Moderator",
-      "Fluids Automation Module",
-      "Fluorine",
-      "Food",
-      "Formaldehyde",
-      "Fuel Condensor",
-      "Fuel Make-up Tank",
-      "Fused Quartz",
-      "Fused Quartz Lightbulb Tube",
-      "Gold",
-      "Graphite",
-      "Habitat",
-      "Habitation Module",
-      "Heat Exchanger",
-      "Heavy Transport",
-      "Heavy Transport Hull",
-      "Highly Enriched Uranium Hexafluoride",
-      "Highly Enriched Uranium Powder",
-      "Hydrochloric Acid",
-      "Hydrofluoric Acid",
-      "Hydrogen",
-      "Hydrogen Cyanide",
-      "Hydrogen Heptafluorotantalate",
-      "Hydrogen Propellant",
-      "Inconel",
-      "Iron",
-      "Iron Oxide",
-      "Iron Sulfide",
-      "Landing Auger",
-      "Landing Leg",
-      "Large Thrust Bearing",
-      "Laser Diode",
-      "Lead Sulfide",
-      "LiPo Battery",
-      "Light Transport",
-      "Light Transport Hull",
-      "Lightbulb Lower End Moderator",
-      "Lightbulb Upper End Moderator",
-      "Lithium",
-      "Lithium Carbonate",
-      "Lithium Chloride",
-      "Lithium Sulfate",
-      "Magnesium",
-      "Magnesium Chloride",
-      "Magnesium Oxide",
-      "Marketplace",
-      "Merrillite",
-      "Methane",
-      "Methanol",
-      "Mobility Module",
-      "Molybdenum Disulfide",
-      "Molybdenum Trioxide",
-      "Naphtha",
-      "Natural Flavorings",
-      "Nd:YAG Laser",
-      "Nd:YAG Laser Rod",
-      "Neodymium",
-      "Neodymium Magnet",
-      "Neodymium Oxide",
-      "Neodymium(III) Chloride",
-      "Neon",
-      "Neon Make-up Tank",
-      "Neon/Fuel Separator Centrifuge",
-      "Nichrome",
-      "Nickel",
-      "Nickel Oxide",
-      "Nitric Acid",
-      "Nitrogen",
-      "Novolak",
-      "Nuclear Lightbulb",
-      "Olivine",
-      "Oxalic Acid",
-      "Oxygen",
-      "PEDOT",
-      "Parabolic Dish",
-      "Phenol",
-      "Phosphate and Sulfate Salts",
-      "Phosphoric Acid",
-      "Photoresist Epoxy",
-      "Photovoltaic Panel",
-      "Polyacrylonitrile",
-      "Polyacrylonitrile Fabric",
-      "Polymer Tantalum Capacitor",
-      "Polypropylene",
-      "Potassium Carbonate",
-      "Potassium Chloride",
-      "Potassium Fluoride",
-      "Potassium Hydroxide",
-      "Potatoes",
-      "Power Module",
-      "Pressure Vessel",
-      "Propellant Tank",
-      "Propulsion Module",
-      "Propylene",
-      "Pump",
-      "Pyroxene",
-      "Quicklime",
-      "Radio Antenna",
-      "Rare Earth Oxides",
-      "Rare Earth Sulfates",
-      "Reactor Plumbing Assembly",
-      "Refinery",
-      "Rhabdite",
-      "Robotic Arm",
-      "Salts",
-      "Shipyard",
-      "Shuttle",
-      "Shuttle Hull",
-      "Silica",
-      "Silica Powder",
-      "Silicon",
-      "Silicon Wafer",
-      "Silver",
-      "Small Propellant Tank",
-      "Sodium Bicarbonate",
-      "Sodium Bisulfate",
-      "Sodium Carbonate",
-      "Sodium Chloride",
-      "Sodium Chromate",
-      "Sodium Dichromate",
-      "Sodium Hydroxide",
-      "Sodium Persulfate",
-      "Sodium Tungstate",
-      "Soil",
-      "Solder",
-      "Solids Automation Module",
-      "Soybeans",
-      "Spaceport",
-      "Spirulina/Chlorella Algae",
-      "Stainless Steel",
-      "Stainless Steel Pipe",
-      "Stainless Steel Sheet",
-      "Star Tracker",
-      "Steel",
-      "Steel Beam",
-      "Steel Cable",
-      "Steel Pipe",
-      "Steel Sheet",
-      "Steel Truss",
-      "Steel Wire",
-      "Sulfur",
-      "Sulfur Dioxide",
-      "Sulfuric Acid",
-      "Surface Mount Device Reel",
-      "Taenite",
-      "Tantalum",
-      "Terrain Interface Module",
-      "Thermal Module",
-      "Thin-film Resistor",
-      "Tin",
-      "Tin Sulfide",
-      "Trimethyl Orthoformate",
-      "Triple Superphosphate",
-      "Troilite",
-      "Tungsten",
-      "Tungsten Powder",
-      "Turbopump",
-      "Unenriched Uranium Hexafluoride",
-      "Uraninite",
-      "Uranium Dioxide",
-      "Uranium Tetrafluoride",
-      "Uranyl Nitrate",
-      "Warehouse",
-      "Water",
-      "Xenotime",
-      "Yellowcake",
-      "Yttrium",
-      "Yttrium Fluoride",
-      "Yttrium Oxide",
-      "Zinc",
-      "Zinc Oxide"
-    ]
-};
-
-// includes "sustainingSpectralTypes"
-const productDataByName = {
-    "Water": {
-      "id": "0",
-      "name": "Water",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Hydrogen": {
-      "id": "1",
-      "name": "Hydrogen",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS",
-        "C",
-        "CM",
-        "CS",
-        "CMS"
-      ]
-    },
-    "Ammonia": {
-      "id": "2",
-      "name": "Ammonia",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Nitrogen": {
-      "id": "3",
-      "name": "Nitrogen",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Sulfur Dioxide": {
-      "id": "4",
-      "name": "Sulfur Dioxide",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Carbon Dioxide": {
-      "id": "5",
-      "name": "Carbon Dioxide",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Carbon Monoxide": {
-      "id": "6",
-      "name": "Carbon Monoxide",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Methane": {
-      "id": "7",
-      "name": "Methane",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Apatite": {
-      "id": "8",
-      "name": "Apatite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Bitumen": {
-      "id": "9",
-      "name": "Bitumen",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Calcite": {
-      "id": "10",
-      "name": "Calcite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Feldspar": {
-      "id": "11",
-      "name": "Feldspar",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "S",
-        "CS",
-        "SI",
-        "SM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Olivine": {
-      "id": "12",
-      "name": "Olivine",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "S",
-        "CS",
-        "SI",
-        "SM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Pyroxene": {
-      "id": "13",
-      "name": "Pyroxene",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "S",
-        "CS",
-        "SI",
-        "SM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Coffinite": {
-      "id": "14",
-      "name": "Coffinite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "S",
-        "CS",
-        "SI",
-        "SM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Merrillite": {
-      "id": "15",
-      "name": "Merrillite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "S",
-        "CS",
-        "SI",
-        "SM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Xenotime": {
-      "id": "16",
-      "name": "Xenotime",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "S",
-        "CS",
-        "SI",
-        "SM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Rhabdite": {
-      "id": "17",
-      "name": "Rhabdite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Graphite": {
-      "id": "18",
-      "name": "Graphite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Taenite": {
-      "id": "19",
-      "name": "Taenite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Troilite": {
-      "id": "20",
-      "name": "Troilite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Uraninite": {
-      "id": "21",
-      "name": "Uraninite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Oxygen": {
-      "id": "22",
-      "name": "Oxygen",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Deionized Water": {
-      "id": "23",
-      "name": "Deionized Water",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Salts": {
-      "id": "24",
-      "name": "Salts",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Silica": {
-      "id": "25",
-      "name": "Silica",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CS",
-        "SI",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Naphtha": {
-      "id": "26",
-      "name": "Naphtha",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Benzene": {
-      "id": "27",
-      "name": "Benzene",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Iron": {
-      "id": "28",
-      "name": "Iron",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS",
-        "SI",
-        "CIS"
-      ]
-    },
-    "Copper": {
-      "id": "29",
-      "name": "Copper",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Nickel": {
-      "id": "30",
-      "name": "Nickel",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS",
-        "SI",
-        "CIS"
-      ]
-    },
-    "Quicklime": {
-      "id": "31",
-      "name": "Quicklime",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Acetylene": {
-      "id": "32",
-      "name": "Acetylene",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Ammonium Carbonate": {
-      "id": "33",
-      "name": "Ammonium Carbonate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Sulfur": {
-      "id": "34",
-      "name": "Sulfur",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Hydrogen Cyanide": {
-      "id": "35",
-      "name": "Hydrogen Cyanide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Methanol": {
-      "id": "36",
-      "name": "Methanol",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Iron Sulfide": {
-      "id": "37",
-      "name": "Iron Sulfide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Lead Sulfide": {
-      "id": "38",
-      "name": "Lead Sulfide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Tin Sulfide": {
-      "id": "39",
-      "name": "Tin Sulfide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Molybdenum Disulfide": {
-      "id": "40",
-      "name": "Molybdenum Disulfide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Fused Quartz": {
-      "id": "41",
-      "name": "Fused Quartz",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CS",
-        "SI",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Fiberglass": {
-      "id": "42",
-      "name": "Fiberglass",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CS",
-        "SI",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Bare Copper Wire": {
-      "id": "43",
-      "name": "Bare Copper Wire",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Concrete": {
-      "id": "44",
-      "name": "Concrete",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CS",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Sodium Chloride": {
-      "id": "45",
-      "name": "Sodium Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Potassium Chloride": {
-      "id": "46",
-      "name": "Potassium Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Borax": {
-      "id": "47",
-      "name": "Borax",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Lithium Carbonate": {
-      "id": "48",
-      "name": "Lithium Carbonate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Magnesium Chloride": {
-      "id": "49",
-      "name": "Magnesium Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Propylene": {
-      "id": "50",
-      "name": "Propylene",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Ethylene": {
-      "id": "51",
-      "name": "Ethylene",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Steel": {
-      "id": "52",
-      "name": "Steel",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Silicon": {
-      "id": "53",
-      "name": "Silicon",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Nitric Acid": {
-      "id": "54",
-      "name": "Nitric Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Sulfuric Acid": {
-      "id": "55",
-      "name": "Sulfuric Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Soil": {
-      "id": "56",
-      "name": "Soil",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Ferrosilicon": {
-      "id": "57",
-      "name": "Ferrosilicon",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Oxalic Acid": {
-      "id": "59",
-      "name": "Oxalic Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Silver": {
-      "id": "60",
-      "name": "Silver",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CM",
-        "CIM",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Gold": {
-      "id": "61",
-      "name": "Gold",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CM",
-        "CIM",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Tin": {
-      "id": "62",
-      "name": "Tin",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Iron Oxide": {
-      "id": "63",
-      "name": "Iron Oxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS",
-        "CM",
-        "IM",
-        "CIM",
-        "CMS"
-      ]
-    },
-    "Formaldehyde": {
-      "id": "64",
-      "name": "Formaldehyde",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Molybdenum Trioxide": {
-      "id": "65",
-      "name": "Molybdenum Trioxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CM",
-        "IM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Silica Powder": {
-      "id": "66",
-      "name": "Silica Powder",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CS",
-        "SI",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Solder": {
-      "id": "67",
-      "name": "Solder",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CM",
-        "CIM",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Fiber Optic Cable": {
-      "id": "68",
-      "name": "Fiber Optic Cable",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CS",
-        "SI",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Steel Beam": {
-      "id": "69",
-      "name": "Steel Beam",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Steel Sheet": {
-      "id": "70",
-      "name": "Steel Sheet",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Steel Pipe": {
-      "id": "71",
-      "name": "Steel Pipe",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Steel Wire": {
-      "id": "72",
-      "name": "Steel Wire",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Acrylonitrile": {
-      "id": "73",
-      "name": "Acrylonitrile",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Polypropylene": {
-      "id": "74",
-      "name": "Polypropylene",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Magnesium": {
-      "id": "75",
-      "name": "Magnesium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Chlorine": {
-      "id": "76",
-      "name": "Chlorine",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Sodium Carbonate": {
-      "id": "77",
-      "name": "Sodium Carbonate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Calcium Chloride": {
-      "id": "78",
-      "name": "Calcium Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Boron Trioxide": {
-      "id": "79",
-      "name": "Boron Trioxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Lithium Sulfate": {
-      "id": "80",
-      "name": "Lithium Sulfate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Hydrochloric Acid": {
-      "id": "81",
-      "name": "Hydrochloric Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Hydrofluoric Acid": {
-      "id": "82",
-      "name": "Hydrofluoric Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Phosphoric Acid": {
-      "id": "83",
-      "name": "Phosphoric Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Boric Acid": {
-      "id": "84",
-      "name": "Boric Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Zinc Oxide": {
-      "id": "85",
-      "name": "Zinc Oxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Nickel Oxide": {
-      "id": "86",
-      "name": "Nickel Oxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Magnesium Oxide": {
-      "id": "87",
-      "name": "Magnesium Oxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Alumina": {
-      "id": "88",
-      "name": "Alumina",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Sodium Hydroxide": {
-      "id": "89",
-      "name": "Sodium Hydroxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Potassium Hydroxide": {
-      "id": "90",
-      "name": "Potassium Hydroxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Acetone": {
-      "id": "91",
-      "name": "Acetone",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Phenol": {
-      "id": "92",
-      "name": "Phenol",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Ammonium Oxalate": {
-      "id": "93",
-      "name": "Ammonium Oxalate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Rare Earth Sulfates": {
-      "id": "94",
-      "name": "Rare Earth Sulfates",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Ferrochromium": {
-      "id": "95",
-      "name": "Ferrochromium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Yellowcake": {
-      "id": "96",
-      "name": "Yellowcake",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IM",
-        "CIM",
-        "IMS",
-        "CIMS",
-        "SI",
-        "CIS"
-      ]
-    },
-    "Alumina Ceramic": {
-      "id": "97",
-      "name": "Alumina Ceramic",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Inconel": {
-      "id": "98",
-      "name": "Inconel",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Copper Wire": {
-      "id": "99",
-      "name": "Copper Wire",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CM",
-        "CIM",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Silicon Wafer": {
-      "id": "100",
-      "name": "Silicon Wafer",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Steel Cable": {
-      "id": "101",
-      "name": "Steel Cable",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Polyacrylonitrile": {
-      "id": "102",
-      "name": "Polyacrylonitrile",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Fertilizer": {
-      "id": "103",
-      "name": "Fertilizer",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Lithium Chloride": {
-      "id": "105",
-      "name": "Lithium Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Zinc": {
-      "id": "106",
-      "name": "Zinc",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Epichlorohydrin": {
-      "id": "107",
-      "name": "Epichlorohydrin",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Bisphenol A": {
-      "id": "108",
-      "name": "Bisphenol A",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Rare Earth Oxides": {
-      "id": "109",
-      "name": "Rare Earth Oxides",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Ammonium Chloride": {
-      "id": "110",
-      "name": "Ammonium Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Aluminium": {
-      "id": "111",
-      "name": "Aluminium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Calcium": {
-      "id": "112",
-      "name": "Calcium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Sodium Chromate": {
-      "id": "113",
-      "name": "Sodium Chromate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CM",
-        "CIM",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Cresol": {
-      "id": "114",
-      "name": "Cresol",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Uranyl Nitrate": {
-      "id": "115",
-      "name": "Uranyl Nitrate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Fluorine": {
-      "id": "116",
-      "name": "Fluorine",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Sodium Tungstate": {
-      "id": "117",
-      "name": "Sodium Tungstate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Ferrite": {
-      "id": "118",
-      "name": "Ferrite",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Diode": {
-      "id": "119",
-      "name": "Diode",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Laser Diode": {
-      "id": "120",
-      "name": "Laser Diode",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Ball Valve": {
-      "id": "121",
-      "name": "Ball Valve",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Aluminium Beam": {
-      "id": "122",
-      "name": "Aluminium Beam",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Aluminium Sheet": {
-      "id": "123",
-      "name": "Aluminium Sheet",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Aluminium Pipe": {
-      "id": "124",
-      "name": "Aluminium Pipe",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Polyacrylonitrile Fabric": {
-      "id": "125",
-      "name": "Polyacrylonitrile Fabric",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Cold Gas Thruster": {
-      "id": "126",
-      "name": "Cold Gas Thruster",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Cold Gas Torque Thruster": {
-      "id": "127",
-      "name": "Cold Gas Torque Thruster",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Carbon Fiber": {
-      "id": "128",
-      "name": "Carbon Fiber",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Food": {
-      "id": "129",
-      "name": "Food",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Small Propellant Tank": {
-      "id": "130",
-      "name": "Small Propellant Tank",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Borosilicate Glass": {
-      "id": "131",
-      "name": "Borosilicate Glass",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Ball Bearing": {
-      "id": "132",
-      "name": "Ball Bearing",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "Large Thrust Bearing": {
-      "id": "133",
-      "name": "Large Thrust Bearing",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "Boron": {
-      "id": "134",
-      "name": "Boron",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Lithium": {
-      "id": "135",
-      "name": "Lithium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Epoxy": {
-      "id": "136",
-      "name": "Epoxy",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Neodymium Oxide": {
-      "id": "137",
-      "name": "Neodymium Oxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Yttrium Oxide": {
-      "id": "138",
-      "name": "Yttrium Oxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Sodium Dichromate": {
-      "id": "139",
-      "name": "Sodium Dichromate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "Novolak": {
-      "id": "140",
-      "name": "Novolak",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Ferromolybdenum": {
-      "id": "141",
-      "name": "Ferromolybdenum",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Ammonium Diuranate": {
-      "id": "142",
-      "name": "Ammonium Diuranate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Ammonium Paratungstate": {
-      "id": "143",
-      "name": "Ammonium Paratungstate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Engine Bell": {
-      "id": "144",
-      "name": "Engine Bell",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Steel Truss": {
-      "id": "145",
-      "name": "Steel Truss",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Aluminium Hull Plate": {
-      "id": "146",
-      "name": "Aluminium Hull Plate",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Aluminium Truss": {
-      "id": "147",
-      "name": "Aluminium Truss",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Cargo Pod": {
-      "id": "148",
-      "name": "Cargo Pod",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Pressure Vessel": {
-      "id": "149",
-      "name": "Pressure Vessel",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Propellant Tank": {
-      "id": "150",
-      "name": "Propellant Tank",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Stainless Steel": {
-      "id": "151",
-      "name": "Stainless Steel",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Bare Circuit Board": {
-      "id": "152",
-      "name": "Bare Circuit Board",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Ferrite-bead Inductor": {
-      "id": "153",
-      "name": "Ferrite-bead Inductor",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Core Sampler Drill": {
-      "id": "154",
-      "name": "Core Sampler Drill",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Core Sampler Thruster": {
-      "id": "155",
-      "name": "Core Sampler Thruster",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Parabolic Dish": {
-      "id": "156",
-      "name": "Parabolic Dish",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Photovoltaic Panel": {
-      "id": "157",
-      "name": "Photovoltaic Panel",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "LiPo Battery": {
-      "id": "158",
-      "name": "LiPo Battery",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "Neodymium(III) Chloride": {
-      "id": "159",
-      "name": "Neodymium(III) Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Yttrium Fluoride": {
-      "id": "160",
-      "name": "Yttrium Fluoride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Chromia": {
-      "id": "161",
-      "name": "Chromia",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "Photoresist Epoxy": {
-      "id": "162",
-      "name": "Photoresist Epoxy",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Uranium Dioxide": {
-      "id": "163",
-      "name": "Uranium Dioxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Tungsten": {
-      "id": "164",
-      "name": "Tungsten",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Shuttle Hull": {
-      "id": "165",
-      "name": "Shuttle Hull",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Light Transport Hull": {
-      "id": "166",
-      "name": "Light Transport Hull",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Cargo Ring": {
-      "id": "167",
-      "name": "Cargo Ring",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Heavy Transport Hull": {
-      "id": "168",
-      "name": "Heavy Transport Hull",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Tungsten Powder": {
-      "id": "169",
-      "name": "Tungsten Powder",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Hydrogen Propellant": {
-      "id": "170",
-      "name": "Hydrogen Propellant",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Stainless Steel Sheet": {
-      "id": "171",
-      "name": "Stainless Steel Sheet",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Stainless Steel Pipe": {
-      "id": "172",
-      "name": "Stainless Steel Pipe",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "CCD": {
-      "id": "173",
-      "name": "CCD",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Computer Chip": {
-      "id": "174",
-      "name": "Computer Chip",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Core Sampler": {
-      "id": "175",
-      "name": "Core Sampler",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Neodymium": {
-      "id": "176",
-      "name": "Neodymium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Yttrium": {
-      "id": "177",
-      "name": "Yttrium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Chromium": {
-      "id": "178",
-      "name": "Chromium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Uranium Tetrafluoride": {
-      "id": "179",
-      "name": "Uranium Tetrafluoride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Core Sample": {
-      "id": "180",
-      "name": "Core Sample",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Nd:YAG Laser Rod": {
-      "id": "181",
-      "name": "Nd:YAG Laser Rod",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Nichrome": {
-      "id": "182",
-      "name": "Nichrome",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Neodymium Magnet": {
-      "id": "183",
-      "name": "Neodymium Magnet",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Unenriched Uranium Hexafluoride": {
-      "id": "184",
-      "name": "Unenriched Uranium Hexafluoride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Highly Enriched Uranium Hexafluoride": {
-      "id": "185",
-      "name": "Highly Enriched Uranium Hexafluoride",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Nd:YAG Laser": {
-      "id": "186",
-      "name": "Nd:YAG Laser",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Thin-film Resistor": {
-      "id": "187",
-      "name": "Thin-film Resistor",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Highly Enriched Uranium Powder": {
-      "id": "188",
-      "name": "Highly Enriched Uranium Powder",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Ethylene Glycol": {
-      "id": "189",
-      "name": "Ethylene Glycol",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Trimethyl Orthoformate": {
-      "id": "190",
-      "name": "Trimethyl Orthoformate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Diacetyl": {
-      "id": "191",
-      "name": "Diacetyl",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Potassium Carbonate": {
-      "id": "192",
-      "name": "Potassium Carbonate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Sodium Bisulfate": {
-      "id": "193",
-      "name": "Sodium Bisulfate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Dioxane Pre-thiophene": {
-      "id": "194",
-      "name": "Dioxane Pre-thiophene",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Potassium Fluoride": {
-      "id": "195",
-      "name": "Potassium Fluoride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Hydrogen Heptafluorotantalate": {
-      "id": "196",
-      "name": "Hydrogen Heptafluorotantalate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "Sodium Persulfate": {
-      "id": "197",
-      "name": "Sodium Persulfate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "EDOT": {
-      "id": "198",
-      "name": "EDOT",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Tantalum": {
-      "id": "199",
-      "name": "Tantalum",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "PEDOT": {
-      "id": "200",
-      "name": "PEDOT",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Polymer Tantalum Capacitor": {
-      "id": "201",
-      "name": "Polymer Tantalum Capacitor",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "Surface Mount Device Reel": {
-      "id": "202",
-      "name": "Surface Mount Device Reel",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Circuit Board": {
-      "id": "203",
-      "name": "Circuit Board",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Brushless Motor Stator": {
-      "id": "204",
-      "name": "Brushless Motor Stator",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Brushless Motor Rotor": {
-      "id": "205",
-      "name": "Brushless Motor Rotor",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Brushless Motor": {
-      "id": "206",
-      "name": "Brushless Motor",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Landing Leg": {
-      "id": "207",
-      "name": "Landing Leg",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Landing Auger": {
-      "id": "208",
-      "name": "Landing Auger",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Pump": {
-      "id": "209",
-      "name": "Pump",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Radio Antenna": {
-      "id": "210",
-      "name": "Radio Antenna",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Fiber Optic Gyroscope": {
-      "id": "211",
-      "name": "Fiber Optic Gyroscope",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Star Tracker": {
-      "id": "212",
-      "name": "Star Tracker",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Computer": {
-      "id": "213",
-      "name": "Computer",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Control Moment Gyroscope": {
-      "id": "214",
-      "name": "Control Moment Gyroscope",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Robotic Arm": {
-      "id": "215",
-      "name": "Robotic Arm",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Beryllium Sulfate": {
-      "id": "216",
-      "name": "Beryllium Sulfate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Beryllium Carbonate": {
-      "id": "217",
-      "name": "Beryllium Carbonate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Beryllia": {
-      "id": "218",
-      "name": "Beryllia",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Beryllia Ceramic": {
-      "id": "219",
-      "name": "Beryllia Ceramic",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Neon": {
-      "id": "220",
-      "name": "Neon",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Heat Exchanger": {
-      "id": "221",
-      "name": "Heat Exchanger",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Turbopump": {
-      "id": "222",
-      "name": "Turbopump",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Fuel Condensor": {
-      "id": "223",
-      "name": "Fuel Condensor",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Neon/Fuel Separator Centrifuge": {
-      "id": "224",
-      "name": "Neon/Fuel Separator Centrifuge",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Fuel Make-up Tank": {
-      "id": "225",
-      "name": "Fuel Make-up Tank",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Neon Make-up Tank": {
-      "id": "226",
-      "name": "Neon Make-up Tank",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Lightbulb Upper End Moderator": {
-      "id": "227",
-      "name": "Lightbulb Upper End Moderator",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Lightbulb Lower End Moderator": {
-      "id": "228",
-      "name": "Lightbulb Lower End Moderator",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Fused Quartz Lightbulb Tube": {
-      "id": "229",
-      "name": "Fused Quartz Lightbulb Tube",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CS",
-        "SI",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Reactor Plumbing Assembly": {
-      "id": "230",
-      "name": "Reactor Plumbing Assembly",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Flow Divider Moderator": {
-      "id": "231",
-      "name": "Flow Divider Moderator",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Nuclear Lightbulb": {
-      "id": "232",
-      "name": "Nuclear Lightbulb",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Composite-overwrapped Reactor Shell": {
-      "id": "233",
-      "name": "Composite-overwrapped Reactor Shell",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Closed-cycle Gas Core Nuclear Reactor Engine": {
-      "id": "234",
-      "name": "Closed-cycle Gas Core Nuclear Reactor Engine",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Habitation Module": {
-      "id": "235",
-      "name": "Habitation Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Mobility Module": {
-      "id": "236",
-      "name": "Mobility Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "Fluids Automation Module": {
-      "id": "237",
-      "name": "Fluids Automation Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Solids Automation Module": {
-      "id": "238",
-      "name": "Solids Automation Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Terrain Interface Module": {
-      "id": "239",
-      "name": "Terrain Interface Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Avionics Module": {
-      "id": "240",
-      "name": "Avionics Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Escape Module": {
-      "id": "241",
-      "name": "Escape Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Attitude Control Module": {
-      "id": "242",
-      "name": "Attitude Control Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Power Module": {
-      "id": "243",
-      "name": "Power Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Thermal Module": {
-      "id": "244",
-      "name": "Thermal Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Propulsion Module": {
-      "id": "245",
-      "name": "Propulsion Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Shuttle": {
-      "id": "246",
-      "name": "Shuttle",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Light Transport": {
-      "id": "247",
-      "name": "Light Transport",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Heavy Transport": {
-      "id": "248",
-      "name": "Heavy Transport",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Warehouse": {
-      "id": "249",
-      "name": "Warehouse",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "Extractor": {
-      "id": "250",
-      "name": "Extractor",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Refinery": {
-      "id": "251",
-      "name": "Refinery",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Factory": {
-      "id": "252",
-      "name": "Factory",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Shipyard": {
-      "id": "253",
-      "name": "Shipyard",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Spaceport": {
-      "id": "254",
-      "name": "Spaceport",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Marketplace": {
-      "id": "255",
-      "name": "Marketplace",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Habitat": {
-      "id": "256",
-      "name": "Habitat",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "Triple Superphosphate": {
-      "id": "257",
-      "name": "Triple Superphosphate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Phosphate and Sulfate Salts": {
-      "id": "258",
-      "name": "Phosphate and Sulfate Salts",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Soybeans": {
-      "id": "259",
-      "name": "Soybeans",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Potatoes": {
-      "id": "260",
-      "name": "Potatoes",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Natural Flavorings": {
-      "id": "261",
-      "name": "Natural Flavorings",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Spirulina/Chlorella Algae": {
-      "id": "262",
-      "name": "Spirulina/Chlorella Algae",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "Sodium Bicarbonate": {
-      "id": "263",
-      "name": "Sodium Bicarbonate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    }
-};
-
-// includes "sustainingSpectralTypes"
-const productDataById = {
-    "0": {
-      "id": "0",
-      "name": "Water",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "1": {
-      "id": "1",
-      "name": "Hydrogen",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS",
-        "C",
-        "CM",
-        "CS",
-        "CMS"
-      ]
-    },
-    "2": {
-      "id": "2",
-      "name": "Ammonia",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "3": {
-      "id": "3",
-      "name": "Nitrogen",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "4": {
-      "id": "4",
-      "name": "Sulfur Dioxide",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "5": {
-      "id": "5",
-      "name": "Carbon Dioxide",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "6": {
-      "id": "6",
-      "name": "Carbon Monoxide",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "7": {
-      "id": "7",
-      "name": "Methane",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "8": {
-      "id": "8",
-      "name": "Apatite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "9": {
-      "id": "9",
-      "name": "Bitumen",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "10": {
-      "id": "10",
-      "name": "Calcite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "11": {
-      "id": "11",
-      "name": "Feldspar",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "S",
-        "CS",
-        "SI",
-        "SM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "12": {
-      "id": "12",
-      "name": "Olivine",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "S",
-        "CS",
-        "SI",
-        "SM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "13": {
-      "id": "13",
-      "name": "Pyroxene",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "S",
-        "CS",
-        "SI",
-        "SM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "14": {
-      "id": "14",
-      "name": "Coffinite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "S",
-        "CS",
-        "SI",
-        "SM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "15": {
-      "id": "15",
-      "name": "Merrillite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "S",
-        "CS",
-        "SI",
-        "SM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "16": {
-      "id": "16",
-      "name": "Xenotime",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "S",
-        "CS",
-        "SI",
-        "SM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "17": {
-      "id": "17",
-      "name": "Rhabdite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "18": {
-      "id": "18",
-      "name": "Graphite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "19": {
-      "id": "19",
-      "name": "Taenite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "20": {
-      "id": "20",
-      "name": "Troilite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "21": {
-      "id": "21",
-      "name": "Uraninite",
-      "type": "Raw Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "22": {
-      "id": "22",
-      "name": "Oxygen",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "23": {
-      "id": "23",
-      "name": "Deionized Water",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "24": {
-      "id": "24",
-      "name": "Salts",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "25": {
-      "id": "25",
-      "name": "Silica",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CS",
-        "SI",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "26": {
-      "id": "26",
-      "name": "Naphtha",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "27": {
-      "id": "27",
-      "name": "Benzene",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "28": {
-      "id": "28",
-      "name": "Iron",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS",
-        "SI",
-        "CIS"
-      ]
-    },
-    "29": {
-      "id": "29",
-      "name": "Copper",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "30": {
-      "id": "30",
-      "name": "Nickel",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS",
-        "SI",
-        "CIS"
-      ]
-    },
-    "31": {
-      "id": "31",
-      "name": "Quicklime",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "32": {
-      "id": "32",
-      "name": "Acetylene",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "33": {
-      "id": "33",
-      "name": "Ammonium Carbonate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "34": {
-      "id": "34",
-      "name": "Sulfur",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "35": {
-      "id": "35",
-      "name": "Hydrogen Cyanide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "36": {
-      "id": "36",
-      "name": "Methanol",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "37": {
-      "id": "37",
-      "name": "Iron Sulfide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "38": {
-      "id": "38",
-      "name": "Lead Sulfide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "39": {
-      "id": "39",
-      "name": "Tin Sulfide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "40": {
-      "id": "40",
-      "name": "Molybdenum Disulfide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "41": {
-      "id": "41",
-      "name": "Fused Quartz",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CS",
-        "SI",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "42": {
-      "id": "42",
-      "name": "Fiberglass",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CS",
-        "SI",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "43": {
-      "id": "43",
-      "name": "Bare Copper Wire",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "44": {
-      "id": "44",
-      "name": "Concrete",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CS",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "45": {
-      "id": "45",
-      "name": "Sodium Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "46": {
-      "id": "46",
-      "name": "Potassium Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "47": {
-      "id": "47",
-      "name": "Borax",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "48": {
-      "id": "48",
-      "name": "Lithium Carbonate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "49": {
-      "id": "49",
-      "name": "Magnesium Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "50": {
-      "id": "50",
-      "name": "Propylene",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "51": {
-      "id": "51",
-      "name": "Ethylene",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "52": {
-      "id": "52",
-      "name": "Steel",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "53": {
-      "id": "53",
-      "name": "Silicon",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "54": {
-      "id": "54",
-      "name": "Nitric Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "55": {
-      "id": "55",
-      "name": "Sulfuric Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "56": {
-      "id": "56",
-      "name": "Soil",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "57": {
-      "id": "57",
-      "name": "Ferrosilicon",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    // "58": {
-    //   "id": "58",
-    //   "name": "Hydrolox Fuel", //// REMOVED from the game
-    //   "type": "Finished Good",
-    //   "sustainingSpectralTypes": [
-    //     "C",
-    //     "I",
-    //     "CI",
-    //     "CM",
-    //     "CS",
-    //     "IM",
-    //     "SI",
-    //     "CIM",
-    //     "CIS",
-    //     "CMS",
-    //     "IMS",
-    //     "CIMS"
-    //   ]
-    // },
-    "59": {
-      "id": "59",
-      "name": "Oxalic Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "60": {
-      "id": "60",
-      "name": "Silver",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CM",
-        "CIM",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "61": {
-      "id": "61",
-      "name": "Gold",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CM",
-        "CIM",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "62": {
-      "id": "62",
-      "name": "Tin",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "63": {
-      "id": "63",
-      "name": "Iron Oxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS",
-        "CM",
-        "IM",
-        "CIM",
-        "CMS"
-      ]
-    },
-    "64": {
-      "id": "64",
-      "name": "Formaldehyde",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "65": {
-      "id": "65",
-      "name": "Molybdenum Trioxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CM",
-        "IM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "66": {
-      "id": "66",
-      "name": "Silica Powder",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CS",
-        "SI",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "67": {
-      "id": "67",
-      "name": "Solder",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CM",
-        "CIM",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "68": {
-      "id": "68",
-      "name": "Fiber Optic Cable",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CS",
-        "SI",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "69": {
-      "id": "69",
-      "name": "Steel Beam",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "70": {
-      "id": "70",
-      "name": "Steel Sheet",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "71": {
-      "id": "71",
-      "name": "Steel Pipe",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "72": {
-      "id": "72",
-      "name": "Steel Wire",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "73": {
-      "id": "73",
-      "name": "Acrylonitrile",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "74": {
-      "id": "74",
-      "name": "Polypropylene",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "75": {
-      "id": "75",
-      "name": "Magnesium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "76": {
-      "id": "76",
-      "name": "Chlorine",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "77": {
-      "id": "77",
-      "name": "Sodium Carbonate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "78": {
-      "id": "78",
-      "name": "Calcium Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "79": {
-      "id": "79",
-      "name": "Boron Trioxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "80": {
-      "id": "80",
-      "name": "Lithium Sulfate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "81": {
-      "id": "81",
-      "name": "Hydrochloric Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "82": {
-      "id": "82",
-      "name": "Hydrofluoric Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "83": {
-      "id": "83",
-      "name": "Phosphoric Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "84": {
-      "id": "84",
-      "name": "Boric Acid",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "85": {
-      "id": "85",
-      "name": "Zinc Oxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "86": {
-      "id": "86",
-      "name": "Nickel Oxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "87": {
-      "id": "87",
-      "name": "Magnesium Oxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "88": {
-      "id": "88",
-      "name": "Alumina",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "89": {
-      "id": "89",
-      "name": "Sodium Hydroxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "90": {
-      "id": "90",
-      "name": "Potassium Hydroxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "91": {
-      "id": "91",
-      "name": "Acetone",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "92": {
-      "id": "92",
-      "name": "Phenol",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "93": {
-      "id": "93",
-      "name": "Ammonium Oxalate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "94": {
-      "id": "94",
-      "name": "Rare Earth Sulfates",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "95": {
-      "id": "95",
-      "name": "Ferrochromium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "96": {
-      "id": "96",
-      "name": "Yellowcake",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IM",
-        "CIM",
-        "IMS",
-        "CIMS",
-        "SI",
-        "CIS"
-      ]
-    },
-    "97": {
-      "id": "97",
-      "name": "Alumina Ceramic",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "98": {
-      "id": "98",
-      "name": "Inconel",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "99": {
-      "id": "99",
-      "name": "Copper Wire",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CM",
-        "CIM",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "100": {
-      "id": "100",
-      "name": "Silicon Wafer",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "101": {
-      "id": "101",
-      "name": "Steel Cable",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "102": {
-      "id": "102",
-      "name": "Polyacrylonitrile",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "103": {
-      "id": "103",
-      "name": "Fertilizer",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "105": {
-      "id": "105",
-      "name": "Lithium Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "106": {
-      "id": "106",
-      "name": "Zinc",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "107": {
-      "id": "107",
-      "name": "Epichlorohydrin",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "108": {
-      "id": "108",
-      "name": "Bisphenol A",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "109": {
-      "id": "109",
-      "name": "Rare Earth Oxides",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "110": {
-      "id": "110",
-      "name": "Ammonium Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "111": {
-      "id": "111",
-      "name": "Aluminium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "112": {
-      "id": "112",
-      "name": "Calcium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "113": {
-      "id": "113",
-      "name": "Sodium Chromate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CM",
-        "CIM",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "114": {
-      "id": "114",
-      "name": "Cresol",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "115": {
-      "id": "115",
-      "name": "Uranyl Nitrate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "116": {
-      "id": "116",
-      "name": "Fluorine",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "117": {
-      "id": "117",
-      "name": "Sodium Tungstate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "118": {
-      "id": "118",
-      "name": "Ferrite",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "119": {
-      "id": "119",
-      "name": "Diode",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "120": {
-      "id": "120",
-      "name": "Laser Diode",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "121": {
-      "id": "121",
-      "name": "Ball Valve",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "122": {
-      "id": "122",
-      "name": "Aluminium Beam",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "123": {
-      "id": "123",
-      "name": "Aluminium Sheet",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "124": {
-      "id": "124",
-      "name": "Aluminium Pipe",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "125": {
-      "id": "125",
-      "name": "Polyacrylonitrile Fabric",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "126": {
-      "id": "126",
-      "name": "Cold Gas Thruster",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "127": {
-      "id": "127",
-      "name": "Cold Gas Torque Thruster",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "128": {
-      "id": "128",
-      "name": "Carbon Fiber",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "129": {
-      "id": "129",
-      "name": "Food",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "130": {
-      "id": "130",
-      "name": "Small Propellant Tank",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "131": {
-      "id": "131",
-      "name": "Borosilicate Glass",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "132": {
-      "id": "132",
-      "name": "Ball Bearing",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "133": {
-      "id": "133",
-      "name": "Large Thrust Bearing",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "134": {
-      "id": "134",
-      "name": "Boron",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "135": {
-      "id": "135",
-      "name": "Lithium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "136": {
-      "id": "136",
-      "name": "Epoxy",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "137": {
-      "id": "137",
-      "name": "Neodymium Oxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "138": {
-      "id": "138",
-      "name": "Yttrium Oxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "139": {
-      "id": "139",
-      "name": "Sodium Dichromate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "140": {
-      "id": "140",
-      "name": "Novolak",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "141": {
-      "id": "141",
-      "name": "Ferromolybdenum",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "142": {
-      "id": "142",
-      "name": "Ammonium Diuranate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "143": {
-      "id": "143",
-      "name": "Ammonium Paratungstate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "144": {
-      "id": "144",
-      "name": "Engine Bell",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "145": {
-      "id": "145",
-      "name": "Steel Truss",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "M",
-        "CM",
-        "IM",
-        "SM",
-        "CIM",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "146": {
-      "id": "146",
-      "name": "Aluminium Hull Plate",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "147": {
-      "id": "147",
-      "name": "Aluminium Truss",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "148": {
-      "id": "148",
-      "name": "Cargo Pod",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "149": {
-      "id": "149",
-      "name": "Pressure Vessel",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "150": {
-      "id": "150",
-      "name": "Propellant Tank",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "151": {
-      "id": "151",
-      "name": "Stainless Steel",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "152": {
-      "id": "152",
-      "name": "Bare Circuit Board",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "153": {
-      "id": "153",
-      "name": "Ferrite-bead Inductor",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "154": {
-      "id": "154",
-      "name": "Core Sampler Drill",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "155": {
-      "id": "155",
-      "name": "Core Sampler Thruster",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "156": {
-      "id": "156",
-      "name": "Parabolic Dish",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "157": {
-      "id": "157",
-      "name": "Photovoltaic Panel",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "158": {
-      "id": "158",
-      "name": "LiPo Battery",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "159": {
-      "id": "159",
-      "name": "Neodymium(III) Chloride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "160": {
-      "id": "160",
-      "name": "Yttrium Fluoride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "161": {
-      "id": "161",
-      "name": "Chromia",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "162": {
-      "id": "162",
-      "name": "Photoresist Epoxy",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "163": {
-      "id": "163",
-      "name": "Uranium Dioxide",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "164": {
-      "id": "164",
-      "name": "Tungsten",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "165": {
-      "id": "165",
-      "name": "Shuttle Hull",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "166": {
-      "id": "166",
-      "name": "Light Transport Hull",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "167": {
-      "id": "167",
-      "name": "Cargo Ring",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "168": {
-      "id": "168",
-      "name": "Heavy Transport Hull",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "169": {
-      "id": "169",
-      "name": "Tungsten Powder",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "170": {
-      "id": "170",
-      "name": "Hydrogen Propellant",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "171": {
-      "id": "171",
-      "name": "Stainless Steel Sheet",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "172": {
-      "id": "172",
-      "name": "Stainless Steel Pipe",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "173": {
-      "id": "173",
-      "name": "CCD",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "174": {
-      "id": "174",
-      "name": "Computer Chip",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "175": {
-      "id": "175",
-      "name": "Core Sampler",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "176": {
-      "id": "176",
-      "name": "Neodymium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "177": {
-      "id": "177",
-      "name": "Yttrium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "178": {
-      "id": "178",
-      "name": "Chromium",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "179": {
-      "id": "179",
-      "name": "Uranium Tetrafluoride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "180": {
-      "id": "180",
-      "name": "Core Sample",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "181": {
-      "id": "181",
-      "name": "Nd:YAG Laser Rod",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "182": {
-      "id": "182",
-      "name": "Nichrome",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "183": {
-      "id": "183",
-      "name": "Neodymium Magnet",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "184": {
-      "id": "184",
-      "name": "Unenriched Uranium Hexafluoride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "185": {
-      "id": "185",
-      "name": "Highly Enriched Uranium Hexafluoride",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "186": {
-      "id": "186",
-      "name": "Nd:YAG Laser",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "187": {
-      "id": "187",
-      "name": "Thin-film Resistor",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "188": {
-      "id": "188",
-      "name": "Highly Enriched Uranium Powder",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "189": {
-      "id": "189",
-      "name": "Ethylene Glycol",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "190": {
-      "id": "190",
-      "name": "Trimethyl Orthoformate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "191": {
-      "id": "191",
-      "name": "Diacetyl",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "192": {
-      "id": "192",
-      "name": "Potassium Carbonate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "I",
-        "CI",
-        "CM",
-        "CS",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "193": {
-      "id": "193",
-      "name": "Sodium Bisulfate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "194": {
-      "id": "194",
-      "name": "Dioxane Pre-thiophene",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "195": {
-      "id": "195",
-      "name": "Potassium Fluoride",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "196": {
-      "id": "196",
-      "name": "Hydrogen Heptafluorotantalate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "197": {
-      "id": "197",
-      "name": "Sodium Persulfate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "198": {
-      "id": "198",
-      "name": "EDOT",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "199": {
-      "id": "199",
-      "name": "Tantalum",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "200": {
-      "id": "200",
-      "name": "PEDOT",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "201": {
-      "id": "201",
-      "name": "Polymer Tantalum Capacitor",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIMS"
-      ]
-    },
-    "202": {
-      "id": "202",
-      "name": "Surface Mount Device Reel",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "203": {
-      "id": "203",
-      "name": "Circuit Board",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "204": {
-      "id": "204",
-      "name": "Brushless Motor Stator",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "205": {
-      "id": "205",
-      "name": "Brushless Motor Rotor",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "206": {
-      "id": "206",
-      "name": "Brushless Motor",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "207": {
-      "id": "207",
-      "name": "Landing Leg",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "208": {
-      "id": "208",
-      "name": "Landing Auger",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "209": {
-      "id": "209",
-      "name": "Pump",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "210": {
-      "id": "210",
-      "name": "Radio Antenna",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "211": {
-      "id": "211",
-      "name": "Fiber Optic Gyroscope",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "212": {
-      "id": "212",
-      "name": "Star Tracker",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "213": {
-      "id": "213",
-      "name": "Computer",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "214": {
-      "id": "214",
-      "name": "Control Moment Gyroscope",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "215": {
-      "id": "215",
-      "name": "Robotic Arm",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "216": {
-      "id": "216",
-      "name": "Beryllium Sulfate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "217": {
-      "id": "217",
-      "name": "Beryllium Carbonate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "218": {
-      "id": "218",
-      "name": "Beryllia",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "219": {
-      "id": "219",
-      "name": "Beryllia Ceramic",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "SI",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "220": {
-      "id": "220",
-      "name": "Neon",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "I",
-        "CI",
-        "IM",
-        "SI",
-        "CIM",
-        "CIS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "221": {
-      "id": "221",
-      "name": "Heat Exchanger",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "222": {
-      "id": "222",
-      "name": "Turbopump",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "223": {
-      "id": "223",
-      "name": "Fuel Condensor",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "224": {
-      "id": "224",
-      "name": "Neon/Fuel Separator Centrifuge",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "225": {
-      "id": "225",
-      "name": "Fuel Make-up Tank",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "226": {
-      "id": "226",
-      "name": "Neon Make-up Tank",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "227": {
-      "id": "227",
-      "name": "Lightbulb Upper End Moderator",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "228": {
-      "id": "228",
-      "name": "Lightbulb Lower End Moderator",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "229": {
-      "id": "229",
-      "name": "Fused Quartz Lightbulb Tube",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CS",
-        "SI",
-        "CIS",
-        "CMS",
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "230": {
-      "id": "230",
-      "name": "Reactor Plumbing Assembly",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "231": {
-      "id": "231",
-      "name": "Flow Divider Moderator",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "232": {
-      "id": "232",
-      "name": "Nuclear Lightbulb",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "233": {
-      "id": "233",
-      "name": "Composite-overwrapped Reactor Shell",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "234": {
-      "id": "234",
-      "name": "Closed-cycle Gas Core Nuclear Reactor Engine",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "235": {
-      "id": "235",
-      "name": "Habitation Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "236": {
-      "id": "236",
-      "name": "Mobility Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "IMS",
-        "CIMS"
-      ]
-    },
-    "237": {
-      "id": "237",
-      "name": "Fluids Automation Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "238": {
-      "id": "238",
-      "name": "Solids Automation Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "239": {
-      "id": "239",
-      "name": "Terrain Interface Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "240": {
-      "id": "240",
-      "name": "Avionics Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "241": {
-      "id": "241",
-      "name": "Escape Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "242": {
-      "id": "242",
-      "name": "Attitude Control Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "243": {
-      "id": "243",
-      "name": "Power Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "244": {
-      "id": "244",
-      "name": "Thermal Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "245": {
-      "id": "245",
-      "name": "Propulsion Module",
-      "type": "Ship Component",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "246": {
-      "id": "246",
-      "name": "Shuttle",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "247": {
-      "id": "247",
-      "name": "Light Transport",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "248": {
-      "id": "248",
-      "name": "Heavy Transport",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "249": {
-      "id": "249",
-      "name": "Warehouse",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CMS",
-        "CIMS"
-      ]
-    },
-    "250": {
-      "id": "250",
-      "name": "Extractor",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "251": {
-      "id": "251",
-      "name": "Refinery",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "252": {
-      "id": "252",
-      "name": "Factory",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "253": {
-      "id": "253",
-      "name": "Shipyard",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "254": {
-      "id": "254",
-      "name": "Spaceport",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "255": {
-      "id": "255",
-      "name": "Marketplace",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "256": {
-      "id": "256",
-      "name": "Habitat",
-      "type": "Finished Good",
-      "sustainingSpectralTypes": [
-        "CIMS"
-      ]
-    },
-    "257": {
-      "id": "257",
-      "name": "Triple Superphosphate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CI",
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "258": {
-      "id": "258",
-      "name": "Phosphate and Sulfate Salts",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "259": {
-      "id": "259",
-      "name": "Soybeans",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "260": {
-      "id": "260",
-      "name": "Potatoes",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "261": {
-      "id": "261",
-      "name": "Natural Flavorings",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "262": {
-      "id": "262",
-      "name": "Spirulina/Chlorella Algae",
-      "type": "Component",
-      "sustainingSpectralTypes": [
-        "CIM",
-        "CIS",
-        "CIMS"
-      ]
-    },
-    "263": {
-      "id": "263",
-      "name": "Sodium Bicarbonate",
-      "type": "Refined Material",
-      "sustainingSpectralTypes": [
-        "C",
-        "CI",
-        "CM",
-        "CS",
-        "CIM",
-        "CIS",
-        "CMS",
-        "CIMS"
-      ]
-    }
-};
-
-const productNamesSorted = [
-    "Acetone",
+  "C": [
+    "Acetylene",
+    "Apatite",
+    "Bisphenol A",
+    "Bitumen",
+    "Borax",
+    "Calcite",
+    "Calcium",
+    "Calcium Chloride",
+    "Carbon Dioxide",
+    "Carbon Monoxide",
+    "Cement",
+    "Chlorine",
+    "Deionized Water",
+    "Hydrogen",
+    "Lithium Carbonate",
+    "Magnesium",
+    "Magnesium Chloride",
+    "Methane",
+    "Novolak Prepolymer Resin",
+    "Oxygen",
+    "Photoresist Epoxy",
+    "Potassium Carbonate",
+    "Potassium Chloride",
+    "Potassium Hydroxide",
+    "Quicklime",
+    "Salts",
+    "Sodium Bicarbonate",
+    "Sodium Carbonate",
+    "Sodium Chloride",
+    "Sodium Hydroxide",
+    "Soil",
+    "Water"
+  ],
+  "I": [
+    "Acetylene",
+    "Ammonia",
+    "Ammonium Carbonate",
+    "Ammonium Chloride",
+    "Ammonium Oxalate",
+    "Bisphenol A",
+    "Borax",
+    "Calcium",
+    "Calcium Chloride",
+    "Carbon Dioxide",
+    "Carbon Monoxide",
+    "Chlorine",
+    "Deionized Water",
+    "Hydrogen",
+    "Lithium Carbonate",
+    "Magnesium",
+    "Magnesium Chloride",
+    "Methane",
+    "Neon",
+    "Nitric Acid",
+    "Nitrogen",
+    "Novolak Prepolymer Resin",
+    "Oxalic Acid",
+    "Oxygen",
+    "Photoresist Epoxy",
+    "Potassium Carbonate",
+    "Potassium Chloride",
+    "Potassium Hydroxide",
+    "Pure Nitrogen",
+    "Salts",
+    "Sodium Bicarbonate",
+    "Sodium Carbonate",
+    "Sodium Chloride",
+    "Sodium Hydroxide",
+    "Sulfur",
+    "Sulfur Dioxide",
+    "Sulfuric Acid",
+    "Water"
+  ],
+  "M": [
+    "Bare Copper Wire",
+    "Copper",
+    "Graphite",
+    "Iron",
+    "Nickel",
+    "Rhabdite",
+    "Taenite",
+    "Troilite",
+    "Uraninite"
+  ],
+  "S": [
+    "Coffinite",
+    "Feldspar",
+    "Merrillite",
+    "Olivine",
+    "Pyroxene",
+    "Xenotime"
+  ],
+  "CI": [
+    "Acetylene",
+    "Acrylonitrile",
+    "Ammonia",
+    "Ammonium Carbonate",
+    "Ammonium Chloride",
+    "Ammonium Oxalate",
+    "Apatite",
+    "Bisphenol A",
+    "Bitumen",
+    "Borax",
+    "Boria",
+    "Boric Acid",
+    "Boron",
+    "Calcite",
+    "Calcium",
+    "Calcium Chloride",
+    "Carbon Dioxide",
+    "Carbon Fiber",
+    "Carbon Monoxide",
+    "Cement",
+    "Chlorine",
+    "Deionized Water",
+    "Diepoxy Prepolymer Resin",
+    "Epichlorohydrin",
+    "Epoxy",
+    "Fluorine",
+    "Hydrochloric Acid",
+    "Hydrofluoric Acid",
+    "Hydrogen",
+    "Lithium",
+    "Lithium Carbonate",
+    "Lithium Chloride",
+    "Magnesia",
+    "Magnesium",
+    "Magnesium Chloride",
+    "Methane",
+    "Naphtha",
+    "Neon",
+    "Nitric Acid",
+    "Nitrogen",
+    "Novolak Prepolymer Resin",
+    "Oxalic Acid",
+    "Oxygen",
+    "Phosphoric Acid",
+    "Photoresist Epoxy",
+    "Polyacrylonitrile",
+    "Polyacrylonitrile Fabric",
+    "Polypropylene",
+    "Potassium Carbonate",
+    "Potassium Chloride",
+    "Potassium Fluoride",
+    "Potassium Hydroxide",
+    "Propylene",
+    "Pure Nitrogen",
+    "Quicklime",
+    "Salts",
+    "Sodium Bicarbonate",
+    "Sodium Carbonate",
+    "Sodium Chloride",
+    "Sodium Hydroxide",
+    "Soil",
+    "Sulfur",
+    "Sulfur Dioxide",
+    "Sulfuric Acid",
+    "Triple Superphosphate",
+    "Water"
+  ],
+  "CM": [
+    "Acetylene",
+    "Apatite",
+    "Bare Copper Wire",
+    "Bisphenol A",
+    "Bitumen",
+    "Borax",
+    "Calcite",
+    "Calcium",
+    "Calcium Chloride",
+    "Carbon Dioxide",
+    "Carbon Monoxide",
+    "Cement",
+    "Chlorine",
+    "Copper",
+    "Core Drill Sampler",
+    "Deionized Water",
+    "Ferrochromium",
+    "Graphite",
+    "Hydrogen",
+    "Iron",
+    "Iron Oxide",
+    "Large Thrust Bearing",
+    "Lithium Carbonate",
+    "Magnesium",
+    "Magnesium Chloride",
+    "Methane",
+    "Nickel",
+    "Novolak Prepolymer Resin",
+    "Oxygen",
+    "Phosphoric Acid",
+    "Photoresist Epoxy",
+    "Potassium Carbonate",
+    "Potassium Chloride",
+    "Potassium Hydroxide",
+    "Quicklime",
+    "Rhabdite",
+    "Rhabdite Slag",
+    "Roasted Rhabdite",
+    "Salts",
+    "Sodium Bicarbonate",
+    "Sodium Carbonate",
+    "Sodium Chloride",
+    "Sodium Chromate",
+    "Sodium Hydroxide",
+    "Soil",
+    "Steel",
+    "Steel Beam",
+    "Steel Cable",
+    "Steel Pipe",
+    "Steel Sheet",
+    "Steel Truss",
+    "Steel Wire",
+    "Taenite",
+    "Troilite",
+    "Uraninite",
+    "Warehouse",
+    "Water"
+  ],
+  "CS": [
+    "Acetylene",
+    "Apatite",
+    "Bisphenol A",
+    "Bitumen",
+    "Borax",
+    "Calcite",
+    "Calcium",
+    "Calcium Chloride",
+    "Carbon Dioxide",
+    "Carbon Monoxide",
+    "Cement",
+    "Chlorine",
+    "Coffinite",
+    "Deionized Water",
+    "Feldspar",
+    "Fiberglass",
+    "Fused Quartz",
+    "Fused Quartz Lightbulb Tube",
+    "Hydrogen",
+    "Lithium Carbonate",
+    "Magnesium",
+    "Magnesium Chloride",
+    "Merrillite",
+    "Methane",
+    "Novolak Prepolymer Resin",
+    "Olivine",
+    "Oxygen",
+    "Photoresist Epoxy",
+    "Potassium Carbonate",
+    "Potassium Chloride",
+    "Potassium Hydroxide",
+    "Pyroxene",
+    "Quicklime",
+    "Salts",
+    "Silica",
+    "Silica Powder",
+    "Sodium Bicarbonate",
+    "Sodium Carbonate",
+    "Sodium Chloride",
+    "Sodium Hydroxide",
+    "Soil",
+    "Water",
+    "Weathered Olivine",
+    "Xenotime"
+  ],
+  "IM": [
+    "Acetylene",
+    "Ammonia",
+    "Ammonium Carbonate",
+    "Ammonium Chloride",
+    "Ammonium Diuranate",
+    "Ammonium Oxalate",
+    "Bare Copper Wire",
+    "Bisphenol A",
+    "Borax",
+    "Calcium",
+    "Calcium Chloride",
+    "Carbon Dioxide",
+    "Carbon Monoxide",
+    "Chlorine",
+    "Copper",
+    "Core Drill Sampler",
+    "Deionized Water",
+    "Ferrochromium",
+    "Graphite",
+    "Hydrogen",
+    "Iron",
+    "Iron Oxide",
+    "Iron Sulfide",
+    "Large Thrust Bearing",
+    "Lead",
+    "Lead Sulfide",
+    "Lithium Carbonate",
+    "Magnesium",
+    "Magnesium Chloride",
+    "Methane",
+    "Molybdenum Disulfide",
+    "Molybdenum Trioxide",
+    "Neon",
+    "Nickel",
+    "Nitric Acid",
+    "Nitrogen",
+    "Novolak Prepolymer Resin",
+    "Oxalic Acid",
+    "Oxygen",
+    "PEDOT",
+    "Phosphate and Sulfate Salts",
+    "Phosphoric Acid",
+    "Photoresist Epoxy",
+    "Potassium Carbonate",
+    "Potassium Chloride",
+    "Potassium Hydroxide",
+    "Pure Nitrogen",
+    "Rhabdite",
+    "Rhabdite Slag",
+    "Roasted Rhabdite",
+    "Salts",
+    "Sodium Bicarbonate",
+    "Sodium Carbonate",
+    "Sodium Chloride",
+    "Sodium Chromate",
+    "Sodium Hydroxide",
+    "Steel",
+    "Steel Beam",
+    "Steel Cable",
+    "Steel Pipe",
+    "Steel Sheet",
+    "Steel Truss",
+    "Steel Wire",
+    "Sulfur",
+    "Sulfur Dioxide",
+    "Sulfuric Acid",
+    "Taenite",
+    "Tin Sulfide",
+    "Troilite",
+    "Uraninite",
+    "Uranium Dioxide",
+    "Uranyl Nitrate",
+    "Water",
+    "Yellowcake"
+  ],
+  "SI": [
+    "Acetylene",
+    "Ammonia",
+    "Ammonium Carbonate",
+    "Ammonium Chloride",
+    "Ammonium Diuranate",
+    "Ammonium Oxalate",
+    "Ammonium Paratungstate",
+    "Bisphenol A",
+    "Borax",
+    "Calcium",
+    "Calcium Chloride",
+    "Carbon Dioxide",
+    "Carbon Monoxide",
+    "Chlorine",
+    "Coffinite",
+    "Deionized Water",
+    "Feldspar",
+    "Ferrite",
+    "Fiberglass",
+    "Fused Quartz",
+    "Fused Quartz Lightbulb Tube",
+    "Hydrochloric Acid",
+    "Hydrogen",
+    "Hydrogen Propellant",
+    "Iron",
+    "Iron Oxide",
+    "Leached Coffinite",
+    "Lithium Carbonate",
+    "Lithium Sulfate",
+    "Magnesia",
+    "Magnesium",
+    "Magnesium Chloride",
+    "Merrillite",
+    "Methane",
+    "Neodymium",
+    "Neodymium Oxide",
+    "Neodymium Trichloride",
+    "Neon",
+    "Nickel",
+    "Nickel Oxide",
+    "Nitric Acid",
+    "Nitrogen",
+    "Novolak Prepolymer Resin",
+    "Olivine",
+    "Oxalic Acid",
+    "Oxygen",
+    "PEDOT",
+    "Phosphate and Sulfate Salts",
+    "Phosphoric Acid",
+    "Photoresist Epoxy",
+    "Platinum",
+    "Potassium Carbonate",
+    "Potassium Chloride",
+    "Potassium Hydroxide",
+    "Pure Nitrogen",
+    "Pyroxene",
+    "Rare Earth Oxides",
+    "Rare Earth Sulfates",
+    "Salts",
+    "Silica",
+    "Silica Powder",
+    "Sodium Bicarbonate",
+    "Sodium Carbonate",
+    "Sodium Chloride",
+    "Sodium Hydroxide",
+    "Sodium Tungstate",
+    "Sulfur",
+    "Sulfur Dioxide",
+    "Sulfuric Acid",
+    "Tungsten",
+    "Tungsten Powder",
+    "Uranium Dioxide",
+    "Uranyl Nitrate",
+    "Water",
+    "Weathered Olivine",
+    "Xenotime",
+    "Yellowcake",
+    "Yttria",
+    "Zinc",
+    "Zinc Oxide"
+  ],
+  "SM": [
+    "Bare Copper Wire",
+    "Coffinite",
+    "Copper",
+    "Feldspar",
+    "Graphite",
+    "Iron",
+    "Merrillite",
+    "Nickel",
+    "Olivine",
+    "Pyroxene",
+    "Rhabdite",
+    "Taenite",
+    "Troilite",
+    "Uraninite",
+    "Xenotime"
+  ],
+  "CIM": [
+    "Acetylene",
+    "Acrylonitrile",
+    "Ammonia",
+    "Ammonium Carbonate",
+    "Ammonium Chloride",
+    "Ammonium Diuranate",
+    "Ammonium Oxalate",
+    "Apatite",
+    "Ball Bearing",
+    "Bare Copper Wire",
+    "Bisphenol A",
+    "Bitumen",
+    "Borax",
+    "Boria",
+    "Boric Acid",
+    "Boron",
+    "Calcite",
+    "Calcium",
+    "Calcium Chloride",
+    "Carbon Dioxide",
+    "Carbon Fiber",
+    "Carbon Monoxide",
+    "Cement",
+    "Chlorine",
+    "Chromia",
+    "Copper",
+    "Copper Wire",
+    "Core Drill Sampler",
+    "Deionized Water",
+    "Diepoxy Prepolymer Resin",
+    "Epichlorohydrin",
+    "Epoxy",
+    "Ferrochromium",
+    "Fluorine",
+    "Food",
+    "Graphite",
+    "Highly Enriched Uranium Hexafluoride",
+    "Highly Enriched Uranium Powder",
+    "Hydrochloric Acid",
+    "Hydrofluoric Acid",
+    "Hydrogen",
+    "Hydrogen Heptafluorotantalate and Niobate",
+    "Iron",
+    "Iron Oxide",
+    "Iron Sulfide",
+    "Large Thrust Bearing",
+    "Lead",
+    "Lead Sulfide",
+    "Lithium",
+    "Lithium Carbonate",
+    "Lithium Chloride",
+    "Magnesia",
+    "Magnesium",
+    "Magnesium Chloride",
+    "Methane",
+    "Molybdenum Disulfide",
+    "Molybdenum Trioxide",
+    "Naphtha",
+    "Natural Flavorings",
+    "Neon",
+    "Nickel",
+    "Nitric Acid",
+    "Nitrogen",
+    "Novolak Prepolymer Resin",
+    "Oxalic Acid",
+    "Oxygen",
+    "PEDOT",
+    "Phosphate and Sulfate Salts",
+    "Phosphoric Acid",
+    "Photoresist Epoxy",
+    "Polyacrylonitrile",
+    "Polyacrylonitrile Fabric",
+    "Polypropylene",
+    "Potassium Carbonate",
+    "Potassium Chloride",
+    "Potassium Fluoride",
+    "Potassium Heptafluorotantalate",
+    "Potassium Hydroxide",
+    "Potatoes",
+    "Propylene",
+    "Pure Nitrogen",
+    "Quicklime",
+    "Rhabdite",
+    "Rhabdite Slag",
+    "Roasted Rhabdite",
+    "Salts",
+    "Sodium Bicarbonate",
+    "Sodium Carbonate",
+    "Sodium Chloride",
+    "Sodium Chromate",
+    "Sodium Dichromate",
+    "Sodium Hydroxide",
+    "Soil",
+    "Soybeans",
+    "Spirulina and Chlorella Algae",
+    "Steel",
+    "Steel Beam",
+    "Steel Cable",
+    "Steel Pipe",
+    "Steel Sheet",
+    "Steel Truss",
+    "Steel Wire",
+    "Sulfur",
+    "Sulfur Dioxide",
+    "Sulfuric Acid",
+    "Taenite",
+    "Tantalum",
+    "Tin",
+    "Tin Sulfide",
+    "Triple Superphosphate",
+    "Troilite",
+    "Unenriched Uranium Hexafluoride",
+    "Uraninite",
+    "Uranium Dioxide",
+    "Uranium Tetrafluoride",
+    "Uranyl Nitrate",
+    "Warehouse",
+    "Water",
+    "Yellowcake"
+  ],
+  "CIS": [
+    "Acetylene",
+    "Acrylonitrile",
+    "Alumina",
+    "Alumina Ceramic",
+    "Ammonia",
+    "Ammonium Carbonate",
+    "Ammonium Chloride",
+    "Ammonium Diuranate",
+    "Ammonium Oxalate",
+    "Ammonium Paratungstate",
+    "Apatite",
+    "Beryllia",
+    "Beryllia Ceramic",
+    "Beryllium Carbonate",
+    "Bisphenol A",
+    "Bitumen",
+    "Borax",
+    "Boria",
+    "Boric Acid",
+    "Boron",
+    "Borosilicate Glass",
+    "Calcite",
+    "Calcium",
+    "Calcium Chloride",
+    "Carbon Dioxide",
+    "Carbon Fiber",
+    "Carbon Monoxide",
+    "Cement",
+    "Chlorine",
+    "Coffinite",
+    "Deionized Water",
+    "Diepoxy Prepolymer Resin",
+    "Epichlorohydrin",
+    "Epoxy",
+    "Feldspar",
+    "Ferrite",
+    "Fiber Optic Cable",
+    "Fiberglass",
+    "Fluorine",
+    "Food",
+    "Fused Quartz",
+    "Fused Quartz Lightbulb Tube",
+    "Highly Enriched Uranium Hexafluoride",
+    "Highly Enriched Uranium Powder",
+    "Hydrochloric Acid",
+    "Hydrofluoric Acid",
+    "Hydrogen",
+    "Hydrogen Propellant",
+    "Iron",
+    "Iron Oxide",
+    "Leached Coffinite",
+    "Leached Feldspar",
+    "Lithium",
+    "Lithium Carbonate",
+    "Lithium Chloride",
+    "Lithium Sulfate",
+    "Magnesia",
+    "Magnesium",
+    "Magnesium Chloride",
+    "Merrillite",
+    "Methane",
+    "Naphtha",
+    "Natural Flavorings",
+    "Nd:YAG Laser Rod",
+    "Neodymium",
+    "Neodymium Magnet",
+    "Neodymium Oxide",
+    "Neodymium Trichloride",
+    "Neon",
+    "Nickel",
+    "Nickel Oxide",
+    "Nitric Acid",
+    "Nitrogen",
+    "Novolak Prepolymer Resin",
+    "Olivine",
+    "Oxalic Acid",
+    "Oxygen",
+    "PEDOT",
+    "Phosphate and Sulfate Salts",
+    "Phosphoric Acid",
+    "Photoresist Epoxy",
+    "Platinum",
+    "Polyacrylonitrile",
+    "Polyacrylonitrile Fabric",
+    "Polypropylene",
+    "Potassium Carbonate",
+    "Potassium Chloride",
+    "Potassium Fluoride",
+    "Potassium Hydroxide",
+    "Potatoes",
+    "Propylene",
+    "Pure Nitrogen",
+    "Pyroxene",
+    "Quicklime",
+    "Rare Earth Oxides",
+    "Rare Earth Sulfates",
+    "Salts",
+    "Silica",
+    "Silica Powder",
+    "Sodium Bicarbonate",
+    "Sodium Carbonate",
+    "Sodium Chloride",
+    "Sodium Hydroxide",
+    "Sodium Tungstate",
+    "Soil",
+    "Soybeans",
+    "Spirulina and Chlorella Algae",
+    "Sulfur",
+    "Sulfur Dioxide",
+    "Sulfuric Acid",
+    "Triple Superphosphate",
+    "Tungsten",
+    "Tungsten Powder",
+    "Unenriched Uranium Hexafluoride",
+    "Uranium Dioxide",
+    "Uranium Tetrafluoride",
+    "Uranyl Nitrate",
+    "Water",
+    "Weathered Olivine",
+    "Xenotime",
+    "Yellowcake",
+    "Yttria",
+    "Zinc",
+    "Zinc Oxide"
+  ],
+  "CMS": [
+    "Acetylene",
+    "Apatite",
+    "Bare Copper Wire",
+    "Bisphenol A",
+    "Bitumen",
+    "Borax",
+    "Calcite",
+    "Calcium",
+    "Calcium Chloride",
+    "Carbon Dioxide",
+    "Carbon Monoxide",
+    "Cement",
+    "Chlorine",
+    "Coffinite",
+    "Copper",
+    "Core Drill Sampler",
+    "Deionized Water",
+    "Feldspar",
+    "Ferrochromium",
+    "Ferrosilicon",
+    "Fiberglass",
+    "Fused Quartz",
+    "Fused Quartz Lightbulb Tube",
+    "Graphite",
+    "Hydrogen",
+    "Iron",
+    "Iron Oxide",
+    "Large Thrust Bearing",
+    "Lithium Carbonate",
+    "Magnesium",
+    "Magnesium Chloride",
+    "Merrillite",
+    "Methane",
+    "Nickel",
+    "Novolak Prepolymer Resin",
+    "Olivine",
+    "Oxygen",
+    "Phosphoric Acid",
+    "Photoresist Epoxy",
+    "Potassium Carbonate",
+    "Potassium Chloride",
+    "Potassium Hydroxide",
+    "Pyroxene",
+    "Quicklime",
+    "Rhabdite",
+    "Rhabdite Slag",
+    "Roasted Rhabdite",
+    "Salts",
+    "Silica",
+    "Silica Powder",
+    "Silicon",
+    "Sodium Bicarbonate",
+    "Sodium Carbonate",
+    "Sodium Chloride",
+    "Sodium Chromate",
+    "Sodium Hydroxide",
+    "Soil",
+    "Steel",
+    "Steel Beam",
+    "Steel Cable",
+    "Steel Pipe",
+    "Steel Sheet",
+    "Steel Truss",
+    "Steel Wire",
+    "Taenite",
+    "Troilite",
+    "Uraninite",
+    "Warehouse",
+    "Water",
+    "Weathered Olivine",
+    "Xenotime"
+  ],
+  "IMS": [
+    "Acetylene",
+    "Ammonia",
+    "Ammonium Carbonate",
+    "Ammonium Chloride",
+    "Ammonium Diuranate",
+    "Ammonium Oxalate",
+    "Ammonium Paratungstate",
+    "Bare Copper Wire",
+    "Bisphenol A",
+    "Borax",
+    "Calcium",
+    "Calcium Chloride",
+    "Carbon Dioxide",
+    "Carbon Monoxide",
+    "Chlorine",
+    "Chromia",
+    "Coffinite",
+    "Copper",
+    "Core Drill Sampler",
+    "Deionized Water",
+    "Feldspar",
+    "Ferrite",
+    "Ferrochromium",
+    "Ferrosilicon",
+    "Fiberglass",
+    "Fused Quartz",
+    "Fused Quartz Lightbulb Tube",
+    "Gold",
+    "Graphite",
+    "Hydrochloric Acid",
+    "Hydrogen",
+    "Hydrogen Propellant",
+    "Iron",
+    "Iron Oxide",
+    "Iron Sulfide",
+    "Large Thrust Bearing",
+    "Leached Coffinite",
+    "Lead",
+    "Lead Sulfide",
+    "Lithium Carbonate",
+    "Lithium Sulfate",
+    "Magnesia",
+    "Magnesium",
+    "Magnesium Chloride",
+    "Merrillite",
+    "Methane",
+    "Molybdenum Disulfide",
+    "Molybdenum Trioxide",
+    "Neodymium",
+    "Neodymium Oxide",
+    "Neodymium Trichloride",
+    "Neon",
+    "Nickel",
+    "Nickel Oxide",
+    "Nitric Acid",
+    "Nitrogen",
+    "Novolak Prepolymer Resin",
+    "Olivine",
+    "Oxalic Acid",
+    "Oxygen",
+    "PEDOT",
+    "Phosphate and Sulfate Salts",
+    "Phosphoric Acid",
+    "Photoresist Epoxy",
+    "Platinum",
+    "Potassium Carbonate",
+    "Potassium Chloride",
+    "Potassium Hydroxide",
+    "Pure Nitrogen",
+    "Pyroxene",
+    "Rare Earth Oxides",
+    "Rare Earth Sulfates",
+    "Rhabdite",
+    "Rhabdite Slag",
+    "Roasted Rhabdite",
+    "Salts",
+    "Silica",
+    "Silica Powder",
+    "Silicon",
+    "Silicon Wafer",
+    "Silver",
+    "Sodium Bicarbonate",
+    "Sodium Carbonate",
+    "Sodium Chloride",
+    "Sodium Chromate",
+    "Sodium Dichromate",
+    "Sodium Hydroxide",
+    "Sodium Tungstate",
+    "Steel",
+    "Steel Beam",
+    "Steel Cable",
+    "Steel Pipe",
+    "Steel Sheet",
+    "Steel Truss",
+    "Steel Wire",
+    "Sulfur",
+    "Sulfur Dioxide",
+    "Sulfuric Acid",
+    "Taenite",
+    "Tin Sulfide",
+    "Troilite",
+    "Tungsten",
+    "Tungsten Powder",
+    "Uraninite",
+    "Uranium Dioxide",
+    "Uranyl Nitrate",
+    "Water",
+    "Weathered Olivine",
+    "Xenotime",
+    "Yellowcake",
+    "Yttria",
+    "Zinc",
+    "Zinc Oxide"
+  ],
+  "CIMS": [
     "Acetylene",
     "Acrylonitrile",
     "Alumina",
@@ -7414,22 +899,22 @@ const productNamesSorted = [
     "Ammonium Paratungstate",
     "Apatite",
     "Attitude Control Module",
+    "Austenitic Nichrome",
     "Avionics Module",
     "Ball Bearing",
     "Ball Valve",
     "Bare Circuit Board",
     "Bare Copper Wire",
-    "Benzene",
     "Beryllia",
     "Beryllia Ceramic",
     "Beryllium Carbonate",
-    "Beryllium Sulfate",
+    "Bioreactor",
     "Bisphenol A",
     "Bitumen",
     "Borax",
+    "Boria",
     "Boric Acid",
     "Boron",
-    "Boron Trioxide",
     "Borosilicate Glass",
     "Brushless Motor",
     "Brushless Motor Rotor",
@@ -7441,8 +926,9 @@ const productNamesSorted = [
     "Carbon Dioxide",
     "Carbon Fiber",
     "Carbon Monoxide",
-    "Cargo Pod",
+    "Cargo Module",
     "Cargo Ring",
+    "Cement",
     "Chlorine",
     "Chromia",
     "Chromium",
@@ -7454,26 +940,19 @@ const productNamesSorted = [
     "Composite-overwrapped Reactor Shell",
     "Computer",
     "Computer Chip",
-    "Concrete",
     "Control Moment Gyroscope",
     "Copper",
     "Copper Wire",
-    "Core Sample",
-    "Core Sampler",
-    "Core Sampler Drill",
-    "Core Sampler Thruster",
-    "Cresol",
+    "Core Drill",
+    "Core Drill Sampler",
+    "Core Drill Thruster",
     "Deionized Water",
-    "Diacetyl",
+    "Diepoxy Prepolymer Resin",
     "Diode",
-    "Dioxane Pre-thiophene",
-    "EDOT",
     "Engine Bell",
     "Epichlorohydrin",
     "Epoxy",
     "Escape Module",
-    "Ethylene",
-    "Ethylene Glycol",
     "Extractor",
     "Factory",
     "Feldspar",
@@ -7482,7 +961,6 @@ const productNamesSorted = [
     "Ferrochromium",
     "Ferromolybdenum",
     "Ferrosilicon",
-    "Fertilizer",
     "Fiber Optic Cable",
     "Fiber Optic Gyroscope",
     "Fiberglass",
@@ -7490,8 +968,6 @@ const productNamesSorted = [
     "Fluids Automation Module",
     "Fluorine",
     "Food",
-    "Formaldehyde",
-    "Fuel Condensor",
     "Fuel Make-up Tank",
     "Fused Quartz",
     "Fused Quartz Lightbulb Tube",
@@ -7507,10 +983,8 @@ const productNamesSorted = [
     "Hydrochloric Acid",
     "Hydrofluoric Acid",
     "Hydrogen",
-    "Hydrogen Cyanide",
-    "Hydrogen Heptafluorotantalate",
+    "Hydrogen Heptafluorotantalate and Niobate",
     "Hydrogen Propellant",
-    "Inconel",
     "Iron",
     "Iron Oxide",
     "Iron Sulfide",
@@ -7518,23 +992,24 @@ const productNamesSorted = [
     "Landing Leg",
     "Large Thrust Bearing",
     "Laser Diode",
+    "Leached Coffinite",
+    "Leached Feldspar",
+    "Lead",
     "Lead Sulfide",
     "LiPo Battery",
     "Light Transport",
     "Light Transport Hull",
-    "Lightbulb Lower End Moderator",
-    "Lightbulb Upper End Moderator",
+    "Lightbulb End Moderators",
     "Lithium",
     "Lithium Carbonate",
     "Lithium Chloride",
     "Lithium Sulfate",
+    "Magnesia",
     "Magnesium",
     "Magnesium Chloride",
-    "Magnesium Oxide",
     "Marketplace",
     "Merrillite",
     "Methane",
-    "Methanol",
     "Mobility Module",
     "Molybdenum Disulfide",
     "Molybdenum Trioxide",
@@ -7545,7 +1020,7 @@ const productNamesSorted = [
     "Neodymium",
     "Neodymium Magnet",
     "Neodymium Oxide",
-    "Neodymium(III) Chloride",
+    "Neodymium Trichloride",
     "Neon",
     "Neon Make-up Tank",
     "Neon/Fuel Separator Centrifuge",
@@ -7554,18 +1029,18 @@ const productNamesSorted = [
     "Nickel Oxide",
     "Nitric Acid",
     "Nitrogen",
-    "Novolak",
+    "Novolak Prepolymer Resin",
     "Nuclear Lightbulb",
     "Olivine",
     "Oxalic Acid",
     "Oxygen",
     "PEDOT",
     "Parabolic Dish",
-    "Phenol",
     "Phosphate and Sulfate Salts",
     "Phosphoric Acid",
     "Photoresist Epoxy",
     "Photovoltaic Panel",
+    "Platinum",
     "Polyacrylonitrile",
     "Polyacrylonitrile Fabric",
     "Polymer Tantalum Capacitor",
@@ -7573,6 +1048,7 @@ const productNamesSorted = [
     "Potassium Carbonate",
     "Potassium Chloride",
     "Potassium Fluoride",
+    "Potassium Heptafluorotantalate",
     "Potassium Hydroxide",
     "Potatoes",
     "Power Module",
@@ -7581,6 +1057,7 @@ const productNamesSorted = [
     "Propulsion Module",
     "Propylene",
     "Pump",
+    "Pure Nitrogen",
     "Pyroxene",
     "Quicklime",
     "Radio Antenna",
@@ -7589,6 +1066,8 @@ const productNamesSorted = [
     "Reactor Plumbing Assembly",
     "Refinery",
     "Rhabdite",
+    "Rhabdite Slag",
+    "Roasted Rhabdite",
     "Robotic Arm",
     "Salts",
     "Shipyard",
@@ -7601,20 +1080,18 @@ const productNamesSorted = [
     "Silver",
     "Small Propellant Tank",
     "Sodium Bicarbonate",
-    "Sodium Bisulfate",
     "Sodium Carbonate",
     "Sodium Chloride",
     "Sodium Chromate",
     "Sodium Dichromate",
     "Sodium Hydroxide",
-    "Sodium Persulfate",
     "Sodium Tungstate",
     "Soil",
     "Solder",
     "Solids Automation Module",
     "Soybeans",
     "Spaceport",
-    "Spirulina/Chlorella Algae",
+    "Spirulina and Chlorella Algae",
     "Stainless Steel",
     "Stainless Steel Pipe",
     "Stainless Steel Sheet",
@@ -7637,7 +1114,6 @@ const productNamesSorted = [
     "Thin-film Resistor",
     "Tin",
     "Tin Sulfide",
-    "Trimethyl Orthoformate",
     "Triple Superphosphate",
     "Troilite",
     "Tungsten",
@@ -7650,11 +1126,7993 @@ const productNamesSorted = [
     "Uranyl Nitrate",
     "Warehouse",
     "Water",
+    "Weathered Olivine",
     "Xenotime",
     "Yellowcake",
-    "Yttrium",
-    "Yttrium Fluoride",
-    "Yttrium Oxide",
+    "Yttria",
     "Zinc",
     "Zinc Oxide"
+  ]
+};
+
+// includes "sustainingSpectralTypes"
+const productDataByName = {
+  "Water": {
+    "category": "2",
+    "id": "1",
+    "massKilogramsPerUnit": "1",
+    "name": "Water",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.971",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Hydrogen": {
+    "category": "2",
+    "id": "2",
+    "massKilogramsPerUnit": "1",
+    "name": "Hydrogen",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "14.1",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS",
+      "C",
+      "CM",
+      "CS",
+      "CMS"
+    ]
+  },
+  "Ammonia": {
+    "category": "2",
+    "id": "3",
+    "massKilogramsPerUnit": "1",
+    "name": "Ammonia",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "1.37",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Nitrogen": {
+    "category": "2",
+    "id": "4",
+    "massKilogramsPerUnit": "1",
+    "name": "Nitrogen",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "1.24",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Sulfur Dioxide": {
+    "category": "2",
+    "id": "5",
+    "massKilogramsPerUnit": "1",
+    "name": "Sulfur Dioxide",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.684",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Carbon Dioxide": {
+    "category": "2",
+    "id": "6",
+    "massKilogramsPerUnit": "1",
+    "name": "Carbon Dioxide",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.801",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Carbon Monoxide": {
+    "category": "2",
+    "id": "7",
+    "massKilogramsPerUnit": "1",
+    "name": "Carbon Monoxide",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "1.25",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Methane": {
+    "category": "2",
+    "id": "8",
+    "massKilogramsPerUnit": "1",
+    "name": "Methane",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "2.22",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Apatite": {
+    "category": "1",
+    "id": "9",
+    "massKilogramsPerUnit": "1",
+    "name": "Apatite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.521",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "Bitumen": {
+    "category": "1",
+    "id": "10",
+    "massKilogramsPerUnit": "1",
+    "name": "Bitumen",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "1.6",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "Calcite": {
+    "category": "1",
+    "id": "11",
+    "massKilogramsPerUnit": "1",
+    "name": "Calcite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.615",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "Feldspar": {
+    "category": "3",
+    "id": "12",
+    "massKilogramsPerUnit": "1",
+    "name": "Feldspar",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.606",
+    "sustainingSpectralTypes": [
+      "S",
+      "CS",
+      "SI",
+      "SM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Olivine": {
+    "category": "3",
+    "id": "13",
+    "massKilogramsPerUnit": "1",
+    "name": "Olivine",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.617",
+    "sustainingSpectralTypes": [
+      "S",
+      "CS",
+      "SI",
+      "SM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Pyroxene": {
+    "category": "3",
+    "id": "14",
+    "massKilogramsPerUnit": "1",
+    "name": "Pyroxene",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.476",
+    "sustainingSpectralTypes": [
+      "S",
+      "CS",
+      "SI",
+      "SM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Coffinite": {
+    "category": "5",
+    "id": "15",
+    "massKilogramsPerUnit": "1",
+    "name": "Coffinite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.327",
+    "sustainingSpectralTypes": [
+      "S",
+      "CS",
+      "SI",
+      "SM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Merrillite": {
+    "category": "4",
+    "id": "16",
+    "massKilogramsPerUnit": "1",
+    "name": "Merrillite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.521",
+    "sustainingSpectralTypes": [
+      "S",
+      "CS",
+      "SI",
+      "SM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Xenotime": {
+    "category": "4",
+    "id": "17",
+    "massKilogramsPerUnit": "1",
+    "name": "Xenotime",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.358",
+    "sustainingSpectralTypes": [
+      "S",
+      "CS",
+      "SI",
+      "SM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Rhabdite": {
+    "category": "3",
+    "id": "18",
+    "massKilogramsPerUnit": "1",
+    "name": "Rhabdite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.233",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Graphite": {
+    "category": "3",
+    "id": "19",
+    "massKilogramsPerUnit": "1",
+    "name": "Graphite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.737",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Taenite": {
+    "category": "3",
+    "id": "20",
+    "massKilogramsPerUnit": "1",
+    "name": "Taenite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.208",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Troilite": {
+    "category": "3",
+    "id": "21",
+    "massKilogramsPerUnit": "1",
+    "name": "Troilite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.362",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Uraninite": {
+    "category": "5",
+    "id": "22",
+    "massKilogramsPerUnit": "1",
+    "name": "Uraninite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.156",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Oxygen": {
+    "category": "9",
+    "id": "23",
+    "massKilogramsPerUnit": "1",
+    "name": "Oxygen",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.876",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Deionized Water": {
+    "category": "23",
+    "id": "24",
+    "massKilogramsPerUnit": "1",
+    "name": "Deionized Water",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Salts": {
+    "category": "6",
+    "id": "25",
+    "massKilogramsPerUnit": "1",
+    "name": "Salts",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.775",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Silica": {
+    "category": "10",
+    "id": "26",
+    "massKilogramsPerUnit": "1",
+    "name": "Silica",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.629",
+    "sustainingSpectralTypes": [
+      "CS",
+      "SI",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Naphtha": {
+    "category": "22",
+    "id": "27",
+    "massKilogramsPerUnit": "1",
+    "name": "Naphtha",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.3",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Sodium Bicarbonate": {
+    "category": "11",
+    "id": "28",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Bicarbonate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.909",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS",
+      "I",
+      "IM",
+      "SI",
+      "IMS"
+    ]
+  },
+  "Iron": {
+    "category": "21",
+    "id": "29",
+    "massKilogramsPerUnit": "1",
+    "name": "Iron",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.14",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS",
+      "SI",
+      "CIS"
+    ]
+  },
+  "Copper": {
+    "category": "21",
+    "id": "30",
+    "massKilogramsPerUnit": "1",
+    "name": "Copper",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.123",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Nickel": {
+    "category": "21",
+    "id": "31",
+    "massKilogramsPerUnit": "1",
+    "name": "Nickel",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.161",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS",
+      "SI",
+      "CIS"
+    ]
+  },
+  "Quicklime": {
+    "category": "10",
+    "id": "32",
+    "massKilogramsPerUnit": "1",
+    "name": "Quicklime",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.599",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "Acetylene": {
+    "category": "22",
+    "id": "33",
+    "massKilogramsPerUnit": "1",
+    "name": "Acetylene",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.44",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Ammonium Carbonate": {
+    "category": "11",
+    "id": "34",
+    "massKilogramsPerUnit": "1",
+    "name": "Ammonium Carbonate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.33",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Triple Superphosphate": {
+    "category": "15",
+    "id": "35",
+    "massKilogramsPerUnit": "1",
+    "name": "Triple Superphosphate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.87",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Phosphate and Sulfate Salts": {
+    "category": "6",
+    "id": "36",
+    "massKilogramsPerUnit": "1",
+    "name": "Phosphate and Sulfate Salts",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.595",
+    "sustainingSpectralTypes": [
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Iron Sulfide": {
+    "category": "13",
+    "id": "37",
+    "massKilogramsPerUnit": "1",
+    "name": "Iron Sulfide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.344",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Lead Sulfide": {
+    "category": "13",
+    "id": "38",
+    "massKilogramsPerUnit": "1",
+    "name": "Lead Sulfide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.219",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Tin Sulfide": {
+    "category": "13",
+    "id": "39",
+    "massKilogramsPerUnit": "1",
+    "name": "Tin Sulfide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.319",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Molybdenum Disulfide": {
+    "category": "13",
+    "id": "40",
+    "massKilogramsPerUnit": "1",
+    "name": "Molybdenum Disulfide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.329",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Fused Quartz": {
+    "category": "29",
+    "id": "41",
+    "massKilogramsPerUnit": "1",
+    "name": "Fused Quartz",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.415",
+    "sustainingSpectralTypes": [
+      "CS",
+      "SI",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Fiberglass": {
+    "category": "30",
+    "id": "42",
+    "massKilogramsPerUnit": "1",
+    "name": "Fiberglass",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "1.26",
+    "sustainingSpectralTypes": [
+      "CS",
+      "SI",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Bare Copper Wire": {
+    "category": "31",
+    "id": "43",
+    "massKilogramsPerUnit": "1",
+    "name": "Bare Copper Wire",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.123",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Cement": {
+    "category": "29",
+    "id": "44",
+    "massKilogramsPerUnit": "1",
+    "name": "Cement",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "1.13",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "Sodium Chloride": {
+    "category": "6",
+    "id": "45",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Chloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.41",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Potassium Chloride": {
+    "category": "6",
+    "id": "46",
+    "massKilogramsPerUnit": "1",
+    "name": "Potassium Chloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.842",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Borax": {
+    "category": "6",
+    "id": "47",
+    "massKilogramsPerUnit": "1",
+    "name": "Borax",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.963",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Lithium Carbonate": {
+    "category": "11",
+    "id": "48",
+    "massKilogramsPerUnit": "1",
+    "name": "Lithium Carbonate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.948",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Magnesium Chloride": {
+    "category": "6",
+    "id": "49",
+    "massKilogramsPerUnit": "1",
+    "name": "Magnesium Chloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.718",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Propylene": {
+    "category": "22",
+    "id": "50",
+    "massKilogramsPerUnit": "1",
+    "name": "Propylene",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "2.04",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Sulfur": {
+    "category": "20",
+    "id": "51",
+    "massKilogramsPerUnit": "1",
+    "name": "Sulfur",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.805",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Steel": {
+    "category": "17",
+    "id": "52",
+    "massKilogramsPerUnit": "1",
+    "name": "Steel",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.159",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Silicon": {
+    "category": "20",
+    "id": "53",
+    "massKilogramsPerUnit": "1",
+    "name": "Silicon",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.715",
+    "sustainingSpectralTypes": [
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Nitric Acid": {
+    "category": "7",
+    "id": "54",
+    "massKilogramsPerUnit": "1",
+    "name": "Nitric Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.893",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Sulfuric Acid": {
+    "category": "7",
+    "id": "55",
+    "massKilogramsPerUnit": "1",
+    "name": "Sulfuric Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.687",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Soil": {
+    "category": "18",
+    "id": "56",
+    "massKilogramsPerUnit": "1",
+    "name": "Soil",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.714",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "Ferrosilicon": {
+    "category": "17",
+    "id": "57",
+    "massKilogramsPerUnit": "1",
+    "name": "Ferrosilicon",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.271",
+    "sustainingSpectralTypes": [
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Weathered Olivine": {
+    "category": "21",
+    "id": "58",
+    "massKilogramsPerUnit": "1",
+    "name": "Weathered Olivine",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.521",
+    "sustainingSpectralTypes": [
+      "CS",
+      "SI",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Oxalic Acid": {
+    "category": "7",
+    "id": "59",
+    "massKilogramsPerUnit": "1",
+    "name": "Oxalic Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.05",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Silver": {
+    "category": "21",
+    "id": "60",
+    "massKilogramsPerUnit": "1",
+    "name": "Silver",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.119",
+    "sustainingSpectralTypes": [
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Gold": {
+    "category": "21",
+    "id": "61",
+    "massKilogramsPerUnit": "1",
+    "name": "Gold",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.0648",
+    "sustainingSpectralTypes": [
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Tin": {
+    "category": "21",
+    "id": "62",
+    "massKilogramsPerUnit": "1",
+    "name": "Tin",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.171",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIMS"
+    ]
+  },
+  "Iron Oxide": {
+    "category": "10",
+    "id": "63",
+    "massKilogramsPerUnit": "1",
+    "name": "Iron Oxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.387",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS",
+      "CM",
+      "IM",
+      "CIM",
+      "CMS"
+    ]
+  },
+  "Spirulina and Chlorella Algae": {
+    "category": "25",
+    "id": "64",
+    "massKilogramsPerUnit": "1",
+    "name": "Spirulina and Chlorella Algae",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "2.5",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Molybdenum Trioxide": {
+    "category": "10",
+    "id": "65",
+    "massKilogramsPerUnit": "1",
+    "name": "Molybdenum Trioxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.426",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Silica Powder": {
+    "category": "10",
+    "id": "66",
+    "massKilogramsPerUnit": "1",
+    "name": "Silica Powder",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.755",
+    "sustainingSpectralTypes": [
+      "CS",
+      "SI",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Solder": {
+    "category": "31",
+    "id": "67",
+    "massKilogramsPerUnit": "1",
+    "name": "Solder",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.148",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Fiber Optic Cable": {
+    "category": "31",
+    "id": "68",
+    "massKilogramsPerUnit": "1",
+    "name": "Fiber Optic Cable",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.886",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Steel Beam": {
+    "category": "33",
+    "id": "69",
+    "massKilogramsPerUnit": "1",
+    "name": "Steel Beam",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "1.1",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Steel Sheet": {
+    "category": "33",
+    "id": "70",
+    "massKilogramsPerUnit": "1",
+    "name": "Steel Sheet",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.15",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Steel Pipe": {
+    "category": "33",
+    "id": "71",
+    "massKilogramsPerUnit": "1",
+    "name": "Steel Pipe",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "1.2",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Steel Wire": {
+    "category": "33",
+    "id": "72",
+    "massKilogramsPerUnit": "1",
+    "name": "Steel Wire",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.15",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Acrylonitrile": {
+    "category": "22",
+    "id": "73",
+    "massKilogramsPerUnit": "1",
+    "name": "Acrylonitrile",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.23",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Polypropylene": {
+    "category": "26",
+    "id": "74",
+    "massKilogramsPerUnit": "1",
+    "name": "Polypropylene",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.57",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Magnesium": {
+    "category": "21",
+    "id": "75",
+    "massKilogramsPerUnit": "1",
+    "name": "Magnesium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.632",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Chlorine": {
+    "category": "20",
+    "id": "76",
+    "massKilogramsPerUnit": "1",
+    "name": "Chlorine",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "4.02",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Sodium Carbonate": {
+    "category": "11",
+    "id": "77",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Carbonate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.787",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS",
+      "I",
+      "IM",
+      "SI",
+      "IMS"
+    ]
+  },
+  "Calcium Chloride": {
+    "category": "6",
+    "id": "78",
+    "massKilogramsPerUnit": "1",
+    "name": "Calcium Chloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.775",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Boria": {
+    "category": "10",
+    "id": "79",
+    "massKilogramsPerUnit": "1",
+    "name": "Boria",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.739",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Lithium Sulfate": {
+    "category": "12",
+    "id": "80",
+    "massKilogramsPerUnit": "1",
+    "name": "Lithium Sulfate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.751",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Hydrochloric Acid": {
+    "category": "7",
+    "id": "81",
+    "massKilogramsPerUnit": "1",
+    "name": "Hydrochloric Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.04",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS",
+      "SI",
+      "IMS"
+    ]
+  },
+  "Hydrofluoric Acid": {
+    "category": "7",
+    "id": "82",
+    "massKilogramsPerUnit": "1",
+    "name": "Hydrofluoric Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.09",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Phosphoric Acid": {
+    "category": "7",
+    "id": "83",
+    "massKilogramsPerUnit": "1",
+    "name": "Phosphoric Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.694",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS",
+      "SI",
+      "IMS",
+      "CM",
+      "IM",
+      "CMS"
+    ]
+  },
+  "Boric Acid": {
+    "category": "7",
+    "id": "84",
+    "massKilogramsPerUnit": "1",
+    "name": "Boric Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.39",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Zinc Oxide": {
+    "category": "10",
+    "id": "85",
+    "massKilogramsPerUnit": "1",
+    "name": "Zinc Oxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.357",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Nickel Oxide": {
+    "category": "10",
+    "id": "86",
+    "massKilogramsPerUnit": "1",
+    "name": "Nickel Oxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.3",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Magnesia": {
+    "category": "10",
+    "id": "87",
+    "massKilogramsPerUnit": "1",
+    "name": "Magnesia",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.559",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS",
+      "CI",
+      "CIM"
+    ]
+  },
+  "Alumina": {
+    "category": "10",
+    "id": "88",
+    "massKilogramsPerUnit": "1",
+    "name": "Alumina",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.46",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Sodium Hydroxide": {
+    "category": "8",
+    "id": "89",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Hydroxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.671",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Potassium Hydroxide": {
+    "category": "8",
+    "id": "90",
+    "massKilogramsPerUnit": "1",
+    "name": "Potassium Hydroxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.674",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Soybeans": {
+    "category": "25",
+    "id": "91",
+    "massKilogramsPerUnit": "1",
+    "name": "Soybeans",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.53",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Potatoes": {
+    "category": "25",
+    "id": "92",
+    "massKilogramsPerUnit": "1",
+    "name": "Potatoes",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.52",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Ammonium Oxalate": {
+    "category": "6",
+    "id": "93",
+    "massKilogramsPerUnit": "1",
+    "name": "Ammonium Oxalate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.11",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Rare Earth Sulfates": {
+    "category": "12",
+    "id": "94",
+    "massKilogramsPerUnit": "1",
+    "name": "Rare Earth Sulfates",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.681",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Ferrochromium": {
+    "category": "17",
+    "id": "95",
+    "massKilogramsPerUnit": "1",
+    "name": "Ferrochromium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.222",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Yellowcake": {
+    "category": "10",
+    "id": "96",
+    "massKilogramsPerUnit": "1",
+    "name": "Yellowcake",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.172",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS",
+      "SI",
+      "CIS"
+    ]
+  },
+  "Alumina Ceramic": {
+    "category": "10",
+    "id": "97",
+    "massKilogramsPerUnit": "1",
+    "name": "Alumina Ceramic",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.316",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Austenitic Nichrome": {
+    "category": "32",
+    "id": "98",
+    "massKilogramsPerUnit": "1",
+    "name": "Austenitic Nichrome",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.135",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Copper Wire": {
+    "category": "31",
+    "id": "99",
+    "massKilogramsPerUnit": "1",
+    "name": "Copper Wire",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.152",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIMS"
+    ]
+  },
+  "Silicon Wafer": {
+    "category": "31",
+    "id": "100",
+    "massKilogramsPerUnit": "1",
+    "name": "Silicon Wafer",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.472",
+    "sustainingSpectralTypes": [
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Steel Cable": {
+    "category": "33",
+    "id": "101",
+    "massKilogramsPerUnit": "1",
+    "name": "Steel Cable",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.182",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Polyacrylonitrile": {
+    "category": "26",
+    "id": "102",
+    "massKilogramsPerUnit": "1",
+    "name": "Polyacrylonitrile",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.21",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Natural Flavorings": {
+    "category": "25",
+    "id": "103",
+    "massKilogramsPerUnit": "1",
+    "name": "Natural Flavorings",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.82",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Platinum": {
+    "category": "21",
+    "id": "104",
+    "massKilogramsPerUnit": "1",
+    "name": "Platinum",
+    "quantized": false,
+    "type": "Refined Metal",
+    "volumeLitersPerUnit": "0.0583",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Lithium Chloride": {
+    "category": "6",
+    "id": "105",
+    "massKilogramsPerUnit": "1",
+    "name": "Lithium Chloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.805",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Zinc": {
+    "category": "21",
+    "id": "106",
+    "massKilogramsPerUnit": "1",
+    "name": "Zinc",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.175",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Epichlorohydrin": {
+    "category": "22",
+    "id": "107",
+    "massKilogramsPerUnit": "1",
+    "name": "Epichlorohydrin",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.06",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Bisphenol A": {
+    "category": "22",
+    "id": "108",
+    "massKilogramsPerUnit": "1",
+    "name": "Bisphenol A",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.04",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Rare Earth Oxides": {
+    "category": "10",
+    "id": "109",
+    "massKilogramsPerUnit": "1",
+    "name": "Rare Earth Oxides",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.272",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Ammonium Chloride": {
+    "category": "6",
+    "id": "110",
+    "massKilogramsPerUnit": "1",
+    "name": "Ammonium Chloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.09",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS",
+      "I",
+      "IM",
+      "SI",
+      "IMS"
+    ]
+  },
+  "Aluminium": {
+    "category": "21",
+    "id": "111",
+    "massKilogramsPerUnit": "1",
+    "name": "Aluminium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.463",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Calcium": {
+    "category": "21",
+    "id": "112",
+    "massKilogramsPerUnit": "1",
+    "name": "Calcium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.29",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Sodium Chromate": {
+    "category": "6",
+    "id": "113",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Chromate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.617",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Leached Coffinite": {
+    "category": "38",
+    "id": "114",
+    "massKilogramsPerUnit": "1",
+    "name": "Leached Coffinite",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.333",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Uranyl Nitrate": {
+    "category": "14",
+    "id": "115",
+    "massKilogramsPerUnit": "1",
+    "name": "Uranyl Nitrate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.593",
+    "sustainingSpectralTypes": [
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Fluorine": {
+    "category": "20",
+    "id": "116",
+    "massKilogramsPerUnit": "1",
+    "name": "Fluorine",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.52",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Sodium Tungstate": {
+    "category": "6",
+    "id": "117",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Tungstate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.435",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Ferrite": {
+    "category": "32",
+    "id": "118",
+    "massKilogramsPerUnit": "1",
+    "name": "Ferrite",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.22",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Diode": {
+    "category": "31",
+    "id": "119",
+    "massKilogramsPerUnit": "1",
+    "name": "Diode",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Laser Diode": {
+    "category": "31",
+    "id": "120",
+    "massKilogramsPerUnit": "1",
+    "name": "Laser Diode",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Ball Valve": {
+    "category": "39",
+    "id": "121",
+    "massKilogramsPerUnit": "1",
+    "name": "Ball Valve",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Aluminium Beam": {
+    "category": "33",
+    "id": "122",
+    "massKilogramsPerUnit": "1",
+    "name": "Aluminium Beam",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "3.19",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Aluminium Sheet": {
+    "category": "33",
+    "id": "123",
+    "massKilogramsPerUnit": "1",
+    "name": "Aluminium Sheet",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.436",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Aluminium Pipe": {
+    "category": "33",
+    "id": "124",
+    "massKilogramsPerUnit": "1",
+    "name": "Aluminium Pipe",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "3.19",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Polyacrylonitrile Fabric": {
+    "category": "27",
+    "id": "125",
+    "massKilogramsPerUnit": "1",
+    "name": "Polyacrylonitrile Fabric",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "2.82",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Cold Gas Thruster": {
+    "category": "39",
+    "id": "126",
+    "massKilogramsPerUnit": "3",
+    "name": "Cold Gas Thruster",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Cold Gas Torque Thruster": {
+    "category": "39",
+    "id": "127",
+    "massKilogramsPerUnit": "3",
+    "name": "Cold Gas Torque Thruster",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Carbon Fiber": {
+    "category": "27",
+    "id": "128",
+    "massKilogramsPerUnit": "1",
+    "name": "Carbon Fiber",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "1.75",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Food": {
+    "category": "25",
+    "id": "129",
+    "massKilogramsPerUnit": "1",
+    "name": "Food",
+    "quantized": false,
+    "type": "Finished Good",
+    "volumeLitersPerUnit": "1.25",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Small Propellant Tank": {
+    "category": "39",
+    "id": "130",
+    "massKilogramsPerUnit": "6",
+    "name": "Small Propellant Tank",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Borosilicate Glass": {
+    "category": "28",
+    "id": "131",
+    "massKilogramsPerUnit": "1",
+    "name": "Borosilicate Glass",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.595",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Ball Bearing": {
+    "category": "35",
+    "id": "132",
+    "massKilogramsPerUnit": "1",
+    "name": "Ball Bearing",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIMS"
+    ]
+  },
+  "Large Thrust Bearing": {
+    "category": "35",
+    "id": "133",
+    "massKilogramsPerUnit": "2000",
+    "name": "Large Thrust Bearing",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Boron": {
+    "category": "20",
+    "id": "134",
+    "massKilogramsPerUnit": "1",
+    "name": "Boron",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.543",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Lithium": {
+    "category": "21",
+    "id": "135",
+    "massKilogramsPerUnit": "1",
+    "name": "Lithium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "3.77",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Epoxy": {
+    "category": "22",
+    "id": "136",
+    "massKilogramsPerUnit": "1",
+    "name": "Epoxy",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.68",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Neodymium Oxide": {
+    "category": "10",
+    "id": "137",
+    "massKilogramsPerUnit": "1",
+    "name": "Neodymium Oxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.251",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Yttria": {
+    "category": "10",
+    "id": "138",
+    "massKilogramsPerUnit": "1",
+    "name": "Yttria",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.363",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Sodium Dichromate": {
+    "category": "6",
+    "id": "139",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Dichromate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.661",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Novolak Prepolymer Resin": {
+    "category": "22",
+    "id": "140",
+    "massKilogramsPerUnit": "1",
+    "name": "Novolak Prepolymer Resin",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.02",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Ferromolybdenum": {
+    "category": "17",
+    "id": "141",
+    "massKilogramsPerUnit": "1",
+    "name": "Ferromolybdenum",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.168",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Ammonium Diuranate": {
+    "category": "6",
+    "id": "142",
+    "massKilogramsPerUnit": "1",
+    "name": "Ammonium Diuranate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.37",
+    "sustainingSpectralTypes": [
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Ammonium Paratungstate": {
+    "category": "6",
+    "id": "143",
+    "massKilogramsPerUnit": "1",
+    "name": "Ammonium Paratungstate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.435",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Engine Bell": {
+    "category": "42",
+    "id": "144",
+    "massKilogramsPerUnit": "300",
+    "name": "Engine Bell",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "8.3",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Steel Truss": {
+    "category": "42",
+    "id": "145",
+    "massKilogramsPerUnit": "1500",
+    "name": "Steel Truss",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "13.3",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Aluminium Hull Plate": {
+    "category": "42",
+    "id": "146",
+    "massKilogramsPerUnit": "600",
+    "name": "Aluminium Hull Plate",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "83.3",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Aluminium Truss": {
+    "category": "42",
+    "id": "147",
+    "massKilogramsPerUnit": "1000",
+    "name": "Aluminium Truss",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "20",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Cargo Module": {
+    "category": "42",
+    "id": "148",
+    "massKilogramsPerUnit": "5000",
+    "name": "Cargo Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "55",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Pressure Vessel": {
+    "category": "42",
+    "id": "149",
+    "massKilogramsPerUnit": "1850",
+    "name": "Pressure Vessel",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "179",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Propellant Tank": {
+    "category": "42",
+    "id": "150",
+    "massKilogramsPerUnit": "3500",
+    "name": "Propellant Tank",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "583",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Stainless Steel": {
+    "category": "32",
+    "id": "151",
+    "massKilogramsPerUnit": "1",
+    "name": "Stainless Steel",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": " ",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Bare Circuit Board": {
+    "category": "31",
+    "id": "152",
+    "massKilogramsPerUnit": "1",
+    "name": "Bare Circuit Board",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Ferrite-bead Inductor": {
+    "category": "31",
+    "id": "153",
+    "massKilogramsPerUnit": "1",
+    "name": "Ferrite-bead Inductor",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Core Drill Sampler": {
+    "category": "35",
+    "id": "154",
+    "massKilogramsPerUnit": "2",
+    "name": "Core Drill Sampler",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "75",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Core Drill Thruster": {
+    "category": "35",
+    "id": "155",
+    "massKilogramsPerUnit": "10",
+    "name": "Core Drill Thruster",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "25",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Parabolic Dish": {
+    "category": "31",
+    "id": "156",
+    "massKilogramsPerUnit": "72",
+    "name": "Parabolic Dish",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Photovoltaic Panel": {
+    "category": "31",
+    "id": "157",
+    "massKilogramsPerUnit": "8",
+    "name": "Photovoltaic Panel",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "LiPo Battery": {
+    "category": "31",
+    "id": "158",
+    "massKilogramsPerUnit": "5",
+    "name": "LiPo Battery",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Neodymium Trichloride": {
+    "category": "6",
+    "id": "159",
+    "massKilogramsPerUnit": "1",
+    "name": "Neodymium Trichloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.404",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Chromia": {
+    "category": "10",
+    "id": "161",
+    "massKilogramsPerUnit": "1",
+    "name": "Chromia",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.348",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Photoresist Epoxy": {
+    "category": "22",
+    "id": "162",
+    "massKilogramsPerUnit": "1",
+    "name": "Photoresist Epoxy",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.67",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Uranium Dioxide": {
+    "category": "10",
+    "id": "163",
+    "massKilogramsPerUnit": "1",
+    "name": "Uranium Dioxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.165",
+    "sustainingSpectralTypes": [
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Tungsten": {
+    "category": "21",
+    "id": "164",
+    "massKilogramsPerUnit": "1",
+    "name": "Tungsten",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.0648",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Shuttle Hull": {
+    "category": "43",
+    "id": "165",
+    "massKilogramsPerUnit": "44600",
+    "name": "Shuttle Hull",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Light Transport Hull": {
+    "category": "43",
+    "id": "166",
+    "massKilogramsPerUnit": "74200",
+    "name": "Light Transport Hull",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Cargo Ring": {
+    "category": "42",
+    "id": "167",
+    "massKilogramsPerUnit": "10000",
+    "name": "Cargo Ring",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Heavy Transport Hull": {
+    "category": "43",
+    "id": "168",
+    "massKilogramsPerUnit": "480400",
+    "name": "Heavy Transport Hull",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Tungsten Powder": {
+    "category": "33",
+    "id": "169",
+    "massKilogramsPerUnit": "1",
+    "name": "Tungsten Powder",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.104",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Hydrogen Propellant": {
+    "category": "41",
+    "id": "170",
+    "massKilogramsPerUnit": "1",
+    "name": "Hydrogen Propellant",
+    "quantized": false,
+    "type": "Finished Good",
+    "volumeLitersPerUnit": "13.3",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Stainless Steel Sheet": {
+    "category": "33",
+    "id": "171",
+    "massKilogramsPerUnit": "1",
+    "name": "Stainless Steel Sheet",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Stainless Steel Pipe": {
+    "category": "33",
+    "id": "172",
+    "massKilogramsPerUnit": "1",
+    "name": "Stainless Steel Pipe",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "CCD": {
+    "category": "36",
+    "id": "173",
+    "massKilogramsPerUnit": "1",
+    "name": "CCD",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Computer Chip": {
+    "category": "31",
+    "id": "174",
+    "massKilogramsPerUnit": "1",
+    "name": "Computer Chip",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Core Drill": {
+    "category": "40",
+    "id": "175",
+    "massKilogramsPerUnit": "30",
+    "name": "Core Drill",
+    "quantized": true,
+    "type": "Finished Good",
+    "volumeLitersPerUnit": "13.3",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Neodymium": {
+    "category": "24",
+    "id": "176",
+    "massKilogramsPerUnit": "1",
+    "name": "Neodymium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Chromium": {
+    "category": "21",
+    "id": "178",
+    "massKilogramsPerUnit": "1",
+    "name": "Chromium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Uranium Tetrafluoride": {
+    "category": "16",
+    "id": "179",
+    "massKilogramsPerUnit": "1",
+    "name": "Uranium Tetrafluoride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Pure Nitrogen": {
+    "category": "23",
+    "id": "180",
+    "massKilogramsPerUnit": "1",
+    "name": "Pure Nitrogen",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Nd:YAG Laser Rod": {
+    "category": "34",
+    "id": "181",
+    "massKilogramsPerUnit": "1",
+    "name": "Nd:YAG Laser Rod",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Nichrome": {
+    "category": "32",
+    "id": "182",
+    "massKilogramsPerUnit": "1",
+    "name": "Nichrome",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Neodymium Magnet": {
+    "category": "31",
+    "id": "183",
+    "massKilogramsPerUnit": "1",
+    "name": "Neodymium Magnet",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Unenriched Uranium Hexafluoride": {
+    "category": "16",
+    "id": "184",
+    "massKilogramsPerUnit": "1",
+    "name": "Unenriched Uranium Hexafluoride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Highly Enriched Uranium Hexafluoride": {
+    "category": "16",
+    "id": "185",
+    "massKilogramsPerUnit": "1",
+    "name": "Highly Enriched Uranium Hexafluoride",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Nd:YAG Laser": {
+    "category": "36",
+    "id": "186",
+    "massKilogramsPerUnit": "1",
+    "name": "Nd:YAG Laser",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Thin-film Resistor": {
+    "category": "31",
+    "id": "187",
+    "massKilogramsPerUnit": "1",
+    "name": "Thin-film Resistor",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Highly Enriched Uranium Powder": {
+    "category": "38",
+    "id": "188",
+    "massKilogramsPerUnit": "1",
+    "name": "Highly Enriched Uranium Powder",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Leached Feldspar": {
+    "category": "21",
+    "id": "189",
+    "massKilogramsPerUnit": "1",
+    "name": "Leached Feldspar",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Roasted Rhabdite": {
+    "category": "21",
+    "id": "190",
+    "massKilogramsPerUnit": "1",
+    "name": "Roasted Rhabdite",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Rhabdite Slag": {
+    "category": "21",
+    "id": "191",
+    "massKilogramsPerUnit": "1",
+    "name": "Rhabdite Slag",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Potassium Carbonate": {
+    "category": "11",
+    "id": "192",
+    "massKilogramsPerUnit": "1",
+    "name": "Potassium Carbonate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Hydrogen Heptafluorotantalate and Niobate": {
+    "category": "16",
+    "id": "193",
+    "massKilogramsPerUnit": "1",
+    "name": "Hydrogen Heptafluorotantalate and Niobate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIMS"
+    ]
+  },
+  "Lead": {
+    "category": "21",
+    "id": "194",
+    "massKilogramsPerUnit": "1",
+    "name": "Lead",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Potassium Fluoride": {
+    "category": "16",
+    "id": "195",
+    "massKilogramsPerUnit": "1",
+    "name": "Potassium Fluoride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Potassium Heptafluorotantalate": {
+    "category": "16",
+    "id": "196",
+    "massKilogramsPerUnit": "1",
+    "name": "Potassium Heptafluorotantalate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIMS"
+    ]
+  },
+  "Diepoxy Prepolymer Resin": {
+    "category": "22",
+    "id": "197",
+    "massKilogramsPerUnit": "1",
+    "name": "Diepoxy Prepolymer Resin",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Tantalum": {
+    "category": "21",
+    "id": "199",
+    "massKilogramsPerUnit": "1",
+    "name": "Tantalum",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIMS"
+    ]
+  },
+  "PEDOT": {
+    "category": "22",
+    "id": "200",
+    "massKilogramsPerUnit": "1",
+    "name": "PEDOT",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Polymer Tantalum Capacitor": {
+    "category": "31",
+    "id": "201",
+    "massKilogramsPerUnit": "1",
+    "name": "Polymer Tantalum Capacitor",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Surface Mount Device Reel": {
+    "category": "31",
+    "id": "202",
+    "massKilogramsPerUnit": "5",
+    "name": "Surface Mount Device Reel",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Circuit Board": {
+    "category": "31",
+    "id": "203",
+    "massKilogramsPerUnit": "1",
+    "name": "Circuit Board",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Brushless Motor Stator": {
+    "category": "35",
+    "id": "204",
+    "massKilogramsPerUnit": "3",
+    "name": "Brushless Motor Stator",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Brushless Motor Rotor": {
+    "category": "35",
+    "id": "205",
+    "massKilogramsPerUnit": "3",
+    "name": "Brushless Motor Rotor",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Brushless Motor": {
+    "category": "37",
+    "id": "206",
+    "massKilogramsPerUnit": "6",
+    "name": "Brushless Motor",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Landing Leg": {
+    "category": "42",
+    "id": "207",
+    "massKilogramsPerUnit": "816",
+    "name": "Landing Leg",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Landing Auger": {
+    "category": "42",
+    "id": "208",
+    "massKilogramsPerUnit": "144",
+    "name": "Landing Auger",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Pump": {
+    "category": "35",
+    "id": "209",
+    "massKilogramsPerUnit": "8",
+    "name": "Pump",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Radio Antenna": {
+    "category": "31",
+    "id": "210",
+    "massKilogramsPerUnit": "75",
+    "name": "Radio Antenna",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Fiber Optic Gyroscope": {
+    "category": "31",
+    "id": "211",
+    "massKilogramsPerUnit": "2",
+    "name": "Fiber Optic Gyroscope",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Star Tracker": {
+    "category": "36",
+    "id": "212",
+    "massKilogramsPerUnit": "2",
+    "name": "Star Tracker",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Computer": {
+    "category": "31",
+    "id": "213",
+    "massKilogramsPerUnit": "1",
+    "name": "Computer",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Control Moment Gyroscope": {
+    "category": "35",
+    "id": "214",
+    "massKilogramsPerUnit": "160",
+    "name": "Control Moment Gyroscope",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Robotic Arm": {
+    "category": "35",
+    "id": "215",
+    "massKilogramsPerUnit": "300",
+    "name": "Robotic Arm",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Beryllium Carbonate": {
+    "category": "11",
+    "id": "217",
+    "massKilogramsPerUnit": "1",
+    "name": "Beryllium Carbonate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Beryllia": {
+    "category": "10",
+    "id": "218",
+    "massKilogramsPerUnit": "1",
+    "name": "Beryllia",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Beryllia Ceramic": {
+    "category": "10",
+    "id": "219",
+    "massKilogramsPerUnit": "1",
+    "name": "Beryllia Ceramic",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "Neon": {
+    "category": "23",
+    "id": "220",
+    "massKilogramsPerUnit": "1",
+    "name": "Neon",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Heat Exchanger": {
+    "category": "42",
+    "id": "221",
+    "massKilogramsPerUnit": "40",
+    "name": "Heat Exchanger",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Turbopump": {
+    "category": "42",
+    "id": "222",
+    "massKilogramsPerUnit": "290",
+    "name": "Turbopump",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Neon/Fuel Separator Centrifuge": {
+    "category": "42",
+    "id": "224",
+    "massKilogramsPerUnit": "190",
+    "name": "Neon/Fuel Separator Centrifuge",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Fuel Make-up Tank": {
+    "category": "42",
+    "id": "225",
+    "massKilogramsPerUnit": "100",
+    "name": "Fuel Make-up Tank",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Neon Make-up Tank": {
+    "category": "42",
+    "id": "226",
+    "massKilogramsPerUnit": "250",
+    "name": "Neon Make-up Tank",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Lightbulb End Moderators": {
+    "category": "42",
+    "id": "227",
+    "massKilogramsPerUnit": "130",
+    "name": "Lightbulb End Moderators",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Fused Quartz Lightbulb Tube": {
+    "category": "42",
+    "id": "229",
+    "massKilogramsPerUnit": "50",
+    "name": "Fused Quartz Lightbulb Tube",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CS",
+      "SI",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "Reactor Plumbing Assembly": {
+    "category": "42",
+    "id": "230",
+    "massKilogramsPerUnit": "1942",
+    "name": "Reactor Plumbing Assembly",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Flow Divider Moderator": {
+    "category": "42",
+    "id": "231",
+    "massKilogramsPerUnit": "18700",
+    "name": "Flow Divider Moderator",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Nuclear Lightbulb": {
+    "category": "42",
+    "id": "232",
+    "massKilogramsPerUnit": "180",
+    "name": "Nuclear Lightbulb",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Composite-overwrapped Reactor Shell": {
+    "category": "42",
+    "id": "233",
+    "massKilogramsPerUnit": "6000",
+    "name": "Composite-overwrapped Reactor Shell",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Closed-cycle Gas Core Nuclear Reactor Engine": {
+    "category": "42",
+    "id": "234",
+    "massKilogramsPerUnit": "30000",
+    "name": "Closed-cycle Gas Core Nuclear Reactor Engine",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Habitation Module": {
+    "category": "42",
+    "id": "235",
+    "massKilogramsPerUnit": "2200",
+    "name": "Habitation Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Mobility Module": {
+    "category": "42",
+    "id": "236",
+    "massKilogramsPerUnit": "2000",
+    "name": "Mobility Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Fluids Automation Module": {
+    "category": "42",
+    "id": "237",
+    "massKilogramsPerUnit": "3600",
+    "name": "Fluids Automation Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Solids Automation Module": {
+    "category": "42",
+    "id": "238",
+    "massKilogramsPerUnit": "3600",
+    "name": "Solids Automation Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Terrain Interface Module": {
+    "category": "42",
+    "id": "239",
+    "massKilogramsPerUnit": "960",
+    "name": "Terrain Interface Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Avionics Module": {
+    "category": "42",
+    "id": "240",
+    "massKilogramsPerUnit": "500",
+    "name": "Avionics Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Escape Module": {
+    "category": "42",
+    "id": "241",
+    "massKilogramsPerUnit": "6665",
+    "name": "Escape Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Attitude Control Module": {
+    "category": "42",
+    "id": "242",
+    "massKilogramsPerUnit": "660",
+    "name": "Attitude Control Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Power Module": {
+    "category": "42",
+    "id": "243",
+    "massKilogramsPerUnit": "2000",
+    "name": "Power Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Thermal Module": {
+    "category": "42",
+    "id": "244",
+    "massKilogramsPerUnit": "1000",
+    "name": "Thermal Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Propulsion Module": {
+    "category": "42",
+    "id": "245",
+    "massKilogramsPerUnit": "32000",
+    "name": "Propulsion Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Shuttle": {
+    "category": "",
+    "id": "S1",
+    "massKilogramsPerUnit": "100755",
+    "name": "Shuttle",
+    "quantized": true,
+    "type": "Ship",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Light Transport": {
+    "category": "",
+    "id": "S2",
+    "massKilogramsPerUnit": "185525",
+    "name": "Light Transport",
+    "quantized": true,
+    "type": "Ship",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Heavy Transport": {
+    "category": "",
+    "id": "S3",
+    "massKilogramsPerUnit": "969525",
+    "name": "Heavy Transport",
+    "quantized": true,
+    "type": "Ship",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Warehouse": {
+    "category": "",
+    "id": "B1",
+    "massKilogramsPerUnit": "1800000",
+    "name": "Warehouse",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CM",
+      "CIM",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "Extractor": {
+    "category": "",
+    "id": "B2",
+    "massKilogramsPerUnit": "1531900",
+    "name": "Extractor",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Refinery": {
+    "category": "",
+    "id": "B3",
+    "massKilogramsPerUnit": "2766900",
+    "name": "Refinery",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Bioreactor": {
+    "category": "",
+    "id": "B4",
+    "massKilogramsPerUnit": "7590700",
+    "name": "Bioreactor",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Factory": {
+    "category": "",
+    "id": "B5",
+    "massKilogramsPerUnit": "0",
+    "name": "Factory",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Shipyard": {
+    "category": "",
+    "id": "B6",
+    "massKilogramsPerUnit": "0",
+    "name": "Shipyard",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Spaceport": {
+    "category": "",
+    "id": "B7",
+    "massKilogramsPerUnit": "0",
+    "name": "Spaceport",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Marketplace": {
+    "category": "",
+    "id": "B8",
+    "massKilogramsPerUnit": "0",
+    "name": "Marketplace",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "Habitat": {
+    "category": "",
+    "id": "B9",
+    "massKilogramsPerUnit": "0",
+    "name": "Habitat",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  }
+};
+
+// includes "sustainingSpectralTypes"
+const productDataById = {
+  "1": {
+    "category": "2",
+    "id": "1",
+    "massKilogramsPerUnit": "1",
+    "name": "Water",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.971",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "2": {
+    "category": "2",
+    "id": "2",
+    "massKilogramsPerUnit": "1",
+    "name": "Hydrogen",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "14.1",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS",
+      "C",
+      "CM",
+      "CS",
+      "CMS"
+    ]
+  },
+  "3": {
+    "category": "2",
+    "id": "3",
+    "massKilogramsPerUnit": "1",
+    "name": "Ammonia",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "1.37",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "4": {
+    "category": "2",
+    "id": "4",
+    "massKilogramsPerUnit": "1",
+    "name": "Nitrogen",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "1.24",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "5": {
+    "category": "2",
+    "id": "5",
+    "massKilogramsPerUnit": "1",
+    "name": "Sulfur Dioxide",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.684",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "6": {
+    "category": "2",
+    "id": "6",
+    "massKilogramsPerUnit": "1",
+    "name": "Carbon Dioxide",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.801",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "7": {
+    "category": "2",
+    "id": "7",
+    "massKilogramsPerUnit": "1",
+    "name": "Carbon Monoxide",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "1.25",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "8": {
+    "category": "2",
+    "id": "8",
+    "massKilogramsPerUnit": "1",
+    "name": "Methane",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "2.22",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "9": {
+    "category": "1",
+    "id": "9",
+    "massKilogramsPerUnit": "1",
+    "name": "Apatite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.521",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "10": {
+    "category": "1",
+    "id": "10",
+    "massKilogramsPerUnit": "1",
+    "name": "Bitumen",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "1.6",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "11": {
+    "category": "1",
+    "id": "11",
+    "massKilogramsPerUnit": "1",
+    "name": "Calcite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.615",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "12": {
+    "category": "3",
+    "id": "12",
+    "massKilogramsPerUnit": "1",
+    "name": "Feldspar",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.606",
+    "sustainingSpectralTypes": [
+      "S",
+      "CS",
+      "SI",
+      "SM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "13": {
+    "category": "3",
+    "id": "13",
+    "massKilogramsPerUnit": "1",
+    "name": "Olivine",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.617",
+    "sustainingSpectralTypes": [
+      "S",
+      "CS",
+      "SI",
+      "SM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "14": {
+    "category": "3",
+    "id": "14",
+    "massKilogramsPerUnit": "1",
+    "name": "Pyroxene",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.476",
+    "sustainingSpectralTypes": [
+      "S",
+      "CS",
+      "SI",
+      "SM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "15": {
+    "category": "5",
+    "id": "15",
+    "massKilogramsPerUnit": "1",
+    "name": "Coffinite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.327",
+    "sustainingSpectralTypes": [
+      "S",
+      "CS",
+      "SI",
+      "SM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "16": {
+    "category": "4",
+    "id": "16",
+    "massKilogramsPerUnit": "1",
+    "name": "Merrillite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.521",
+    "sustainingSpectralTypes": [
+      "S",
+      "CS",
+      "SI",
+      "SM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "17": {
+    "category": "4",
+    "id": "17",
+    "massKilogramsPerUnit": "1",
+    "name": "Xenotime",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.358",
+    "sustainingSpectralTypes": [
+      "S",
+      "CS",
+      "SI",
+      "SM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "18": {
+    "category": "3",
+    "id": "18",
+    "massKilogramsPerUnit": "1",
+    "name": "Rhabdite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.233",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "19": {
+    "category": "3",
+    "id": "19",
+    "massKilogramsPerUnit": "1",
+    "name": "Graphite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.737",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "20": {
+    "category": "3",
+    "id": "20",
+    "massKilogramsPerUnit": "1",
+    "name": "Taenite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.208",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "21": {
+    "category": "3",
+    "id": "21",
+    "massKilogramsPerUnit": "1",
+    "name": "Troilite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.362",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "22": {
+    "category": "5",
+    "id": "22",
+    "massKilogramsPerUnit": "1",
+    "name": "Uraninite",
+    "quantized": false,
+    "type": "Raw Material",
+    "volumeLitersPerUnit": "0.156",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "23": {
+    "category": "9",
+    "id": "23",
+    "massKilogramsPerUnit": "1",
+    "name": "Oxygen",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.876",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "24": {
+    "category": "23",
+    "id": "24",
+    "massKilogramsPerUnit": "1",
+    "name": "Deionized Water",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "25": {
+    "category": "6",
+    "id": "25",
+    "massKilogramsPerUnit": "1",
+    "name": "Salts",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.775",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "26": {
+    "category": "10",
+    "id": "26",
+    "massKilogramsPerUnit": "1",
+    "name": "Silica",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.629",
+    "sustainingSpectralTypes": [
+      "CS",
+      "SI",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "27": {
+    "category": "22",
+    "id": "27",
+    "massKilogramsPerUnit": "1",
+    "name": "Naphtha",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.3",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "28": {
+    "category": "11",
+    "id": "28",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Bicarbonate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.909",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS",
+      "I",
+      "IM",
+      "SI",
+      "IMS"
+    ]
+  },
+  "29": {
+    "category": "21",
+    "id": "29",
+    "massKilogramsPerUnit": "1",
+    "name": "Iron",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.14",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS",
+      "SI",
+      "CIS"
+    ]
+  },
+  "30": {
+    "category": "21",
+    "id": "30",
+    "massKilogramsPerUnit": "1",
+    "name": "Copper",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.123",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "31": {
+    "category": "21",
+    "id": "31",
+    "massKilogramsPerUnit": "1",
+    "name": "Nickel",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.161",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS",
+      "SI",
+      "CIS"
+    ]
+  },
+  "32": {
+    "category": "10",
+    "id": "32",
+    "massKilogramsPerUnit": "1",
+    "name": "Quicklime",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.599",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "33": {
+    "category": "22",
+    "id": "33",
+    "massKilogramsPerUnit": "1",
+    "name": "Acetylene",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.44",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "34": {
+    "category": "11",
+    "id": "34",
+    "massKilogramsPerUnit": "1",
+    "name": "Ammonium Carbonate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.33",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "35": {
+    "category": "15",
+    "id": "35",
+    "massKilogramsPerUnit": "1",
+    "name": "Triple Superphosphate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.87",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "36": {
+    "category": "6",
+    "id": "36",
+    "massKilogramsPerUnit": "1",
+    "name": "Phosphate and Sulfate Salts",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.595",
+    "sustainingSpectralTypes": [
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "37": {
+    "category": "13",
+    "id": "37",
+    "massKilogramsPerUnit": "1",
+    "name": "Iron Sulfide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.344",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "38": {
+    "category": "13",
+    "id": "38",
+    "massKilogramsPerUnit": "1",
+    "name": "Lead Sulfide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.219",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "39": {
+    "category": "13",
+    "id": "39",
+    "massKilogramsPerUnit": "1",
+    "name": "Tin Sulfide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.319",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "40": {
+    "category": "13",
+    "id": "40",
+    "massKilogramsPerUnit": "1",
+    "name": "Molybdenum Disulfide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.329",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "41": {
+    "category": "29",
+    "id": "41",
+    "massKilogramsPerUnit": "1",
+    "name": "Fused Quartz",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.415",
+    "sustainingSpectralTypes": [
+      "CS",
+      "SI",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "42": {
+    "category": "30",
+    "id": "42",
+    "massKilogramsPerUnit": "1",
+    "name": "Fiberglass",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "1.26",
+    "sustainingSpectralTypes": [
+      "CS",
+      "SI",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "43": {
+    "category": "31",
+    "id": "43",
+    "massKilogramsPerUnit": "1",
+    "name": "Bare Copper Wire",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.123",
+    "sustainingSpectralTypes": [
+      "M",
+      "CM",
+      "IM",
+      "SM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "44": {
+    "category": "29",
+    "id": "44",
+    "massKilogramsPerUnit": "1",
+    "name": "Cement",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "1.13",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "45": {
+    "category": "6",
+    "id": "45",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Chloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.41",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "46": {
+    "category": "6",
+    "id": "46",
+    "massKilogramsPerUnit": "1",
+    "name": "Potassium Chloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.842",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "47": {
+    "category": "6",
+    "id": "47",
+    "massKilogramsPerUnit": "1",
+    "name": "Borax",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.963",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "48": {
+    "category": "11",
+    "id": "48",
+    "massKilogramsPerUnit": "1",
+    "name": "Lithium Carbonate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.948",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "49": {
+    "category": "6",
+    "id": "49",
+    "massKilogramsPerUnit": "1",
+    "name": "Magnesium Chloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.718",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "50": {
+    "category": "22",
+    "id": "50",
+    "massKilogramsPerUnit": "1",
+    "name": "Propylene",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "2.04",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "51": {
+    "category": "20",
+    "id": "51",
+    "massKilogramsPerUnit": "1",
+    "name": "Sulfur",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.805",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "52": {
+    "category": "17",
+    "id": "52",
+    "massKilogramsPerUnit": "1",
+    "name": "Steel",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.159",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "53": {
+    "category": "20",
+    "id": "53",
+    "massKilogramsPerUnit": "1",
+    "name": "Silicon",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.715",
+    "sustainingSpectralTypes": [
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "54": {
+    "category": "7",
+    "id": "54",
+    "massKilogramsPerUnit": "1",
+    "name": "Nitric Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.893",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "55": {
+    "category": "7",
+    "id": "55",
+    "massKilogramsPerUnit": "1",
+    "name": "Sulfuric Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.687",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "56": {
+    "category": "18",
+    "id": "56",
+    "massKilogramsPerUnit": "1",
+    "name": "Soil",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.714",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "57": {
+    "category": "17",
+    "id": "57",
+    "massKilogramsPerUnit": "1",
+    "name": "Ferrosilicon",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.271",
+    "sustainingSpectralTypes": [
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "58": {
+    "category": "21",
+    "id": "58",
+    "massKilogramsPerUnit": "1",
+    "name": "Weathered Olivine",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.521",
+    "sustainingSpectralTypes": [
+      "CS",
+      "SI",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "59": {
+    "category": "7",
+    "id": "59",
+    "massKilogramsPerUnit": "1",
+    "name": "Oxalic Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.05",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "60": {
+    "category": "21",
+    "id": "60",
+    "massKilogramsPerUnit": "1",
+    "name": "Silver",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.119",
+    "sustainingSpectralTypes": [
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "61": {
+    "category": "21",
+    "id": "61",
+    "massKilogramsPerUnit": "1",
+    "name": "Gold",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.0648",
+    "sustainingSpectralTypes": [
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "62": {
+    "category": "21",
+    "id": "62",
+    "massKilogramsPerUnit": "1",
+    "name": "Tin",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.171",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIMS"
+    ]
+  },
+  "63": {
+    "category": "10",
+    "id": "63",
+    "massKilogramsPerUnit": "1",
+    "name": "Iron Oxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.387",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS",
+      "CM",
+      "IM",
+      "CIM",
+      "CMS"
+    ]
+  },
+  "64": {
+    "category": "25",
+    "id": "64",
+    "massKilogramsPerUnit": "1",
+    "name": "Spirulina and Chlorella Algae",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "2.5",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "65": {
+    "category": "10",
+    "id": "65",
+    "massKilogramsPerUnit": "1",
+    "name": "Molybdenum Trioxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.426",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "66": {
+    "category": "10",
+    "id": "66",
+    "massKilogramsPerUnit": "1",
+    "name": "Silica Powder",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.755",
+    "sustainingSpectralTypes": [
+      "CS",
+      "SI",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "67": {
+    "category": "31",
+    "id": "67",
+    "massKilogramsPerUnit": "1",
+    "name": "Solder",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.148",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "68": {
+    "category": "31",
+    "id": "68",
+    "massKilogramsPerUnit": "1",
+    "name": "Fiber Optic Cable",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.886",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "69": {
+    "category": "33",
+    "id": "69",
+    "massKilogramsPerUnit": "1",
+    "name": "Steel Beam",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "1.1",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "70": {
+    "category": "33",
+    "id": "70",
+    "massKilogramsPerUnit": "1",
+    "name": "Steel Sheet",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.15",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "71": {
+    "category": "33",
+    "id": "71",
+    "massKilogramsPerUnit": "1",
+    "name": "Steel Pipe",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "1.2",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "72": {
+    "category": "33",
+    "id": "72",
+    "massKilogramsPerUnit": "1",
+    "name": "Steel Wire",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.15",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "73": {
+    "category": "22",
+    "id": "73",
+    "massKilogramsPerUnit": "1",
+    "name": "Acrylonitrile",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.23",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "74": {
+    "category": "26",
+    "id": "74",
+    "massKilogramsPerUnit": "1",
+    "name": "Polypropylene",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.57",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "75": {
+    "category": "21",
+    "id": "75",
+    "massKilogramsPerUnit": "1",
+    "name": "Magnesium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.632",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "76": {
+    "category": "20",
+    "id": "76",
+    "massKilogramsPerUnit": "1",
+    "name": "Chlorine",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "4.02",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "77": {
+    "category": "11",
+    "id": "77",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Carbonate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.787",
+    "sustainingSpectralTypes": [
+      "C",
+      "CI",
+      "CM",
+      "CS",
+      "CIM",
+      "CIS",
+      "CMS",
+      "CIMS",
+      "I",
+      "IM",
+      "SI",
+      "IMS"
+    ]
+  },
+  "78": {
+    "category": "6",
+    "id": "78",
+    "massKilogramsPerUnit": "1",
+    "name": "Calcium Chloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.775",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "79": {
+    "category": "10",
+    "id": "79",
+    "massKilogramsPerUnit": "1",
+    "name": "Boria",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.739",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "80": {
+    "category": "12",
+    "id": "80",
+    "massKilogramsPerUnit": "1",
+    "name": "Lithium Sulfate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.751",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "81": {
+    "category": "7",
+    "id": "81",
+    "massKilogramsPerUnit": "1",
+    "name": "Hydrochloric Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.04",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS",
+      "SI",
+      "IMS"
+    ]
+  },
+  "82": {
+    "category": "7",
+    "id": "82",
+    "massKilogramsPerUnit": "1",
+    "name": "Hydrofluoric Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.09",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "83": {
+    "category": "7",
+    "id": "83",
+    "massKilogramsPerUnit": "1",
+    "name": "Phosphoric Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.694",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS",
+      "SI",
+      "IMS",
+      "CM",
+      "IM",
+      "CMS"
+    ]
+  },
+  "84": {
+    "category": "7",
+    "id": "84",
+    "massKilogramsPerUnit": "1",
+    "name": "Boric Acid",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.39",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "85": {
+    "category": "10",
+    "id": "85",
+    "massKilogramsPerUnit": "1",
+    "name": "Zinc Oxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.357",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "86": {
+    "category": "10",
+    "id": "86",
+    "massKilogramsPerUnit": "1",
+    "name": "Nickel Oxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.3",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "87": {
+    "category": "10",
+    "id": "87",
+    "massKilogramsPerUnit": "1",
+    "name": "Magnesia",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.559",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS",
+      "CI",
+      "CIM"
+    ]
+  },
+  "88": {
+    "category": "10",
+    "id": "88",
+    "massKilogramsPerUnit": "1",
+    "name": "Alumina",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.46",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "89": {
+    "category": "8",
+    "id": "89",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Hydroxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.671",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "90": {
+    "category": "8",
+    "id": "90",
+    "massKilogramsPerUnit": "1",
+    "name": "Potassium Hydroxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.674",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "91": {
+    "category": "25",
+    "id": "91",
+    "massKilogramsPerUnit": "1",
+    "name": "Soybeans",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.53",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "92": {
+    "category": "25",
+    "id": "92",
+    "massKilogramsPerUnit": "1",
+    "name": "Potatoes",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.52",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "93": {
+    "category": "6",
+    "id": "93",
+    "massKilogramsPerUnit": "1",
+    "name": "Ammonium Oxalate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.11",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "94": {
+    "category": "12",
+    "id": "94",
+    "massKilogramsPerUnit": "1",
+    "name": "Rare Earth Sulfates",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.681",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "95": {
+    "category": "17",
+    "id": "95",
+    "massKilogramsPerUnit": "1",
+    "name": "Ferrochromium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.222",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "96": {
+    "category": "10",
+    "id": "96",
+    "massKilogramsPerUnit": "1",
+    "name": "Yellowcake",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.172",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS",
+      "SI",
+      "CIS"
+    ]
+  },
+  "97": {
+    "category": "10",
+    "id": "97",
+    "massKilogramsPerUnit": "1",
+    "name": "Alumina Ceramic",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.316",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "98": {
+    "category": "32",
+    "id": "98",
+    "massKilogramsPerUnit": "1",
+    "name": "Austenitic Nichrome",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.135",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "99": {
+    "category": "31",
+    "id": "99",
+    "massKilogramsPerUnit": "1",
+    "name": "Copper Wire",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.152",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIMS"
+    ]
+  },
+  "100": {
+    "category": "31",
+    "id": "100",
+    "massKilogramsPerUnit": "1",
+    "name": "Silicon Wafer",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.472",
+    "sustainingSpectralTypes": [
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "101": {
+    "category": "33",
+    "id": "101",
+    "massKilogramsPerUnit": "1",
+    "name": "Steel Cable",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.182",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "102": {
+    "category": "26",
+    "id": "102",
+    "massKilogramsPerUnit": "1",
+    "name": "Polyacrylonitrile",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.21",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "103": {
+    "category": "25",
+    "id": "103",
+    "massKilogramsPerUnit": "1",
+    "name": "Natural Flavorings",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.82",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "104": {
+    "category": "21",
+    "id": "104",
+    "massKilogramsPerUnit": "1",
+    "name": "Platinum",
+    "quantized": false,
+    "type": "Refined Metal",
+    "volumeLitersPerUnit": "0.0583",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "105": {
+    "category": "6",
+    "id": "105",
+    "massKilogramsPerUnit": "1",
+    "name": "Lithium Chloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.805",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "106": {
+    "category": "21",
+    "id": "106",
+    "massKilogramsPerUnit": "1",
+    "name": "Zinc",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.175",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "107": {
+    "category": "22",
+    "id": "107",
+    "massKilogramsPerUnit": "1",
+    "name": "Epichlorohydrin",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.06",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "108": {
+    "category": "22",
+    "id": "108",
+    "massKilogramsPerUnit": "1",
+    "name": "Bisphenol A",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.04",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "109": {
+    "category": "10",
+    "id": "109",
+    "massKilogramsPerUnit": "1",
+    "name": "Rare Earth Oxides",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.272",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "110": {
+    "category": "6",
+    "id": "110",
+    "massKilogramsPerUnit": "1",
+    "name": "Ammonium Chloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.09",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS",
+      "I",
+      "IM",
+      "SI",
+      "IMS"
+    ]
+  },
+  "111": {
+    "category": "21",
+    "id": "111",
+    "massKilogramsPerUnit": "1",
+    "name": "Aluminium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.463",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "112": {
+    "category": "21",
+    "id": "112",
+    "massKilogramsPerUnit": "1",
+    "name": "Calcium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.29",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "113": {
+    "category": "6",
+    "id": "113",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Chromate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.617",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "114": {
+    "category": "38",
+    "id": "114",
+    "massKilogramsPerUnit": "1",
+    "name": "Leached Coffinite",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.333",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "115": {
+    "category": "14",
+    "id": "115",
+    "massKilogramsPerUnit": "1",
+    "name": "Uranyl Nitrate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.593",
+    "sustainingSpectralTypes": [
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "116": {
+    "category": "20",
+    "id": "116",
+    "massKilogramsPerUnit": "1",
+    "name": "Fluorine",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.52",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "117": {
+    "category": "6",
+    "id": "117",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Tungstate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.435",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "118": {
+    "category": "32",
+    "id": "118",
+    "massKilogramsPerUnit": "1",
+    "name": "Ferrite",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.22",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "119": {
+    "category": "31",
+    "id": "119",
+    "massKilogramsPerUnit": "1",
+    "name": "Diode",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "120": {
+    "category": "31",
+    "id": "120",
+    "massKilogramsPerUnit": "1",
+    "name": "Laser Diode",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "121": {
+    "category": "39",
+    "id": "121",
+    "massKilogramsPerUnit": "1",
+    "name": "Ball Valve",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "122": {
+    "category": "33",
+    "id": "122",
+    "massKilogramsPerUnit": "1",
+    "name": "Aluminium Beam",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "3.19",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "123": {
+    "category": "33",
+    "id": "123",
+    "massKilogramsPerUnit": "1",
+    "name": "Aluminium Sheet",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.436",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "124": {
+    "category": "33",
+    "id": "124",
+    "massKilogramsPerUnit": "1",
+    "name": "Aluminium Pipe",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "3.19",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "125": {
+    "category": "27",
+    "id": "125",
+    "massKilogramsPerUnit": "1",
+    "name": "Polyacrylonitrile Fabric",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "2.82",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "126": {
+    "category": "39",
+    "id": "126",
+    "massKilogramsPerUnit": "3",
+    "name": "Cold Gas Thruster",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "127": {
+    "category": "39",
+    "id": "127",
+    "massKilogramsPerUnit": "3",
+    "name": "Cold Gas Torque Thruster",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "128": {
+    "category": "27",
+    "id": "128",
+    "massKilogramsPerUnit": "1",
+    "name": "Carbon Fiber",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "1.75",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "129": {
+    "category": "25",
+    "id": "129",
+    "massKilogramsPerUnit": "1",
+    "name": "Food",
+    "quantized": false,
+    "type": "Finished Good",
+    "volumeLitersPerUnit": "1.25",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "130": {
+    "category": "39",
+    "id": "130",
+    "massKilogramsPerUnit": "6",
+    "name": "Small Propellant Tank",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "131": {
+    "category": "28",
+    "id": "131",
+    "massKilogramsPerUnit": "1",
+    "name": "Borosilicate Glass",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "0.595",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "132": {
+    "category": "35",
+    "id": "132",
+    "massKilogramsPerUnit": "1",
+    "name": "Ball Bearing",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIMS"
+    ]
+  },
+  "133": {
+    "category": "35",
+    "id": "133",
+    "massKilogramsPerUnit": "2000",
+    "name": "Large Thrust Bearing",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "134": {
+    "category": "20",
+    "id": "134",
+    "massKilogramsPerUnit": "1",
+    "name": "Boron",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.543",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "135": {
+    "category": "21",
+    "id": "135",
+    "massKilogramsPerUnit": "1",
+    "name": "Lithium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "3.77",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "136": {
+    "category": "22",
+    "id": "136",
+    "massKilogramsPerUnit": "1",
+    "name": "Epoxy",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.68",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "137": {
+    "category": "10",
+    "id": "137",
+    "massKilogramsPerUnit": "1",
+    "name": "Neodymium Oxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.251",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "138": {
+    "category": "10",
+    "id": "138",
+    "massKilogramsPerUnit": "1",
+    "name": "Yttria",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.363",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "139": {
+    "category": "6",
+    "id": "139",
+    "massKilogramsPerUnit": "1",
+    "name": "Sodium Dichromate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.661",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "140": {
+    "category": "22",
+    "id": "140",
+    "massKilogramsPerUnit": "1",
+    "name": "Novolak Prepolymer Resin",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.02",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "141": {
+    "category": "17",
+    "id": "141",
+    "massKilogramsPerUnit": "1",
+    "name": "Ferromolybdenum",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.168",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "142": {
+    "category": "6",
+    "id": "142",
+    "massKilogramsPerUnit": "1",
+    "name": "Ammonium Diuranate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.37",
+    "sustainingSpectralTypes": [
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "143": {
+    "category": "6",
+    "id": "143",
+    "massKilogramsPerUnit": "1",
+    "name": "Ammonium Paratungstate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.435",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "144": {
+    "category": "42",
+    "id": "144",
+    "massKilogramsPerUnit": "300",
+    "name": "Engine Bell",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "8.3",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "145": {
+    "category": "42",
+    "id": "145",
+    "massKilogramsPerUnit": "1500",
+    "name": "Steel Truss",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "13.3",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "146": {
+    "category": "42",
+    "id": "146",
+    "massKilogramsPerUnit": "600",
+    "name": "Aluminium Hull Plate",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "83.3",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "147": {
+    "category": "42",
+    "id": "147",
+    "massKilogramsPerUnit": "1000",
+    "name": "Aluminium Truss",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "20",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "148": {
+    "category": "42",
+    "id": "148",
+    "massKilogramsPerUnit": "5000",
+    "name": "Cargo Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "55",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "149": {
+    "category": "42",
+    "id": "149",
+    "massKilogramsPerUnit": "1850",
+    "name": "Pressure Vessel",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "179",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "150": {
+    "category": "42",
+    "id": "150",
+    "massKilogramsPerUnit": "3500",
+    "name": "Propellant Tank",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "583",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "151": {
+    "category": "32",
+    "id": "151",
+    "massKilogramsPerUnit": "1",
+    "name": "Stainless Steel",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": " ",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "152": {
+    "category": "31",
+    "id": "152",
+    "massKilogramsPerUnit": "1",
+    "name": "Bare Circuit Board",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "153": {
+    "category": "31",
+    "id": "153",
+    "massKilogramsPerUnit": "1",
+    "name": "Ferrite-bead Inductor",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "154": {
+    "category": "35",
+    "id": "154",
+    "massKilogramsPerUnit": "2",
+    "name": "Core Drill Sampler",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "75",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "155": {
+    "category": "35",
+    "id": "155",
+    "massKilogramsPerUnit": "10",
+    "name": "Core Drill Thruster",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "25",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "156": {
+    "category": "31",
+    "id": "156",
+    "massKilogramsPerUnit": "72",
+    "name": "Parabolic Dish",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "157": {
+    "category": "31",
+    "id": "157",
+    "massKilogramsPerUnit": "8",
+    "name": "Photovoltaic Panel",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "158": {
+    "category": "31",
+    "id": "158",
+    "massKilogramsPerUnit": "5",
+    "name": "LiPo Battery",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "159": {
+    "category": "6",
+    "id": "159",
+    "massKilogramsPerUnit": "1",
+    "name": "Neodymium Trichloride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.404",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "161": {
+    "category": "10",
+    "id": "161",
+    "massKilogramsPerUnit": "1",
+    "name": "Chromia",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.348",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "162": {
+    "category": "22",
+    "id": "162",
+    "massKilogramsPerUnit": "1",
+    "name": "Photoresist Epoxy",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "1.67",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "163": {
+    "category": "10",
+    "id": "163",
+    "massKilogramsPerUnit": "1",
+    "name": "Uranium Dioxide",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.165",
+    "sustainingSpectralTypes": [
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "164": {
+    "category": "21",
+    "id": "164",
+    "massKilogramsPerUnit": "1",
+    "name": "Tungsten",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.0648",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "165": {
+    "category": "43",
+    "id": "165",
+    "massKilogramsPerUnit": "44600",
+    "name": "Shuttle Hull",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "166": {
+    "category": "43",
+    "id": "166",
+    "massKilogramsPerUnit": "74200",
+    "name": "Light Transport Hull",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "167": {
+    "category": "42",
+    "id": "167",
+    "massKilogramsPerUnit": "10000",
+    "name": "Cargo Ring",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "168": {
+    "category": "43",
+    "id": "168",
+    "massKilogramsPerUnit": "480400",
+    "name": "Heavy Transport Hull",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "169": {
+    "category": "33",
+    "id": "169",
+    "massKilogramsPerUnit": "1",
+    "name": "Tungsten Powder",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "0.104",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "170": {
+    "category": "41",
+    "id": "170",
+    "massKilogramsPerUnit": "1",
+    "name": "Hydrogen Propellant",
+    "quantized": false,
+    "type": "Finished Good",
+    "volumeLitersPerUnit": "13.3",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "171": {
+    "category": "33",
+    "id": "171",
+    "massKilogramsPerUnit": "1",
+    "name": "Stainless Steel Sheet",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "172": {
+    "category": "33",
+    "id": "172",
+    "massKilogramsPerUnit": "1",
+    "name": "Stainless Steel Pipe",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "173": {
+    "category": "36",
+    "id": "173",
+    "massKilogramsPerUnit": "1",
+    "name": "CCD",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "174": {
+    "category": "31",
+    "id": "174",
+    "massKilogramsPerUnit": "1",
+    "name": "Computer Chip",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "175": {
+    "category": "40",
+    "id": "175",
+    "massKilogramsPerUnit": "30",
+    "name": "Core Drill",
+    "quantized": true,
+    "type": "Finished Good",
+    "volumeLitersPerUnit": "13.3",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "176": {
+    "category": "24",
+    "id": "176",
+    "massKilogramsPerUnit": "1",
+    "name": "Neodymium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "SI",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "178": {
+    "category": "21",
+    "id": "178",
+    "massKilogramsPerUnit": "1",
+    "name": "Chromium",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "179": {
+    "category": "16",
+    "id": "179",
+    "massKilogramsPerUnit": "1",
+    "name": "Uranium Tetrafluoride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "180": {
+    "category": "23",
+    "id": "180",
+    "massKilogramsPerUnit": "1",
+    "name": "Pure Nitrogen",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "181": {
+    "category": "34",
+    "id": "181",
+    "massKilogramsPerUnit": "1",
+    "name": "Nd:YAG Laser Rod",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "182": {
+    "category": "32",
+    "id": "182",
+    "massKilogramsPerUnit": "1",
+    "name": "Nichrome",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "183": {
+    "category": "31",
+    "id": "183",
+    "massKilogramsPerUnit": "1",
+    "name": "Neodymium Magnet",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "184": {
+    "category": "16",
+    "id": "184",
+    "massKilogramsPerUnit": "1",
+    "name": "Unenriched Uranium Hexafluoride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "185": {
+    "category": "16",
+    "id": "185",
+    "massKilogramsPerUnit": "1",
+    "name": "Highly Enriched Uranium Hexafluoride",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "186": {
+    "category": "36",
+    "id": "186",
+    "massKilogramsPerUnit": "1",
+    "name": "Nd:YAG Laser",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "187": {
+    "category": "31",
+    "id": "187",
+    "massKilogramsPerUnit": "1",
+    "name": "Thin-film Resistor",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "188": {
+    "category": "38",
+    "id": "188",
+    "massKilogramsPerUnit": "1",
+    "name": "Highly Enriched Uranium Powder",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "189": {
+    "category": "21",
+    "id": "189",
+    "massKilogramsPerUnit": "1",
+    "name": "Leached Feldspar",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "190": {
+    "category": "21",
+    "id": "190",
+    "massKilogramsPerUnit": "1",
+    "name": "Roasted Rhabdite",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "191": {
+    "category": "21",
+    "id": "191",
+    "massKilogramsPerUnit": "1",
+    "name": "Rhabdite Slag",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CM",
+      "IM",
+      "CIM",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "192": {
+    "category": "11",
+    "id": "192",
+    "massKilogramsPerUnit": "1",
+    "name": "Potassium Carbonate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "C",
+      "I",
+      "CI",
+      "CM",
+      "CS",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "193": {
+    "category": "16",
+    "id": "193",
+    "massKilogramsPerUnit": "1",
+    "name": "Hydrogen Heptafluorotantalate and Niobate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIMS"
+    ]
+  },
+  "194": {
+    "category": "21",
+    "id": "194",
+    "massKilogramsPerUnit": "1",
+    "name": "Lead",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "IM",
+      "CIM",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "195": {
+    "category": "16",
+    "id": "195",
+    "massKilogramsPerUnit": "1",
+    "name": "Potassium Fluoride",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "196": {
+    "category": "16",
+    "id": "196",
+    "massKilogramsPerUnit": "1",
+    "name": "Potassium Heptafluorotantalate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIMS"
+    ]
+  },
+  "197": {
+    "category": "22",
+    "id": "197",
+    "massKilogramsPerUnit": "1",
+    "name": "Diepoxy Prepolymer Resin",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CI",
+      "CIM",
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "199": {
+    "category": "21",
+    "id": "199",
+    "massKilogramsPerUnit": "1",
+    "name": "Tantalum",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIM",
+      "CIMS"
+    ]
+  },
+  "200": {
+    "category": "22",
+    "id": "200",
+    "massKilogramsPerUnit": "1",
+    "name": "PEDOT",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "201": {
+    "category": "31",
+    "id": "201",
+    "massKilogramsPerUnit": "1",
+    "name": "Polymer Tantalum Capacitor",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "202": {
+    "category": "31",
+    "id": "202",
+    "massKilogramsPerUnit": "5",
+    "name": "Surface Mount Device Reel",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "203": {
+    "category": "31",
+    "id": "203",
+    "massKilogramsPerUnit": "1",
+    "name": "Circuit Board",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "204": {
+    "category": "35",
+    "id": "204",
+    "massKilogramsPerUnit": "3",
+    "name": "Brushless Motor Stator",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "205": {
+    "category": "35",
+    "id": "205",
+    "massKilogramsPerUnit": "3",
+    "name": "Brushless Motor Rotor",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "206": {
+    "category": "37",
+    "id": "206",
+    "massKilogramsPerUnit": "6",
+    "name": "Brushless Motor",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "207": {
+    "category": "42",
+    "id": "207",
+    "massKilogramsPerUnit": "816",
+    "name": "Landing Leg",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "208": {
+    "category": "42",
+    "id": "208",
+    "massKilogramsPerUnit": "144",
+    "name": "Landing Auger",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "209": {
+    "category": "35",
+    "id": "209",
+    "massKilogramsPerUnit": "8",
+    "name": "Pump",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "210": {
+    "category": "31",
+    "id": "210",
+    "massKilogramsPerUnit": "75",
+    "name": "Radio Antenna",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "211": {
+    "category": "31",
+    "id": "211",
+    "massKilogramsPerUnit": "2",
+    "name": "Fiber Optic Gyroscope",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "212": {
+    "category": "36",
+    "id": "212",
+    "massKilogramsPerUnit": "2",
+    "name": "Star Tracker",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "213": {
+    "category": "31",
+    "id": "213",
+    "massKilogramsPerUnit": "1",
+    "name": "Computer",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "214": {
+    "category": "35",
+    "id": "214",
+    "massKilogramsPerUnit": "160",
+    "name": "Control Moment Gyroscope",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "215": {
+    "category": "35",
+    "id": "215",
+    "massKilogramsPerUnit": "300",
+    "name": "Robotic Arm",
+    "quantized": true,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "217": {
+    "category": "11",
+    "id": "217",
+    "massKilogramsPerUnit": "1",
+    "name": "Beryllium Carbonate",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "218": {
+    "category": "10",
+    "id": "218",
+    "massKilogramsPerUnit": "1",
+    "name": "Beryllia",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "219": {
+    "category": "10",
+    "id": "219",
+    "massKilogramsPerUnit": "1",
+    "name": "Beryllia Ceramic",
+    "quantized": false,
+    "type": "Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIS",
+      "CIMS"
+    ]
+  },
+  "220": {
+    "category": "23",
+    "id": "220",
+    "massKilogramsPerUnit": "1",
+    "name": "Neon",
+    "quantized": false,
+    "type": "Refined Material",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "I",
+      "CI",
+      "IM",
+      "SI",
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "221": {
+    "category": "42",
+    "id": "221",
+    "massKilogramsPerUnit": "40",
+    "name": "Heat Exchanger",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "222": {
+    "category": "42",
+    "id": "222",
+    "massKilogramsPerUnit": "290",
+    "name": "Turbopump",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "224": {
+    "category": "42",
+    "id": "224",
+    "massKilogramsPerUnit": "190",
+    "name": "Neon/Fuel Separator Centrifuge",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "225": {
+    "category": "42",
+    "id": "225",
+    "massKilogramsPerUnit": "100",
+    "name": "Fuel Make-up Tank",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "226": {
+    "category": "42",
+    "id": "226",
+    "massKilogramsPerUnit": "250",
+    "name": "Neon Make-up Tank",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "227": {
+    "category": "42",
+    "id": "227",
+    "massKilogramsPerUnit": "130",
+    "name": "Lightbulb End Moderators",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "229": {
+    "category": "42",
+    "id": "229",
+    "massKilogramsPerUnit": "50",
+    "name": "Fused Quartz Lightbulb Tube",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CS",
+      "SI",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
+    ]
+  },
+  "230": {
+    "category": "42",
+    "id": "230",
+    "massKilogramsPerUnit": "1942",
+    "name": "Reactor Plumbing Assembly",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "231": {
+    "category": "42",
+    "id": "231",
+    "massKilogramsPerUnit": "18700",
+    "name": "Flow Divider Moderator",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "232": {
+    "category": "42",
+    "id": "232",
+    "massKilogramsPerUnit": "180",
+    "name": "Nuclear Lightbulb",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "233": {
+    "category": "42",
+    "id": "233",
+    "massKilogramsPerUnit": "6000",
+    "name": "Composite-overwrapped Reactor Shell",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "234": {
+    "category": "42",
+    "id": "234",
+    "massKilogramsPerUnit": "30000",
+    "name": "Closed-cycle Gas Core Nuclear Reactor Engine",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "235": {
+    "category": "42",
+    "id": "235",
+    "massKilogramsPerUnit": "2200",
+    "name": "Habitation Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "236": {
+    "category": "42",
+    "id": "236",
+    "massKilogramsPerUnit": "2000",
+    "name": "Mobility Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "237": {
+    "category": "42",
+    "id": "237",
+    "massKilogramsPerUnit": "3600",
+    "name": "Fluids Automation Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "238": {
+    "category": "42",
+    "id": "238",
+    "massKilogramsPerUnit": "3600",
+    "name": "Solids Automation Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "239": {
+    "category": "42",
+    "id": "239",
+    "massKilogramsPerUnit": "960",
+    "name": "Terrain Interface Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "240": {
+    "category": "42",
+    "id": "240",
+    "massKilogramsPerUnit": "500",
+    "name": "Avionics Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "241": {
+    "category": "42",
+    "id": "241",
+    "massKilogramsPerUnit": "6665",
+    "name": "Escape Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "242": {
+    "category": "42",
+    "id": "242",
+    "massKilogramsPerUnit": "660",
+    "name": "Attitude Control Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "243": {
+    "category": "42",
+    "id": "243",
+    "massKilogramsPerUnit": "2000",
+    "name": "Power Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "244": {
+    "category": "42",
+    "id": "244",
+    "massKilogramsPerUnit": "1000",
+    "name": "Thermal Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "245": {
+    "category": "42",
+    "id": "245",
+    "massKilogramsPerUnit": "32000",
+    "name": "Propulsion Module",
+    "quantized": true,
+    "type": "Ship Component",
+    "volumeLitersPerUnit": "",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "S1": {
+    "category": "",
+    "id": "S1",
+    "massKilogramsPerUnit": "100755",
+    "name": "Shuttle",
+    "quantized": true,
+    "type": "Ship",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "S2": {
+    "category": "",
+    "id": "S2",
+    "massKilogramsPerUnit": "185525",
+    "name": "Light Transport",
+    "quantized": true,
+    "type": "Ship",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "S3": {
+    "category": "",
+    "id": "S3",
+    "massKilogramsPerUnit": "969525",
+    "name": "Heavy Transport",
+    "quantized": true,
+    "type": "Ship",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "B1": {
+    "category": "",
+    "id": "B1",
+    "massKilogramsPerUnit": "1800000",
+    "name": "Warehouse",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CM",
+      "CIM",
+      "CMS",
+      "CIMS"
+    ]
+  },
+  "B2": {
+    "category": "",
+    "id": "B2",
+    "massKilogramsPerUnit": "1531900",
+    "name": "Extractor",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "B3": {
+    "category": "",
+    "id": "B3",
+    "massKilogramsPerUnit": "2766900",
+    "name": "Refinery",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "B4": {
+    "category": "",
+    "id": "B4",
+    "massKilogramsPerUnit": "7590700",
+    "name": "Bioreactor",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "B5": {
+    "category": "",
+    "id": "B5",
+    "massKilogramsPerUnit": "0",
+    "name": "Factory",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "B6": {
+    "category": "",
+    "id": "B6",
+    "massKilogramsPerUnit": "0",
+    "name": "Shipyard",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "B7": {
+    "category": "",
+    "id": "B7",
+    "massKilogramsPerUnit": "0",
+    "name": "Spaceport",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "B8": {
+    "category": "",
+    "id": "B8",
+    "massKilogramsPerUnit": "0",
+    "name": "Marketplace",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  },
+  "B9": {
+    "category": "",
+    "id": "B9",
+    "massKilogramsPerUnit": "0",
+    "name": "Habitat",
+    "quantized": true,
+    "type": "Building",
+    "volumeLitersPerUnit": "0",
+    "sustainingSpectralTypes": [
+      "CIMS"
+    ]
+  }
+};
+
+const productNamesSorted = [
+  "Acetylene",
+  "Acrylonitrile",
+  "Alumina",
+  "Alumina Ceramic",
+  "Aluminium",
+  "Aluminium Beam",
+  "Aluminium Hull Plate",
+  "Aluminium Pipe",
+  "Aluminium Sheet",
+  "Aluminium Truss",
+  "Ammonia",
+  "Ammonium Carbonate",
+  "Ammonium Chloride",
+  "Ammonium Diuranate",
+  "Ammonium Oxalate",
+  "Ammonium Paratungstate",
+  "Apatite",
+  "Attitude Control Module",
+  "Austenitic Nichrome",
+  "Avionics Module",
+  "Ball Bearing",
+  "Ball Valve",
+  "Bare Circuit Board",
+  "Bare Copper Wire",
+  "Beryllia",
+  "Beryllia Ceramic",
+  "Beryllium Carbonate",
+  "Bioreactor",
+  "Bisphenol A",
+  "Bitumen",
+  "Borax",
+  "Boria",
+  "Boric Acid",
+  "Boron",
+  "Borosilicate Glass",
+  "Brushless Motor",
+  "Brushless Motor Rotor",
+  "Brushless Motor Stator",
+  "CCD",
+  "Calcite",
+  "Calcium",
+  "Calcium Chloride",
+  "Carbon Dioxide",
+  "Carbon Fiber",
+  "Carbon Monoxide",
+  "Cargo Module",
+  "Cargo Ring",
+  "Cement",
+  "Chlorine",
+  "Chromia",
+  "Chromium",
+  "Circuit Board",
+  "Closed-cycle Gas Core Nuclear Reactor Engine",
+  "Coffinite",
+  "Cold Gas Thruster",
+  "Cold Gas Torque Thruster",
+  "Composite-overwrapped Reactor Shell",
+  "Computer",
+  "Computer Chip",
+  "Control Moment Gyroscope",
+  "Copper",
+  "Copper Wire",
+  "Core Drill",
+  "Core Drill Sampler",
+  "Core Drill Thruster",
+  "Deionized Water",
+  "Diepoxy Prepolymer Resin",
+  "Diode",
+  "Engine Bell",
+  "Epichlorohydrin",
+  "Epoxy",
+  "Escape Module",
+  "Extractor",
+  "Factory",
+  "Feldspar",
+  "Ferrite",
+  "Ferrite-bead Inductor",
+  "Ferrochromium",
+  "Ferromolybdenum",
+  "Ferrosilicon",
+  "Fiber Optic Cable",
+  "Fiber Optic Gyroscope",
+  "Fiberglass",
+  "Flow Divider Moderator",
+  "Fluids Automation Module",
+  "Fluorine",
+  "Food",
+  "Fuel Make-up Tank",
+  "Fused Quartz",
+  "Fused Quartz Lightbulb Tube",
+  "Gold",
+  "Graphite",
+  "Habitat",
+  "Habitation Module",
+  "Heat Exchanger",
+  "Heavy Transport",
+  "Heavy Transport Hull",
+  "Highly Enriched Uranium Hexafluoride",
+  "Highly Enriched Uranium Powder",
+  "Hydrochloric Acid",
+  "Hydrofluoric Acid",
+  "Hydrogen",
+  "Hydrogen Heptafluorotantalate and Niobate",
+  "Hydrogen Propellant",
+  "Iron",
+  "Iron Oxide",
+  "Iron Sulfide",
+  "Landing Auger",
+  "Landing Leg",
+  "Large Thrust Bearing",
+  "Laser Diode",
+  "Leached Coffinite",
+  "Leached Feldspar",
+  "Lead",
+  "Lead Sulfide",
+  "LiPo Battery",
+  "Light Transport",
+  "Light Transport Hull",
+  "Lightbulb End Moderators",
+  "Lithium",
+  "Lithium Carbonate",
+  "Lithium Chloride",
+  "Lithium Sulfate",
+  "Magnesia",
+  "Magnesium",
+  "Magnesium Chloride",
+  "Marketplace",
+  "Merrillite",
+  "Methane",
+  "Mobility Module",
+  "Molybdenum Disulfide",
+  "Molybdenum Trioxide",
+  "Naphtha",
+  "Natural Flavorings",
+  "Nd:YAG Laser",
+  "Nd:YAG Laser Rod",
+  "Neodymium",
+  "Neodymium Magnet",
+  "Neodymium Oxide",
+  "Neodymium Trichloride",
+  "Neon",
+  "Neon Make-up Tank",
+  "Neon/Fuel Separator Centrifuge",
+  "Nichrome",
+  "Nickel",
+  "Nickel Oxide",
+  "Nitric Acid",
+  "Nitrogen",
+  "Novolak Prepolymer Resin",
+  "Nuclear Lightbulb",
+  "Olivine",
+  "Oxalic Acid",
+  "Oxygen",
+  "PEDOT",
+  "Parabolic Dish",
+  "Phosphate and Sulfate Salts",
+  "Phosphoric Acid",
+  "Photoresist Epoxy",
+  "Photovoltaic Panel",
+  "Platinum",
+  "Polyacrylonitrile",
+  "Polyacrylonitrile Fabric",
+  "Polymer Tantalum Capacitor",
+  "Polypropylene",
+  "Potassium Carbonate",
+  "Potassium Chloride",
+  "Potassium Fluoride",
+  "Potassium Heptafluorotantalate",
+  "Potassium Hydroxide",
+  "Potatoes",
+  "Power Module",
+  "Pressure Vessel",
+  "Propellant Tank",
+  "Propulsion Module",
+  "Propylene",
+  "Pump",
+  "Pure Nitrogen",
+  "Pyroxene",
+  "Quicklime",
+  "Radio Antenna",
+  "Rare Earth Oxides",
+  "Rare Earth Sulfates",
+  "Reactor Plumbing Assembly",
+  "Refinery",
+  "Rhabdite",
+  "Rhabdite Slag",
+  "Roasted Rhabdite",
+  "Robotic Arm",
+  "Salts",
+  "Shipyard",
+  "Shuttle",
+  "Shuttle Hull",
+  "Silica",
+  "Silica Powder",
+  "Silicon",
+  "Silicon Wafer",
+  "Silver",
+  "Small Propellant Tank",
+  "Sodium Bicarbonate",
+  "Sodium Carbonate",
+  "Sodium Chloride",
+  "Sodium Chromate",
+  "Sodium Dichromate",
+  "Sodium Hydroxide",
+  "Sodium Tungstate",
+  "Soil",
+  "Solder",
+  "Solids Automation Module",
+  "Soybeans",
+  "Spaceport",
+  "Spirulina and Chlorella Algae",
+  "Stainless Steel",
+  "Stainless Steel Pipe",
+  "Stainless Steel Sheet",
+  "Star Tracker",
+  "Steel",
+  "Steel Beam",
+  "Steel Cable",
+  "Steel Pipe",
+  "Steel Sheet",
+  "Steel Truss",
+  "Steel Wire",
+  "Sulfur",
+  "Sulfur Dioxide",
+  "Sulfuric Acid",
+  "Surface Mount Device Reel",
+  "Taenite",
+  "Tantalum",
+  "Terrain Interface Module",
+  "Thermal Module",
+  "Thin-film Resistor",
+  "Tin",
+  "Tin Sulfide",
+  "Triple Superphosphate",
+  "Troilite",
+  "Tungsten",
+  "Tungsten Powder",
+  "Turbopump",
+  "Unenriched Uranium Hexafluoride",
+  "Uraninite",
+  "Uranium Dioxide",
+  "Uranium Tetrafluoride",
+  "Uranyl Nitrate",
+  "Warehouse",
+  "Water",
+  "Weathered Olivine",
+  "Xenotime",
+  "Yellowcake",
+  "Yttria",
+  "Zinc",
+  "Zinc Oxide"
 ];

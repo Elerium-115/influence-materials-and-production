@@ -15,6 +15,12 @@ if (elToggleHorizontalLayout) {
     horizontalLayout = elToggleHorizontalLayout.checked;
 }
 
+let optimizeVariants = true;
+const elToggleOptimizeVariants = document.getElementById('toggle-optimize-variants');
+if (elToggleOptimizeVariants) {
+    optimizeVariants = elToggleOptimizeVariants.checked;
+}
+
 const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
 const productSearchInput = productsListWrapper.querySelector('input');
@@ -213,6 +219,17 @@ function toggleHorizontalLayout(el) {
         productChainItemsContainer.classList.remove('horizontal-layout');
         productChainItemsContainer.classList.add('vertical-layout');
     }
+}
+
+function toggleOptimizeVariants(el) {
+    //// TO DO: implement
+    //// -- WARNING: toggling this will likely require a complete reset of the planned chain => request confirmation from user?
+    if (el.checked) {
+        optimizeVariants = true;
+    } else {
+        optimizeVariants = false;
+    }
+    //// ...
 }
 
 // Toggle products-list when clicking on "▼" / "✕"

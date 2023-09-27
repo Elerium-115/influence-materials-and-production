@@ -32,14 +32,15 @@
     </script>
     <div class="main production-planner">
         <nav class="topbar">
-            <a href="https://my.adalia.id/" target="_blank" id="dalia-id-logo" title="my.adalia.id">
+            <a href="https://my.adalia.id/" target="_blank" id="dalia-id-logo" title="my.adalia.id" style="display: none;">
                 <img src="./img/adalia-id-logo.png" alt="my.adalia.id" class="logo-small">
                 <img src="./img/adalia-id-logo-text.webp" alt="my.adalia.id" class="logo-large">
             </a>
             <a href="./">Raw Materials</a>
             <a href="./ratios.html">Materials Ratios</a>
             <a href="./products.html">Products</a>
-            <a href="./production.html">Production Chains</a>
+            <!-- DISABLED production chains -->
+            <!-- <a href="./production.html">Production Chains</a> -->
             <a href="./production-planner.html" class="active">Production Planner</a>
             <a href="./asteroids-planner.html">Asteroids Planner</a>
         </nav>
@@ -61,6 +62,7 @@
                 </div>
                 <span class="separator"></span>
                 <label for="toggle-horizontal-layout" class="checked"><input type="checkbox" id="toggle-horizontal-layout" checked>Horizontal Layout</label>
+                <label for="toggle-optimize-variants" class="checked"><input type="checkbox" id="toggle-optimize-variants" checked>Optimize Process Variants</label>
             </div>
             <div id="selected-production-chain">
                 <h2><span id="selected-item-name"></span> - Production Plan</h2>
@@ -71,7 +73,9 @@
                     </span>
                     <span class="link-text">Share Link</span>
                 </div>
-                <div id="chain-type-link" class="chain-link">
+                <!-- DISABLED production chains -->
+                <!-- <div id="chain-type-link" class="chain-link"></div> -->
+                <div id="chain-type-link" class="chain-link" style="display: none;">
                     <span class="link-icon-wrapper">
                         <!-- Source: https://www.iconfinder.com/icons/4763233/hierarchy_network_organization_sitemap_structure_icon -->
                         <svg width="22px" viewBox="-1 1 32 32"><g><path d="M20,16.18V11H13V7.82a3,3,0,1,0-2,0V11H4v5.18a3,3,0,1,0,2,0V13h5v3.18a3,3,0,1,0,2,0V13h5v3.18a3,3,0,1,0,2,0Z"/></g></svg>
@@ -145,8 +149,8 @@
     <script src="./js-deflate/rawinflate.js"></script>
     <script src="./leader-line.min.js"></script>
     <script src="./pagemap-1.4.0.min.js"></script>
-    <script src="./influence-production-chains.js"></script>
-    <script src="./products-vs-spectral-types.js"></script>
+    <script src="./influence-production-chains-loader.js"></script>
+    <script src="./products-vs-spectral-types-loader.js"></script>
     <script src="./abstract-core.js"></script>
     <script src="./production-core.js"></script>
     <script src="./production-planner-core.js"></script>

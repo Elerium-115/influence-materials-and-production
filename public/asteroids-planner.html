@@ -34,14 +34,15 @@
     <div class="main asteroids-planner">
         <nav class="topbar topbar-sections">
             <div class="topbar-section-left">
-                <a href="https://my.adalia.id/" target="_blank" id="dalia-id-logo" title="my.adalia.id">
+                <a href="https://my.adalia.id/" target="_blank" id="dalia-id-logo" title="my.adalia.id" style="display: none;">
                     <img src="./img/adalia-id-logo.png" alt="my.adalia.id" class="logo-small">
                     <img src="./img/adalia-id-logo-text.webp" alt="my.adalia.id" class="logo-large">
                 </a>
                 <a href="./">Raw Materials</a>
                 <a href="./ratios.html">Materials Ratios</a>
                 <a href="./products.html">Products</a>
-                <a href="./production.html">Production Chains</a>
+                <!-- DISABLED production chains -->
+                <!-- <a href="./production.html">Production Chains</a> -->
                 <a href="./production-planner.html">Production Planner</a>
                 <a href="./asteroids-planner.html" class="active">Asteroids Planner</a>
             </div>
@@ -217,8 +218,8 @@
     <!-- Third-party and "core" scripts, loaded first -->
     <script src="./leader-line.min.js"></script>
     <script src="./axios.min.js"></script>
-    <script src="./influence-production-chains.js"></script>
-    <script src="./products-vs-spectral-types.js"></script>
+    <script src="./influence-production-chains-loader.js"></script>
+    <script src="./products-vs-spectral-types-loader.js"></script>
     <script src="./abstract-core.js"></script>
     <script src="./production-core.js"></script>
     <script src="./wallet-core.js"></script>
