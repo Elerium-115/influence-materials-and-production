@@ -353,7 +353,7 @@ function getShoppingListForProductionPlan(itemDataById) {
     const processData = processDataById[processId];
     let inputQty = 0;
     processData.inputs.forEach(inputData => {
-        if (Number(inputData.productId) === inputProductId) {
+        if (String(inputData.productId) === inputProductId) {
             inputQty = inputData.qty;
         }
     });
@@ -381,7 +381,7 @@ function getTotalQtyForItemId(itemId, itemDataById) {
 
 function getTotalQtyForAllSelectedOccurrencesOfProductName(productName, itemDataById) {
     let qty = 0;
-    const productId = Number(productDataByName[productName].id);
+    const productId = String(productDataByName[productName].id);
     for (const [itemId, itemData] of Object.entries(itemDataById)) {
         // Parse only SELECTED occurrences of this product ID
         if (itemData.isSelected && itemData.productId === productId) {
@@ -507,7 +507,7 @@ function getFilteredProcessVariantIds(
             return;
         }
         const hasForbiddenInputs = processData.inputs.some(inputData => {
-            const inputProductId = Number(inputData.productId);
+            const inputProductId = String(inputData.productId);
             return forbiddenInputProductIds.includes(inputProductId);
         });
         if (hasForbiddenInputs) {
@@ -535,7 +535,7 @@ function getFilteredProcessVariantIds(
              * NOTE: Using "every" instead of "forEach", in order to be able to exit early via "return false".
              */
             processData.inputs.every(inputData => {
-                const inputProductId = Number(inputData.productId);
+                const inputProductId = String(inputData.productId);
                 if (doDebug) console.log(`${dots}--- ... START CHECK input product #${inputProductId}: ${productDataById[inputProductId].name}`);
                 const subProcessVariantIds = getFilteredProcessVariantIds(
                     inputProductId,
@@ -833,7 +833,7 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
                 level: processItemData.level + 1,
                 parentItemId: Number(processItemId),
                 processId: null,
-                productId: Number(inputProductId),
+                productId: String(inputProductId),
             };
             addItemToChain(inputItemData); // not using the return value, in this context
         });
@@ -853,7 +853,7 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
     }
     if (processVariantItemIds.length > 1) {
         // Multiple process variants => prompt the user to select one
-        // if (doDebug) console.log(`%c--- PROMPT the user to select one of the processVariantItemIds: [${processVariantItemIds.toString()}]`, 'background: yellow; color: black;');
+        // if (doDebug) console.log(`%c--- PROMPT the user to select one of the processVariantItemIds: [${String(processVariantItemIds)}]`, 'background: yellow; color: black;');
         processVariantItemIds.forEach(itemId => {
             // Mark all process variants from this group
             itemDataById[itemId].processVariantItemIds = processVariantItemIds;
@@ -1403,7 +1403,7 @@ function selectPlannedProductId(plannedProductId) {
         level: 1,
         parentItemId: 0, // top-level item (i.e. no parent)
         processId: null,
-        productId: Number(plannedProductId),
+        productId: String(plannedProductId),
     };
     const plannedProductItemId = addItemToChain(plannedProductItemData);
     selectProductItemId(plannedProductItemId);
@@ -1454,7 +1454,7 @@ function selectPlannedProductData(plannedProductData) {
     // Select the planned product
     const productName = plannedProductData.plannedProductName;
     // if (doDebug) console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue');
-    const plannedProductId = Number(productDataByName[productName].id);
+    const plannedProductId = String(productDataByName[productName].id);
     selectPlannedProductId(plannedProductId);
 }
 

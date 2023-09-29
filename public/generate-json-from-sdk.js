@@ -36,7 +36,7 @@ function getFormattedInputsOrOutputs(inputsOrOutputs) {
     let formattedInputsOrOutputs = [];
     Object.entries(inputsOrOutputs).forEach(([productId, qty]) => {
         formattedInputsOrOutputs.push({
-            productId: productId.toString(),
+            productId: String(productId),
             qty,
         });
     });
@@ -48,7 +48,7 @@ function getFormattedInputsOrOutputs(inputsOrOutputs) {
 // - buildings
 Object.values(Product.TYPES).forEach(productData => {
     InfluenceProductionChainsJSON.products.push({
-        id: productData.i.toString(),
+        id: String(productData.i),
         name: productData.name,
         type: productData.classification,
     });
@@ -63,7 +63,7 @@ Object.values(Ship.TYPES).forEach(shipData => {
     }
     const nextProductId = ++maxProductId;
     InfluenceProductionChainsJSON.products.push({
-        id: nextProductId.toString(),
+        id: String(nextProductId),
         name: shipData.name,
         type: 'Ship',
     });
@@ -73,7 +73,7 @@ Object.values(Ship.TYPES).forEach(shipData => {
 // Add buildings to "buildings" + "products" in the JSON
 Object.values(Building.TYPES).forEach(buildingData => {
     InfluenceProductionChainsJSON.buildings.push({
-        id: buildingData.i.toString(),
+        id: String(buildingData.i),
         name: buildingData.name,
     });
     if (buildingData.name === 'Empty Lot') {
@@ -82,7 +82,7 @@ Object.values(Building.TYPES).forEach(buildingData => {
     }
     const nextProductId = ++maxProductId;
     InfluenceProductionChainsJSON.products.push({
-        id: nextProductId.toString(),
+        id: String(nextProductId),
         name: buildingData.name,
         type: 'Building',
     });
@@ -95,7 +95,7 @@ Object.values(Building.TYPES).forEach(buildingData => {
 // - buildings (construction)
 Object.values(Process.TYPES).forEach(processData => {
     InfluenceProductionChainsJSON.processes.push({
-        id: processData.i.toString(),
+        id: String(processData.i),
         name: processData.name,
         buildingId: getBuildingIdForProcessorId(processData.processorType),
         inputs: getFormattedInputsOrOutputs(processData.inputs),
@@ -110,12 +110,12 @@ Object.values(Process.TYPES).forEach(processData => {
 // - e.g. raw material "Water" => process "Water Mining"
 Product.getListByClassification(Product.CLASSIFICATIONS.RAW_MATERIAL).forEach(productId => {
     InfluenceProductionChainsJSON.processes.push({
-        id: (++maxProcessId).toString(),
+        id: String(++maxProcessId),
         name: `${Product.TYPES[productId].name} Mining`,
-        buildingId: Building.IDS.EXTRACTOR.toString(),
+        buildingId: String(Building.IDS.EXTRACTOR),
         inputs: [],
         outputs: [{
-            productId: productId.toString(),
+            productId: String(productId),
             qty: 1, //// PLACEHOLDER
         }],
         setupTime: null, //// PLACEHOLDER
@@ -127,12 +127,12 @@ Product.getListByClassification(Product.CLASSIFICATIONS.RAW_MATERIAL).forEach(pr
 // - e.g. ship "Shuttle" => process "Shuttle Integration"
 Object.entries(shipIdToProductId).forEach(([shipId, productId]) => {
     InfluenceProductionChainsJSON.processes.push({
-        id: (++maxProcessId).toString(),
+        id: String(++maxProcessId),
         name: `${Ship.TYPES[shipId].name} Integration`,
-        buildingId: Building.IDS.SHIPYARD.toString(),
+        buildingId: String(Building.IDS.SHIPYARD),
         inputs: getFormattedInputsOrOutputs(Ship.CONSTRUCTION_TYPES[shipId].requirements),
         outputs: [{
-            productId: productId.toString(),
+            productId: String(productId),
             qty: 1,
         }],
         setupTime: null, //// PLACEHOLDER
@@ -144,12 +144,12 @@ Object.entries(shipIdToProductId).forEach(([shipId, productId]) => {
 // - e.g. building "Warehouse" => process "Warehouse Construction"
 Object.entries(buildingIdToProductId).forEach(([buildingId, productId]) => {
     InfluenceProductionChainsJSON.processes.push({
-        id: (++maxProcessId).toString(),
+        id: String(++maxProcessId),
         name: `${Building.TYPES[buildingId].name} Construction`,
-        buildingId: Building.IDS.EMPTY_LOT.toString(),
+        buildingId: String(Building.IDS.EMPTY_LOT),
         inputs: getFormattedInputsOrOutputs(Building.CONSTRUCTION_TYPES[buildingId].requirements),
         outputs: [{
-            productId: productId.toString(),
+            productId: String(productId),
             qty: 1,
         }],
         setupTime: null, //// PLACEHOLDER

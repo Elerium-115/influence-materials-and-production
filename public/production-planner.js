@@ -82,7 +82,7 @@ function selectPlannedProductHash(hash) {
     const productName = productNamesByHash[plannedProductCompactName];
     if (productName) {
         // if (doDebug) console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue');
-        const plannedProductId = Number(productDataByName[productName].id);
+        const plannedProductId = String(productDataByName[productName].id);
         selectPlannedProductId(plannedProductId);
     }
 }
