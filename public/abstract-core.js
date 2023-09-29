@@ -114,6 +114,15 @@ function validateInputArea(el) {
     el.value = isNaN(intValue) || intValue < 13 ? 13 : Math.min(intValue, 1768484);
 }
 
+// Update the direct parent of a checkbox input (typically a "label" element), to reflect the state of the checkbox
+function updateCheckboxLabel(elInput) {
+    if (elInput.checked) {
+        elInput.parentElement.classList.add('checked');
+    } else {
+        elInput.parentElement.classList.remove('checked');
+    }
+}
+
 // Source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
 function on(eventType, selector, callback) {
     document.addEventListener(eventType, event => {
@@ -129,11 +138,7 @@ function on(eventType, selector, callback) {
 
 // Toggle option checked
 on('change', 'label > input', el => {
-    if (el.checked) {
-        el.parentElement.classList.add('checked');
-    } else {
-        el.parentElement.classList.remove('checked');
-    }
+    updateCheckboxLabel(el);
 });
 
 window.addEventListener('keydown', event => {

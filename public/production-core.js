@@ -7,20 +7,9 @@ Common code used in:
 
 const doDebug = location.href.includes('127.0.0.1');
 
-let maxLevel = 0;
-
-let horizontalLayout = true;
+// DOM elements should be selected first, before executing any other logic that may require them
 const elToggleHorizontalLayout = document.getElementById('toggle-horizontal-layout');
-if (elToggleHorizontalLayout) {
-    horizontalLayout = elToggleHorizontalLayout.checked;
-}
-
-let optimizeVariants = true;
 const elToggleOptimizeVariants = document.getElementById('toggle-optimize-variants');
-if (elToggleOptimizeVariants) {
-    optimizeVariants = elToggleOptimizeVariants.checked;
-}
-
 const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
 const productSearchInput = productsListWrapper.querySelector('input');
@@ -29,6 +18,18 @@ const selectedItemNameContainer = document.getElementById('selected-item-name');
 const chainTypeLinkContainer = document.getElementById('chain-type-link');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const elMinimapWrapper = document.getElementById('minimap-wrapper');
+
+// Load state for "Horizontal Layout" toggle from local-storage (if set), otherwise default to TRUE
+const horizontalLayoutLocal = localStorage.getItem('horizontalLayout');
+let horizontalLayout = horizontalLayoutLocal !== null ? horizontalLayoutLocal === 'true' : true;
+setHorizontalLayout(horizontalLayout);
+
+// Load state for "Optimize Process Variants" toggle from local-storage (if set), otherwise default to TRUE
+const optimizeVariantsLocal = localStorage.getItem('optimizeVariants');
+let optimizeVariants = optimizeVariantsLocal !== null ? optimizeVariantsLocal === 'true' : true;
+setOptimizeVariants(optimizeVariants);
+
+let maxLevel = 0;
 
 const isRealSpectralType = {
     C: true,
@@ -209,27 +210,51 @@ function toggleMinimap() {
     elMinimapWrapper.classList.toggle('minimized');
 }
 
-function toggleHorizontalLayout(el) {
-    if (el.checked) {
-        horizontalLayout = true;
+function setHorizontalLayout(horizontalLayoutNew) {
+    if (!elToggleHorizontalLayout) {
+        return;
+    }
+    elToggleHorizontalLayout.checked = horizontalLayoutNew;
+    updateCheckboxLabel(elToggleHorizontalLayout);
+    if (horizontalLayoutNew) {
         productChainItemsContainer.classList.remove('vertical-layout');
         productChainItemsContainer.classList.add('horizontal-layout');
     } else {
-        horizontalLayout = false;
         productChainItemsContainer.classList.remove('horizontal-layout');
         productChainItemsContainer.classList.add('vertical-layout');
     }
+    localStorage.setItem('horizontalLayout', horizontalLayoutNew);
+    horizontalLayout = horizontalLayoutNew;
+}
+
+function setOptimizeVariants(optimizeVariantsNew) {
+    if (!elToggleOptimizeVariants) {
+        return;
+    }
+    elToggleOptimizeVariants.checked = optimizeVariantsNew;
+    updateCheckboxLabel(elToggleOptimizeVariants);
+    localStorage.setItem('optimizeVariants', optimizeVariantsNew);
+    optimizeVariants = optimizeVariantsNew;
+}
+
+function toggleHorizontalLayout(el) {
+    // The state of "el.checked" has already changed => update everything else
+    setHorizontalLayout(el.checked);
 }
 
 function toggleOptimizeVariants(el) {
-    //// TO DO: implement
-    //// -- WARNING: toggling this will likely require a complete reset of the planned chain => request confirmation from user?
-    if (el.checked) {
-        optimizeVariants = true;
-    } else {
-        optimizeVariants = false;
+    // The state of "el.checked" has already changed => update everything else, pending the user's confirmation
+    if (!confirm(`The entire chain will be reset. Are you sure you want to continue?`)) {
+        // Revert to the state before the click, for both the "checked" property and class
+        el.checked = !el.checked;
+        updateCheckboxLabel(el);
+        return; // Abort the toggle
     }
-    //// ...
+    setOptimizeVariants(el.checked);
+    if (typeof toggleProductItemId === 'function') {
+        // This is the "Production Planner", not "Production Chains" => reset the chain for the planned product
+        toggleProductItemId(1);
+    }
 }
 
 // Toggle products-list when clicking on "▼" / "✕"
