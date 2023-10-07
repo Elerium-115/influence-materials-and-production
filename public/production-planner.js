@@ -62,7 +62,7 @@ function selectPlannedProductHash(hash) {
     hideAndResetProductsList();
     const [plannedProductCompactName, hashEncodedFromItemDataById] = hash.split('__');
     // Update link to other production chain type, for the same product
-    chainTypeLinkContainer.querySelector('a').setAttribute('href', `./production.html#${plannedProductCompactName}`);
+    chainTypeLinkContainer.querySelector('a').setAttribute('href', `./production-chains.html#${plannedProductCompactName}`);
     // Re-render the entire planned chain on page-load, based on the decoded hash, if any
     if (hashEncodedFromItemDataById) {
         // if (doDebug) console.log(`%c--- RENDER the entire planned chain, based on the decoded hash`, 'background: blue');

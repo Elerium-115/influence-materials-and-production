@@ -91,7 +91,7 @@ for (const productName of productNamesSorted) {
         // Show links to Production Chain / Production Planner for the selected product
         elSelectedProductName.textContent = productName;
         const productNameCompact = getCompactName(productName);
-        // elSelectedProductChain.href = `./production.html#${productNameCompact}`; //// DISABLED production chains
+        // elSelectedProductChain.href = `./production-chains.html#${productNameCompact}`; //// DISABLED production chains
         elSelectedProductPlanner.href = `./production-planner.html#${productNameCompact}`;
         elSelectedProduct.classList.remove('hidden');
         window.scrollTo({ top: 0, behavior: 'smooth' });

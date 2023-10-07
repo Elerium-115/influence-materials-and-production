@@ -2,7 +2,7 @@
  * This script requires the inputs below, from "products-vs-spectral-types.js" (included via HTML).
  * 
  * Inputs:
- * - "productDataByName" ("items" in "production.js")
+ * - "productDataByName" ("items" in "production-chains.js")
  * - "productDataById"
  * 
  * Common code used in:
@@ -39,7 +39,7 @@ const rawMaterialDataByName = {
 // Parse data from official JSON
 const buildingDataById = {};
 const buildingIdByName = {};
-const productNamesByHash = {}; // "itemNamesByHash" in "production.js"
+const productNamesByHash = {}; // "itemNamesByHash" in "production-chains.js"
 const processDataById = {};
 const processVariantIdsByProductId = {};
 InfluenceProductionChainsJSON.buildings.forEach(building => {

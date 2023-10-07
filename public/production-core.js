@@ -166,7 +166,7 @@ function sortLevels(startLevel = 1) {
         const itemContainersOnLevel = [...levelContainer.querySelectorAll('[data-container-id]')];
         /**
          * NOTE: "compareItemContainers" has different definitions
-         * in "production.js" vs. "production-planner-core.js"
+         * in "production-chains.js" vs. "production-planner-core.js"
          */
         itemContainersOnLevel.sort(compareItemContainers);
         levelContainer.textContent = '';
