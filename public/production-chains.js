@@ -1171,7 +1171,8 @@ if (!hashToPreselect || !itemNamesByHash[hashToPreselect]) {
 }
 // pre-select via small delay, to avoid buggy connections between items
 setTimeout(() => {
-    selectItemByName(itemNamesByHash[hashToPreselect]);
+    //// TO DO: re-enable after production chains are fixed
+    // selectItemByName(itemNamesByHash[hashToPreselect]); //// DISABLED
     resetMinimap();
 }, 10);
 
