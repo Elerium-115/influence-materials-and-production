@@ -69,6 +69,18 @@ function getItemTypeClass(itemType) {
     return `item-type-${getItemNameSafe(itemType)}`;
 }
 
+/**
+ * Call syntax:
+ * ```
+ * const arrays = [[array1, ...], [array2, ...], [array3, ...]]
+ * intersectArrays(...arrays)
+ * ```
+ * Source: https://stackoverflow.com/a/51874332
+ */
+function intersectArrays(...arrays) {
+    return arrays.reduce((a, b) => a.filter(x => b.includes(x)));
+}
+
 function closeOverlay() {
     if (!elOverlayWrapper) {
         // Page without overlay

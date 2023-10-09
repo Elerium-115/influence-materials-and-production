@@ -73,7 +73,7 @@ const allSpectralsByRawMaterial = {
     // Fissiles
     "Coffinite":        ["S", "CS", "SI", "SM", "CIS", "CMS", "IMS", "CIMS"],
     "Uraninite":        ["M", "CM", "IM", "SM", "CIM", "CMS", "IMS", "CIMS"],
-}
+};
 
 // Parse data from official JSON
 const productDataById = {};

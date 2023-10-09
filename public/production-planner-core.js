@@ -3,6 +3,9 @@
  * 
  * Inputs:
  * - "productDataByName" ("items" in "production-chains.js")
+ *   - EXCEPTION: If this file is included from "generate-products-vs-spectral-types.html",
+ *     then "productDataByName" is undefined => defining "productDataRawByName" here,
+ *     and using it during "banProcessNameForProductName".
  * - "productDataById"
  * 
  * Common code used in:
@@ -69,6 +72,11 @@ InfluenceProductionChainsJSON.processes.forEach(process => {
         }
         processVariantIdsByProductId[productId].push(process.id);
     });
+});
+
+const productDataRawByName = {};
+InfluenceProductionChainsJSON.products.forEach(product => {
+    productDataRawByName[product.name] = product;
 });
 
 const itemDataKeyEncodeDecode = {
@@ -167,7 +175,7 @@ const leaderLineOptionsProductionChain = {
 };
 
 function banProcessNameForProductName(productName, processName) {
-    const productData = productDataByName[productName];
+    const productData = typeof productDataByName !== 'undefined' ? productDataByName[productName] : productDataRawByName[productName];
     if (!productData) {
         console.log(`%c--- ERROR: [banProcessNameForProductName] productData not found for productName = ${productName}`, 'background: maroon');
         return;
@@ -1612,15 +1620,23 @@ on('mouseleave', '[data-container-id]', el => {
 });
 
 // Debug itemData on hover
-if (doDebug && false) {
+// if (doDebug && false) {
+if (doDebug) {
     on('mouseenter', '[data-container-id]', el => {
         const debugContainer = document.getElementById('debug');
         let debugHtml = '';
-        debugHtml += `itemId = ${el.dataset.containerId}<br><br>`
+        debugHtml += `itemId = ${el.dataset.containerId}<br>`
+        debugHtml += `<br>`;
         debugHtml += `itemData:<br>`;
-        debugHtml += `${JSON.stringify(itemDataById[el.dataset.containerId], null, '\t')}<br><br>`;
+        const itemData = itemDataById[el.dataset.containerId];
+        debugHtml += `${JSON.stringify(itemData, null, '\t')}<br>`;
+        debugHtml += `<br>`;
         debugHtml += `selectedProductItemIds:<br>`;
         debugHtml += `[${selectedProductItemIds.join(', ')}]<br>`;
+        debugHtml += `<br>`;
+        debugHtml += `productOrProcessData:<br>`;
+        const productOrProcessData = itemData.productId ? productDataById[itemData.productId] : processDataById[itemData.processId];
+        debugHtml += `${JSON.stringify(productOrProcessData, null, '\t')}<br>`;
         debugContainer.innerHTML = debugHtml;
         debugContainer.classList.remove('hidden');
     });
