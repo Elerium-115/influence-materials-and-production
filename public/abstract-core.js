@@ -1,4 +1,6 @@
 
+let doDebug = location.href.includes('127.0.0.1');
+
 /**
  * Fix for Firefox bug re: checkbox inputs keeping
  * the "checked" PROPERTY cached after a SOFT-reload.

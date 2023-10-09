@@ -22,7 +22,6 @@ const rawMaterialDataByName = {
     "Apatite":          { "label": "Mineral",       "materialType": "Organics",     "baseSpectrals": ["C"]      },
     "Bitumen":          { "label": "Hydrocarbon",   "materialType": "Organics",     "baseSpectrals": ["C"]      },
     "Calcite":          { "label": "Mineral",       "materialType": "Organics",     "baseSpectrals": ["C"]      },
-//  "Magnesite":        { "label": "Mineral",       "materialType": "Organics",     "baseSpectrals": ["C"]      }, // obsolete product, no longer exists
     "Feldspar":         { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["S"]      },
     "Graphite":         { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["M"]      },
     "Olivine":          { "label": "Mineral",       "materialType": "Metals",       "baseSpectrals": ["S"]      },
@@ -111,6 +110,14 @@ const rawMaterialMaxDepth = 2;
 const filterDepthDefault = 4;
 
 /**
+ * Manually banned process variants which are vastly inefficient, for certain products.
+ * 
+ * WARNING: This needs to be manually upadted, if the product / process IDs change!
+ */
+const bannedProcessVariantIdsByProductId = {};
+banProcessNameForProductName('Deionized Water', 'Polyacrylonitrile Oxidation and Carbonization');
+
+/**
  * "itemDataById" will effectively contain the production chain for the planned-product,
  * with only the direct-input(s) for the selected items to be produced by the user
  * (i.e. NOT necessarily all the way down to the raw materials)
@@ -158,6 +165,24 @@ const leaderLineOptionsProductionChain = {
     ...leaderLineOptionsDefault,
     path: 'straight',
 };
+
+function banProcessNameForProductName(productName, processName) {
+    const productData = productDataByName[productName];
+    if (!productData) {
+        console.log(`%c--- ERROR: [banProcessNameForProductName] productData not found for productName = ${productName}`, 'background: maroon');
+        return;
+    }
+    const processId = Object.keys(processDataById).find(processId => processDataById[processId].name === processName);
+    if (!processId) {
+        console.log(`%c--- ERROR: [banProcessNameForProductName] processId not found for processName = ${processName}`, 'background: maroon');
+        return;
+    }
+    const productId = productData.id;
+    if (!bannedProcessVariantIdsByProductId[productId]) {
+        bannedProcessVariantIdsByProductId[productId] = [];
+    }
+    bannedProcessVariantIdsByProductId[productId].push(processId);
+}
 
 function getAllAncestorsOfItemId(itemId) {
     let ancestors = [];
@@ -442,9 +467,10 @@ function getFilteredProcessVariantIds(
     filterDepth = filterDepthDefault,
     filteredDepth = 0,
     rawMaterialDepth = null,
+    doDebugFn = false, // disctinct from "doDebug" @ "abstract-core.js"
 ) {
     const dots = '*** '.repeat(filterDepthDefault - filterDepth); // used only for debugging
-    if (doDebug) console.log(`%c${dots}--- getFilteredProcessVariantIds w/ args:`, 'background: blue;', {outputProductId, ancestorProductIds: JSON.stringify(ancestorProductIds), filterDepth, filteredDepth, rawMaterialDepth});
+    if (doDebugFn) console.log(`%c${dots}--- getFilteredProcessVariantIds w/ args:`, 'background: blue;', {outputProductId, ancestorProductIds: JSON.stringify(ancestorProductIds), filterDepth, filteredDepth, rawMaterialDepth});
 
     /**
      * Optimization to prevent recursing too many levels for raw materials.
@@ -485,7 +511,7 @@ function getFilteredProcessVariantIds(
      */
     if (rawMaterialDepth !== null && rawMaterialDepth > rawMaterialMaxDepth) {
         // Too many levels recursed since the first-encountered raw material => STOP recursion by returning NO process variants
-        if (doDebug) console.log(`%c${dots}--- ABORT filtering re: too many levels recursed since first-encountered raw material`, 'color: orange');
+        if (doDebugFn) console.log(`%c${dots}--- ABORT filtering re: too many levels recursed since first-encountered raw material`, 'color: orange');
         return [];
     }
 
@@ -498,12 +524,18 @@ function getFilteredProcessVariantIds(
     const processVariantIds = processVariantIdsByProductId[outputProductId] || []; // e.g. "Food" had no process in the old JSON from 2022
     processVariantIds.forEach(processId => {
         const processData = processDataById[processId];
-        if (doDebug && filteredDepth === 0) console.log(`------`); // next root process variant
-        if (doDebug) console.log(`${dots}--- CHECK process variant #${processId}: ${processData.name}`);
+        if (doDebugFn && filteredDepth === 0) console.log(`------`); // next root process variant
+        if (doDebugFn) console.log(`${dots}--- CHECK process variant #${processId}: ${processData.name}`);
         if (!processData.inputs.length) {
             // Keep process variant if mining process, and skip any other filtering
-            if (doDebug) console.log(`${dots}--- ... KEEP process variant #${processId}: ${processData.name} <= MINING process (NO inputs)`);
+            if (doDebugFn) console.log(`${dots}--- ... KEEP process variant #${processId}: ${processData.name} <= MINING process (NO inputs)`);
             filteredProcessVariantIds.push(processId);
+            return;
+        }
+        const bannedProcessVariantIds = bannedProcessVariantIdsByProductId[outputProductId];
+        if (bannedProcessVariantIds && bannedProcessVariantIds.includes(processId)) {
+            // Skip process variant if banned for current output
+            if (doDebugFn) console.log(`%c${dots}--- ... SKIP this process variant re: banned for current output:`, 'color: yellow;');
             return;
         }
         const hasForbiddenInputs = processData.inputs.some(inputData => {
@@ -512,10 +544,10 @@ function getFilteredProcessVariantIds(
         });
         if (hasForbiddenInputs) {
             // Skip process variant that requires a forbidden input
-            if (doDebug) console.log(`%c${dots}--- ... SKIP this process variant re: has forbidden input among:`, 'color: yellow;', forbiddenInputProductIds);
+            if (doDebugFn) console.log(`%c${dots}--- ... SKIP this process variant re: has forbidden input among:`, 'color: yellow;', forbiddenInputProductIds);
             return;
         }
-        if (doDebug) console.log(`${dots}--- ... OK re: no forbidden inputs`);
+        if (doDebugFn) console.log(`${dots}--- ... OK re: no forbidden inputs`);
         if (processData.outputs.length === 1) {
             /**
              * Keep process variant if it has a single output, and skip the recursive filtering.
@@ -523,12 +555,12 @@ function getFilteredProcessVariantIds(
              * This also includes some processes which lead to production loops - see notes above re: "Ferrochromium Alloying".
              * NOTE: Doing this only after ensuring that this process does not require a forbidden input.
              */
-            if (doDebug) console.log(`${dots}--- ... KEEP process variant #${processId}: ${processData.name} <= SINGLE output`);
+            if (doDebugFn) console.log(`${dots}--- ... KEEP process variant #${processId}: ${processData.name} <= SINGLE output`);
             filteredProcessVariantIds.push(processId);
             return;
         }
         if (filterDepth > 0) {
-            if (doDebug) console.log(`${dots}--- ... RECURSING into inputs`);
+            if (doDebugFn) console.log(`${dots}--- ... RECURSING into inputs`);
             let hasInputWithNoValidProcessVariant = false;
             /**
              * Recurse into each input of this potentially-valid process variant.
@@ -536,7 +568,7 @@ function getFilteredProcessVariantIds(
              */
             processData.inputs.every(inputData => {
                 const inputProductId = String(inputData.productId);
-                if (doDebug) console.log(`${dots}--- ... START CHECK input product #${inputProductId}: ${productDataById[inputProductId].name}`);
+                if (doDebugFn) console.log(`${dots}--- ... START CHECK input product #${inputProductId}: ${productDataById[inputProductId].name}`);
                 const subProcessVariantIds = getFilteredProcessVariantIds(
                     inputProductId,
                     forbiddenInputProductIds,
@@ -544,10 +576,10 @@ function getFilteredProcessVariantIds(
                     filteredDepth + 1,
                     rawMaterialDepth === null ? null : rawMaterialDepth + 1
                 );
-                if (doDebug) console.log(`${dots}--- ... END CHECK input product #${inputProductId}: ${productDataById[inputProductId].name} => subProcessVariantIds: ${JSON.stringify(subProcessVariantIds)}`);
+                if (doDebugFn) console.log(`${dots}--- ... END CHECK input product #${inputProductId}: ${productDataById[inputProductId].name} => subProcessVariantIds: ${JSON.stringify(subProcessVariantIds)}`);
                 if (!subProcessVariantIds.length) {
                     hasInputWithNoValidProcessVariant = true;
-                    if (doDebug) console.log(`%c${dots}--- ... ... INVALID input => STOP parsing remaining inputs`, 'color: orange;');
+                    if (doDebugFn) console.log(`%c${dots}--- ... ... INVALID input => STOP parsing remaining inputs`, 'color: orange;');
                     // Stop parsing the remaining inputs
                     return false;
                 }
@@ -556,12 +588,12 @@ function getFilteredProcessVariantIds(
             });
             if (hasInputWithNoValidProcessVariant) {
                 // Skip process variant b/c at least one of its inputs has no valid process variant
-                if (doDebug) console.log(`%c${dots}--- ... SKIP this process variant re: has input w/ NO valid process variant`, 'color: yellow;');
+                if (doDebugFn) console.log(`%c${dots}--- ... SKIP this process variant re: has input w/ NO valid process variant`, 'color: yellow;');
                 return;
             }
-            if (doDebug) console.log(`${dots}--- ... KEEP process variant #${processId}: ${processData.name} <= DONE RECURSING into inputs`);
+            if (doDebugFn) console.log(`${dots}--- ... KEEP process variant #${processId}: ${processData.name} <= DONE RECURSING into inputs`);
         } else {
-            if (doDebug) console.log(`${dots}--- ... KEEP process variant #${processId}: ${processData.name} <= WITHOUT recursing into inputs`);
+            if (doDebugFn) console.log(`${dots}--- ... KEEP process variant #${processId}: ${processData.name} <= WITHOUT recursing into inputs`);
         }
 
         // Keep process variant if not filtered-out

@@ -2,6 +2,10 @@
  * This script only needs to be executed when there are changes in the production chains.
  * Do this by loading the HTML, and check the dev-tools console.
  * 
+ * Inputs:
+ * - "processDataById" from "production-planner-core.js"
+ * - "getFilteredProcessVariantIds"
+ * 
  * Outputs:
  * - "productNamesBySustainingSpectralType" for ALL spectral types, including the VIRTUAL spectral types: "IM", "CIM", "IMS", "CIMS"
  * - "productDataByName"
@@ -15,13 +19,9 @@
  * NOTE: To generate the "next" version, load the HTML with the query param "?next=true"
  */
 
+doDebugLocal = false; // disctinct from "doDebug" @ "abstract-core.js"
+
 const timeStart = new Date(); //// TEST
-
-let doDebug = false;
-
-const notParsedProcessIds = []; // initially all process IDs
-const parsedProcessIds = [];
-const outputsOfParsedProcessIds = []; // product IDs
 
 /** Real spectral types */
 // const spectralTypes = ['C', 'CI', 'CIS', 'CM', 'CMS', 'CS', 'I', 'M', 'S', 'SI', 'SM'];
@@ -86,12 +86,10 @@ InfluenceProductionChainsJSON.products.forEach(product => {
 });
 productNamesSorted.sort();
 
-const processDataById = {};
-InfluenceProductionChainsJSON.processes.forEach(process => {
-    processDataById[process.id] = process;
-    notParsedProcessIds.push(process.id);
-});
+const parsedProcessIds = [];
+const outputsOfParsedProcessIds = []; // product IDs
 
+const notParsedProcessIds = Object.keys(processDataById); // initially all process IDs
 console.log(`--- notParsedProcessIds INITIAL:`, [...notParsedProcessIds]); //// TEST
 
 function removeFromArray(arr, value) {
@@ -201,7 +199,7 @@ for (const processId of [...notParsedProcessIds]) {
 
 console.log(`%c--- DONE tier-0`, 'color: cyan;'); //// TEST
 console.log(`---> notParsedProcessIds:`, [...notParsedProcessIds]); //// TEST
-console.log(`---> parsedProcessIds:`, [...parsedProcessIds]); //// TEST
+console.log(`---> parsedProcessIds:`, [...parsedProcessIds].map(processId => `${processId}: ${processDataById[processId].name}`)); //// TEST
 console.log(`---> outputsOfParsedProcessIds:`, [...outputsOfParsedProcessIds].map(id => `${id}: ${productDataById[id].name}`)); //// TEST
 
 /*
@@ -234,11 +232,10 @@ function parseNextTierProcesses() {
      * NOTE: Parsing a deep clone of "notParsedProcessIds", b/c this array is being spliced during each cycle, via "removeFromArray".
      */
     for (const processId of [...notParsedProcessIds]) {
-    // for (const processId of ["23"]) { //// TEST - Water Electrolysis (inputs: Water; outputs: Hydrogen, Oxygen)
         const processData = processDataById[processId];
         console.log(`%c--- tier-${processTier} process #${processId}: ${processData.name}`, 'color: yellow;'); //// TEST
         // Parse this process only if ALL its inputs are already in "outputsOfParsedProcessIds"
-        if (doDebug) console.log(`--- ... inputs = [${processData.inputs.map(inputData => productDataById[inputData.productId].name).join(', ')}]`);
+        if (doDebugLocal) console.log(`--- ... inputs = [${processData.inputs.map(inputData => productDataById[inputData.productId].name).join(', ')}]`);
         let allInputsAvailable = true;
         let inputIdNotAvailable = null;
         for (const inputData of processData.inputs) {
@@ -246,39 +243,40 @@ function parseNextTierProcesses() {
             if (!outputsOfParsedProcessIds.includes(inputId)) {
                 allInputsAvailable = false;
                 inputIdNotAvailable = inputId;
-                if (doDebug) console.log(`--- ... NO match in outputsOfParsedProcessIds for input #${inputId}: ${productDataById[inputId].name}`);
-                if (doDebug) console.log(`--- ... ... => SKIP remaining inputs`);
+                if (doDebugLocal) console.log(`--- ... NO match in outputsOfParsedProcessIds for input #${inputId}: ${productDataById[inputId].name}`);
+                if (doDebugLocal) console.log(`--- ... ... => SKIP remaining inputs`);
                 break; // skip remaining inputs
             }
         }
-        if (doDebug) console.log(`--- ... allInputsAvailable = ${allInputsAvailable}`);
+        if (doDebugLocal) console.log(`--- ... allInputsAvailable = ${allInputsAvailable}`);
         if (!allInputsAvailable) {
             console.log(`%c---> ... ABORT this process at this tier-level re: NOT (yet) available input #${inputIdNotAvailable}: ${productDataById[inputIdNotAvailable].name}`, 'color: orange;'); //// TEST
-            if (doDebug) console.log(`--- ... ... => SKIP this process, at this tier`);
+            if (doDebugLocal) console.log(`--- ... ... => SKIP this process, at this tier`);
             continue; // skip this process, continue to the next one
         }
         let abortProcess = false;
         let abortProcessReason = '';
         // Parse each spectral type
         for (const spectralType of allSpectralTypes) {
-            if (doDebug) console.log(`---> CHECK spectralType = ${spectralType}`);
+            if (doDebugLocal) console.log(`---> CHECK spectralType = ${spectralType}`);
             // Check if this spectral type can sustain at-least-one process-variant, for each input of this process
             let canSustainAllInputs = true;
             for (const inputData of processData.inputs) {
                 const inputId = inputData.productId;
-                if (doDebug) console.log(`---> ... check if can sustain input #${inputId}: ${productDataById[inputId].name}`);
+                if (doDebugLocal) console.log(`---> ... check if can sustain input #${inputId}: ${productDataById[inputId].name}`);
                 let canSustainThisInput = false;
                 // Parse process-variants for this input
-                const processVariantsForThisInput = getProcessVariantIdsForOutputId(inputId);
+                // const processVariantsForThisInput = getProcessVariantIdsForOutputId(inputId); // DISABLED old unfiltered variants
+                const processVariantsForThisInput = getFilteredProcessVariantIds(inputId);
                 const isRawMaterialInput = processVariantsForThisInput.some(processVariantId => isMiningProcess(processDataById[processVariantId]));
                 for (const processVariantId of processVariantsForThisInput) {
                     /**
                      * Ignore non-mining process variants for raw-material inputs,
                      * otherwise the algo gets stuck re: NO sustainingSpectralTypes...
                      */
-                    if (doDebug) console.log(`---> ... ... with process variant #${processVariantId}: ${processDataById[processVariantId].name}`);
+                    if (doDebugLocal) console.log(`---> ... ... with process variant #${processVariantId}: ${processDataById[processVariantId].name}`);
                     if (isRawMaterialInput && !isMiningProcess(processDataById[processVariantId])) {
-                        if (doDebug) console.log(`---> ... ... ... IGNORE this non-mining process variant for raw-material input`);
+                        if (doDebugLocal) console.log(`---> ... ... ... IGNORE this non-mining process variant for raw-material input`);
                         continue;
                     }
                     /**
@@ -294,48 +292,6 @@ function parseNextTierProcesses() {
                      */
                     const sustainingSpectralTypes = processDataById[processVariantId].sustainingSpectralTypes;
                     if (!sustainingSpectralTypes) {
-/*
-    CHECK / FIX re: algo stuck @ tier-2
-
---- tier-2 process #23: Water Electrolysis
---- ... inputs = [Deionized Water]
-// types "C" + "I" sustained w/ process variant #24: Water Vacuum-evaporation Desalination
-// then checking type "M" (see below)
----> CHECK spectralType = M
----> ... check if can sustain input #24: Deionized Water
----> ... ... with process variant #24: Water Vacuum-evaporation Desalination
----> ... ... ... sustainingSpectralTypes = C,I,CI,CM,CS,IM,SI,CIM,CIS,CMS,IMS,CIMS
----> ... ... with process variant #25: Sabatier Process
----> ... ... ... sustainingSpectralTypes = I,CI,IM,SI,CIM,CIS,IMS,CIMS
----> ... ... with process variant #61: Propylene Ammoxidation
----> ... ... ... NO sustainingSpectralTypes => SKIP remaining process variants
----> ... ... FINAL canSustainThisInput = false
----> ... ABORT this process at this tier-level re: NO sustainingSpectralTypes for:
-    - input #24 (Deionized Water) > process variant #61: Propylene Ammoxidation
-(... fast-forward to process #61 ...)
---- tier-2 process #61: Propylene Ammoxidation
---- ... inputs = [Ammonia, Oxygen, Propylene, Sulfuric Acid]
----> ... ABORT this process at this tier-level re: NOT (yet) available input #50: Propylene
-    ^^ output from process IDs:
-        40: Naphtha Steam-cracking
-(... backtrack to process #40 ...)
---- tier-2 process #40: Naphtha Steam-cracking
---- ... inputs = [Deionized Water, Naphtha]
-// types "C" + "I" not sustained, but parsed ok
-// then checking type "M" => same as when checking type "M" @ tier-2 process #23: Water Electrolysis
----> (...)
----> ... ABORT this process at this tier-level re: NO sustainingSpectralTypes for:
-    - input #24 (Deionized Water) > process variant #61: Propylene Ammoxidation
-
-=> REQUIRES FIX FROM "production-planner-core.js" re: "guard against forbidden inputs deeper in the sub-chain"?
-- see similar scenarios failing due to NO sustainingSpectralTypes for:
-    - input #26 (Silica) > process variant #82: Coffinite Acid Leaching, Solvent Extraction, and Precipitation
-    - input #23 (Oxygen) > process variant #23: Water Electrolysis
-    - input #180 (Pure Nitrogen) > process variant #71: Nitrogen Cryocooling and Fractional Distillation
-    - input #78 (Calcium Chloride) > process variant #79: Merrillite Hot Acid Leaching
-    - input #45 (Sodium Chloride) > process variant #70: Borax Acid Extraction
-    - input #28 (Sodium Bicarbonate) > process variant #237: Bicarbonate Solvay-Hou Process
-*/
                         /**
                          * TO DO:
                          * - mark the current "processId" as PARTIALLY parsed - e.g. via 2 new lists saved for each "processId"?
@@ -346,23 +302,23 @@ function parseNextTierProcesses() {
                          */
                         abortProcess = true;
                         abortProcessReason = `NO sustainingSpectralTypes for input #${inputId} (${productDataById[inputId].name}) > process variant #${processVariantId}: ${processDataById[processVariantId].name}`;
-                        if (doDebug) console.log(`---> ... ... ... NO sustainingSpectralTypes => SKIP remaining process variants`);
+                        if (doDebugLocal) console.log(`---> ... ... ... NO sustainingSpectralTypes => SKIP remaining process variants`);
                         break; // skip remaining process variants
                     }
-                    if (doDebug) console.log(`---> ... ... ... sustainingSpectralTypes = ${sustainingSpectralTypes}`);
+                    if (doDebugLocal) console.log(`---> ... ... ... sustainingSpectralTypes = ${sustainingSpectralTypes}`);
                     if (sustainingSpectralTypes && sustainingSpectralTypes.includes(spectralType)) {
                         canSustainThisInput = true; // this process variant can be sustained by "spectralType"
-                        if (doDebug) console.log(`---> ... ... ... SET canSustainThisInput = ${canSustainThisInput}`);
+                        if (doDebugLocal) console.log(`---> ... ... ... SET canSustainThisInput = ${canSustainThisInput}`);
                         break; // skip remaining process variants
                     }
                 }
-                if (doDebug) console.log(`---> ... ... FINAL canSustainThisInput = ${canSustainThisInput}`);
+                if (doDebugLocal) console.log(`---> ... ... FINAL canSustainThisInput = ${canSustainThisInput}`);
                 if (abortProcess) {
                     break; // skip remaining inputs
                 }
                 if (!canSustainThisInput) {
                     canSustainAllInputs = false;
-                    if (doDebug) console.log(`---> ... ... ... SKIP remaining inputs`);
+                    if (doDebugLocal) console.log(`---> ... ... ... SKIP remaining inputs`);
                     break; // skip remaining inputs
                 }
             }
@@ -372,7 +328,7 @@ function parseNextTierProcesses() {
             if (!processData.sustainingSpectralTypes) {
                 processData.sustainingSpectralTypes = [];
             }
-            if (doDebug) console.log(`---> ... canSustainAllInputs = ${canSustainAllInputs}`);
+            if (doDebugLocal) console.log(`---> ... canSustainAllInputs = ${canSustainAllInputs}`);
             if (canSustainAllInputs) {
                 // This spectral type can sustain this process
                 // -- Assign this spectral type as sustaining for this process
@@ -422,6 +378,7 @@ function parseNextTierProcesses() {
 
 function recursiveParseNextTierProcesses() {
     processTier++;
+    // if (processTier >= 2) doDebugLocal = true; //// TEST deubgging starting with tier-2 //// DELME
     if (processTier > 10) {
         // Fail-safe, in case aborting based on "previousCountNotParsedProcessIds" is not triggered for some reason
         console.log(`%c--- ABORT: processTier too high`, 'color: red;');
@@ -431,7 +388,7 @@ function recursiveParseNextTierProcesses() {
     console.log(`%c--- DONE tier-${processTier}`, 'color: cyan;'); //// TEST
     console.log(`---> previousCountNotParsedProcessIds = ${previousCountNotParsedProcessIds}`); //// TEST
     console.log(`---> notParsedProcessIds:`, [...notParsedProcessIds]); //// TEST
-    console.log(`---> parsedProcessIds:`, [...parsedProcessIds]); //// TEST
+    console.log(`---> parsedProcessIds:`, [...parsedProcessIds].map(processId => `${processId}: ${processDataById[processId].name}`)); //// TEST
     console.log(`---> outputsOfParsedProcessIds:`, [...outputsOfParsedProcessIds].map(id => `${id}: ${productDataById[id].name}`)); //// TEST
     /**
      * Before continuing the recursion, ensure that the length of "notParsedProcessIds" is
@@ -443,7 +400,7 @@ function recursiveParseNextTierProcesses() {
     }
     previousCountNotParsedProcessIds = notParsedProcessIds.length;
     if (notParsedProcessIds.length > 0) {
-        if (doDebug) console.log(`---> CALL recursiveParseNextTierProcesses`);
+        if (doDebugLocal) console.log(`---> CALL recursiveParseNextTierProcesses`);
         recursiveParseNextTierProcesses();
     } else {
         const timeEnd = new Date(); //// TEST

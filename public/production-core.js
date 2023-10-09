@@ -5,8 +5,6 @@ Common code used in:
 - Asteroids Planner tool
 */
 
-const doDebug = location.href.includes('127.0.0.1');
-
 // DOM elements should be selected first, before executing any other logic that may require them
 const elToggleHorizontalLayout = document.getElementById('toggle-horizontal-layout');
 const elToggleOptimizeVariants = document.getElementById('toggle-optimize-variants');
