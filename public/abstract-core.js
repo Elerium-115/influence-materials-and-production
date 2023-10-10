@@ -69,6 +69,20 @@ function getItemTypeClass(itemType) {
     return `item-type-${getItemNameSafe(itemType)}`;
 }
 
+function uniquePushToArray(arr, value) {
+    if (arr.indexOf(value) === -1) {
+        arr.push(value);
+    }
+}
+
+function removeFromArray(arr, value) {
+    var index = arr.indexOf(value);
+    if (index > -1) {
+      arr.splice(index, 1);
+    }
+    return arr;
+}
+
 /**
  * Call syntax:
  * ```

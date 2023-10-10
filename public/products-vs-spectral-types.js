@@ -10,6 +10,9 @@ const productNamesBySustainingSpectralType = {
     "Bisphenol A",
     "Bitumen",
     "Borax",
+    "Boria",
+    "Boric Acid",
+    "Boron",
     "Calcite",
     "Calcium",
     "Calcium Chloride",
@@ -18,17 +21,27 @@ const productNamesBySustainingSpectralType = {
     "Cement",
     "Chlorine",
     "Deionized Water",
+    "Diepoxy Prepolymer Resin",
+    "Epichlorohydrin",
+    "Epoxy",
+    "Hydrochloric Acid",
     "Hydrogen",
+    "Lithium",
     "Lithium Carbonate",
+    "Lithium Chloride",
+    "Magnesia",
     "Magnesium",
     "Magnesium Chloride",
     "Methane",
+    "Naphtha",
     "Novolak Prepolymer Resin",
     "Oxygen",
     "Photoresist Epoxy",
+    "Polypropylene",
     "Potassium Carbonate",
     "Potassium Chloride",
     "Potassium Hydroxide",
+    "Propylene",
     "Quicklime",
     "Salts",
     "Sodium Bicarbonate",
@@ -172,6 +185,9 @@ const productNamesBySustainingSpectralType = {
     "Bisphenol A",
     "Bitumen",
     "Borax",
+    "Boria",
+    "Boric Acid",
+    "Boron",
     "Calcite",
     "Calcium",
     "Calcium Chloride",
@@ -180,26 +196,42 @@ const productNamesBySustainingSpectralType = {
     "Cement",
     "Chlorine",
     "Copper",
+    "Copper Wire",
     "Core Drill Sampler",
     "Deionized Water",
+    "Diepoxy Prepolymer Resin",
+    "Epichlorohydrin",
+    "Epoxy",
     "Ferrochromium",
+    "Fluorine",
     "Graphite",
+    "Hydrochloric Acid",
+    "Hydrofluoric Acid",
     "Hydrogen",
+    "Hydrogen Heptafluorotantalate and Niobate",
     "Iron",
     "Iron Oxide",
     "Large Thrust Bearing",
+    "Lithium",
     "Lithium Carbonate",
+    "Lithium Chloride",
+    "Magnesia",
     "Magnesium",
     "Magnesium Chloride",
     "Methane",
+    "Naphtha",
     "Nickel",
     "Novolak Prepolymer Resin",
     "Oxygen",
     "Phosphoric Acid",
     "Photoresist Epoxy",
+    "Polypropylene",
     "Potassium Carbonate",
     "Potassium Chloride",
+    "Potassium Fluoride",
+    "Potassium Heptafluorotantalate",
     "Potassium Hydroxide",
+    "Propylene",
     "Quicklime",
     "Rhabdite",
     "Rhabdite Slag",
@@ -209,6 +241,7 @@ const productNamesBySustainingSpectralType = {
     "Sodium Carbonate",
     "Sodium Chloride",
     "Sodium Chromate",
+    "Sodium Dichromate",
     "Sodium Hydroxide",
     "Soil",
     "Steel",
@@ -219,6 +252,8 @@ const productNamesBySustainingSpectralType = {
     "Steel Truss",
     "Steel Wire",
     "Taenite",
+    "Tantalum",
+    "Triple Superphosphate",
     "Troilite",
     "Uraninite",
     "Warehouse",
@@ -230,6 +265,9 @@ const productNamesBySustainingSpectralType = {
     "Bisphenol A",
     "Bitumen",
     "Borax",
+    "Boria",
+    "Boric Acid",
+    "Boron",
     "Calcite",
     "Calcium",
     "Calcium Chloride",
@@ -239,23 +277,34 @@ const productNamesBySustainingSpectralType = {
     "Chlorine",
     "Coffinite",
     "Deionized Water",
+    "Diepoxy Prepolymer Resin",
+    "Epichlorohydrin",
+    "Epoxy",
     "Feldspar",
+    "Fiber Optic Cable",
     "Fiberglass",
     "Fused Quartz",
     "Fused Quartz Lightbulb Tube",
+    "Hydrochloric Acid",
     "Hydrogen",
+    "Lithium",
     "Lithium Carbonate",
+    "Lithium Chloride",
+    "Magnesia",
     "Magnesium",
     "Magnesium Chloride",
     "Merrillite",
     "Methane",
+    "Naphtha",
     "Novolak Prepolymer Resin",
     "Olivine",
     "Oxygen",
     "Photoresist Epoxy",
+    "Polypropylene",
     "Potassium Carbonate",
     "Potassium Chloride",
     "Potassium Hydroxide",
+    "Propylene",
     "Pyroxene",
     "Quicklime",
     "Salts",
@@ -356,6 +405,9 @@ const productNamesBySustainingSpectralType = {
     "Ammonium Paratungstate",
     "Bisphenol A",
     "Borax",
+    "Boria",
+    "Boric Acid",
+    "Boron",
     "Calcium",
     "Calcium Chloride",
     "Carbon Dioxide",
@@ -374,7 +426,9 @@ const productNamesBySustainingSpectralType = {
     "Iron",
     "Iron Oxide",
     "Leached Coffinite",
+    "Lithium",
     "Lithium Carbonate",
+    "Lithium Chloride",
     "Lithium Sulfate",
     "Magnesia",
     "Magnesium",
@@ -382,6 +436,7 @@ const productNamesBySustainingSpectralType = {
     "Merrillite",
     "Methane",
     "Neodymium",
+    "Neodymium Magnet",
     "Neodymium Oxide",
     "Neodymium Trichloride",
     "Neon",
@@ -699,6 +754,9 @@ const productNamesBySustainingSpectralType = {
     "Bisphenol A",
     "Bitumen",
     "Borax",
+    "Boria",
+    "Boric Acid",
+    "Boron",
     "Calcite",
     "Calcium",
     "Calcium Chloride",
@@ -708,33 +766,51 @@ const productNamesBySustainingSpectralType = {
     "Chlorine",
     "Coffinite",
     "Copper",
+    "Copper Wire",
     "Core Drill Sampler",
     "Deionized Water",
+    "Diepoxy Prepolymer Resin",
+    "Diode",
+    "Epichlorohydrin",
+    "Epoxy",
     "Feldspar",
     "Ferrochromium",
     "Ferrosilicon",
+    "Fiber Optic Cable",
     "Fiberglass",
+    "Fluorine",
     "Fused Quartz",
     "Fused Quartz Lightbulb Tube",
     "Graphite",
+    "Hydrochloric Acid",
+    "Hydrofluoric Acid",
     "Hydrogen",
+    "Hydrogen Heptafluorotantalate and Niobate",
     "Iron",
     "Iron Oxide",
     "Large Thrust Bearing",
+    "Lithium",
     "Lithium Carbonate",
+    "Lithium Chloride",
+    "Magnesia",
     "Magnesium",
     "Magnesium Chloride",
     "Merrillite",
     "Methane",
+    "Naphtha",
     "Nickel",
     "Novolak Prepolymer Resin",
     "Olivine",
     "Oxygen",
     "Phosphoric Acid",
     "Photoresist Epoxy",
+    "Polypropylene",
     "Potassium Carbonate",
     "Potassium Chloride",
+    "Potassium Fluoride",
+    "Potassium Heptafluorotantalate",
     "Potassium Hydroxide",
+    "Propylene",
     "Pyroxene",
     "Quicklime",
     "Rhabdite",
@@ -744,10 +820,12 @@ const productNamesBySustainingSpectralType = {
     "Silica",
     "Silica Powder",
     "Silicon",
+    "Silicon Wafer",
     "Sodium Bicarbonate",
     "Sodium Carbonate",
     "Sodium Chloride",
     "Sodium Chromate",
+    "Sodium Dichromate",
     "Sodium Hydroxide",
     "Soil",
     "Steel",
@@ -758,6 +836,8 @@ const productNamesBySustainingSpectralType = {
     "Steel Truss",
     "Steel Wire",
     "Taenite",
+    "Tantalum",
+    "Triple Superphosphate",
     "Troilite",
     "Uraninite",
     "Warehouse",
@@ -776,6 +856,9 @@ const productNamesBySustainingSpectralType = {
     "Bare Copper Wire",
     "Bisphenol A",
     "Borax",
+    "Boria",
+    "Boric Acid",
+    "Boron",
     "Calcium",
     "Calcium Chloride",
     "Carbon Dioxide",
@@ -805,7 +888,9 @@ const productNamesBySustainingSpectralType = {
     "Leached Coffinite",
     "Lead",
     "Lead Sulfide",
+    "Lithium",
     "Lithium Carbonate",
+    "Lithium Chloride",
     "Lithium Sulfate",
     "Magnesia",
     "Magnesium",
@@ -815,6 +900,7 @@ const productNamesBySustainingSpectralType = {
     "Molybdenum Disulfide",
     "Molybdenum Trioxide",
     "Neodymium",
+    "Neodymium Magnet",
     "Neodymium Oxide",
     "Neodymium Trichloride",
     "Neon",
@@ -1169,18 +1255,18 @@ const productDataByName = {
     "type": "Raw Material",
     "volumeLitersPerUnit": "14.1",
     "sustainingSpectralTypes": [
+      "C",
       "I",
       "CI",
+      "CM",
+      "CS",
       "IM",
       "SI",
       "CIM",
       "CIS",
+      "CMS",
       "IMS",
-      "CIMS",
-      "C",
-      "CM",
-      "CS",
-      "CMS"
+      "CIMS"
     ]
   },
   "Ammonia": {
@@ -1670,9 +1756,13 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.3",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -1686,17 +1776,17 @@ const productDataByName = {
     "volumeLitersPerUnit": "0.909",
     "sustainingSpectralTypes": [
       "C",
+      "I",
       "CI",
       "CM",
       "CS",
+      "IM",
+      "SI",
       "CIM",
       "CIS",
       "CMS",
-      "CIMS",
-      "I",
-      "IM",
-      "SI",
-      "IMS"
+      "IMS",
+      "CIMS"
     ]
   },
   "Iron": {
@@ -1711,13 +1801,13 @@ const productDataByName = {
       "M",
       "CM",
       "IM",
+      "SI",
       "SM",
       "CIM",
+      "CIS",
       "CMS",
       "IMS",
-      "CIMS",
-      "SI",
-      "CIS"
+      "CIMS"
     ]
   },
   "Copper": {
@@ -1751,13 +1841,13 @@ const productDataByName = {
       "M",
       "CM",
       "IM",
+      "SI",
       "SM",
       "CIM",
+      "CIS",
       "CMS",
       "IMS",
-      "CIMS",
-      "SI",
-      "CIS"
+      "CIMS"
     ]
   },
   "Quicklime": {
@@ -1831,8 +1921,10 @@ const productDataByName = {
     "volumeLitersPerUnit": "0.87",
     "sustainingSpectralTypes": [
       "CI",
+      "CM",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -2109,9 +2201,13 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "2.04",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -2320,14 +2416,14 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "0.387",
     "sustainingSpectralTypes": [
-      "SI",
-      "CIS",
-      "IMS",
-      "CIMS",
       "CM",
       "IM",
+      "SI",
       "CIM",
-      "CMS"
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
     ]
   },
   "Spirulina and Chlorella Algae": {
@@ -2397,7 +2493,9 @@ const productDataByName = {
     "type": "Component",
     "volumeLitersPerUnit": "0.886",
     "sustainingSpectralTypes": [
+      "CS",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -2493,9 +2591,13 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.57",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -2555,17 +2657,17 @@ const productDataByName = {
     "volumeLitersPerUnit": "0.787",
     "sustainingSpectralTypes": [
       "C",
+      "I",
       "CI",
       "CM",
       "CS",
+      "IM",
+      "SI",
       "CIM",
       "CIS",
       "CMS",
-      "CIMS",
-      "I",
-      "IM",
-      "SI",
-      "IMS"
+      "IMS",
+      "CIMS"
     ]
   },
   "Calcium Chloride": {
@@ -2600,9 +2702,15 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "0.739",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
+      "SI",
       "CIM",
       "CIS",
+      "CMS",
+      "IMS",
       "CIMS"
     ]
   },
@@ -2630,12 +2738,16 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.04",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
+      "SI",
       "CIM",
       "CIS",
-      "CIMS",
-      "SI",
-      "IMS"
+      "CMS",
+      "IMS",
+      "CIMS"
     ]
   },
   "Hydrofluoric Acid": {
@@ -2648,8 +2760,10 @@ const productDataByName = {
     "volumeLitersPerUnit": "1.09",
     "sustainingSpectralTypes": [
       "CI",
+      "CM",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -2663,14 +2777,14 @@ const productDataByName = {
     "volumeLitersPerUnit": "0.694",
     "sustainingSpectralTypes": [
       "CI",
-      "CIM",
-      "CIS",
-      "CIMS",
-      "SI",
-      "IMS",
       "CM",
       "IM",
-      "CMS"
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
     ]
   },
   "Boric Acid": {
@@ -2682,9 +2796,15 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.39",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
+      "SI",
       "CIM",
       "CIS",
+      "CMS",
+      "IMS",
       "CIMS"
     ]
   },
@@ -2727,12 +2847,16 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "0.559",
     "sustainingSpectralTypes": [
-      "SI",
-      "CIS",
-      "IMS",
-      "CIMS",
+      "C",
       "CI",
-      "CIM"
+      "CM",
+      "CS",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
     ]
   },
   "Alumina": {
@@ -2883,11 +3007,11 @@ const productDataByName = {
     "volumeLitersPerUnit": "0.172",
     "sustainingSpectralTypes": [
       "IM",
-      "CIM",
-      "IMS",
-      "CIMS",
       "SI",
-      "CIS"
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
     ]
   },
   "Alumina Ceramic": {
@@ -2924,7 +3048,9 @@ const productDataByName = {
     "type": "Component",
     "volumeLitersPerUnit": "0.152",
     "sustainingSpectralTypes": [
+      "CM",
       "CIM",
+      "CMS",
       "CIMS"
     ]
   },
@@ -2937,6 +3063,7 @@ const productDataByName = {
     "type": "Component",
     "volumeLitersPerUnit": "0.472",
     "sustainingSpectralTypes": [
+      "CMS",
       "IMS",
       "CIMS"
     ]
@@ -3011,9 +3138,15 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "0.805",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
+      "SI",
       "CIM",
       "CIS",
+      "CMS",
+      "IMS",
       "CIMS"
     ]
   },
@@ -3041,9 +3174,13 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.06",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -3094,14 +3231,14 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.09",
     "sustainingSpectralTypes": [
-      "CI",
-      "CIM",
-      "CIS",
-      "CIMS",
       "I",
+      "CI",
       "IM",
       "SI",
-      "IMS"
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
     ]
   },
   "Aluminium": {
@@ -3198,8 +3335,10 @@ const productDataByName = {
     "volumeLitersPerUnit": "1.52",
     "sustainingSpectralTypes": [
       "CI",
+      "CM",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -3242,6 +3381,7 @@ const productDataByName = {
     "type": "Component",
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
+      "CMS",
       "CIMS"
     ]
   },
@@ -3437,9 +3577,15 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "0.543",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
+      "SI",
       "CIM",
       "CIS",
+      "CMS",
+      "IMS",
       "CIMS"
     ]
   },
@@ -3452,9 +3598,15 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "3.77",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
+      "SI",
       "CIM",
       "CIS",
+      "CMS",
+      "IMS",
       "CIMS"
     ]
   },
@@ -3467,9 +3619,13 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.68",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -3512,7 +3668,9 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "0.661",
     "sustainingSpectralTypes": [
+      "CM",
       "CIM",
+      "CMS",
       "IMS",
       "CIMS"
     ]
@@ -4090,7 +4248,9 @@ const productDataByName = {
     "type": "Component",
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
+      "SI",
       "CIS",
+      "IMS",
       "CIMS"
     ]
   },
@@ -4239,7 +4399,9 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
+      "CM",
       "CIM",
+      "CMS",
       "CIMS"
     ]
   },
@@ -4268,8 +4430,10 @@ const productDataByName = {
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
       "CI",
+      "CM",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -4282,7 +4446,9 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
+      "CM",
       "CIM",
+      "CMS",
       "CIMS"
     ]
   },
@@ -4295,9 +4461,13 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -4310,7 +4480,9 @@ const productDataByName = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
+      "CM",
       "CIM",
+      "CMS",
       "CIMS"
     ]
   },
@@ -5033,18 +5205,18 @@ const productDataById = {
     "type": "Raw Material",
     "volumeLitersPerUnit": "14.1",
     "sustainingSpectralTypes": [
+      "C",
       "I",
       "CI",
+      "CM",
+      "CS",
       "IM",
       "SI",
       "CIM",
       "CIS",
+      "CMS",
       "IMS",
-      "CIMS",
-      "C",
-      "CM",
-      "CS",
-      "CMS"
+      "CIMS"
     ]
   },
   "3": {
@@ -5534,9 +5706,13 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.3",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -5550,17 +5726,17 @@ const productDataById = {
     "volumeLitersPerUnit": "0.909",
     "sustainingSpectralTypes": [
       "C",
+      "I",
       "CI",
       "CM",
       "CS",
+      "IM",
+      "SI",
       "CIM",
       "CIS",
       "CMS",
-      "CIMS",
-      "I",
-      "IM",
-      "SI",
-      "IMS"
+      "IMS",
+      "CIMS"
     ]
   },
   "29": {
@@ -5575,13 +5751,13 @@ const productDataById = {
       "M",
       "CM",
       "IM",
+      "SI",
       "SM",
       "CIM",
+      "CIS",
       "CMS",
       "IMS",
-      "CIMS",
-      "SI",
-      "CIS"
+      "CIMS"
     ]
   },
   "30": {
@@ -5615,13 +5791,13 @@ const productDataById = {
       "M",
       "CM",
       "IM",
+      "SI",
       "SM",
       "CIM",
+      "CIS",
       "CMS",
       "IMS",
-      "CIMS",
-      "SI",
-      "CIS"
+      "CIMS"
     ]
   },
   "32": {
@@ -5695,8 +5871,10 @@ const productDataById = {
     "volumeLitersPerUnit": "0.87",
     "sustainingSpectralTypes": [
       "CI",
+      "CM",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -5973,9 +6151,13 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "2.04",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -6184,14 +6366,14 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "0.387",
     "sustainingSpectralTypes": [
-      "SI",
-      "CIS",
-      "IMS",
-      "CIMS",
       "CM",
       "IM",
+      "SI",
       "CIM",
-      "CMS"
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
     ]
   },
   "64": {
@@ -6261,7 +6443,9 @@ const productDataById = {
     "type": "Component",
     "volumeLitersPerUnit": "0.886",
     "sustainingSpectralTypes": [
+      "CS",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -6357,9 +6541,13 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.57",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -6419,17 +6607,17 @@ const productDataById = {
     "volumeLitersPerUnit": "0.787",
     "sustainingSpectralTypes": [
       "C",
+      "I",
       "CI",
       "CM",
       "CS",
+      "IM",
+      "SI",
       "CIM",
       "CIS",
       "CMS",
-      "CIMS",
-      "I",
-      "IM",
-      "SI",
-      "IMS"
+      "IMS",
+      "CIMS"
     ]
   },
   "78": {
@@ -6464,9 +6652,15 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "0.739",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
+      "SI",
       "CIM",
       "CIS",
+      "CMS",
+      "IMS",
       "CIMS"
     ]
   },
@@ -6494,12 +6688,16 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.04",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
+      "SI",
       "CIM",
       "CIS",
-      "CIMS",
-      "SI",
-      "IMS"
+      "CMS",
+      "IMS",
+      "CIMS"
     ]
   },
   "82": {
@@ -6512,8 +6710,10 @@ const productDataById = {
     "volumeLitersPerUnit": "1.09",
     "sustainingSpectralTypes": [
       "CI",
+      "CM",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -6527,14 +6727,14 @@ const productDataById = {
     "volumeLitersPerUnit": "0.694",
     "sustainingSpectralTypes": [
       "CI",
-      "CIM",
-      "CIS",
-      "CIMS",
-      "SI",
-      "IMS",
       "CM",
       "IM",
-      "CMS"
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
     ]
   },
   "84": {
@@ -6546,9 +6746,15 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.39",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
+      "SI",
       "CIM",
       "CIS",
+      "CMS",
+      "IMS",
       "CIMS"
     ]
   },
@@ -6591,12 +6797,16 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "0.559",
     "sustainingSpectralTypes": [
-      "SI",
-      "CIS",
-      "IMS",
-      "CIMS",
+      "C",
       "CI",
-      "CIM"
+      "CM",
+      "CS",
+      "SI",
+      "CIM",
+      "CIS",
+      "CMS",
+      "IMS",
+      "CIMS"
     ]
   },
   "88": {
@@ -6747,11 +6957,11 @@ const productDataById = {
     "volumeLitersPerUnit": "0.172",
     "sustainingSpectralTypes": [
       "IM",
-      "CIM",
-      "IMS",
-      "CIMS",
       "SI",
-      "CIS"
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
     ]
   },
   "97": {
@@ -6788,7 +6998,9 @@ const productDataById = {
     "type": "Component",
     "volumeLitersPerUnit": "0.152",
     "sustainingSpectralTypes": [
+      "CM",
       "CIM",
+      "CMS",
       "CIMS"
     ]
   },
@@ -6801,6 +7013,7 @@ const productDataById = {
     "type": "Component",
     "volumeLitersPerUnit": "0.472",
     "sustainingSpectralTypes": [
+      "CMS",
       "IMS",
       "CIMS"
     ]
@@ -6875,9 +7088,15 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "0.805",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
+      "SI",
       "CIM",
       "CIS",
+      "CMS",
+      "IMS",
       "CIMS"
     ]
   },
@@ -6905,9 +7124,13 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.06",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -6958,14 +7181,14 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.09",
     "sustainingSpectralTypes": [
-      "CI",
-      "CIM",
-      "CIS",
-      "CIMS",
       "I",
+      "CI",
       "IM",
       "SI",
-      "IMS"
+      "CIM",
+      "CIS",
+      "IMS",
+      "CIMS"
     ]
   },
   "111": {
@@ -7062,8 +7285,10 @@ const productDataById = {
     "volumeLitersPerUnit": "1.52",
     "sustainingSpectralTypes": [
       "CI",
+      "CM",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -7106,6 +7331,7 @@ const productDataById = {
     "type": "Component",
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
+      "CMS",
       "CIMS"
     ]
   },
@@ -7301,9 +7527,15 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "0.543",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
+      "SI",
       "CIM",
       "CIS",
+      "CMS",
+      "IMS",
       "CIMS"
     ]
   },
@@ -7316,9 +7548,15 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "3.77",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
+      "SI",
       "CIM",
       "CIS",
+      "CMS",
+      "IMS",
       "CIMS"
     ]
   },
@@ -7331,9 +7569,13 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "1.68",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -7376,7 +7618,9 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "0.661",
     "sustainingSpectralTypes": [
+      "CM",
       "CIM",
+      "CMS",
       "IMS",
       "CIMS"
     ]
@@ -7954,7 +8198,9 @@ const productDataById = {
     "type": "Component",
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
+      "SI",
       "CIS",
+      "IMS",
       "CIMS"
     ]
   },
@@ -8103,7 +8349,9 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
+      "CM",
       "CIM",
+      "CMS",
       "CIMS"
     ]
   },
@@ -8132,8 +8380,10 @@ const productDataById = {
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
       "CI",
+      "CM",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -8146,7 +8396,9 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
+      "CM",
       "CIM",
+      "CMS",
       "CIMS"
     ]
   },
@@ -8159,9 +8411,13 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
+      "C",
       "CI",
+      "CM",
+      "CS",
       "CIM",
       "CIS",
+      "CMS",
       "CIMS"
     ]
   },
@@ -8174,7 +8430,9 @@ const productDataById = {
     "type": "Refined Material",
     "volumeLitersPerUnit": "",
     "sustainingSpectralTypes": [
+      "CM",
       "CIM",
+      "CMS",
       "CIMS"
     ]
   },

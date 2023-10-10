@@ -43,12 +43,6 @@ const mapAlphabeticalSpectralTypeToRealName = {
     CIMS: "CIMS",
 }
 
-function uniquePushToArray(arr, value) {
-    if (arr.indexOf(value) === -1) {
-        arr.push(value);
-    }
-}
-
 const elTitleSpectralTypes = document.querySelector('.spectral-types h2');
 const elTitleProducts = document.querySelector('#products-wrapper h2');
 const originalTitleSpectralTypes = elTitleSpectralTypes.textContent;
