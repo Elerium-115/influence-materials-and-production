@@ -803,11 +803,20 @@ function createProcessContainerV2(itemId) {
         processTooltipHtml += '</ul>';
     }
     */
-    // show durations only for Refinery (#3) / Bioreactor (#4) / Factory (#5) / Shipyard (#6)
-    if ([3, 4, 5, 6].includes(Number(processData.buildingId))) {
+    // show durations only for processes with startup / runtime
+    if (buildingIdsWithDurations.includes(processData.buildingId)) {
         processTooltipHtml += '<ul>';
-        processTooltipHtml += `<li>Startup: 4h</li>`;
-        processTooltipHtml += `<li>Runtime: 1h/unit</li>`;
+        processTooltipHtml += `<li>Startup: TBD</li>`;
+        processTooltipHtml += `<li>Runtime: TBD/unit</li>`;
+        processTooltipHtml += '</ul>';
+    }
+    // show other outputs, if any
+    if (processData.outputs.length >= 2) {
+        processTooltipHtml += '<ul>';
+        processTooltipHtml += `<li><strong>Other Outputs:</strong></li>`;
+        processData.outputs
+            .filter(outputData => outputData.productId !== outputProductData.id)
+            .forEach(outputData => processTooltipHtml += `<li>- ${productDataById[outputData.productId].name}</li>`);
         processTooltipHtml += '</ul>';
     }
     processTooltip.innerHTML = processTooltipHtml;

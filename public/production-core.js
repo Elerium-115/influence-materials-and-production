@@ -1,9 +1,9 @@
-/*
-Common code used in:
-- Production Chains tool
-- Production Planner tool + any other tool that includes "template-production-plan"
-- Asteroids Planner tool
-*/
+/**
+ * Common code used in:
+ * - Production Chains tool
+ * - Production Planner tool + any other tool that includes "template-production-plan"
+ * - Asteroids Planner tool
+ */
 
 // DOM elements should be selected first, before executing any other logic that may require them
 const elToggleHorizontalLayout = document.getElementById('toggle-horizontal-layout');
@@ -46,6 +46,13 @@ const isRealSpectralType = {
     IMS: false, // virtual
     CIMS: false, // virtual
 };
+
+/**
+ * IDs of buildings required by processes with startup / runtime durations
+ */
+const buildingIdsWithDurations = InfluenceProductionChainsJSON.buildings
+    .filter(building => ['Refinery', 'Bioreactor', 'Factory', 'Shipyard'].includes(building.name))
+    .map(building => building.id);
 
 /**
  * Keep only the real spectral types, from a list of spectral types

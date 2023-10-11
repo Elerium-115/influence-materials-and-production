@@ -839,7 +839,7 @@
 #production-chain-items .process-tooltip-wrapper {
     position: absolute;
     display: none;
-    width: 7rem;
+    white-space: nowrap;
 }
 
 #production-chain-items .item-type-process[data-container-id]:hover .process-tooltip-wrapper {

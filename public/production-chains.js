@@ -3,6 +3,7 @@
  * 
  * Inputs:
  * - "productDataByName"
+ * - "productDataById"
  */
 
 // raw materials sorted by material-type (Volatiles > Organics > Metals > Rare-Earth > Fissiles)
@@ -447,11 +448,22 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
         processTooltipHtml += '</ul>';
     }
     */
-    // show durations only for Refinery (#3) / Bioreactor (#4) / Factory (#5) / Shipyard (#6)
-    if ([3, 4, 5, 6].includes(Number(processData.buildingId))) {
+    // show durations only for processes with startup / runtime
+    if (buildingIdsWithDurations.includes(processData.buildingId)) {
         processTooltipHtml += '<ul>';
-        processTooltipHtml += `<li>Startup: 4h</li>`;
-        processTooltipHtml += `<li>Runtime: 1h/unit</li>`;
+        processTooltipHtml += `<li>Startup: TBD</li>`;
+        processTooltipHtml += `<li>Runtime: TBD/unit</li>`;
+        processTooltipHtml += '</ul>';
+    }
+    // show other outputs, if any
+    // -- i.e. if "processes" contains multiple elements with the same name (".process"), but different ".output"
+    const processesWithSameName = processes.filter(pData => pData.process === processName);
+    if (processesWithSameName.length >= 2) {
+        processTooltipHtml += '<ul>';
+        processTooltipHtml += `<li><strong>Other Outputs:</strong></li>`;
+        processesWithSameName
+            .filter(pData => pData.output !== processData.output)
+            .forEach(pData => processTooltipHtml += `<li>- ${pData.output}</li>`);
         processTooltipHtml += '</ul>';
     }
     processTooltip.innerHTML = processTooltipHtml;
