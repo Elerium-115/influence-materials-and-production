@@ -2127,7 +2127,7 @@ function updateContent() {
         loadProductionPlanDataById(plannedProductData.production_plan_id).then(productionPlanData => {
             const itemDataById = productionPlanData.itemDataById;
             const requiredQty = getTotalQtyForAllSelectedOccurrencesOfProductName(intermediateProductName, itemDataById);
-            elContent.querySelector('.required-qty').textContent = requiredQty;
+            elContent.querySelector('.required-qty').textContent = getNiceNumber(requiredQty);
             /**
              * Show disclaimer re: qty, if the same intermediate product name
              * also appears in the shopping list for this production plan.

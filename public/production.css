@@ -668,13 +668,14 @@
     position: absolute;
     top: -1.25rem;
     left: calc(50% - 1.5rem);
-    width: 3rem;
+    min-width: 3rem;
     height: 1.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
     background: var(--process);
     color: var(--item-name);
+    padding: 0 0.5rem;
     border: 1px solid gray;
     border-radius: 0.5rem;
     filter: drop-shadow(0 -0.25rem 0.25rem var(--dark-bg));
@@ -1233,6 +1234,11 @@
 .embed #shopping-list-wrapper {
     background: unset;
     backdrop-filter: opacity(1);
+}
+
+#shopping-list-subtitle {
+    margin-top: 0.5rem;
+    opacity: 0.5;
 }
 
 #shopping-list {

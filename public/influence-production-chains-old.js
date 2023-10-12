@@ -1,5 +1,5 @@
 /**
- * source: influence_production_chains_2022-07-21.json
+ * Source: influence_production_chains_2022-07-21.json
  * 
  * WARNING: DO NOT USE this JSON re:
  * - obsolete data

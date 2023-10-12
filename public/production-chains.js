@@ -205,6 +205,8 @@ InfluenceProductionChainsJSON.processes.forEach(process => {
             inputs: process.inputs.map(input => itemNamesById[input.productId]),
             parts: null, // future format: [ "Condenser", "Evaporator" ]
             buildingId: process.buildingId,
+            hPerAction: getRealHours(process.bAdalianHoursPerAction),
+            hPerSR: getRealHours(process.mAdalianHoursPerSR),
         };
         processes.push(processData);
     });
@@ -451,8 +453,8 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     // show durations only for processes with startup / runtime
     if (buildingIdsWithDurations.includes(processData.buildingId)) {
         processTooltipHtml += '<ul>';
-        processTooltipHtml += `<li>Startup: TBD</li>`;
-        processTooltipHtml += `<li>Runtime: TBD/unit</li>`;
+        processTooltipHtml += `<li>Startup: ${getNiceNumber(processData.hPerAction)}h</li>`;
+        processTooltipHtml += `<li>Runtime: ${getNiceNumber(processData.hPerSR)}h/SR</li>`;
         processTooltipHtml += '</ul>';
     }
     // show other outputs, if any
@@ -658,7 +660,7 @@ function getOffset(el) {
     };
 }
 
-// source: https://thewebdev.info/2021/09/12/how-to-draw-a-line-between-two-divs-with-javascript/
+// Source: https://thewebdev.info/2021/09/12/how-to-draw-a-line-between-two-divs-with-javascript/
 function connectContainers(parentContainer, childContainer, color, thickness, faded, arrow) {
     const off1 = getOffset(parentContainer);
     const off2 = getOffset(childContainer);

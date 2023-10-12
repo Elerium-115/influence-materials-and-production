@@ -1,5 +1,5 @@
 /**
- * source: https://github.com/influenceth/sdk/tree/next/src/lib - via "generate-json-from-sdk.js"
+ * Source: https://github.com/influenceth/sdk/tree/next/src/lib - via "generate-json-from-sdk.js"
  * 
  * WARNING: DO NOT USE this JSON re:
  * - "fake" IDs generated via "generate-json-from-sdk.js"

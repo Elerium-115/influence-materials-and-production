@@ -1,5 +1,5 @@
 /**
- * source: influence_production_chains_2023-08-16.json
+ * Source: influence_production_chains_2023-08-16.json
  * 
  * WARNING: Product IDs for ships and buildings are NOT numeric - e.g. "S1", "S2", ..., "B1", "B2", ...
  * 

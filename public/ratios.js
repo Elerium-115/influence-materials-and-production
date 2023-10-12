@@ -181,7 +181,7 @@ function updateRatios() {
     });
 }
 
-// source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
+// Source: https://gist.github.com/Machy8/1b0e3cd6c61f140a6b520269acdd645f
 function on(eventType, selector, callback) {
     document.body.addEventListener(eventType, event => {
         if (event.target.matches(selector)) {

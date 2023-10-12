@@ -51,12 +51,12 @@ InfluenceProductionChainsJSON.buildings.forEach(building => {
 InfluenceProductionChainsJSON.processes.forEach(process => {
     // Set qty for each input
     process.inputs = process.inputs.map(input => {
-        input.qty = 2; //// PLACEHOLDER
+        input.qty = Number(input.unitsPerSR);
         return input;
     });
     // Set qty for each output
     process.outputs = process.outputs.map(output => {
-        output.qty = 1; //// PLACEHOLDER
+        output.qty = Number(output.unitsPerSR); // WARNING: 0 for mining processes
         return output;
     });
     // Set module parts
@@ -381,17 +381,31 @@ function getShoppingListForProductionPlan(itemDataById) {
 }
 
 /**
- * Get input-qty required for an input of a process
+ * Get qty required for an input of a process
  */
  function getInputQtyForProcess(processId, inputProductId) {
     const processData = processDataById[processId];
-    let inputQty = 0;
+    let qty = 0;
     processData.inputs.forEach(inputData => {
         if (String(inputData.productId) === inputProductId) {
-            inputQty = inputData.qty;
+            qty = inputData.qty;
         }
     });
-    return inputQty;
+    return qty;
+}
+
+/**
+ * Get qty produced for an output of a process
+ */
+function getOutputQtyForProcess(processId, outputProductId) {
+    const processData = processDataById[processId];
+    let qty = 0;
+    processData.outputs.forEach(outputData => {
+        if (String(outputData.productId) === outputProductId) {
+            qty = outputData.qty;
+        }
+    });
+    return qty;
 }
 
 /**
@@ -407,7 +421,9 @@ function getTotalQtyForItemId(itemId, itemDataById) {
         const processItemData = itemDataById[processItemId];
         const processId = processItemData.processId;
         const inputQty = getInputQtyForProcess(processId, inputProductId);
-        totalQty = inputQty;
+        const outputProductId = itemDataById[processItemData.parentItemId].productId;
+        const outputQty = getOutputQtyForProcess(processId, outputProductId);
+        totalQty = inputQty / outputQty; // input qty relative to output qty = 1
         totalQty *= getTotalQtyForItemId(processItemData.parentItemId, itemDataById);
     }
     return totalQty;
@@ -806,8 +822,8 @@ function createProcessContainerV2(itemId) {
     // show durations only for processes with startup / runtime
     if (buildingIdsWithDurations.includes(processData.buildingId)) {
         processTooltipHtml += '<ul>';
-        processTooltipHtml += `<li>Startup: TBD</li>`;
-        processTooltipHtml += `<li>Runtime: TBD/unit</li>`;
+        processTooltipHtml += `<li>Startup: ${getNiceNumber(getRealHours(processData.bAdalianHoursPerAction))}h</li>`;
+        processTooltipHtml += `<li>Runtime: ${getNiceNumber(getRealHours(processData.mAdalianHoursPerSR))}h/SR</li>`;
         processTooltipHtml += '</ul>';
     }
     // show other outputs, if any
@@ -1370,13 +1386,13 @@ function renderShoppingList() {
     // #1 - required inputs
     if (shoppingList.inputs.length) {
         // if (doDebug) console.log(`--- shoppingList.inputs:`, shoppingList.inputs);
-        shoppingListHtml += /*html*/ `<div class="line line-title"><div>Inputs</div><div>Qty</div></div>`;
+        shoppingListHtml += /*html*/ `<div class="line line-title"><div>Inputs</div><div>Qty*</div></div>`;
         shoppingList.inputs.forEach(inputData => {
             const hrefHtml = isToolProductionPlanner ? `href="#${getCompactName(inputData.name)}"` : '';
             shoppingListHtml += /*html*/ `
                 <div class="line">
                     <div><a ${hrefHtml} class="list-product-name">${inputData.name}</a></div>
-                    <div class="qty">${inputData.qty}</div>
+                    <div class="qty">${getNiceNumber(inputData.qty)}</div>
                 </div>
             `;
         });

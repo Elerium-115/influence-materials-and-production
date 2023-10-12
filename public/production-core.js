@@ -114,6 +114,18 @@ function getBaseSpectralsHtmlForRawMaterial(rawMaterialData) {
     return baseSpectralsHtml;
 }
 
+function getRealHours(adalianHoursOrNaN) {
+    // 24 Adalian hours = 1 real hour
+    return isNaN(Number(adalianHoursOrNaN)) ? 0 : Number(adalianHoursOrNaN) / 24;
+}
+
+// Source: https://stackoverflow.com/a/59103453
+function getNiceNumber(num) {
+    const integerDigits = Math.floor(Math.log10(Math.abs(num))+1);
+    const mult = 10**(5-integerDigits); // also consider integer digits
+    return Math.round(num * mult) / mult;
+}
+
 function getCurrentHash() {
     return window.location.hash.replace(/^#/, '');
 }

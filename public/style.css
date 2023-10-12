@@ -297,7 +297,7 @@ body.embed::-webkit-scrollbar-thumb {
     border-radius: 50%;
 }
 
-/* source: https://stackoverflow.com/a/51496341 */
+/* Source: https://stackoverflow.com/a/51496341 */
 .spectral-types ul li::before,
 .spectral-types-circle::before {
     content: "";
