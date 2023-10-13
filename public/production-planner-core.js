@@ -99,18 +99,6 @@ const itemDataKeyEncodeDecode = {
 };
 
 /**
- * Raw materials should be produced either via mining (zero depth), or with a production chain of this max depth
- * - e.g. for "Hydrogen":
- *   - max depth 0 => 1 process variant: Hydrogen Mining
- *   - max depth 1 => 2 process variants: Hydrogen Mining, Ammonia Cetalytic Cracking
- *   - max depth 2 => 4 process variants: Hydrogen Mining, Ammonia Cetalytic Cracking, Methane Steam Reforming and Water-gas Shift, Water Electrolysis
- *     - "Methane Steam Reforming and Water-gas Shift" is a viable process for Hydrogen, as confirmed by protoplanetary @ 2023-09-25
- *   - max depth 3 => 6 process variants: Hydrogen Mining, Ammonia Cetalytic Cracking, +4 more ...
- */
-const rawMaterialMaxDepth = 2;
-// const rawMaterialMaxDepth = 3; //// TEST - required for Methane < (via Sabatier Process) Hydrogen < (via Water Electrolysis) Deionized Water < Water
-
-/**
  * Default value for how many levels to recurse into each possible sub-chain, when filtering process variants.
  * See "getFilteredProcessVariantIds" for details and considerations.
  * - ensure the value is high enough, to avoid triggering the issue described in that function, as much as possible (i.e. value >= 4)
@@ -120,8 +108,6 @@ const filterDepthDefault = 4;
 
 /**
  * Manually banned process variants which are vastly inefficient, for certain products.
- * 
- * WARNING: This needs to be manually upadted, if the product / process IDs change!
  */
 const bannedProcessVariantIdsByProductId = {};
 banProcessNameForProductName('Polyacrylonitrile Oxidation and Carbonization', 'Deionized Water');
@@ -174,6 +160,27 @@ const leaderLineOptionsProductionChain = {
     ...leaderLineOptionsDefault,
     path: 'straight',
 };
+
+/**
+ * Raw materials should be produced either via mining (zero depth), or with a production chain of this max depth
+ * - e.g. for "Hydrogen":
+ *   - max depth 0 => 1 process variant: Hydrogen Mining
+ *   - max depth 1 => 2 process variants: Hydrogen Mining, Ammonia Cetalytic Cracking
+ *   - max depth 2 => 4 process variants: Hydrogen Mining, Ammonia Cetalytic Cracking, Methane Steam Reforming and Water-gas Shift, Water Electrolysis
+ *     - "Methane Steam Reforming and Water-gas Shift" is a viable process for Hydrogen, as confirmed by protoplanetary @ 2023-09-25
+ *   - max depth 3 => 6 process variants: Hydrogen Mining, Ammonia Cetalytic Cracking, +4 more ...
+ */
+function getRawMaterialMaxDepth(rawMaterialProductId = null) {
+    let maxDepth = 2;
+    if (rawMaterialProductId === productDataByName['Methane'].id) {
+        /**
+         * Custom max depth for Methane, for the "Startship on Mars" sub-chain... inefficient as it may be!
+         * Methane < (via Sabatier Process) Hydrogen < (via Water Electrolysis) Deionized Water < Water
+         */
+        maxDepth = 3;
+    }
+    return maxDepth;
+}
 
 function banProcessNameForProductName(processName, productName) {
     const productData = typeof productDataByName !== 'undefined' ? productDataByName[productName] : productDataRawByName[productName];
@@ -441,14 +448,22 @@ function getTotalQtyForAllSelectedOccurrencesOfProductName(productName, itemData
     return qty;
 }
 
-function getHighestRawMaterialPositionInListOfProductIds(productIds) {
+/**
+ * Get `{productId, position}` of highest raw material in list of "productIds"
+ */
+function getHighestRawMaterialInListOfProductIds(productIds) {
+    let highestRawMaterialProductId = null;
     let highestRawMaterialPosition = 0;
     productIds.forEach((productId, idx) => {
         if (productDataById[productId].type === 'Raw Material') {
-            highestRawMaterialPosition = Math.max(highestRawMaterialPosition, (idx + 1));
+            highestRawMaterialProductId = productId;
+            highestRawMaterialPosition = idx + 1;
         }
     });
-    return highestRawMaterialPosition;
+    return {
+        productId: highestRawMaterialProductId,
+        position: highestRawMaterialPosition,
+    };
 }
 
 /**
@@ -476,7 +491,7 @@ function getHighestRawMaterialPositionInListOfProductIds(productIds) {
  *   - this is the default "forbidden input"
  * - "ancestorProductIds" = each output from ancestors of this output product ID (optional argument)
  *   - IMPORTANT: these need to be sorted as [closest-to-outputProductId, ..., farthest-from-outputProductId_aka_planned-product]
- *     - this is required for "getHighestRawMaterialPositionInListOfProductIds" to return the expected value
+ *     - this is required for "getHighestRawMaterialInListOfProductIds" to return the expected value
  *   - in the context of a planned production chain (via "itemDataById"), these include the ancestors "above" the initial output product ID
  *   - in the cotext of a recursion, these (also) include the ancestors "below" the initial output product ID, down to the current recursion level
  *   - these are added to the "forbidden inputs", along with the "outputProductId"
@@ -495,6 +510,7 @@ function getHighestRawMaterialPositionInListOfProductIds(productIds) {
  *     - w/ value 6 => this function is called x2518 times for "Deionized Water"
  * - "filteredDepth" = how many levels already recursed, starting from the original output product ID
  * - "rawMaterialDepth" = how many levels recursed since the first-encountered raw material was parsed (if any, otherwise "null")
+ * - "rawMaterialInitialId" = product ID of the first-encountered raw material, including among "ancestorProductIds"
  * 
  * NOTE: This function also needs to work WITHOUT using "itemDataById", for "generate-products-vs-spectral-types.js"
  */
@@ -504,6 +520,7 @@ function getFilteredProcessVariantIds(
     filterDepth = filterDepthDefault,
     filteredDepth = 0,
     rawMaterialDepth = null,
+    rawMaterialInitialId = null,
     doDebugFn = false, // disctinct from "doDebug" @ "abstract-core.js"
 ) {
     const dots = '*** '.repeat(filterDepthDefault - filterDepth); // used only for debugging
@@ -548,23 +565,40 @@ function getFilteredProcessVariantIds(
      */
 
     // Check if any raw materials among "ancestorProductIds"
-    const highestRawMaterialPositionInAncestorProductIds = getHighestRawMaterialPositionInListOfProductIds(ancestorProductIds);
-    if (highestRawMaterialPositionInAncestorProductIds) {
+    const outputIsRawMaterial = productDataById[outputProductId].type === 'Raw Material';
+    const highestRawMaterialInAcestors = getHighestRawMaterialInListOfProductIds(ancestorProductIds);
+    const highestRawMaterialProductIdInAncestors = highestRawMaterialInAcestors.productId;
+    const highestRawMaterialPositionInAncestors = highestRawMaterialInAcestors.position;
+    if (highestRawMaterialProductIdInAncestors) {
+        // Raw material among ancestors
         if (rawMaterialDepth === null) {
-            rawMaterialDepth = highestRawMaterialPositionInAncestorProductIds;
+            rawMaterialDepth = highestRawMaterialPositionInAncestors;
         } else {
-            rawMaterialDepth = Math.max(rawMaterialDepth, highestRawMaterialPositionInAncestorProductIds);
+            rawMaterialDepth = Math.max(rawMaterialDepth, highestRawMaterialPositionInAncestors);
         }
+        rawMaterialInitialId = highestRawMaterialProductIdInAncestors;
         if (doDebugFn) console.log(`${dots}--- INHERIT rawMaterialDepth = ${rawMaterialDepth}`);
-    } else if (productDataById[outputProductId].type === 'Raw Material' && rawMaterialDepth === null) {
+    } else if (outputIsRawMaterial && rawMaterialDepth === null) {
         // First-encountered raw material => start counting its depth
         rawMaterialDepth = 0;
-        if (doDebugFn) console.log(`${dots}--- START counting rawMaterialDepth = 0`);
+        rawMaterialInitialId = outputProductId;
+        if (doDebugFn) console.log(`${dots}--- START counting rawMaterialDepth = 0, for rawMaterialInitialId = ${rawMaterialInitialId}`);
     }
-    if (rawMaterialDepth !== null && rawMaterialDepth > rawMaterialMaxDepth) {
-        // Too many levels recursed since the first-encountered raw material => STOP recursion by returning NO process variants
-        if (doDebugFn) console.log(`%c${dots}--- ABORT filtering re: too many levels recursed since first-encountered raw material`, 'color: orange');
-        return [];
+    if (rawMaterialDepth !== null) {
+        if (rawMaterialDepth > getRawMaterialMaxDepth(rawMaterialInitialId)) {
+            // Too many levels recursed since the first-encountered raw material => STOP recursion by returning NO process variants
+            if (doDebugFn) console.log(`%c${dots}--- ABORT filtering re: too many levels recursed since first-encountered raw material`, 'color: orange');
+            return [];
+        }
+        if (rawMaterialDepth === getRawMaterialMaxDepth(rawMaterialInitialId) && !outputIsRawMaterial) {
+            /**
+             * The current output is NOT a raw material, so it would require at least one more level,
+             * which would innevitably lead to "rawMaterialDepth" > max depth
+             * => STOP recursion by returning NO process variants
+             */
+            if (doDebugFn) console.log(`%c${dots}--- ABORT filtering re: innevitable to recurse too many levels since raw material`, 'color: orange');
+            return [];
+        }
     }
 
     const filteredProcessVariantIds = [];
@@ -574,18 +608,24 @@ function getFilteredProcessVariantIds(
         const processData = processDataById[processId];
         if (doDebugFn && filteredDepth === 0) console.log(`------`); // next root process variant
         if (doDebugFn) console.log(`${dots}--- CHECK process variant #${processId}: ${processData.name}`);
+
+        // Check if mining process
         if (!processData.inputs.length) {
             // Keep process variant if mining process, and skip any other filtering
             if (doDebugFn) console.log(`${dots}--- ... KEEP process variant #${processId}: ${processData.name} <= MINING process (NO inputs)`);
             filteredProcessVariantIds.push(processId);
             return;
         }
+
+        // Check if banned process
         const bannedProcessVariantIds = bannedProcessVariantIdsByProductId[outputProductId];
         if (bannedProcessVariantIds && bannedProcessVariantIds.includes(processId)) {
             // Skip process variant if banned for current output
             if (doDebugFn) console.log(`%c${dots}--- ... SKIP this process variant re: banned for current output:`, 'color: yellow;');
             return;
         }
+
+        // Check if process has forbidden inputs
         const hasForbiddenInputs = processData.inputs.some(inputData => {
             const inputProductId = String(inputData.productId);
             return forbiddenInputProductIds.includes(inputProductId);
@@ -596,6 +636,25 @@ function getFilteredProcessVariantIds(
             return;
         }
         if (doDebugFn) console.log(`${dots}--- ... OK re: no forbidden inputs`);
+
+        // Check if process would lead to "rawMaterialDepth" > max depth
+        if (rawMaterialDepth !== null && rawMaterialDepth === getRawMaterialMaxDepth(rawMaterialInitialId) - 1) {
+            // The inputs of this process variant would be at max depth from the initial raw material
+            const hasNonRawMaterialInputs = processData.inputs.some(inputData => {
+                const inputProductId = String(inputData.productId);
+                return productDataById[inputProductId].type !== 'Raw Material';
+            });
+            if (hasNonRawMaterialInputs) {
+                /**
+                 * Skip process variant that requires a non-raw material input at max depth from the initial raw material,
+                 * because it would require at least one more level, which would innevitably lead to "rawMaterialDepth" > max depth.
+                 */
+                if (doDebugFn) console.log(`%c${dots}--- ... SKIP this process variant re: innevitable to recurse too many levels since raw material`, 'color: yellow;');
+                return;
+            }
+        }
+
+        // If all other checks passed, check if process has a single output
         if (processData.outputs.length === 1) {
             /**
              * Keep process variant if it has a single output, and skip the recursive filtering.
@@ -607,6 +666,7 @@ function getFilteredProcessVariantIds(
             filteredProcessVariantIds.push(processId);
             return;
         }
+
         if (filterDepth > 0) {
             if (doDebugFn) console.log(`${dots}--- ... RECURSING into inputs`);
             let hasInputWithNoValidProcessVariant = false;
@@ -622,7 +682,8 @@ function getFilteredProcessVariantIds(
                     forbiddenInputProductIds,
                     filterDepth - 1,
                     filteredDepth + 1,
-                    rawMaterialDepth === null ? null : rawMaterialDepth + 1
+                    rawMaterialDepth === null ? null : rawMaterialDepth + 1,
+                    rawMaterialInitialId,
                 );
                 if (doDebugFn) console.log(`${dots}--- ... END CHECK input product #${inputProductId}: ${productDataById[inputProductId].name} => subProcessVariantIds: ${JSON.stringify(subProcessVariantIds)}`);
                 if (!subProcessVariantIds.length) {
@@ -832,7 +893,7 @@ function createProcessContainerV2(itemId) {
         processTooltipHtml += `<li><strong>Other Outputs:</strong></li>`;
         processData.outputs
             .filter(outputData => outputData.productId !== outputProductData.id)
-            .forEach(outputData => processTooltipHtml += `<li>- ${productDataById[outputData.productId].name}</li>`);
+            .forEach(outputData => processTooltipHtml += `<li>- ${productDataById[outputData.productId].name} (x${outputData.unitsPerSR})</li>`);
         processTooltipHtml += '</ul>';
     }
     processTooltip.innerHTML = processTooltipHtml;
@@ -897,7 +958,7 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
     if (optimizeVariants) {
         processVariantIds = getFilteredProcessVariantIds(
             outputProductId,
-            getAllAncestorProductIdsOfItemId(outputItemId).reverse() // sort as [closest-to-outputProductId, ..., farthest-from-outputProductId_aka_planned-product]
+            getAllAncestorProductIdsOfItemId(outputItemId).reverse(), // sort as [closest-to-outputProductId, ..., farthest-from-outputProductId_aka_planned-product]
         );
         if (doDebug) console.log(`%c--- FILTERED processVariantIds:`, 'background: green;', processVariantIds);
     } else {
@@ -1646,15 +1707,18 @@ on('mouseenter', '[data-container-id]', el => {
     if (el.classList.contains('item-type-process')) {
         const processQtyByProductId = {};
         const processData = processDataById[itemDataById[itemId].processId];
-        processData.inputs.concat(processData.outputs).forEach(productQtyData => {
-            processQtyByProductId[productQtyData.productId] = productQtyData.qty;
-        });
-        const selectorInputsAndOutput = `[data-parent-container-id="${itemId}"], [data-container-id="${el.dataset.parentContainerId}"]`;
-        productChainItemsContainer.querySelectorAll(selectorInputsAndOutput).forEach(itemWithQty => {
-            const productId = itemDataById[itemWithQty.dataset.containerId].productId;
-            itemWithQty.querySelector('.item-qty').textContent = processQtyByProductId[productId];
-            itemWithQty.classList.add('show-qty');
-        });
+        if (processData.inputs.length) {
+            // Show quantities only if this is NOT a mining process (to avoid qty 0)
+            processData.inputs.concat(processData.outputs).forEach(productQtyData => {
+                processQtyByProductId[productQtyData.productId] = productQtyData.qty;
+            });
+            const selectorInputsAndOutput = `[data-parent-container-id="${itemId}"], [data-container-id="${el.dataset.parentContainerId}"]`;
+            productChainItemsContainer.querySelectorAll(selectorInputsAndOutput).forEach(itemWithQty => {
+                const productId = itemDataById[itemWithQty.dataset.containerId].productId;
+                itemWithQty.querySelector('.item-qty').textContent = processQtyByProductId[productId];
+                itemWithQty.classList.add('show-qty');
+            });
+        }
     }
 });
 on('mouseleave', '[data-container-id]', el => {
