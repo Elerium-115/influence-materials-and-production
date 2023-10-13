@@ -893,7 +893,12 @@ function createProcessContainerV2(itemId) {
         processTooltipHtml += `<li><strong>Other Outputs:</strong></li>`;
         processData.outputs
             .filter(outputData => outputData.productId !== outputProductData.id)
-            .forEach(outputData => processTooltipHtml += `<li>- ${productDataById[outputData.productId].name} (x${outputData.unitsPerSR})</li>`);
+            .forEach(outputData => processTooltipHtml += /*html*/ `
+                <li>
+                    - ${productDataById[outputData.productId].name}
+                    <span class="qty">${outputData.unitsPerSR}</span>
+                </li>
+            `);
         processTooltipHtml += '</ul>';
     }
     processTooltip.innerHTML = processTooltipHtml;
