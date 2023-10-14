@@ -1055,10 +1055,11 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
         if (doDebug) console.log(`%c--- WARNING: NO processVariantIds found for output productId ${outputProductId}`, 'background: brown');
         if (optimizeVariants) {
             // No process variant remaining after optimization
-            getItemContainerById(outputItemId).classList.add('prompt-process-variant', '--no-optimized-variant');
+            // e.g. "Ferrochromium" < (via Ferrochromium Alloying) Chromium < Chromia < Sodium Dichromate = dead-end
+            getItemContainerById(outputItemId).classList.add('prompt-message', '--no-optimized-variant');
         } else {
             //  No process variants in the JSON?
-            getItemContainerById(outputItemId).classList.add('prompt-process-variant', '--no-raw-variant');
+            getItemContainerById(outputItemId).classList.add('prompt-message', '--no-raw-variant');
         }
         return;
     }
@@ -1072,7 +1073,9 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
         // if (doDebug) console.log(`%c--- PROMPT the user to select one of the processVariantItemIds: [${String(processVariantItemIds)}]`, 'background: yellow; color: black;');
         const preferredProcessVariantItemId = getPreferredProcessVariantItemId(outputProductId, processVariantItemIds);
         processVariantItemIds.forEach(itemId => {
-            // Mark all process variants from this group
+            // Mark all process variants as having sibling variants
+            getItemContainerById(itemId).classList.add('has-sibling-variants');
+            // Mark all process variants from this group as waiting selection
             itemDataById[itemId].processVariantItemIds = processVariantItemIds;
             markProcessWaitingSelection(itemId);
             // Mark "inferior" (non-default) process variants from this group
@@ -1080,7 +1083,8 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
                 markProcessInferior(itemId);
             }
         });
-        getItemContainerById(outputItemId).classList.add('prompt-process-variant');
+        // Mark this output to prompt for selecting a process variant
+        getItemContainerById(outputItemId).classList.add('prompt-message', '--select-variant');
     }
 }
 
@@ -1198,7 +1202,7 @@ function deselectProductItemId(itemId, skipRefreshDetailsAndConnections = false)
     removeItemIdFromSelectedProductItemIds(itemId);
     itemDataById[itemId].isSelected = false;
     const itemContainer = getItemContainerById(itemId);
-    itemContainer.classList.remove('selected-item', 'prompt-process-variant');
+    itemContainer.classList.remove('selected-item', 'prompt-message');
     if (!skipRefreshDetailsAndConnections) {
         refreshDetailsAndConnections();
     }
@@ -1283,7 +1287,7 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
             }
         });
         // Hide the prompt from the output, after a process variant was selected
-        getItemContainerById(itemData.parentItemId).classList.remove('prompt-process-variant');
+        getItemContainerById(itemData.parentItemId).classList.remove('prompt-message');
     }
     refreshDetailsAndConnections();
 }

@@ -746,6 +746,13 @@
     white-space: nowrap;
 }
 
+#production-chain-items [data-container-id].prompt-message.--no-optimized-variant:hover .sustaining-spectral-types span::after {
+    content: 'All process variants for this product were removed during the optimization,\Ain order to avoid either an infinite production loop,\Aor a highly inefficient production path.';
+    display: block;
+    margin-top: 0.5rem;
+    opacity: 0.5;
+}
+
 #production-chain-connections > * {
     position: absolute; 
     line-height: 1px;
@@ -920,7 +927,7 @@
     color: var(--brand-text);
 }
 
-#production-chain-items .item-type-process:not(.inferior-process) .process-tooltip .throughput::after {
+#production-chain-items .item-type-process.has-sibling-variants:not(.inferior-process) .process-tooltip .throughput::after {
     color: var(--default-text_semifaded);
     content: '(best for selected output)';
     display: block;
@@ -1501,9 +1508,8 @@
     border-color: var(--brand-text);
 }
 
-/* production planner - prompt for selecting a process variant */
-#production-chain-items .prompt-process-variant::after {
-    content: 'Select one of the\Aprocess variants';
+/* production planner - prompt message on (typically-selected) products */
+#production-chain-items .prompt-message::after {
     white-space: pre;
     background: var(--brand-text);
     color: black;
@@ -1513,17 +1519,12 @@
     border-bottom-left-radius: 0.4rem;
     border-bottom-right-radius: 0.4rem;
 }
-.production-planner #production-chain-items.horizontal-layout .prompt-process-variant:hover::after {
+.production-planner #production-chain-items.horizontal-layout .prompt-message:hover::after {
     border-bottom-right-radius: 0;
 }
-/* production planner - prompt for warning re: no process variant remaining after optimization */
-#production-chain-items .prompt-process-variant.--no-optimized-variant::after {
-    content: 'No optimized process\Avariant available';
-}
-/* production planner - prompt for warning re: no process variants in the JSON? */
-#production-chain-items .prompt-process-variant.--no-raw-variant::after {
-    content: 'ERROR: No process\Avariant available';
-}
+#production-chain-items .prompt-message.--select-variant::after { content: 'Select one of the\Aprocess variants'; }
+#production-chain-items .prompt-message.--no-optimized-variant::after { content: 'No optimized process\Avariant available'; }
+#production-chain-items .prompt-message.--no-raw-variant::after { content: 'ERROR: No process\Avariant available'; }
 
 /* debug */
 #debug {
