@@ -452,10 +452,12 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     */
     // show durations only for processes with startup / runtime
     if (buildingIdsWithDurations.includes(processData.buildingId)) {
-        processTooltipHtml += '<ul>';
-        processTooltipHtml += `<li>Startup: ${getNiceNumber(processData.hPerAction)}h</li>`;
-        processTooltipHtml += `<li>Runtime: ${getNiceNumber(processData.hPerSR)}h/SR</li>`;
-        processTooltipHtml += '</ul>';
+        processTooltipHtml += /*html*/ `
+            <ul>
+                <li>Startup: ${getNiceNumber(processData.hPerAction)}h</li>
+                <li>Runtime: ${getNiceNumber(processData.hPerSR)}h/SR</li>
+            </ul>
+        `;
     }
     // show other outputs, if any
     // -- i.e. if "processes" contains multiple elements with the same name (".process"), but different ".output"

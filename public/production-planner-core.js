@@ -474,6 +474,39 @@ function getHighestRawMaterialInListOfProductIds(productIds) {
 }
 
 /**
+ * Get units per real hour (NOT Adalian hour) produced by a given process, for a given output
+ */
+function getUnitsPerHourForProcessOutput(outputProductId, processId) {
+    const processData = processDataById[processId];
+    const outputUnitsPerSR = Number(processData.outputs.find(output => output.productId === outputProductId).unitsPerSR);
+    return outputUnitsPerSR / getRealHours(processData.mAdalianHoursPerSR);
+}
+
+/**
+ * Get the preferred process variant (as item ID) for a given output product ID.
+ * - initial implementation: preferred process = fastest process (i.e. most units per hour for the given output)
+ * - future implementation: preferred process = user-preferred process for the given output (feature NOT yet implemented)
+ */
+function getPreferredProcessVariantItemId(outputProductId, processVariantItemIds) {
+    let maxUnitsPerHour = 0;
+    let fastestProcessVariantItemId = null;
+    for (const processVariantItemId of processVariantItemIds) {
+        const processId = itemDataById[processVariantItemId].processId;
+        const processData = processDataById[processId];
+        if (!processData.inputs.length) {
+            // Mining process = always preferred
+            return processVariantItemId;
+        }
+        const unitsPerHour = getUnitsPerHourForProcessOutput(outputProductId, processId);
+        if (unitsPerHour > maxUnitsPerHour) {
+            maxUnitsPerHour = unitsPerHour;
+            fastestProcessVariantItemId = processVariantItemId;
+        }
+    }
+    return fastestProcessVariantItemId;
+}
+
+/**
  * Filter the process variants for a given output product ID, to avoid infinite production loops:
  * 1. define the "forbidden inputs" = output product ID + ancestor product IDs (see also notes below re: "Arguments")
  * 2. for each process variant, if any of its inputs is a "forbidden input" => filter-out that process variant
@@ -848,7 +881,8 @@ function createProductContainerV2(itemId) {
 
 function createProcessContainerV2(itemId) {
     const itemData = itemDataById[itemId];
-    const processData = processDataById[itemData.processId];
+    const processId = itemData.processId;
+    const processData = processDataById[processId];
     const processName = processData.name;
     const outputItemData = itemDataById[itemData.parentItemId];
     const outputProductData = productDataById[outputItemData.productId];
@@ -875,7 +909,7 @@ function createProcessContainerV2(itemId) {
     processContainer.appendChild(processTooltipWrapper);
     // inject building and extra-info (durations, process-module parts) into tooltip
     let processTooltipHtml = '';
-    processTooltipHtml += `<div class="building">${getBuildingNameForProcessId(itemData.processId)}</div>`;
+    processTooltipHtml += `<div class="building">${getBuildingNameForProcessId(processId)}</div>`;
     /* DISABLED re: no modules in Exploitation
     // show process-module parts only for actual buildings, not for "Empty Lot" (buildingId "0")
     if (Number(processData.buildingId) !== 0) {
@@ -891,8 +925,20 @@ function createProcessContainerV2(itemId) {
     if (buildingIdsWithDurations.includes(processData.buildingId)) {
         processTooltipHtml += '<ul>';
         processTooltipHtml += `<li>Startup: ${getNiceNumber(getRealHours(processData.bAdalianHoursPerAction))}h</li>`;
-        processTooltipHtml += `<li>Runtime: ${getNiceNumber(getRealHours(processData.mAdalianHoursPerSR))}h/SR</li>`;
+        if (getRealHours(processData.mAdalianHoursPerSR)) {
+            processTooltipHtml += `<li>Runtime: ${getNiceNumber(getRealHours(processData.mAdalianHoursPerSR))}h/SR</li>`;
+        }
         processTooltipHtml += '</ul>';
+    }
+    // show throughput for the current output, if numeric runtime ("mAdalianHoursPerSR" NOT "N/A")
+    if (getRealHours(processData.mAdalianHoursPerSR)) {
+        const unitsPerHour = getUnitsPerHourForProcessOutput(outputItemData.productId, processId);
+        processTooltipHtml += /*html*/ `
+            <ul>
+                <li>Throughput:</li>
+                <li class="throughput">${getNiceNumber(unitsPerHour)} units/h</li>
+            </ul>
+        `;
     }
     // show other outputs, if any
     if (processData.outputs.length >= 2) {
@@ -1024,10 +1070,15 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
     if (processVariantItemIds.length > 1) {
         // Multiple process variants => prompt the user to select one
         // if (doDebug) console.log(`%c--- PROMPT the user to select one of the processVariantItemIds: [${String(processVariantItemIds)}]`, 'background: yellow; color: black;');
+        const preferredProcessVariantItemId = getPreferredProcessVariantItemId(outputProductId, processVariantItemIds);
         processVariantItemIds.forEach(itemId => {
             // Mark all process variants from this group
             itemDataById[itemId].processVariantItemIds = processVariantItemIds;
             markProcessWaitingSelection(itemId);
+            // Mark "inferior" (non-default) process variants from this group
+            if (itemId !== preferredProcessVariantItemId) {
+                markProcessInferior(itemId);
+            }
         });
         getItemContainerById(outputItemId).classList.add('prompt-process-variant');
     }
@@ -1325,6 +1376,10 @@ function markProcessNotWaitingSelection(itemId) {
     getChildContainersOfItemId(itemId).forEach(inputContainer => {
         inputContainer.classList.remove('waiting-selection');
     });
+}
+
+function markProcessInferior(itemId) {
+    getItemContainerById(itemId).classList.add('inferior-process');
 }
 
 function setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById) {

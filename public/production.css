@@ -14,11 +14,13 @@
     --flash-error: #8e373a;
 
     --raw-material: #373737;
-    --process: #482066;
     --refined-material: #1c323d;
     --component: #315a6e;
     --ship-component: #315a6e;
     --finished-good: #47819e;
+
+    --process: #482066;
+    --process-inferior: #211130;
 }
 
 .flash-error { animation: flash-error 250ms; }
@@ -914,6 +916,16 @@
     margin-right: 0.2rem;
 }
 
+#production-chain-items .item-type-process:not(.inferior-process) .process-tooltip .throughput {
+    color: var(--brand-text);
+}
+
+#production-chain-items .item-type-process:not(.inferior-process) .process-tooltip .throughput::after {
+    color: var(--default-text_semifaded);
+    content: '(best for selected output)';
+    display: block;
+}
+
 #production-chain-items .process-tooltip ul {
     margin-top: 1rem;
 }
@@ -1478,6 +1490,10 @@
 
 #production-chain-items .item-type-process.waiting-selection:not(:hover) {
     animation: pulse 2s infinite;
+}
+
+#production-chain-items .item-type-process.inferior-process {
+    --process: var(--process-inferior);
 }
 
 #production-chain-items .item-type-process.selected-process .hexagon {

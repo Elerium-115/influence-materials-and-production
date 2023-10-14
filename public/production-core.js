@@ -51,7 +51,8 @@ const isRealSpectralType = {
  * IDs of buildings required by processes with startup / runtime durations
  */
 const buildingIdsWithDurations = InfluenceProductionChainsJSON.buildings
-    .filter(building => ['Refinery', 'Bioreactor', 'Factory', 'Shipyard'].includes(building.name))
+    // Including "Empty Lot" for construction processes
+    .filter(building => ['Empty Lot', 'Refinery', 'Bioreactor', 'Factory', 'Shipyard'].includes(building.name))
     .map(building => building.id);
 
 /**
