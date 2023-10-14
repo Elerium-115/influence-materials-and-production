@@ -172,6 +172,13 @@ const leaderLineOptionsProductionChain = {
  */
 function getRawMaterialMaxDepth(rawMaterialProductId = null) {
     let maxDepth = 2;
+    if (rawMaterialProductId === productDataByName['Ammonia'].id) {
+        /**
+         * Custom max depth for Ammonia, to avoid "dead-end" for this sub-chain... inefficient as it may be!
+         * Ammonia < (via Haber-Bosch Process) Pure Nitrogen = dead-end w/ maxDepth = 4
+         */
+        maxDepth = 6; // 5 = too restrictive @ Calcium Chloride
+    }
     if (rawMaterialProductId === productDataByName['Methane'].id) {
         /**
          * Custom max depth for Methane, for the "Startship on Mars" sub-chain... inefficient as it may be!
@@ -995,11 +1002,19 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
     });
     if (!processVariantItemIds.length) {
         /**
-         * This may signal either:
+         * NO process variant for this output. This may signal either:
+         * - a production loop or other issues that filtered-out all process variants for this output - see "getFilteredProcessVariantIds"
          * - a product without process variants in the JSON (this was the case for "Food" in the old JSON from 2022)
-         * - a production loop, as described @ "getFilteredProcessVariantIds"
          */
         if (doDebug) console.log(`%c--- WARNING: NO processVariantIds found for output productId ${outputProductId}`, 'background: brown');
+        if (optimizeVariants) {
+            // No process variant remaining after optimization
+            getItemContainerById(outputItemId).classList.add('prompt-process-variant', '--no-optimized-variant');
+        } else {
+            //  No process variants in the JSON?
+            getItemContainerById(outputItemId).classList.add('prompt-process-variant', '--no-raw-variant');
+        }
+        return;
     }
     if (processVariantItemIds.length === 1) {
         // Single process variant => auto-select it

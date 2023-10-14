@@ -1283,6 +1283,10 @@
     color: var(--item-name);
 }
 
+#shopping-list .line .qty {
+    color: var(--default-text_semifaded);
+}
+
 #shopping-list .line .qty::before {
     content: "✕";
     font-size: 0.5rem;
@@ -1495,6 +1499,14 @@
 }
 .production-planner #production-chain-items.horizontal-layout .prompt-process-variant:hover::after {
     border-bottom-right-radius: 0;
+}
+/* production planner - prompt for warning re: no process variant remaining after optimization */
+#production-chain-items .prompt-process-variant.--no-optimized-variant::after {
+    content: 'No optimized process\Avariant available';
+}
+/* production planner - prompt for warning re: no process variants in the JSON? */
+#production-chain-items .prompt-process-variant.--no-raw-variant::after {
+    content: 'ERROR: No process\Avariant available';
 }
 
 /* debug */
