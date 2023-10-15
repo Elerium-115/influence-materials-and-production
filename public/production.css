@@ -572,10 +572,8 @@
 }
 
 #production-chain-items [data-container-id] .item-name {
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
     color: var(--item-name);
     font-size: 0.9rem;
@@ -641,26 +639,6 @@
     content: '✕';
     font-size: 0.5rem;
     margin: 0.15rem 0.25rem 0 0;
-}
-
-#production-chain-items [data-container-id] .thumb {
-    position: absolute;
-    top: -2.75rem;
-    left: calc(50% - 1.5rem);
-    width: 3rem;
-    height: 3rem;
-    background: black;
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-    filter: drop-shadow(0 -0.25rem 0.25rem var(--dark-bg));
-}
-
-#production-chain-items [data-container-id].selected-item .thumb {
-    border-color: var(--brand-text);
-}
-
-#production-chain-items [data-container-id]:not(:hover) .thumb {
-    display: none;
 }
 
 #production-chain-connections > * {
@@ -836,19 +814,38 @@
 /* item tooltip - product */
 
 #production-chain-items .item-tooltip-wrapper .product-tooltip {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     background: black;
+    color: var(--item-name);
 }
 
-#production-chain-items .item-tooltip-wrapper .product-tooltip span::before {
-    content: 'Sustaining Spectral Types';
+#production-chain-items .item-tooltip-wrapper .product-tooltip .thumb {
     display: block;
+    width: 5rem;
+    margin: 0 auto;
+}
+
+#production-chain-items .item-tooltip-wrapper .product-tooltip .thumb.no-image {
+    display: none;
+}
+
+#production-chain-items .item-tooltip-wrapper .product-tooltip .product-type::before,
+#production-chain-items .item-tooltip-wrapper .product-tooltip .sustaining-spectral-types::before,
+#production-chain-items .item-tooltip-wrapper .product-tooltip .mass-volume::before {
+    display: block;
+    margin-bottom: 0.25rem;
     opacity: 0.5;
 }
 
-#production-chain-items [data-container-id].prompt-message.--no-optimized-variant:hover .item-tooltip-wrapper .product-tooltip span::after {
-    content: 'All process variants for this product were removed during the optimization,\Ain order to avoid either an infinite production loop,\Aor a highly inefficient production path.';
+#production-chain-items .item-tooltip-wrapper .product-tooltip .product-type::before { content: 'Product Type'; }
+#production-chain-items .item-tooltip-wrapper .product-tooltip .sustaining-spectral-types::before { content: 'Sustaining Spectral Types'; }
+#production-chain-items .item-tooltip-wrapper .product-tooltip .mass-volume::before { content: 'Mass & Volume (per unit)'; }
+
+#production-chain-items [data-container-id].prompt-message.--no-optimized-variant:hover .item-tooltip-wrapper .product-tooltip::after {
+    content: 'All process variants for this product were removed during the optimization, in order to avoid either an infinite production loop, or a highly inefficient production path.';
     display: block;
-    margin-top: 0.5rem;
     opacity: 0.5;
     white-space: normal;
 }

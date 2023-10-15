@@ -879,10 +879,31 @@ function createProductContainerV2(itemId) {
     }
     productContainer.innerHTML = `<div class="item-name">${itemNameHtml}</div>`;
     productContainer.innerHTML += `<div class="item-qty"></div>`;
-    // productContainer.innerHTML += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png';">`;
     const sustainingSpectralTypes = getRealSpectralTypesSorted(productDataByName[itemName].sustainingSpectralTypes);
     const sustainingSpectralTypesText = sustainingSpectralTypes.length ? sustainingSpectralTypes.join(', ') : 'N/A';
-    productContainer.innerHTML += `<div class="item-tooltip-wrapper"><div class="item-tooltip product-tooltip"><span>${sustainingSpectralTypesText}</span></div></div>`;
+    // tooltip for product details
+    const tooltipWrapper = document.createElement('div');
+    tooltipWrapper.classList.add('item-tooltip-wrapper');
+    const tooltip = document.createElement('div');
+    tooltip.classList.add('item-tooltip', 'product-tooltip');
+    tooltipWrapper.appendChild(tooltip);
+    productContainer.appendChild(tooltipWrapper);
+    // inject details into tooltip
+    let tooltipHtml = '';
+    // show product image
+    tooltipHtml += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('no-image');">`;
+    // show product type
+    tooltipHtml += `<div class="product-type">${productData.type}</div>`;
+    // show sustaining spectral types
+    tooltipHtml += `<div class="sustaining-spectral-types">${sustainingSpectralTypesText}</div>`;
+    // show mass + volume
+    tooltipHtml += /*html*/ `
+        <ul class="mass-volume">
+            <li>Mass: ${productData.massKilogramsPerUnit} kg</li>
+            <li>Volume: ${Number(productData.volumeLitersPerUnit) ? productData.volumeLitersPerUnit + ' L' : 'N/A'}</li>
+        </ul>
+    `;
+    tooltip.innerHTML = tooltipHtml;
     productContainer.classList.add(getItemTypeClass(productData.type));
     productContainer.addEventListener('click', event => {
         toggleProductItemId(itemId); // the user may either select or deselect a product
@@ -912,28 +933,28 @@ function createProcessContainerV2(itemId) {
     processHexagon.classList.add('hexagon');
     processContainer.appendChild(processHexagon);
     // tooltip for process details
-    const processTooltipWrapper = document.createElement('div');
-    processTooltipWrapper.classList.add('item-tooltip-wrapper');
-    const processTooltip = document.createElement('div');
-    processTooltip.classList.add('item-tooltip', 'process-tooltip');
-    processTooltipWrapper.appendChild(processTooltip);
-    processContainer.appendChild(processTooltipWrapper);
+    const tooltipWrapper = document.createElement('div');
+    tooltipWrapper.classList.add('item-tooltip-wrapper');
+    const tooltip = document.createElement('div');
+    tooltip.classList.add('item-tooltip', 'process-tooltip');
+    tooltipWrapper.appendChild(tooltip);
+    processContainer.appendChild(tooltipWrapper);
     // inject details into tooltip
-    let processTooltipHtml = '';
-    processTooltipHtml += `<div class="building">${getBuildingNameForProcessId(processId)}</div>`;
+    let tooltipHtml = '';
+    tooltipHtml += `<div class="building">${getBuildingNameForProcessId(processId)}</div>`;
     // show durations only for processes with startup / runtime
     if (buildingIdsWithDurations.includes(processData.buildingId)) {
-        processTooltipHtml += '<ul>';
-        processTooltipHtml += `<li>Startup: ${getNiceNumber(getRealHours(processData.bAdalianHoursPerAction))}h</li>`;
+        tooltipHtml += '<ul>';
+        tooltipHtml += `<li>Startup: ${getNiceNumber(getRealHours(processData.bAdalianHoursPerAction))}h</li>`;
         if (getRealHours(processData.mAdalianHoursPerSR)) {
-            processTooltipHtml += `<li>Runtime: ${getNiceNumber(getRealHours(processData.mAdalianHoursPerSR))}h/SR</li>`;
+            tooltipHtml += `<li>Runtime: ${getNiceNumber(getRealHours(processData.mAdalianHoursPerSR))}h/SR</li>`;
         }
-        processTooltipHtml += '</ul>';
+        tooltipHtml += '</ul>';
     }
     // show throughput for the current output, if numeric runtime ("mAdalianHoursPerSR" NOT "N/A")
     if (getRealHours(processData.mAdalianHoursPerSR)) {
         const unitsPerHour = getUnitsPerHourForProcessOutput(outputItemData.productId, processId);
-        processTooltipHtml += /*html*/ `
+        tooltipHtml += /*html*/ `
             <ul>
                 <li>Throughput:</li>
                 <li class="throughput">${getNiceNumber(unitsPerHour)} units/h</li>
@@ -942,19 +963,19 @@ function createProcessContainerV2(itemId) {
     }
     // show other outputs, if any
     if (processData.outputs.length >= 2) {
-        processTooltipHtml += '<ul>';
-        processTooltipHtml += `<li><strong>Other Outputs:</strong></li>`;
+        tooltipHtml += '<ul>';
+        tooltipHtml += `<li><strong>Other Outputs:</strong></li>`;
         processData.outputs
             .filter(outputData => outputData.productId !== outputProductData.id)
-            .forEach(outputData => processTooltipHtml += /*html*/ `
+            .forEach(outputData => tooltipHtml += /*html*/ `
                 <li>
                     - ${productDataById[outputData.productId].name}
                     <span class="qty">${outputData.unitsPerSR}</span>
                 </li>
             `);
-        processTooltipHtml += '</ul>';
+        tooltipHtml += '</ul>';
     }
-    processTooltip.innerHTML = processTooltipHtml;
+    tooltip.innerHTML = tooltipHtml;
     processContainer.addEventListener('click', event => {
         selectProcessItemId(itemId); // the user may only select a process, not deselect it
     });
