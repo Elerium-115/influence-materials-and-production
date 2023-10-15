@@ -883,12 +883,16 @@ function createProductContainerV2(itemId) {
     // if "parentItemId" is an array [1, 2, 4] => this will be set as string "1,2,4"
     productContainer.dataset.parentContainerId = itemData.parentItemId;
     productContainer.dataset.itemName = itemName;
-    productContainer.innerHTML = `<div class="item-name">${itemName}</div>`;
+    let itemNameHtml = `${itemName}`;
+    if (productData.type === 'Raw Material') {
+        itemNameHtml += getBaseSpectralsHtmlForRawMaterial(rawMaterialDataByName[itemName]);
+    }
+    productContainer.innerHTML = `<div class="item-name">${itemNameHtml}</div>`;
     productContainer.innerHTML += `<div class="item-qty"></div>`;
     // productContainer.innerHTML += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png';">`;
     const sustainingSpectralTypes = getRealSpectralTypesSorted(productDataByName[itemName].sustainingSpectralTypes);
     const sustainingSpectralTypesText = sustainingSpectralTypes.length ? sustainingSpectralTypes.join(', ') : 'N/A';
-    productContainer.innerHTML += `<div class="product-tooltip-wrapper"><span>${sustainingSpectralTypesText}</span></div>`;
+    productContainer.innerHTML += `<div class="item-tooltip-wrapper"><div class="item-tooltip product-tooltip"><span>${sustainingSpectralTypesText}</span></div></div>`;
     productContainer.classList.add(getItemTypeClass(productData.type));
     productContainer.addEventListener('click', event => {
         toggleProductItemId(itemId); // the user may either select or deselect a product
@@ -917,14 +921,14 @@ function createProcessContainerV2(itemId) {
     processHexagon.innerHTML = `<span class="process-name">${getItemNameWithSmartLinebreaks(processName)}</span>`;
     processHexagon.classList.add('hexagon');
     processContainer.appendChild(processHexagon);
-    // tooltip for extra-info (durations, process-module parts)
+    // tooltip for process details
     const processTooltipWrapper = document.createElement('div');
-    processTooltipWrapper.classList.add('process-tooltip-wrapper');
+    processTooltipWrapper.classList.add('item-tooltip-wrapper');
     const processTooltip = document.createElement('div');
-    processTooltip.classList.add('process-tooltip');
+    processTooltip.classList.add('item-tooltip', 'process-tooltip');
     processTooltipWrapper.appendChild(processTooltip);
     processContainer.appendChild(processTooltipWrapper);
-    // inject building and extra-info (durations, process-module parts) into tooltip
+    // inject details into tooltip
     let processTooltipHtml = '';
     processTooltipHtml += `<div class="building">${getBuildingNameForProcessId(processId)}</div>`;
     /* DISABLED re: no modules in Exploitation
@@ -1000,12 +1004,6 @@ function addItemToChain(itemData, overwriteItemId = null) {
     }
     if (itemData.isDisabled) {
         itemContainer.classList.add('disabled-item');
-    }
-    if (itemData.productId !== null) {
-        const productData = productDataById[itemData.productId];
-        if (productData.type === 'Raw Material') {
-            itemContainer.innerHTML += getBaseSpectralsHtmlForRawMaterial(rawMaterialDataByName[productData.name]);
-        }
     }
     levelContainer.appendChild(itemContainer);
     sortLevels(renderOnLevel);

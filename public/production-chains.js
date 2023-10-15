@@ -405,7 +405,7 @@ function createProductContainer(itemName, itemData, parentContainerId) {
     itemContainer.innerHTML += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png';">`;
     const sustainingSpectralTypes = getRealSpectralTypesSorted(productDataByName[itemName].sustainingSpectralTypes);
     const sustainingSpectralTypesText = sustainingSpectralTypes.length ? sustainingSpectralTypes.join(', ') : 'N/A';
-    itemContainer.innerHTML += `<div class="product-tooltip-wrapper"><span>${sustainingSpectralTypesText}</span></div>`;
+    itemContainer.innerHTML += `<div class="item-tooltip-wrapper"><div class="item-tooltip product-tooltip"><span>${sustainingSpectralTypesText}</span></div></div>`;
     itemContainer.classList.add(getItemTypeClass(itemData.itemType));
     return itemContainer;
 }
@@ -429,18 +429,18 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     processHexagon.innerHTML = `<span class="process-name">${getItemNameWithSmartLinebreaks(processName)}</span>`;
     processHexagon.classList.add('hexagon');
     processContainer.appendChild(processHexagon);
-    // tooltip for process-module parts
+    // tooltip for process details
     const processTooltipWrapper = document.createElement('div');
-    processTooltipWrapper.classList.add('process-tooltip-wrapper');
+    processTooltipWrapper.classList.add('item-tooltip-wrapper');
     const processTooltip = document.createElement('div');
-    processTooltip.classList.add('process-tooltip');
+    processTooltip.classList.add('item-tooltip', 'process-tooltip');
     processTooltipWrapper.appendChild(processTooltip);
     processContainer.appendChild(processTooltipWrapper);
-    // inject building and process-module parts into tooltip
+    // inject details into tooltip
     let processTooltipHtml = '';
     processTooltipHtml += `<div class="building">${buildingNamesById[processData.buildingId]}</div>`;
     /* DISABLED re: no modules in Exploitation
-    // show process-module parts only for actual buildings, not for Empty Lot (buildingId '0')
+    // show process-module parts only for actual buildings, not for "Empty Lot" (buildingId "0")
     if (Number(processData.buildingId) !== 0) {
         processTooltipHtml += '<ul>';
         const parts = processData.parts || ['[redacted]', '[redacted]'];

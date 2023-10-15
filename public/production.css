@@ -458,11 +458,7 @@
     z-index: 1;
 }
 
-#production-chain-items [data-container-id]:not(.item-type-process),
-#production-chain-items .item-type-process .hexagon {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+#production-chain-items [data-container-id]:not(.item-type-process) {
     border: 1px solid gray;
     border-radius: 0.5rem;
 }
@@ -487,7 +483,7 @@
     display: none;
 }
 
-#production-chain-items .selected-item[data-container-id] {
+#production-chain-items [data-container-id].selected-item {
     background: var(--dark-bg) !important;
     border-color: var(--brand-text);
 }
@@ -578,6 +574,7 @@
 #production-chain-items [data-container-id] .item-name {
     flex-grow: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     color: var(--item-name);
@@ -590,7 +587,7 @@
     color: white;
 }
 
-#production-chain-items .selected-item[data-container-id] .item-name {
+#production-chain-items [data-container-id].selected-item .item-name {
     color: var(--brand-text);
 }
 
@@ -608,7 +605,7 @@
     display: flex;
     justify-content: center;
     gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 #production-chain-items [data-container-id] .spectral-type {
@@ -658,54 +655,12 @@
     filter: drop-shadow(0 -0.25rem 0.25rem var(--dark-bg));
 }
 
-#production-chain-items .selected-item[data-container-id] .thumb {
+#production-chain-items [data-container-id].selected-item .thumb {
     border-color: var(--brand-text);
 }
 
 #production-chain-items [data-container-id]:not(:hover) .thumb {
     display: none;
-}
-
-/* product tooltip */
-
-#production-chain-items [data-container-id] .product-tooltip-wrapper {
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    left: 50%;
-    position: absolute;
-}
-
-#production-chain-items [data-container-id]:not(:hover) .product-tooltip-wrapper {
-    display: none;
-}
-
-#production-chain-items [data-container-id] .product-tooltip-wrapper span {
-    background: black;
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-    filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
-    padding: 0.5rem;
-    position: absolute;
-}
-
-#production-chain-items .selected-item[data-container-id] .product-tooltip-wrapper span {
-    border-color: var(--brand-text);
-    color: var(--item-name);
-}
-
-#production-chain-items [data-container-id] .product-tooltip-wrapper span::before {
-    content: 'Sustaining Spectral Types';
-    display: block;
-    opacity: 0.5;
-    white-space: nowrap;
-}
-
-#production-chain-items [data-container-id].prompt-message.--no-optimized-variant:hover .product-tooltip-wrapper span::after {
-    content: 'All process variants for this product were removed during the optimization,\Ain order to avoid either an infinite production loop,\Aor a highly inefficient production path.';
-    display: block;
-    margin-top: 0.5rem;
-    opacity: 0.5;
 }
 
 #production-chain-connections > * {
@@ -780,10 +735,15 @@
 }
 
 #production-chain-items .hexagon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background: gray;
     min-width: 6rem;
     min-height: 4rem;
     height: 100%;
+    border: 1px solid gray;
+    border-radius: 0.5rem;
 }
 
 #production-chain-items .hexagon .process-name {
@@ -795,20 +755,20 @@
     padding: 0.5rem 1rem;
 }
 
-/* process tooltip */
+/* item tooltip */
 
-#production-chain-items .process-tooltip-wrapper {
+#production-chain-items .item-tooltip-wrapper {
     position: absolute;
     display: none;
     left: 50%;
     white-space: nowrap;
 }
 
-#production-chain-items .item-type-process[data-container-id]:hover .process-tooltip-wrapper {
+#production-chain-items [data-container-id]:hover .item-tooltip-wrapper {
     display: block;
 }
 
-#production-chain-items .process-tooltip-wrapper::before {
+#production-chain-items .item-tooltip-wrapper::before {
     content: '⮕';
     position: absolute;
     left: -0.5rem;
@@ -818,10 +778,9 @@
     transform: rotate(-90deg);
 }
 
-#production-chain-items .process-tooltip {
+#production-chain-items .item-tooltip-wrapper .item-tooltip {
     position: relative;
     left: -50%;
-    background: var(--process);
     text-align: left;
     margin-top: 1rem;
     padding: 0.75rem;
@@ -830,7 +789,13 @@
     filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
 }
 
-#production-chain-items .process-tooltip .building {
+/* item tooltip - process */
+
+#production-chain-items .item-tooltip-wrapper .process-tooltip {
+    background: var(--process);
+}
+
+#production-chain-items .item-tooltip-wrapper .process-tooltip .building {
     background: var(--default-text);
     color: var(--process);
     text-align: center;
@@ -838,34 +803,54 @@
     border-radius: 0.4rem;
 }
 
-#production-chain-items .process-tooltip .qty {
+#production-chain-items .item-tooltip-wrapper .process-tooltip .qty {
     color: var(--default-text_semifaded);
 }
 
-#production-chain-items .process-tooltip .qty::before {
+#production-chain-items .item-tooltip-wrapper .process-tooltip .qty::before {
     content: "✕";
     font-size: 0.5rem;
     margin-left: 0.4rem;
     margin-right: 0.2rem;
 }
 
-#production-chain-items .item-type-process:not(.inferior-process) .process-tooltip .throughput {
+#production-chain-items .item-type-process:not(.inferior-process) .item-tooltip-wrapper .process-tooltip .throughput {
     color: var(--brand-text);
 }
 
-#production-chain-items .item-type-process.has-sibling-variants:not(.inferior-process) .process-tooltip .throughput::after {
+#production-chain-items .item-type-process.has-sibling-variants:not(.inferior-process) .item-tooltip-wrapper .process-tooltip .throughput::after {
     color: var(--default-text_semifaded);
     content: '(best for selected output)';
     display: block;
 }
 
-#production-chain-items .process-tooltip ul {
+#production-chain-items .item-tooltip-wrapper .process-tooltip ul {
     margin-top: 1rem;
 }
 
-#production-chain-items .process-tooltip ul li {
+#production-chain-items .item-tooltip-wrapper .process-tooltip ul li {
     font-size: 0.7rem;
     line-height: 1rem;
+}
+
+/* item tooltip - product */
+
+#production-chain-items .item-tooltip-wrapper .product-tooltip {
+    background: black;
+}
+
+#production-chain-items .item-tooltip-wrapper .product-tooltip span::before {
+    content: 'Sustaining Spectral Types';
+    display: block;
+    opacity: 0.5;
+}
+
+#production-chain-items [data-container-id].prompt-message.--no-optimized-variant:hover .item-tooltip-wrapper .product-tooltip span::after {
+    content: 'All process variants for this product were removed during the optimization,\Ain order to avoid either an infinite production loop,\Aor a highly inefficient production path.';
+    display: block;
+    margin-top: 0.5rem;
+    opacity: 0.5;
+    white-space: normal;
 }
 
 /* required stuff */
@@ -1416,22 +1401,24 @@
 }
 
 /* production planner - prompt message on (typically-selected) products */
-#production-chain-items .prompt-message::after {
+#production-chain-items .prompt-message .item-name::after {
     white-space: pre;
     background: var(--brand-text);
     color: black;
     /* font-family: Jura-Bold; */
+    font-size: 0.8rem;
     font-weight: bold;
+    margin: 0.5rem -0.5rem -0.5rem -0.5rem; /* compensate for ".item-name" padding */
     padding: 0.5rem;
     border-bottom-left-radius: 0.4rem;
     border-bottom-right-radius: 0.4rem;
 }
-.production-planner #production-chain-items .prompt-message:hover::after {
+.production-planner #production-chain-items .prompt-message:hover .item-name::after {
     border-bottom-right-radius: 0;
 }
-#production-chain-items .prompt-message.--select-variant::after { content: 'Select one of the\Aprocess variants'; }
-#production-chain-items .prompt-message.--no-optimized-variant::after { content: 'No optimized process\Avariant available'; }
-#production-chain-items .prompt-message.--no-raw-variant::after { content: 'ERROR: No process\Avariant available'; }
+#production-chain-items .prompt-message.--select-variant .item-name::after { content: 'Select one of the\Aprocess variants'; }
+#production-chain-items .prompt-message.--no-optimized-variant .item-name::after { content: 'No optimized process\Avariant available'; }
+#production-chain-items .prompt-message.--no-raw-variant .item-name::after { content: 'ERROR: No process\Avariant available'; }
 
 /* debug */
 #debug {
