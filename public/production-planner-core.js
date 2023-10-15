@@ -893,16 +893,26 @@ function createProductContainerV2(itemId) {
     // show product image
     tooltipHtml += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('no-image');">`;
     // show product type
-    tooltipHtml += `<div class="product-type">${productData.type}</div>`;
+    tooltipHtml += `<div class="titled-details product-type">${productData.type}</div>`;
     // show sustaining spectral types
-    tooltipHtml += `<div class="sustaining-spectral-types">${sustainingSpectralTypesText}</div>`;
+    tooltipHtml += `<div class="titled-details sustaining-spectral-types">${sustainingSpectralTypesText}</div>`;
     // show mass + volume
     tooltipHtml += /*html*/ `
-        <ul class="mass-volume">
-            <li>Mass: ${productData.massKilogramsPerUnit} kg</li>
+        <ul class="titled-details mass-volume">
+            <li>Mass: ${Number(productData.massKilogramsPerUnit) ? productData.massKilogramsPerUnit + ' kg' : 'N/A'}</li>
             <li>Volume: ${Number(productData.volumeLitersPerUnit) ? productData.volumeLitersPerUnit + ' L' : 'N/A'}</li>
         </ul>
     `;
+    // show max units per storage, if BOTH mass + volume set
+    if (Number(productData.massKilogramsPerUnit) && Number(productData.volumeLitersPerUnit)) {
+        let maxUnitsHtml = '<ul class="titled-details max-units">';
+        const maxUnitsPerStorage = getMaxUnitsPerStorageForMassAndVolume(productData.massKilogramsPerUnit, productData.volumeLitersPerUnit);
+        maxUnitsPerStorage.forEach(maxUnits => {
+            maxUnitsHtml += `<li>${maxUnits.storage_name}: <span class="qty">${maxUnits.max_units_capacity}</span></li>`;
+        });
+        maxUnitsHtml += '</ul>';
+        tooltipHtml += maxUnitsHtml;
+    }
     tooltip.innerHTML = tooltipHtml;
     productContainer.classList.add(getItemTypeClass(productData.type));
     productContainer.addEventListener('click', event => {

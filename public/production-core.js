@@ -115,6 +115,31 @@ function getBaseSpectralsHtmlForRawMaterial(rawMaterialData) {
     return baseSpectralsHtml;
 }
 
+/**
+ * @param mass in kg (numeric string)
+ * @param volume in L (numeric string)
+ */
+function getMaxUnitsPerStorageForMassAndVolume(mass, volume) {
+    const massT = Number(mass) / 1000;
+    const volumeM3 = Number(volume) / 1000;
+    /**
+     * Warehouse: 1,500,000 t / 75,000 m3
+     * Heavy Transport: 12,000 t / 30,000 m3
+     * Light Transport: 2,000 t / 5,000 m3
+     * Shuttle: 50 t / 125 m3
+     */
+    const capacityWarehouse = Math.min(Math.floor(1500000 / massT), Math.floor(75000 / volumeM3));
+    const capacityHeavyTransport = Math.min(Math.floor(12000 / massT), Math.floor(30000 / volumeM3));
+    const capacityLightTransport = Math.min(Math.floor(2000 / massT), Math.floor(5000 / volumeM3));
+    const capacityShuttle = Math.min(Math.floor(50 / massT), Math.floor(125 / volumeM3));
+    return [
+        {storage_name: 'Warehouse', max_units_capacity: capacityWarehouse},
+        {storage_name: 'Heavy Transport', max_units_capacity: capacityHeavyTransport},
+        {storage_name: 'Light Transport', max_units_capacity: capacityLightTransport},
+        {storage_name: 'Shuttle', max_units_capacity: capacityShuttle},
+    ];
+}
+
 function getRealHours(adalianHoursOrNaN) {
     // 24 Adalian hours = 1 real hour
     return isNaN(Number(adalianHoursOrNaN)) ? 0 : Number(adalianHoursOrNaN) / 24;

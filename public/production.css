@@ -819,6 +819,7 @@
     gap: 1rem;
     background: black;
     color: var(--item-name);
+    font-size: 0.7rem;
 }
 
 #production-chain-items .item-tooltip-wrapper .product-tooltip .thumb {
@@ -831,17 +832,16 @@
     display: none;
 }
 
-#production-chain-items .item-tooltip-wrapper .product-tooltip .product-type::before,
-#production-chain-items .item-tooltip-wrapper .product-tooltip .sustaining-spectral-types::before,
-#production-chain-items .item-tooltip-wrapper .product-tooltip .mass-volume::before {
+#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details::before {
     display: block;
     margin-bottom: 0.25rem;
     opacity: 0.5;
 }
 
-#production-chain-items .item-tooltip-wrapper .product-tooltip .product-type::before { content: 'Product Type'; }
-#production-chain-items .item-tooltip-wrapper .product-tooltip .sustaining-spectral-types::before { content: 'Sustaining Spectral Types'; }
-#production-chain-items .item-tooltip-wrapper .product-tooltip .mass-volume::before { content: 'Mass & Volume (per unit)'; }
+#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.product-type::before { content: 'Product Type'; }
+#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.sustaining-spectral-types::before { content: 'Sustaining Spectral Types'; }
+#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.mass-volume::before { content: 'Mass & Volume per Unit'; }
+#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.max-units::before { content: 'Max Units per Storage'; }
 
 #production-chain-items [data-container-id].prompt-message.--no-optimized-variant:hover .item-tooltip-wrapper .product-tooltip::after {
     content: 'All process variants for this product were removed during the optimization, in order to avoid either an infinite production loop, or a highly inefficient production path.';
