@@ -6,8 +6,8 @@
  */
 
 // DOM elements should be selected first, before executing any other logic that may require them
-const elToggleHorizontalLayout = document.getElementById('toggle-horizontal-layout');
 const elToggleOptimizeVariants = document.getElementById('toggle-optimize-variants');
+const elToggleAutoReplicate = document.getElementById('toggle-auto-replicate');
 const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
 const productSearchInput = productsListWrapper.querySelector('input');
@@ -17,15 +17,15 @@ const chainTypeLinkContainer = document.getElementById('chain-type-link');
 const productChainItemsContainer = document.getElementById('production-chain-items');
 const elMinimapWrapper = document.getElementById('minimap-wrapper');
 
-// Load state for "Horizontal Layout" toggle from local-storage (if set), otherwise default to TRUE
-const horizontalLayoutLocal = localStorage.getItem('horizontalLayout');
-let horizontalLayout = horizontalLayoutLocal !== null ? horizontalLayoutLocal === 'true' : true;
-setHorizontalLayout(horizontalLayout);
-
 // Load state for "Optimize Process Variants" toggle from local-storage (if set), otherwise default to TRUE
 const optimizeVariantsLocal = localStorage.getItem('optimizeVariants');
 let optimizeVariants = optimizeVariantsLocal !== null ? optimizeVariantsLocal === 'true' : true;
 setOptimizeVariants(optimizeVariants);
+
+// Load state for "Auto-Replicate Selections" toggle from local-storage (if set), otherwise default to TRUE
+const autoReplicateLocal = localStorage.getItem('autoReplicate');
+let autoReplicate = autoReplicateLocal !== null ? autoReplicateLocal === 'true' : true;
+setAutoReplicate(autoReplicate);
 
 let maxLevel = 0;
 
@@ -228,23 +228,6 @@ function toggleMinimap() {
     elMinimapWrapper.classList.toggle('minimized');
 }
 
-function setHorizontalLayout(horizontalLayoutNew) {
-    if (!elToggleHorizontalLayout) {
-        return;
-    }
-    elToggleHorizontalLayout.checked = horizontalLayoutNew;
-    updateCheckboxLabel(elToggleHorizontalLayout);
-    if (horizontalLayoutNew) {
-        productChainItemsContainer.classList.remove('vertical-layout');
-        productChainItemsContainer.classList.add('horizontal-layout');
-    } else {
-        productChainItemsContainer.classList.remove('horizontal-layout');
-        productChainItemsContainer.classList.add('vertical-layout');
-    }
-    localStorage.setItem('horizontalLayout', horizontalLayoutNew);
-    horizontalLayout = horizontalLayoutNew;
-}
-
 function setOptimizeVariants(optimizeVariantsNew) {
     if (!elToggleOptimizeVariants) {
         return;
@@ -255,9 +238,14 @@ function setOptimizeVariants(optimizeVariantsNew) {
     optimizeVariants = optimizeVariantsNew;
 }
 
-function toggleHorizontalLayout(el) {
-    // The state of "el.checked" has already changed => update everything else
-    setHorizontalLayout(el.checked);
+function setAutoReplicate(autoReplicateNew) {
+    if (!elToggleAutoReplicate) {
+        return;
+    }
+    elToggleAutoReplicate.checked = autoReplicateNew;
+    updateCheckboxLabel(elToggleAutoReplicate);
+    localStorage.setItem('autoReplicate', autoReplicateNew);
+    autoReplicate = autoReplicateNew;
 }
 
 function toggleOptimizeVariants(el) {
@@ -273,6 +261,11 @@ function toggleOptimizeVariants(el) {
         // This is the "Production Planner", not "Production Chains" => reset the chain for the planned product
         toggleProductItemId(1);
     }
+}
+
+function toggleAutoReplicate(el) {
+    // The state of "el.checked" has already changed => update everything else
+    setAutoReplicate(el.checked);
 }
 
 // Toggle products-list when clicking on "▼" / "✕"

@@ -405,7 +405,7 @@ function createProductContainer(itemName, itemData, parentContainerId) {
     itemContainer.innerHTML += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png';">`;
     const sustainingSpectralTypes = getRealSpectralTypesSorted(productDataByName[itemName].sustainingSpectralTypes);
     const sustainingSpectralTypesText = sustainingSpectralTypes.length ? sustainingSpectralTypes.join(', ') : 'N/A';
-    itemContainer.innerHTML += `<div class="sustaining-spectral-types"><span>${sustainingSpectralTypesText}</span></div>`;
+    itemContainer.innerHTML += `<div class="product-tooltip-wrapper"><span>${sustainingSpectralTypesText}</span></div>`;
     itemContainer.classList.add(getItemTypeClass(itemData.itemType));
     return itemContainer;
 }
@@ -667,21 +667,12 @@ function connectContainers(parentContainer, childContainer, color, thickness, fa
     const off1 = getOffset(parentContainer);
     const off2 = getOffset(childContainer);
     let x1, y1, x2, y2;
-    if (horizontalLayout) {
-        // connect the mid-left side of the parent element
-        x1 = off1.left;
-        y1 = off1.top + (off1.height / 2);
-        // connect the mid-right side of the child element
-        x2 = off2.left + off2.width;
-        y2 = off2.top + (off2.height / 2);
-    } else {
-        // connect the mid-bottom side of the parent element
-        x1 = off1.left + (off1.width / 2);
-        y1 = off1.top + off1.height;
-        // connect the mid-top side of the child element
-        x2 = off2.left + (off2.width / 2);
-        y2 = off2.top;
-    }
+    // connect the mid-left side of the parent element
+    x1 = off1.left;
+    y1 = off1.top + (off1.height / 2);
+    // connect the mid-right side of the child element
+    x2 = off2.left + off2.width;
+    y2 = off2.top + (off2.height / 2);
     const length = Math.sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)));
     const cx = ((x1 + x2) / 2) - (length / 2);
     const cy = ((y1 + y2) / 2) - (thickness / 2);
@@ -1055,12 +1046,6 @@ on('change', 'input[name="chain-type"]', el => {
     selectItemByName(itemNamesByHash[hashToSelect]);
 });
 */
-
-// toggle horizontal vs. vertical layout for the production chain
-on('change', '#toggle-horizontal-layout', el => {
-    toggleHorizontalLayout(el);
-    updateAllConnections();
-});
 
 // toggle process variant
 on('change', '.process input', el => {

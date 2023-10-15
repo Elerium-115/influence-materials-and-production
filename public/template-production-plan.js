@@ -15,7 +15,8 @@ const templateProductionPlan = /*html*/ `
             <a class="active" onclick="onClickProductionPlanActions(['save', 'close'])">Save and close</a>
             <a onclick="onClickProductionPlanActions(['save'])">Save and continue editing</a>
             <div class="options">
-                <label for="toggle-horizontal-layout" class="checked"><input type="checkbox" id="toggle-horizontal-layout" checked>Horizontal Layout</label>
+                <label for="toggle-optimize-variants" class="checked"><input type="checkbox" id="toggle-optimize-variants" checked>Optimize Process Variants</label>
+                <label for="toggle-auto-replicate" class="checked"><input type="checkbox" id="toggle-auto-replicate" checked>Auto-Replicate Selections</label>
             </div>
             <div class="topbar-section-right">
                 <div class="cta connect-wallet-cta" onclick="connectWallet(isExampleAsteroidsPlan)">Connect wallet</div>
@@ -41,7 +42,7 @@ const templateProductionPlan = /*html*/ `
                         <div id="shopping-list-product-name"></div>
                     </div>
                 </div>
-                <div id="production-chain-items" class="horizontal-layout"></div>
+                <div id="production-chain-items"></div>
             </div>
             <div id="user-selected-products-info">
                 <span class="brand-text">Select any other products</span> from the chain, that you also plan to produce.<br>

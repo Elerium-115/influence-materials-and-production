@@ -113,6 +113,28 @@ const bannedProcessVariantIdsByProductId = {};
 banProcessNameForProductName('Polyacrylonitrile Oxidation and Carbonization', 'Deionized Water');
 
 /**
+ * Map the last-selected "processVariantId", for each "outputProductId".
+ * Expected format:
+ * ```
+ * {
+ *   outputProductId1: selectedProcessVariantId111,
+ *   outputProductId2: selectedProcessVariantId222,
+ * }
+ * ```
+ * 
+ * Functionality:
+ * - each time a process variant is selected (IFF among multiple variants), do:
+ *   - save it / update its value as:
+ *     `autoReplicateSelection[outputProductId] = selectedProcessVariantId`
+ *   - immediately parse all other SELECTED occurrences of that outputProductId, REGARDLESS if any process variant selected
+ *     - for each one, auto-select the same process variant
+ *     - should be fun when this leads to large sub-chains being removed all across the planned chain, for the same outputProductId
+ * - each time a product is selected, if it has process variants AND a matching entry in "autoReplicateSelection", do:
+ *   - auto-select the same process variant
+ */
+const autoReplicateSelection = {};
+
+/**
  * "itemDataById" will effectively contain the production chain for the planned-product,
  * with only the direct-input(s) for the selected items to be produced by the user
  * (i.e. NOT necessarily all the way down to the raw materials)
@@ -789,13 +811,8 @@ function resetFadedItemsAndConnectionsV2() {
 
 function getLeaderLineOptionsForCurrentLayout() {
     const leaderLineOptions = {...leaderLineOptionsProductionChain};
-    if (horizontalLayout) {
-        leaderLineOptions.startSocket = 'right';
-        leaderLineOptions.endSocket = 'left';
-    } else {
-        leaderLineOptions.startSocket = 'top';
-        leaderLineOptions.endSocket = 'bottom';
-    }
+    leaderLineOptions.startSocket = 'right';
+    leaderLineOptions.endSocket = 'left';
     return leaderLineOptions;
 }
 
@@ -871,7 +888,7 @@ function createProductContainerV2(itemId) {
     // productContainer.innerHTML += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png';">`;
     const sustainingSpectralTypes = getRealSpectralTypesSorted(productDataByName[itemName].sustainingSpectralTypes);
     const sustainingSpectralTypesText = sustainingSpectralTypes.length ? sustainingSpectralTypes.join(', ') : 'N/A';
-    productContainer.innerHTML += `<div class="sustaining-spectral-types"><span>${sustainingSpectralTypesText}</span></div>`;
+    productContainer.innerHTML += `<div class="product-tooltip-wrapper"><span>${sustainingSpectralTypesText}</span></div>`;
     productContainer.classList.add(getItemTypeClass(productData.type));
     productContainer.addEventListener('click', event => {
         toggleProductItemId(itemId); // the user may either select or deselect a product
@@ -1740,15 +1757,14 @@ async function saveProductionPlan() {
     return savedProductionPlanData;
 }
 
-// Toggle horizontal vs. vertical layout for the production chain
-on('change', '#toggle-horizontal-layout', el => {
-    toggleHorizontalLayout(el);
-    refreshConnections(true);
-});
-
 // Toggle optimized vs. non-optimized process variants
 on('change', '#toggle-optimize-variants', el => {
     toggleOptimizeVariants(el);
+});
+
+// Toggle auto-replicate selections of the same process variant, for all occurrences of a selected product
+on('change', '#toggle-auto-replicate', el => {
+    toggleAutoReplicate(el);
 });
 
 /**
