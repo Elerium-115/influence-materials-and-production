@@ -203,7 +203,6 @@ InfluenceProductionChainsJSON.processes.forEach(process => {
             output: itemNamesById[output.productId],
             process: process.name,
             inputs: process.inputs.map(input => itemNamesById[input.productId]),
-            parts: null, // future format: [ "Condenser", "Evaporator" ]
             buildingId: process.buildingId,
             hPerAction: getRealHours(process.bAdalianHoursPerAction),
             hPerSR: getRealHours(process.mAdalianHoursPerSR),
@@ -439,17 +438,6 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     // inject details into tooltip
     let processTooltipHtml = '';
     processTooltipHtml += `<div class="building">${buildingNamesById[processData.buildingId]}</div>`;
-    /* DISABLED re: no modules in Exploitation
-    // show process-module parts only for actual buildings, not for "Empty Lot" (buildingId "0")
-    if (Number(processData.buildingId) !== 0) {
-        processTooltipHtml += '<ul>';
-        const parts = processData.parts || ['[redacted]', '[redacted]'];
-        parts.forEach(part => {
-            processTooltipHtml += `<li>${part}</li>`;
-        });
-        processTooltipHtml += '</ul>';
-    }
-    */
     // show durations only for processes with startup / runtime
     if (buildingIdsWithDurations.includes(processData.buildingId)) {
         processTooltipHtml += /*html*/ `
@@ -1189,7 +1177,7 @@ setTimeout(() => {
 ////          => AUTO-SELECT "#required-spectrals-and-raw-materials"?
 ////        - tier limit >= 1
 ////          => required products a mix raw materials / refined materials / components
-////          => AUTO-SELECT "#required-tier-products-and-parts"?
+////          => AUTO-SELECT "#required-tier-products"?
 ////        - tier limit == [max_selectable] - i.e. the chart is fully contracted (e.g. showing only the 3 inputs for LiPo Battery)
 ////          => required products = Lithium + Polyacrylonitrile + Graphite
 

@@ -637,31 +637,6 @@ function refreshShoppingListTreeHtml() {
             </li>
         `;
     }
-    let modulesTreeHtml = '';
-    //// DISABLED re: no modules in Exploitation
-    // if (shoppingListTree.modules) {
-    //     let modulesListHtml = '';
-    //     if (!shoppingListTree.modules.length) {
-    //         //// TO BE IMPLEMENTED, pending official details
-    //         //// -- THEN also add "onclick" handler for modules, similar to inputs and buildings
-    //         shoppingListTree.modules = [{module_name: '[redacted]'}];
-    //     }
-    //     shoppingListTree.modules.forEach(moduleData => {
-    //         modulesListHtml += /*html*/ `
-    //             <li class="tree-label" data-module-name="${moduleData.module_name}">
-    //                 ${moduleData.module_name}
-    //             </li>
-    //         `;
-    //     });
-    //     modulesTreeHtml = /*html*/ `
-    //         <li>
-    //             <div class="tree-label">Modules</div>
-    //             <ul class="shopping-modules-tree can-add-product">
-    //                 ${modulesListHtml}
-    //             </ul>
-    //         </li>
-    //     `;
-    // }
     let spectralTypesTreeHtml = '';
     if (shoppingListTree.spectral_types) {
         let spectralTypesListHtml = '';
@@ -677,7 +652,7 @@ function refreshShoppingListTreeHtml() {
             </li>
         `;
     }
-    const shoppingListTreeHtml = inputsTreeHtml + buildingsTreeHtml + modulesTreeHtml + spectralTypesTreeHtml;
+    const shoppingListTreeHtml = inputsTreeHtml + buildingsTreeHtml + spectralTypesTreeHtml;
     disconnectAsteroidsPlannerTree();
     elShoppingListTree.querySelector('.shopping-tree').innerHTML = shoppingListTreeHtml;
     connectAsteroidsPlannerTree();
@@ -766,7 +741,6 @@ function keepSingleKeyForObjectsInArray(arr, key) {
 // Sort array of objects alphabetically, based on a certain key of each object
 function compareListElementsByInputName(el1, el2) { return el1.input_name.localeCompare(el2.input_name); }
 function compareListElementsByBuildingName(el1, el2) { return el1.building_name.localeCompare(el2.building_name); }
-function compareListElementsByModuleName(el1, el2) { return el1.module_name.localeCompare(el2.module_name); }
 function compareListElementsBySpectralTypeName(el1, el2) { return el1.spectral_type_name.localeCompare(el2.spectral_type_name); }
 function compareListElementsByPlannedProductName(el1, el2) { return el1.planned_product_name.localeCompare(el2.planned_product_name); }
 function compareListElementsByIntermediateProductName(el1, el2) { return el1.intermediate_product_name.localeCompare(el2.intermediate_product_name); }
@@ -798,8 +772,6 @@ function mergeAndSortArraysWithUniqueValuesForKey(arr1, arr2, key = null) {
             return mergedArray.sort(compareListElementsByInputName);
         case 'building_name':
             return mergedArray.sort(compareListElementsByBuildingName);
-        case 'module_name':
-            return mergedArray.sort(compareListElementsByModuleName);
         case 'spectral_type_name':
             return mergedArray.sort(compareListElementsBySpectralTypeName);
     }
@@ -865,7 +837,6 @@ function regenerateShoppingListTree() {
     shoppingListTree = {
         inputs: [],
         buildings: [],
-        modules: [],
         spectral_types: [],
     };
     asteroidsPlannerTree.forEach(asteroidData => {
@@ -874,7 +845,6 @@ function regenerateShoppingListTree() {
             // Combine distinct elements from each section of the shopping list, and sort them alphabetically
             shoppingListTree.inputs = mergeAndSortArraysWithUniqueValuesForKey(shoppingListTree.inputs, shoppingList.inputs, 'input_name');
             shoppingListTree.buildings = mergeAndSortArraysWithUniqueValuesForKey(shoppingListTree.buildings, shoppingList.buildings, 'building_name');
-            shoppingListTree.modules = mergeAndSortArraysWithUniqueValuesForKey(shoppingListTree.modules, shoppingList.modules, 'module_name');
             shoppingListTree.spectral_types = mergeAndSortArraysWithUniqueValuesForKey(shoppingListTree.spectral_types, shoppingList.spectral_types, 'spectral_type_name');
         });
     });
@@ -985,12 +955,10 @@ function connectAsteroidsPlannerTree() {
     const originsToConnect = [];
     let targetInputs = [];
     let targetBuildings = [];
-    let targetModules = [];
     let targetSpectralTypes = [];
     shoppingLists.forEach(shoppingList => {
         shoppingList.inputs.forEach(inputData => targetInputs = [...new Set([...targetInputs, inputData.input_name])]);
         shoppingList.buildings.forEach(buildingData => targetBuildings = [...new Set([...targetBuildings, buildingData.building_name])]);
-        shoppingList.modules.forEach(moduleData => targetModules = [...new Set([...targetModules, moduleData.module_name])]);
         shoppingList.spectral_types.forEach(spectralTypeData => targetSpectralTypes = [...new Set([...targetSpectralTypes, spectralTypeData.spectral_type_name])]);
     });
     targetInputs.forEach(inputName => {
@@ -1005,12 +973,6 @@ function connectAsteroidsPlannerTree() {
             originsToConnect.push(origin);
         }
     });
-    targetModules.forEach(moduleName => {
-        const origin = elShoppingListTree.querySelector(`[data-module-name="${moduleName}"]`);
-        if (origin) {
-            originsToConnect.push(origin);
-        }
-    });
     targetSpectralTypes.forEach(baseSpectral => {
         const origin = elShoppingListTree.querySelector(`[data-base-spectral="${baseSpectral}"]`);
         if (origin) {
@@ -1021,10 +983,10 @@ function connectAsteroidsPlannerTree() {
         asteroidsPlannerLines.push(connectElements(origin, elToConnect, leaderLineOptionsRightToLeftGradient));
         origin.classList.add('connected');
         /**
-         * If this origin (input / building / module) is a planned product from
+         * If this origin (input / building) is a planned product from
          * any other production chain, connect that planned product to this origin.
          */
-        const originName = origin.dataset.inputName || origin.dataset.buildingName || origin.dataset.moduleName;
+        const originName = origin.dataset.inputName || origin.dataset.buildingName;
         if (originName) {
             elAsteroidsPlannerTree.querySelectorAll('[data-planned-product-name]').forEach(elPlannedProduct => {
                 if (elPlannedProduct.dataset.plannedProductName === originName) {
@@ -1600,7 +1562,6 @@ function addPlannedProductToAsteroid(productName, asteroidName) {
         shopping_list: {
             buildings: [],
             inputs: [],
-            modules: [],
             spectral_types: [],
         },
     });
@@ -1740,8 +1701,6 @@ function updatePlannedProductDataBasedOnProductionPlanData(plannedProductData, p
             qty: buildingData.qty,
         };
     });
-    //// TO BE IMPLEMENTED, pending official details
-    const shoppingListModules = [];
     const shoppingListSpectralTypes = shoppingList.spectralTypes.map(spectralTypeData => {
         return {
             spectral_type_name: spectralTypeData.name,
@@ -1751,7 +1710,6 @@ function updatePlannedProductDataBasedOnProductionPlanData(plannedProductData, p
     plannedProductData.shopping_list = {
         inputs: shoppingListInputs,
         buildings: shoppingListBuildings,
-        modules: shoppingListModules,
         spectral_types: shoppingListSpectralTypes,
     };
 }
@@ -2019,8 +1977,6 @@ function updateContent() {
             if (!buildingsHtml) {
                 buildingsHtml = /*html*/ `<div class="row none"><span class="name">[none]</span></div>`;
             }
-            //// TO BE IMPLEMENTED, pending official details
-            const modulesHtml = /*html*/ `<div class="row none"><span class="name">[redacted]</span></div>`;
             let spectralTypesHtml = '';
             plannedProductData.shopping_list.spectral_types.forEach(spectralTypeData => {
                 const optionalClass = spectralTypeData.is_optional ? 'optional' : '';
@@ -2038,7 +1994,6 @@ function updateContent() {
                 <div class="shopping-list">
                     <div class="required-cell required-inputs can-add-product">${inputsHtml}</div>
                     <div class="required-cell required-buildings can-add-product">${buildingsHtml}</div>
-                    <!-- <div class="required-cell required-modules can-add-product">${modulesHtml}</div> -->
                     <div class="required-cell required-spectral-types">${spectralTypesHtml}</div>
                 </div>
                 ${qtyNoteHtml}

@@ -731,7 +731,6 @@
 
 #content .shopping-list .required-inputs .row-with-title::before { content: 'Inputs'; }
 #content .shopping-list .required-buildings .row-with-title::before { content: 'Buildings'; }
-#content .shopping-list .required-modules .row-with-title::before { content: 'Modules'; }
 #content .shopping-list .required-spectral-types .row-with-title::before { content: 'Spectral Types'; }
 
 #content .shopping-list .row {

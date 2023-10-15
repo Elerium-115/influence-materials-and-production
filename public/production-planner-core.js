@@ -59,11 +59,6 @@ InfluenceProductionChainsJSON.processes.forEach(process => {
         output.qty = Number(output.unitsPerSR); // WARNING: 0 for mining processes
         return output;
     });
-    // Set module parts
-    process.parts = null; // future format: [ 'Condenser', 'Evaporator' ]
-    if (process.name === 'Desalination') {
-        process.parts = [ 'Condenser', 'Evaporator' ]; //// PLACEHOLDER
-    }
     processDataById[process.id] = process;
     process.outputs.forEach(output => {
         const productId = output.productId;
@@ -320,7 +315,6 @@ function getShoppingListForProductionPlan(itemDataById) {
         return {
             inputs: [],
             buildings: [],
-            modules: [],
             spectralTypes: [],
         };
     }
@@ -371,11 +365,7 @@ function getShoppingListForProductionPlan(itemDataById) {
     }
     shoppingList.buildings = getArraySortedByNameFromObjectValues(requiredBuildings);
 
-    // #3 - required process modules, for the required buildings
-    //// TO BE IMPLEMENTED, pending official details
-    shoppingList.modules = [];
-
-    // #4 - required spectral types, only if the user selected to extract at least one raw material
+    // #3 - required spectral types, only if the user selected to extract at least one raw material
     const requiredSpectralTypes = {};
     /**
      * Parse only selected processes that require an extractor.
@@ -931,17 +921,6 @@ function createProcessContainerV2(itemId) {
     // inject details into tooltip
     let processTooltipHtml = '';
     processTooltipHtml += `<div class="building">${getBuildingNameForProcessId(processId)}</div>`;
-    /* DISABLED re: no modules in Exploitation
-    // show process-module parts only for actual buildings, not for "Empty Lot" (buildingId "0")
-    if (Number(processData.buildingId) !== 0) {
-        processTooltipHtml += '<ul>';
-        const parts = processData.parts || ['[redacted]', '[redacted]'];
-        parts.forEach(part => {
-            processTooltipHtml += `<li>${part}</li>`;
-        });
-        processTooltipHtml += '</ul>';
-    }
-    */
     // show durations only for processes with startup / runtime
     if (buildingIdsWithDurations.includes(processData.buildingId)) {
         processTooltipHtml += '<ul>';
@@ -1570,13 +1549,7 @@ function renderShoppingList() {
         shoppingListHtml += `<hr>`;
     }
 
-    // #3 - required process modules, for the required buildings
-    //// DISABLED re: no modules in Exploitation
-    // shoppingListHtml += /*html*/ `<div class="line line-title">Modules</div>`;
-    // shoppingListHtml += /*html*/ `<div class="line">[redacted]</div>`;
-    // shoppingListHtml += `<hr>`;
-
-    // #4 - required spectral types, only if the user selected to extract at least one raw material
+    // #3 - required spectral types, only if the user selected to extract at least one raw material
     if (shoppingList.spectralTypes.length) {
         const optionalSpectrals = [];
         shoppingListHtml += /*html*/ `<div class="line line-title">Spectral Types</div>`;
