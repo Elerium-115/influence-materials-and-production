@@ -283,6 +283,10 @@ function getArraySortedByNameFromObjectValues(obj) {
     return Object.values(obj).sort(compareListElementsByName);
 }
 
+function getItemIdsMatchingProductId(productId) {
+    return Object.keys(itemDataById).filter(itemId => itemDataById[itemId].productId === productId);
+}
+
 /**
  * Return the list of intermediate products, for a given production plan - counting
  * selected occurrences in the chain, NOT quantities required for the planned product.
@@ -1196,6 +1200,11 @@ function selectProductItemId(itemId) {
     itemData.isSelected = true;
     itemContainer.classList.add('selected-item');
     addProcessesAndInputsForOutputItemId(itemId);
+    const outputProductId = itemData.productId;
+    if (autoReplicate && autoReplicateSelection[outputProductId]) {
+        // Auto-select the process variant cached for auto-replication, for the current output
+        selectProcessForAllSelectedOutput(outputProductId, autoReplicateSelection[outputProductId]);
+    }
     refreshDetailsAndConnections();
     /**
      * If, after a short delay, the mouse is still over the newly selected item,
@@ -1249,6 +1258,7 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
     // if (doDebug) console.log(`--- selectProcessItemId(${itemId}, ${forceSelectProcessVariant})`);
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     const itemData = itemDataById[itemId];
+    const processId = itemData.processId;
     /**
      * Bypass redundancy checks when selecting this process "by force"
      * (i.e. when the user already confirmed the deselection of the entire
@@ -1275,7 +1285,7 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
                     // The currently-selected process variant has at least one selected input
                     selectedProcessVariantHasSelectedInput = true;
                     // Prepare data in overlay
-                    overlaySelectedProcessNameContainer.textContent = processDataById[itemData.processId].name;
+                    overlaySelectedProcessNameContainer.textContent = processDataById[processId].name;
                     overlaySelectedProcessNameContainer.dataset.pendingProcessItemId = itemId;
                     overlaySelectedProcessNameContainer.dataset.currentlySelectedProcessItemId = processVariantItemId;
                     // if (doDebug) console.log(`--- PREPARE pendingProcessItemId = ${itemId}, currentlySelectedProcessItemId = ${processVariantItemId}`);
@@ -1314,7 +1324,42 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
         // Hide the prompt from the output, after a process variant was selected
         getItemContainerById(itemData.parentItemId).classList.remove('prompt-message');
     }
+    if (autoReplicate) {
+        /**
+         * Auto-select this same process variant, for all other selected occurrences of the current output.
+         * Also cache the mapping between the output product and this process variant,
+         * for auto-selecting future occurrences via "selectProductItemId".
+         */
+        const outputProductId = itemDataById[itemData.parentItemId].productId;
+        autoReplicateSelection[outputProductId] = processId;
+        selectProcessForAllSelectedOutput(outputProductId, processId);
+    }
     refreshDetailsAndConnections();
+}
+
+/**
+ * Force-select the process variant matching "processId", for all selected occurrences of "outputProductId" (unless already selected)
+ */
+function selectProcessForAllSelectedOutput(outputProductId, processId) {
+    // Get selected occurrences of "outputProductId"
+    const selectedOutputItemIds = getItemIdsMatchingProductId(outputProductId).filter(itemId => itemDataById[itemId].isSelected);
+    if (selectedOutputItemIds.length < 2) {
+        // No OTHER occurrences
+        return;
+    }
+    selectedOutputItemIds.forEach(outputItemId => {
+        outputItemId = Number(outputItemId);
+        const matchingProcessItemId = Object.keys(itemDataById).find(itemId => {
+            // Match process variant for "outputItemId" only if not already selected
+            return itemDataById[itemId].parentItemId === outputItemId
+                && itemDataById[itemId].processId === processId
+                && !itemDataById[itemId].isSelected;
+        });
+        if (matchingProcessItemId) {
+            // Force-select matching non-selected process variant
+            selectProcessItemId(matchingProcessItemId, true);
+        }
+    });
 }
 
 function deselectProcessItemId(itemId, forceDeselectProcessVariant = false) {
