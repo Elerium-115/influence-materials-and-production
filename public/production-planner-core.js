@@ -120,24 +120,24 @@ banProcessNameForProductName('Polyacrylonitrile Oxidation and Carbonization', 'D
  * Functionality:
  * - each time a process variant is selected (IFF among multiple variants), do:
  *   - save it / update its value as:
- *     `autoReplicateSelection[outputProductId] = selectedProcessVariantId`
+ *     `autoReplicateProcessSelection[outputProductId] = selectedProcessVariantId`
  *   - immediately parse all other SELECTED occurrences of that outputProductId, REGARDLESS if any process variant selected
  *     - for each one, auto-select the same process variant
  *     - should be fun when this leads to large sub-chains being removed all across the planned chain, for the same outputProductId
- * - each time a product is selected, if it has process variants AND a matching entry in "autoReplicateSelection", do:
+ * - each time a product is selected, if it has process variants AND a matching entry in "autoReplicateProcessSelection", do:
  *   - auto-select the same process variant
  */
-const autoReplicateSelection = {};
+const autoReplicateProcessSelection = {};
 
 /**
- * "itemDataById" will effectively contain the production chain for the planned-product,
+ * "itemDataById" will effectively contain the production chain for the planned product,
  * with only the direct-input(s) for the selected items to be produced by the user
  * (i.e. NOT necessarily all the way down to the raw materials)
  */
 let itemDataById = {};
 
 /**
- * List of itemIds from the chain, corresponding to the products selected to be produced by the user.
+ * List of item IDs from the chain, corresponding to the products selected to be produced by the user.
  * NOTE: This does NOT include processes.
  */
 let selectedProductItemIds = [];
@@ -157,6 +157,8 @@ let isToolProductionPlanner = false;
  * The ID used for saving a production plan in the data storage
  */
 let productionPlanId = null;
+
+let isAutoReplicating = false;
 
 /**
  * Leader Line settings
@@ -209,12 +211,12 @@ function getRawMaterialMaxDepth(rawMaterialProductId = null) {
 function banProcessNameForProductName(processName, productName) {
     const productData = typeof productDataByName !== 'undefined' ? productDataByName[productName] : productDataRawByName[productName];
     if (!productData) {
-        console.log(`%c--- ERROR: [banProcessNameForProductName] productData not found for productName = ${productName}`, 'background: maroon');
+        if (doDebug) console.log(`%c--- ERROR: [banProcessNameForProductName] productData not found for productName = ${productName}`, 'background: maroon');
         return;
     }
     const processId = Object.keys(processDataById).find(processId => processDataById[processId].name === processName);
     if (!processId) {
-        console.log(`%c--- ERROR: [banProcessNameForProductName] processId not found for processName = ${processName}`, 'background: maroon');
+        if (doDebug) console.log(`%c--- ERROR: [banProcessNameForProductName] processId not found for processName = ${processName}`, 'background: maroon');
         return;
     }
     const productId = productData.id;
@@ -284,7 +286,9 @@ function getArraySortedByNameFromObjectValues(obj) {
 }
 
 function getItemIdsMatchingProductId(productId) {
-    return Object.keys(itemDataById).filter(itemId => itemDataById[itemId].productId === productId);
+    return Object.keys(itemDataById)
+        .filter(itemId => itemDataById[itemId].productId === productId)
+        .map(itemId => Number(itemId));
 }
 
 /**
@@ -440,7 +444,7 @@ function getOutputQtyForProcess(processId, outputProductId) {
 
 /**
  * Get total-qty required for a product-item from the given production chain,
- * by recursively multiplying each input-qty from that sub-chain, up to the planned-product
+ * by recursively multiplying each input-qty from that sub-chain, up to the planned product
  */
 function getTotalQtyForItemId(itemId, itemDataById) {
     let totalQty = 1;
@@ -496,6 +500,35 @@ function getUnitsPerHourForProcessOutput(outputProductId, processId) {
     const processData = processDataById[processId];
     const outputUnitsPerSR = Number(processData.outputs.find(output => output.productId === outputProductId).unitsPerSR);
     return outputUnitsPerSR / getRealHours(processData.mAdalianHoursPerSR);
+}
+
+function getProcessVariantItemIdsForOutputProductItemId(outputProductItemId) {
+    return Object.keys(itemDataById)
+        .filter(itemId => itemDataById[itemId].parentItemId === outputProductItemId)
+        .map(itemId => Number(itemId));
+}
+
+function getInputProductItemIdsForSelectedProcessItemId(processItemId) {
+    if (!itemDataById[processItemId].isSelected) {
+        if (doDebug) console.log(`%c--- ERROR: [getInputProductItemIdsForProcessItemId] processItemId ${processItemId} NOT selected`, 'background: maroon');
+        return;
+    }
+    return Object.keys(itemDataById)
+        .filter(itemId => itemDataById[itemId].parentItemId === processItemId)
+        .map(itemId => Number(itemId));
+}
+
+// NOTE: This function is NOT currently used (it was implemented for auto-replication, then abandoned, but might be useful in the future)
+function getSelectedItemIdsSubchainForParentItemId(parentItemId, subchainItemIds = []) {
+    const parentItemData = itemDataById[parentItemId];
+    const childItemIds = parentItemData.productId !== null ? getProcessVariantItemIdsForOutputProductItemId(parentItemId) : getInputProductItemIdsForSelectedProcessItemId(parentItemId);
+    childItemIds.forEach(itemId => {
+        if (itemDataById[itemId].isSelected) {
+            subchainItemIds.push(itemId);
+            getSelectedItemIdsSubchainForParentItemId(itemId, subchainItemIds);
+        }
+    });
+    return subchainItemIds;
 }
 
 /**
@@ -868,6 +901,15 @@ function compareListElementsByName(el1, el2) {
     return el1.name.localeCompare(el2.name);
 }
 
+/**
+ * Sort array of item IDs by "level" ascending
+ */
+function compareItemIdsByLevel(itemId1, itemId2) {
+    const itemData1 = itemDataById[itemId1];
+    const itemData2 = itemDataById[itemId2];
+    return itemData1.level - itemData2.level;
+}
+
 function createProductContainerV2(itemId) {
     const itemData = itemDataById[itemId];
     const productData = productDataById[itemData.productId];
@@ -1035,7 +1077,7 @@ function addItemToChain(itemData, overwriteItemId = null) {
 function addProcessesAndInputsForOutputItemId(outputItemId) {
     const outputItemData = itemDataById[outputItemId];
     const outputProductId = outputItemData.productId;
-    if (doDebug) console.log(`%c--- outputItemId #${outputItemId} (product #${outputProductId}: ${productDataById[outputProductId].name})`, 'background: yellow; color: black;');
+    // if (doDebug) console.log(`%c--- outputItemId #${outputItemId} (product #${outputProductId}: ${productDataById[outputProductId].name})`, 'background: yellow; color: black;');
     if (outputProductId === null) {
         if (doDebug) console.log(`%c--- ERROR: addProcessesAndInputsForOutputItemId called for non-product outputItemId ${outputItemId}`, 'background: maroon');
         return;
@@ -1047,7 +1089,7 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
             outputProductId,
             getAllAncestorProductIdsOfItemId(outputItemId).reverse(), // sort as [closest-to-outputProductId, ..., farthest-from-outputProductId_aka_planned-product]
         );
-        if (doDebug) console.log(`%c--- FILTERED processVariantIds:`, 'background: green;', processVariantIds);
+        // if (doDebug) console.log(`%c--- FILTERED processVariantIds:`, 'background: green;', processVariantIds);
     } else {
         processVariantIds = processVariantIdsByProductId[outputProductId] || []; // e.g. "Food" had no process in the old JSON from 2022
     }
@@ -1170,7 +1212,7 @@ function toggleProductItemId(itemId) {
  * The production chain is then re-rendered, and the "shopping list" is also updated.
  */
 function selectProductItemId(itemId) {
-    // if (doDebug) console.log(`--- selectProductItemId(${itemId})`);
+    // if (doDebug) console.log(`--- selectProductItemId arg:`, {itemId});
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     if (selectedProductItemIds.includes(itemId)) {
         if (doDebug) console.log(`%c--- WARNING: itemId ${itemId} is already selected`, 'background: brown');
@@ -1200,10 +1242,20 @@ function selectProductItemId(itemId) {
     itemData.isSelected = true;
     itemContainer.classList.add('selected-item');
     addProcessesAndInputsForOutputItemId(itemId);
-    const outputProductId = itemData.productId;
-    if (autoReplicate && autoReplicateSelection[outputProductId]) {
-        // Auto-select the process variant cached for auto-replication, for the current output
-        selectProcessForAllSelectedOutput(outputProductId, autoReplicateSelection[outputProductId]);
+    if (autoReplicate) {
+        // Auto-select the process variant cached for auto-replication, for the current output (if any)
+        const outputProductId = itemData.productId;
+        const autoReplicateProcessId = autoReplicateProcessSelection[outputProductId];
+        if (autoReplicateProcessId) {
+            // if (doDebug) console.log(`---> [selectProductItemId] CALL selectProcessForAllSelectedOutput`);
+            selectProcessForAllSelectedOutput(outputProductId, autoReplicateProcessId);
+        }
+        if (isAutoReplicating) {
+            // Do NOT refresh details, connections etc. while auto-replicating selections
+            return;
+        } else {
+            autoReplicateProductSelections();
+        }
     }
     refreshDetailsAndConnections();
     /**
@@ -1237,6 +1289,9 @@ function deselectProductItemId(itemId, skipRefreshDetailsAndConnections = false)
     itemDataById[itemId].isSelected = false;
     const itemContainer = getItemContainerById(itemId);
     itemContainer.classList.remove('selected-item', 'prompt-message');
+    if (autoReplicate && !isAutoReplicating) {
+        autoReplicateProductDeselection(itemId);
+    }
     if (!skipRefreshDetailsAndConnections) {
         refreshDetailsAndConnections();
     }
@@ -1255,7 +1310,7 @@ function handleOverlayResponse(isConfirmed = false) {
 }
 
 function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
-    // if (doDebug) console.log(`--- selectProcessItemId(${itemId}, ${forceSelectProcessVariant})`);
+    // if (doDebug) console.log(`--- selectProcessItemId args:`, {itemId, forceSelectProcessVariant});
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     const itemData = itemDataById[itemId];
     const processId = itemData.processId;
@@ -1331,35 +1386,17 @@ function selectProcessItemId(itemId, forceSelectProcessVariant = false) {
          * for auto-selecting future occurrences via "selectProductItemId".
          */
         const outputProductId = itemDataById[itemData.parentItemId].productId;
-        autoReplicateSelection[outputProductId] = processId;
+        autoReplicateProcessSelection[outputProductId] = processId;
+        // if (doDebug) console.log(`---> [selectProcessItemId] CALL selectProcessForAllSelectedOutput`);
         selectProcessForAllSelectedOutput(outputProductId, processId);
+        if (isAutoReplicating) {
+            // Do NOT refresh details, connections etc. while auto-replicating selections
+            return;
+        } else {
+            autoReplicateProductSelections();
+        }
     }
     refreshDetailsAndConnections();
-}
-
-/**
- * Force-select the process variant matching "processId", for all selected occurrences of "outputProductId" (unless already selected)
- */
-function selectProcessForAllSelectedOutput(outputProductId, processId) {
-    // Get selected occurrences of "outputProductId"
-    const selectedOutputItemIds = getItemIdsMatchingProductId(outputProductId).filter(itemId => itemDataById[itemId].isSelected);
-    if (selectedOutputItemIds.length < 2) {
-        // No OTHER occurrences
-        return;
-    }
-    selectedOutputItemIds.forEach(outputItemId => {
-        outputItemId = Number(outputItemId);
-        const matchingProcessItemId = Object.keys(itemDataById).find(itemId => {
-            // Match process variant for "outputItemId" only if not already selected
-            return itemDataById[itemId].parentItemId === outputItemId
-                && itemDataById[itemId].processId === processId
-                && !itemDataById[itemId].isSelected;
-        });
-        if (matchingProcessItemId) {
-            // Force-select matching non-selected process variant
-            selectProcessItemId(matchingProcessItemId, true);
-        }
-    });
 }
 
 function deselectProcessItemId(itemId, forceDeselectProcessVariant = false) {
@@ -1454,6 +1491,119 @@ function markProcessNotWaitingSelection(itemId) {
 
 function markProcessInferior(itemId) {
     getItemContainerById(itemId).classList.add('inferior-process');
+}
+
+/**
+ * Force-select the process variant matching "processId", for all selected occurrences of "outputProductId" (unless already selected)
+ */
+function selectProcessForAllSelectedOutput(outputProductId, processId) {
+    // if (doDebug) console.log(`--- selectProcessForAllSelectedOutput args:`, {outputProductId, processId});
+    // Get selected occurrences of "outputProductId"
+    const selectedOutputItemIds = getItemIdsMatchingProductId(outputProductId).filter(itemId => itemDataById[itemId].isSelected);
+    selectedOutputItemIds.forEach(outputItemId => {
+        outputItemId = Number(outputItemId);
+        const matchingProcessItemId = Object.keys(itemDataById).find(itemId => {
+            // Match process variant for "outputItemId" only if not already selected
+            return itemDataById[itemId].parentItemId === outputItemId
+                && itemDataById[itemId].processId === processId
+                && !itemDataById[itemId].isSelected;
+        });
+        if (matchingProcessItemId) {
+            // Force-select matching non-selected process variant
+            selectProcessItemId(matchingProcessItemId, true);
+        }
+    });
+}
+
+function autoReplicateProductSelections() {
+    // if (doDebug) console.log(`%c--- autoReplicateProductSelections -- START`, 'color: yellow');
+    isAutoReplicating = true;
+    /**
+     * Generate list of selected product item IDs, sorted by "level" ascending.
+     * Exclude the planned product, but KEEP the just-selected item.
+     * This ensures that all other occurrences of the just-selected item will also be selected.
+     */
+    const selectedProductItemIdsSortedByLevel = selectedProductItemIds.sort(compareItemIdsByLevel)
+        .filter(sortedItemId => sortedItemId !== 1);
+    // if (doDebug) console.log(`---> selectedProductItemIdsSortedByLevel:`, selectedProductItemIdsSortedByLevel);
+    selectedProductItemIdsSortedByLevel.forEach(selectedItemId => {
+        // if (doDebug) console.log(`%c---> selectedItemId = ${selectedItemId}`, 'color: cyan');
+        /**
+         * Parse non-selected, non-disabled occurrences of this already-selected
+         * product item, only if their parent process is already selected.
+         */
+        const otherDeselectedItemIdsMatchingProductId = getItemIdsMatchingProductId(itemDataById[selectedItemId].productId)
+            .filter(matchingItemId => {
+                const matchingItemData = itemDataById[matchingItemId];
+                return matchingItemId !== selectedItemId
+                    && !matchingItemData.isSelected
+                    && !matchingItemData.isDisabled
+                    && itemDataById[matchingItemData.parentItemId].isSelected;
+            });
+        // if (doDebug) console.log(`---> ... otherDeselectedItemIdsMatchingProductId:`, otherDeselectedItemIdsMatchingProductId);
+        otherDeselectedItemIdsMatchingProductId.forEach(matchingItemId => {
+            // Auto-select this "matchingItemId", and the entire subchain of "selectedItemId"
+            autoReplicateSubchain(selectedItemId, matchingItemId);
+        });
+    });
+    isAutoReplicating = false;
+    // if (doDebug) console.log(`%c--- autoReplicateProductSelections -- END`, 'color: yellow');
+}
+
+function autoReplicateProductDeselection(itemId) {
+    // if (doDebug) console.log(`%c--- autoReplicateProductDeselection(${itemId}) -- START`, 'color: orange');
+    isAutoReplicating = true;
+    // Auto-deselect all other selected occurrences of the product from "itemId"
+    const productId = itemDataById[itemId].productId;
+    const otherSelectedItemIdsMatchingProductId = getItemIdsMatchingProductId(productId)
+        .filter(matchingItemId => matchingItemId !== itemId && itemDataById[matchingItemId].isSelected);
+    // if (doDebug) console.log(`---> otherSelectedItemIdsMatchingProductId:`, otherSelectedItemIdsMatchingProductId);
+    otherSelectedItemIdsMatchingProductId.forEach(matchingItemId => {
+        // Deselect this occurrence WITHOUT refreshing details and connections
+        deselectProductItemId(matchingItemId, true);
+    });
+    isAutoReplicating = false;
+    // if (doDebug) console.log(`%c--- autoReplicateProductDeselection(${itemId}) -- END`, 'color: orange');
+}
+
+function autoReplicateSubchain(sourceItemId, destinationItemId) {
+    // if (doDebug) console.log(`---> ... autoReplicateSubchain w/ args:`, {sourceItemId, destinationItemId});
+    const isSourceProduct = Boolean(itemDataById[sourceItemId].productId !== null);
+    const isDestinationProduct = Boolean(itemDataById[destinationItemId].productId !== null);
+    // Select the destination item
+    isDestinationProduct ? selectProductItemId(destinationItemId) : selectProcessItemId(destinationItemId);
+    /**
+     * Parse the chidren of "sourceItemId" and, for each selected "sourceChildItemId":
+     * - find the matching child of "destinationItemId" => "matchingDestinationChildItemId"
+     * - recursively call "autoReplicateSubchain(sourceChildItemId, matchingDestinationChildItemId)"
+     */
+    const sourceChildItemIds = isSourceProduct ? getProcessVariantItemIdsForOutputProductItemId(sourceItemId) : getInputProductItemIdsForSelectedProcessItemId(sourceItemId);
+    const destinationChildItemIds = isDestinationProduct ? getProcessVariantItemIdsForOutputProductItemId(destinationItemId) : getInputProductItemIdsForSelectedProcessItemId(destinationItemId);
+    // if (doDebug) console.log(`---> ... ... sourceChildItemIds:`, sourceChildItemIds);
+    // if (doDebug) console.log(`---> ... ... destinationChildItemIds:`, destinationChildItemIds);
+    sourceChildItemIds.forEach(sourceChildItemId => {
+        // if (doDebug) console.log(`--- sourceChildItemId = ${sourceChildItemId}`);
+        if (!itemDataById[sourceChildItemId].isSelected) {
+            // Do NOT recurse for non-selected child of "sourceItemId"
+            // if (doDebug) console.log(`---> SKIP non-selected child`);
+            return;
+        }
+        let matchingDestinationChildItemId = null;
+        const isSourceChildProduct = Boolean(itemDataById[sourceChildItemId].productId !== null);
+        if (isSourceChildProduct) {
+            matchingDestinationChildItemId = destinationChildItemIds.find(destinationChildItemId => {
+                return itemDataById[destinationChildItemId].productId === itemDataById[sourceChildItemId].productId;
+            });
+        } else {
+            matchingDestinationChildItemId = destinationChildItemIds.find(destinationChildItemId => {
+                return itemDataById[destinationChildItemId].processId === itemDataById[sourceChildItemId].processId;
+            });
+        }
+        // if (doDebug) console.log(`---> matchingDestinationChildItemId = ${matchingDestinationChildItemId}`);
+        // if (doDebug) console.log(`---> RECURSIVE CALL autoReplicateSubchain`);
+        // Auto-select this "matchingItemId", and the entire subchain of "selectedItemId"
+        autoReplicateSubchain(sourceChildItemId, matchingDestinationChildItemId);
+    });
 }
 
 function setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById) {
@@ -1684,7 +1834,7 @@ function injectPlannedProductNameAndImage(plannedProductId) {
 }
 
 /**
- * Selecting a new planned-product will reset everything and re-generate its production chain, "shopping list" etc.
+ * Selecting a new planned product will reset everything and re-generate its production chain, "shopping list" etc.
  */
 function selectPlannedProductId(plannedProductId) {
     // if (doDebug) console.log(`--- SELECTING planned product ${plannedProductId} (${productDataById[plannedProductId].name})`);
