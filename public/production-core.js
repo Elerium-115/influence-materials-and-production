@@ -233,11 +233,14 @@ function resetMinimap() {
     pagemap(elMinimapCanvasNew, {
         // viewport: productChainItemsContainer,
         styles: {
-            'div.item-type-raw-material': 'rgba(55, 55, 55, 1)', // var(--raw-material) + alpha
-            'div.item-type-refined-material': 'rgba(28, 50, 61, 1)', // var(--refined-material) + alpha
-            'div.item-type-component': 'rgba(49, 90, 110, 1)', // var(--component) + alpha
-            'div.item-type-ship-component': 'rgba(49, 90, 110, 1)', // var(--component) + alpha
-            'div.item-type-finished-good': 'rgba(71, 129, 158, 1)', // var(--finished-good) + alpha
+            'div.item-type-raw-material': 'rgba(55, 55, 55, 1)', // var(--product-type-raw-material) + alpha
+            'div.item-type-refined-material': 'rgba(28, 50, 61, 1)', // var(--product-type-refined-material) + alpha
+            'div.item-type-refined-metal': 'rgba(28, 50, 61, 1)', // var(--product-type-refined-metal) + alpha
+            'div.item-type-component': 'rgba(49, 90, 110, 1)', // var(--product-type-component) + alpha
+            'div.item-type-ship-component': 'rgba(49, 90, 110, 1)', // var(--product-type-ship-component) + alpha
+            'div.item-type-finished-good': 'rgba(71, 129, 158, 1)', // var(--product-type-finished-good) + alpha
+            'div.item-type-ship': 'rgba(71, 129, 158, 1)', // var(--product-type-ship) + alpha
+            'div.item-type-building': 'rgba(71, 129, 158, 1)', // var(--product-type-building) + alpha
             'div.item-type-process': 'rgba(72, 32, 102, 1)', // var(--process) + alpha
             'div.selected-item': 'rgba(255, 214, 0, 0.3)', // var(--brand-text) + alpha
             '.disabled-item:not(.hover, .active), .faded [data-container-id]:not(.active)': 'rgba(0, 0, 0, 0.75)',

@@ -13,11 +13,14 @@
 
     --flash-error: #8e373a;
 
-    --raw-material: #373737;
-    --refined-material: #1c323d;
-    --component: #315a6e;
-    --ship-component: #315a6e;
-    --finished-good: #47819e;
+    --product-type-raw-material: #373737;
+    --product-type-refined-material: #1c323d;
+    --product-type-refined-metal: #1c323d;
+    --product-type-component: #315a6e;
+    --product-type-ship-component: #315a6e;
+    --product-type-finished-good: #47819e;
+    --product-type-ship: #47819e;
+    --product-type-building: #47819e;
 
     --process: #482066;
     --process-inferior: #211130;
@@ -671,31 +674,49 @@
 #products-list .item-type-raw-material,
 #filters-list #filter-raw-materials.checked,
 #production-chain-items [data-container-id].item-type-raw-material {
-    background: var(--raw-material);
+    background: var(--product-type-raw-material);
 }
 
 #products-list .item-type-refined-material,
 #filters-list #filter-refined-materials.checked,
 #production-chain-items [data-container-id].item-type-refined-material {
-    background: var(--refined-material);
+    background: var(--product-type-refined-material);
+}
+
+#products-list .item-type-refined-metal,
+#filters-list #filter-refined-metals.checked,
+#production-chain-items [data-container-id].item-type-refined-metal {
+    background: var(--product-type-refined-metal);
 }
 
 #products-list .item-type-component,
 #filters-list #filter-components.checked,
 #production-chain-items [data-container-id].item-type-component {
-    background: var(--component);
+    background: var(--product-type-component);
 }
 
 #products-list .item-type-ship-component,
 #filters-list #filter-ship-components.checked,
 #production-chain-items [data-container-id].item-type-ship-component {
-    background: var(--ship-component);
+    background: var(--product-type-ship-component);
 }
 
 #products-list .item-type-finished-good,
 #filters-list #filter-finished-goods.checked,
 #production-chain-items [data-container-id].item-type-finished-good {
-    background: var(--finished-good);
+    background: var(--product-type-finished-good);
+}
+
+#products-list .item-type-ship,
+#filters-list #filter-ships.checked,
+#production-chain-items [data-container-id].item-type-ship {
+    background: var(--product-type-ship);
+}
+
+#products-list .item-type-building,
+#filters-list #filter-buildings.checked,
+#production-chain-items [data-container-id].item-type-building {
+    background: var(--product-type-building);
 }
 
 /* hexagon inside process container */

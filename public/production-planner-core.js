@@ -923,11 +923,16 @@ function createProductContainerV2(itemId) {
     if (productData.type === 'Raw Material') {
         itemNameHtml += getBaseSpectralsHtmlForRawMaterial(rawMaterialDataByName[itemName]);
     }
-    productContainer.innerHTML = `<div class="item-name">${itemNameHtml}</div>`;
-    productContainer.innerHTML += `<div class="item-qty"></div>`;
-    const sustainingSpectralTypes = getRealSpectralTypesSorted(productDataByName[itemName].sustainingSpectralTypes);
-    const sustainingSpectralTypesText = sustainingSpectralTypes.length ? sustainingSpectralTypes.join(', ') : 'N/A';
-    // tooltip for product details
+    // inject item name
+    const elItemName = document.createElement('div');
+    elItemName.classList.add('item-name');
+    elItemName.innerHTML = itemNameHtml;
+    productContainer.appendChild(elItemName);
+    // inject item qty (blank container for qtys shown on hover)
+    const elItemQty = document.createElement('div');
+    elItemQty.classList.add('item-qty');
+    productContainer.appendChild(elItemQty);
+    // inject tooltip for product details
     const tooltipWrapper = document.createElement('div');
     tooltipWrapper.classList.add('item-tooltip-wrapper');
     const tooltip = document.createElement('div');
@@ -941,6 +946,8 @@ function createProductContainerV2(itemId) {
     // show product type
     tooltipHtml += `<div class="titled-details product-type">${productData.type}</div>`;
     // show sustaining spectral types
+    const sustainingSpectralTypes = getRealSpectralTypesSorted(productDataByName[itemName].sustainingSpectralTypes);
+    const sustainingSpectralTypesText = sustainingSpectralTypes.length ? sustainingSpectralTypes.join(', ') : 'N/A';
     tooltipHtml += `<div class="titled-details sustaining-spectral-types">${sustainingSpectralTypesText}</div>`;
     // show mass + volume
     tooltipHtml += /*html*/ `
