@@ -6,6 +6,8 @@
  * - "productNamesSorted"
  */
 
+const defaultPageTitle = document.title;
+
 isToolProductionPlanner = true;
 
 // Populate "productNamesByHash" and the products-list
@@ -75,12 +77,13 @@ function selectPlannedProductHash(hash) {
         renderPlannedProductionChain();
         return;
     }
-    // Select the planned product from the hash
+    // Select the planned product from the hash, and update the page title
     const productName = productNamesByHash[plannedProductCompactName];
     if (productName) {
         // if (doDebug) console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue');
         const plannedProductId = String(productDataByName[productName].id);
         selectPlannedProductId(plannedProductId);
+        document.title = `${productName} - ${defaultPageTitle}`;
     }
 }
 
