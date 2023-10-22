@@ -77,13 +77,16 @@ function selectPlannedProductHash(hash) {
         renderPlannedProductionChain();
         return;
     }
-    // Select the planned product from the hash, and update the page title
+    // Select the planned product from the hash
     const productName = productNamesByHash[plannedProductCompactName];
     if (productName) {
         // if (doDebug) console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue');
         const plannedProductId = String(productDataByName[productName].id);
         selectPlannedProductId(plannedProductId);
+        // SEO optimizations
         document.title = `${productName} - ${defaultPageTitle}`;
+        document.querySelector("meta[name='twitter:title']").content = document.title;
+        document.querySelector("meta[name='twitter:image']").content = location.origin + getProductImageSrc(productName).replace(/^\./, '');
     }
 }
 
