@@ -1875,13 +1875,57 @@ function renderItemByIdAndData(itemId, itemData) {
      * - inject the level container if needed
      * - style the item container based on "isSelected" and "isDisabled"
      * - connect to parent (if any), and set the "line" property into "itemData" (passed by reference => preserved globally in "itemDataById")
-     * (no need to mark a process as "waiting selection", b/c the hash is ONLY generated if NO process variant waiting selection)
      */
     addItemToChain(itemData, itemId);
     // Add selected product items to "selectedProductItemIds"
     if (itemData.productId !== null && itemData.isSelected) {
         selectedProductItemIds.push(itemId);
     }
+}
+
+/**
+ * Render the entire planned production chain, based on the current "itemDataById"
+ */
+function renderPlannedProductionChain() {
+    for (const [itemId, itemData] of Object.entries(itemDataById)) {
+        renderItemByIdAndData(itemId, itemData);
+    }
+    /**
+     * Mark products and processes waiting selection,
+     * and also mark "inferior" (non-default) process variants.
+     * Do this after the entire chain is rendered, to ensure that
+     * input-product containers can be accessed when parsing processes.
+     */
+    for (let [itemId, itemData] of Object.entries(itemDataById)) {
+        if (itemData.productId !== null) {
+            // Skip products
+            continue;
+        }
+        const processVariantItemIds = itemData.processVariantItemIds;
+        if (!processVariantItemIds) {
+            // Skip process if no process variants
+            continue;
+        }
+        itemId = Number(itemId);
+        const outputProductItemId = itemData.parentItemId;
+        if (!processVariantItemIds.some(processItemId => itemDataById[processItemId].isSelected)) {
+            /**
+             * None of the process variants in this group is selected, so:
+             * - mark this process and its inputs as waiting selection
+             * - mark this output to prompt for selecting a process variant
+             */
+            markProcessWaitingSelection(itemId);
+            getItemContainerById(outputProductItemId).classList.add('prompt-message', '--select-variant');
+        }
+        // Mark this process as having sibling variants
+        getItemContainerById(itemId).classList.add('has-sibling-variants');
+        const preferredProcessVariantItemId = getPreferredProcessVariantItemId(itemDataById[outputProductItemId].productId, processVariantItemIds);
+        if (itemId !== preferredProcessVariantItemId) {
+            // Mark "inferior" (non-default) process variant
+            markProcessInferior(itemId);
+        }
+    }
+    refreshDetailsAndConnections(true);
 }
 
 function selectPlannedProductData(plannedProductData) {
@@ -1895,10 +1939,7 @@ function selectPlannedProductData(plannedProductData) {
          * until the user saves the newly configured production plan.
          */
         itemDataById = {...plannedProductData.itemDataById};
-        for (const [itemId, itemData] of Object.entries(itemDataById)) {
-            renderItemByIdAndData(itemId, itemData);
-        }
-        refreshDetailsAndConnections(true);
+        renderPlannedProductionChain();
         return;
     }
     // Select the planned product

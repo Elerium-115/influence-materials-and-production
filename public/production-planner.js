@@ -72,10 +72,7 @@ function selectPlannedProductHash(hash) {
          * During this process, the "line" property will automatically be injected into each item.
          */
         setItemDataByIdDecodedFromHash(hashEncodedFromItemDataById);
-        for (const [itemId, itemData] of Object.entries(itemDataById)) {
-            renderItemByIdAndData(itemId, itemData);
-        }
-        refreshDetailsAndConnections(true);
+        renderPlannedProductionChain();
         return;
     }
     // Select the planned product from the hash
