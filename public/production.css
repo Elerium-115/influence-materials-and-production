@@ -1176,9 +1176,19 @@
     backdrop-filter: opacity(1);
 }
 
-#shopping-list-subtitle {
+#shopping-list-qty-disclaimer {
     margin-top: 0.5rem;
-    opacity: 0.5;
+}
+
+#shopping-list-qty-final-product {
+    color: var(--brand-text);
+}
+
+#shopping-list-qty-final-product::before {
+    content: "✕";
+    font-size: 0.5rem;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
 }
 
 #shopping-list {

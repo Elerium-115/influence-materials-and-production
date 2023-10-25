@@ -146,6 +146,8 @@ let shouldHandleHashchange = true;
 
 const shareLinkContainer = document.getElementById('share-link');
 const shoppingListContainer = document.getElementById('shopping-list');
+const shoppingListQtyDisclaimerContainer = document.getElementById('shopping-list-qty-disclaimer');
+const shoppingListQtyFinalProductContainer = document.getElementById('shopping-list-qty-final-product');
 const shoppingListProductImage = document.getElementById('shopping-list-product-image');
 const shoppingListProductName = document.getElementById('shopping-list-product-name');
 const productionChainOverlayContainer = document.getElementById('production-chain-overlay');
@@ -1742,6 +1744,7 @@ function renderSelectedProductsList() {
 }
 
 function renderShoppingList() {
+    shoppingListQtyDisclaimerContainer.classList.add('hidden');
     const shoppingList = getShoppingListForProductionPlan(itemDataById);
     if (!shoppingList) {
         // Waiting for user to select a required process variant => NO shopping list
@@ -1753,13 +1756,20 @@ function renderShoppingList() {
     // #1 - required inputs
     if (shoppingList.inputs.length) {
         // if (doDebug) console.log(`--- shoppingList.inputs:`, shoppingList.inputs);
+        let qtyMultiplier = 1;
+        if (shoppingList.inputs.some(inputData => inputData.qty < 1) && shoppingList.inputs.every(inputData => inputData.qty < 10)) {
+            // Small quantities, with at least one of them lower than 1
+            qtyMultiplier = 1000;
+        }
+        shoppingListQtyFinalProductContainer.textContent = qtyMultiplier;
+        shoppingListQtyDisclaimerContainer.classList.remove('hidden');
         shoppingListHtml += /*html*/ `<div class="line line-title"><div>Inputs</div><div>Qty*</div></div>`;
         shoppingList.inputs.forEach(inputData => {
             const hrefHtml = isToolProductionPlanner ? `href="#${getCompactName(inputData.name)}"` : '';
             shoppingListHtml += /*html*/ `
                 <div class="line">
                     <div><a ${hrefHtml} class="list-product-name">${inputData.name}</a></div>
-                    <div class="qty">${getNiceNumber(inputData.qty)}</div>
+                    <div class="qty">${getNiceNumber(inputData.qty * qtyMultiplier)}</div>
                 </div>
             `;
         });
