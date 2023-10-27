@@ -144,7 +144,8 @@ ul {
     list-style: none;
 }
 
-label {
+label,
+input[type='range'] {
     cursor: pointer;
 }
 

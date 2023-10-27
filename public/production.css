@@ -39,6 +39,7 @@
 /* options */
 
 .options label {
+    position: relative;
     white-space: nowrap;
     margin-right: 0.5rem;
     padding: 0.5rem;
@@ -54,8 +55,49 @@
     background: var(--active-bg);
 }
 
+.options label.has-toggle-tooltip:hover {
+    border-bottom-color: transparent;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.options label.has-toggle-tooltip:hover::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: -1px;
+    right: -1px;
+    height: 0.5rem;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    border-bottom: 1px solid var(--active-bg);
+}
+
+.options label.has-toggle-tooltip.checked:hover::after {
+    background: var(--active-bg);
+}
+
 .options label input {
     margin-right: 0.5rem;
+}
+
+.options label .toggle-tooltip {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: -1px;
+    display: block;
+    width: calc(100% + 5rem);
+    min-width: 15rem;
+    background: var(--dark-bg);
+    white-space: normal;
+    padding: 0.5rem;
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+    border-top-left-radius: 0;
+}
+
+.options label:not(:hover) .toggle-tooltip {
+    display: none;
 }
 
 .options .separator {
@@ -63,9 +105,26 @@
     width: 2rem;
 }
 
+#top-settings {
+    display: flex;
+    align-items: center;
+}
+
 #chain-settings {
     margin-top: 2rem;
     padding-bottom: 0.5rem; /* compensate for padding of options */
+}
+
+#scale-slider {
+    position: relative;
+}
+
+#scale-slider::before {
+    content: 'Scale';
+    position: absolute;
+    top: -1.25rem;
+    width: 100%;
+    text-align: center;
 }
 
 .missing-image {
@@ -430,6 +489,7 @@
     flex-direction: row-reverse;
     justify-content: flex-end;
     margin-left: -1.5rem;
+    transform-origin: left top;
 }
 
 .incomplete-chain #production-chain-items {

@@ -49,7 +49,7 @@
         </nav>
 
         <div id="production-wrapper" class="chain-type-combined">
-            <div class="options">
+            <div id="top-settings" class="options">
                 <span>Select product:</span>
                 <div id="products-list-wrapper" class="list-hidden">
                     <input type="text">
@@ -67,8 +67,17 @@
                     </div>
                 </div>
                 <span class="separator"></span>
-                <label for="toggle-optimize-variants" class="checked"><input type="checkbox" id="toggle-optimize-variants" checked>Optimize Process Variants</label>
-                <label for="toggle-auto-replicate" class="checked"><input type="checkbox" id="toggle-auto-replicate" checked>Auto-Replicate Selections</label>
+                <label for="toggle-optimize-variants" class="checked has-toggle-tooltip">
+                    <input type="checkbox" id="toggle-optimize-variants" checked>Optimize Process Variants
+                    <div class="toggle-tooltip">Enabling this will automatically hide some process variants, in order to avoid infinite production loops, or highly inefficient production paths.</div>
+                </label>
+                <label for="toggle-auto-replicate" class="checked has-toggle-tooltip">
+                    <input type="checkbox" id="toggle-auto-replicate" checked>Auto-Replicate Selections
+                    <div class="toggle-tooltip">Enabling this will automatically select the same products and process variants, that you already selected in other parts of the production chain.</div>
+                </label>
+                <div id="scale-slider">
+                    <input type="range" min="50" max="100" value="100" id="scale-slider-range">
+                </div>
             </div>
             <div id="selected-production-chain">
                 <h2><span id="selected-item-name"></span> - Production Plan</h2>

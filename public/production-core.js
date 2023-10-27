@@ -12,6 +12,7 @@ const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
 const productSearchInput = productsListWrapper.querySelector('input');
 const productsListContainer = document.getElementById('products-list');
+const scaleSliderRange = document.getElementById('scale-slider-range');
 const selectedItemNameContainer = document.getElementById('selected-item-name');
 const chainTypeLinkContainer = document.getElementById('chain-type-link');
 const productChainItemsContainer = document.getElementById('production-chain-items');
@@ -360,6 +361,12 @@ on('mouseleave', '.list-product-name', el => {
         itemContainer.classList.remove('hover');
     });
 });
+
+// Scale the production chain
+scaleSliderRange.oninput = function() {
+    productChainItemsContainer.style.scale = scaleSliderRange.value / 100;
+    refreshConnections();
+}
 
 window.addEventListener('keydown', event => {
     // Pressing "Enter" while the product-search input is focused, selects the first matching product
