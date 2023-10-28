@@ -15,8 +15,17 @@ const templateProductionPlan = /*html*/ `
             <a class="active" onclick="onClickProductionPlanActions(['save', 'close'])">Save and close</a>
             <a onclick="onClickProductionPlanActions(['save'])">Save and continue editing</a>
             <div class="options">
-                <label for="toggle-optimize-variants" class="checked"><input type="checkbox" id="toggle-optimize-variants" checked>Optimize Process Variants</label>
-                <label for="toggle-auto-replicate" class="checked"><input type="checkbox" id="toggle-auto-replicate" checked>Auto-Replicate Selections</label>
+                <label for="toggle-optimize-variants" class="checked has-toggle-tooltip">
+                    <input type="checkbox" id="toggle-optimize-variants" checked>Optimize Variants
+                    <div class="toggle-tooltip">Enabling this will automatically hide some process variants, in order to avoid infinite production loops, or highly inefficient production paths.</div>
+                </label>
+                <label for="toggle-auto-replicate" class="checked has-toggle-tooltip">
+                    <input type="checkbox" id="toggle-auto-replicate" checked>Auto-Replicate
+                    <div class="toggle-tooltip">Enabling this will automatically select the same products and process variants, that you already selected in other parts of the production chain.</div>
+                </label>
+                <div id="scale-slider">
+                    <input type="range" min="50" max="100" value="100" id="scale-slider-range">
+                </div>
             </div>
             <div class="topbar-section-right">
                 <div class="cta connect-wallet-cta" onclick="connectWallet(isExampleAsteroidsPlan)">Connect wallet</div>
@@ -28,7 +37,7 @@ const templateProductionPlan = /*html*/ `
             <div id="selected-production-chain">
                 <h2><span id="selected-item-name"></span> - Production Plan</h2>
             </div>
-            <div id="user-selected-products-wrapper" class="hidden-NOT">
+            <div id="user-selected-products-wrapper">
                 <div>Intermediate products that you also plan to produce</div>
                 <div class="extra-info">(counting selected occurrences in the chain, not quantities required for the planned product)</div>
                 <div id="user-selected-products-list" class="brand-text"><span>N/A</span></div>
@@ -36,6 +45,10 @@ const templateProductionPlan = /*html*/ `
             <div id="production-chain-wrapper">
                 <div id="shopping-list-wrapper">
                     <h3>Shopping List</h3>
+                    <div id="shopping-list-qty-disclaimer">
+                        <span>*Qty for final product</span>
+                        <span id="shopping-list-qty-final-product">1000</span>
+                    </div>
                     <div id="shopping-list"></div>
                     <div id="shopping-list-product-image-wrapper" onclick="onClickProductImage(this)">
                         <img id="shopping-list-product-image" src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image'); this.parentNode.classList.add('missing-image-wrapper');">

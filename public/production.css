@@ -117,6 +117,7 @@
 
 #scale-slider {
     position: relative;
+    display: flex;
 }
 
 #scale-slider::before {
@@ -125,6 +126,10 @@
     top: -1.25rem;
     width: 100%;
     text-align: center;
+}
+
+#scale-slider-range {
+    width: 5rem;
 }
 
 .missing-image {

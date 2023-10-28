@@ -1601,7 +1601,14 @@
 @keyframes disabling-minimap-wrapper { 0% { right: 0; } 100% { right: -50%; } }
 
 #template-production-plan .topbar .options {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
     padding-left: 2rem;
+}
+
+#template-production-plan .topbar .options #scale-slider::before {
+    display: none;
 }
 
 #template-production-plan .topbar .topbar-section-right {

@@ -68,11 +68,11 @@
                 </div>
                 <span class="separator"></span>
                 <label for="toggle-optimize-variants" class="checked has-toggle-tooltip">
-                    <input type="checkbox" id="toggle-optimize-variants" checked>Optimize Process Variants
+                    <input type="checkbox" id="toggle-optimize-variants" checked>Optimize Variants
                     <div class="toggle-tooltip">Enabling this will automatically hide some process variants, in order to avoid infinite production loops, or highly inefficient production paths.</div>
                 </label>
                 <label for="toggle-auto-replicate" class="checked has-toggle-tooltip">
-                    <input type="checkbox" id="toggle-auto-replicate" checked>Auto-Replicate Selections
+                    <input type="checkbox" id="toggle-auto-replicate" checked>Auto-Replicate
                     <div class="toggle-tooltip">Enabling this will automatically select the same products and process variants, that you already selected in other parts of the production chain.</div>
                 </label>
                 <div id="scale-slider">
@@ -98,7 +98,7 @@
                     <a><span class="link-text">View Full Production Chain</span></a>
                 </div>
             </div>
-            <div id="user-selected-products-wrapper" class="hidden-NOT">
+            <div id="user-selected-products-wrapper">
                 <div>Intermediate products that you also plan to produce</div>
                 <div class="extra-info">(counting selected occurrences in the chain, not quantities required for the planned product)</div>
                 <div id="user-selected-products-list" class="brand-text"><span>N/A</span></div>

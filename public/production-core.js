@@ -363,9 +363,11 @@ on('mouseleave', '.list-product-name', el => {
 });
 
 // Scale the production chain
-scaleSliderRange.oninput = function() {
-    productChainItemsContainer.style.scale = scaleSliderRange.value / 100;
-    refreshConnections();
+if (scaleSliderRange) {
+    scaleSliderRange.oninput = function() {
+        productChainItemsContainer.style.scale = scaleSliderRange.value / 100;
+        refreshConnections();
+    }
 }
 
 window.addEventListener('keydown', event => {
