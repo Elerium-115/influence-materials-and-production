@@ -224,7 +224,7 @@ input[type='text'] {
         grid-template-columns: 1fr;
         row-gap: 2rem;
     }
-    
+
     .ratios-raw-materials > i {
         display: none;
     }

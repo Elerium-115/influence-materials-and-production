@@ -1717,7 +1717,7 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
                     break;
                 case 'delete':
                     line.remove();
-                    break;    
+                    break;
             }
         }
     }
@@ -1735,7 +1735,7 @@ function renderSelectedProductsList() {
                 intermediateProductsListHtml += `<span class="qty">${intermediateProductData.qty}</span>`;
             }
             intermediateProductsListHtml += `</span>`;
-        });    
+        });
     } else {
         // NO intermediate products selected
         intermediateProductsListHtml = '<span>N/A</span>';

@@ -100,7 +100,7 @@ const elsProducts = elProductsList.querySelectorAll('li');
 function resetSelectionsExcept(skipEntity = null) {
     if (skipEntity !== 'spectral-types') {
         elsSpectralTypes.forEach(el => el.classList.remove('active'));
-    }    
+    }
     if (skipEntity !== 'products') {
         elsProducts.forEach(el => el.classList.remove('active'));
     }

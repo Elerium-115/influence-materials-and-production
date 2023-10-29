@@ -18,7 +18,7 @@ async function fetchAccessToken(clientId, clientKey) {
     } catch (error) {
         console.log(`--- [influencethIo > fetchAccessToken] ERROR:`, error); //// TEST
         return null;
-    }    
+    }
 }
 
 module.exports = {

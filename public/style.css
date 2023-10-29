@@ -1,508 +1,483 @@
 @font-face {
-    font-family: Jura;
-    src: url("font/Jura-Regular.ttf");
+  font-family: Jura;
+  src: url("font/Jura-Regular.ttf");
 }
-
 @font-face {
-    font-family: Jura-Bold;
-    src: url("font/Jura-Bold.ttf");
+  font-family: Jura-Bold;
+  src: url("font/Jura-Bold.ttf");
 }
-
-@keyframes spin { 100% { transform: rotate(360deg); } }
-
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
 :root {
-    --default-bg: #202634;
-    --default-overlay-bg: rgba(32, 38, 52, 0.95);
-    --dark-bg: #10131a;
-
-    --default-text: #a9acb3;
-    --default-text_semifaded: #a9acb380;
-    --default-text_faded: #a9acb333;
-    --brand-text: #ffd600;
-
-    --link: #3f80ea;
-    --link-hover: #6599ee;
-
-    --volatiles: #5bc0f5;
-    --volatiles_faded: #5bc0f508;
-    --organics: #78d356;
-    --organics_faded: #78d35608;
-    --metals: #ff852b;
-    --metals_faded: #ff852b08;
-    --rare-earth: #ff3636;
-    --rare-earth_faded: #ff363608;
-    --fissiles: #8a15ff;
-    --fissiles_faded: #8a15ff08;
-
-    --rarity-common: rgb(187, 187, 187);
-    --rarity-uncommon: rgb(105, 235, 244);
-    --rarity-rare: rgb(79, 144, 255);
-    --rarity-superior: rgb(136, 79, 255);
-    --rarity-exceptional: rgb(255, 152, 79);
-    --rarity-incomparable: rgb(255, 217, 79);
-
-    /* 1/3 = 120 deg, 1/5 = 72 deg, 1/7 ~= 52 deg (but then 3/7 = only 152 deg), transparent gap = +/- 4deg */
-
-    /* type C = volatiles 2/5 (0-144 deg), organics 3/5 (144-360 deg) */
-    --gradient-type-c: transparent 1.11%,
-        var(--volatiles) 1.11%, var(--volatiles) 38.88%, transparent 38.88%, transparent 41.11%,
-        var(--organics) 41.11%, var(--organics) 98.88%, transparent 98.88%;
-
-    /* type CI = volatiles 1/2 (0-180 deg), organics 1/2 (180-360 deg) */
-    --gradient-type-ci: transparent 1.11%,
-        var(--volatiles) 1.11%, var(--volatiles) 48.88%, transparent 48.88%, transparent 51.11%,
-        var(--organics) 51.11%, var(--organics) 98.88%, transparent 98.88%;
-
-    /* type CIS = volatiles 3/7 (0-152 deg), organics 1/7 (152-204 deg), metals 1/7 (204-256 deg), rare-earth 1/7 (256-308 deg), fissiles 1/7 (308-360 deg) */
-    --gradient-type-cis: transparent 1.11%,
-        var(--volatiles) 1.11%, var(--volatiles) 41.11%, transparent 41.11%, transparent 43.33%,
-        var(--organics) 43.33%, var(--organics) 55.55%, transparent 55.55%, transparent 57.77%,
-        var(--metals) 57.77%, var(--metals) 70%, transparent 70%, transparent 72.22%,
-        var(--rare-earth) 72.22%, var(--rare-earth) 84.44%, transparent 84.44%, transparent 86.66%,
-        var(--fissiles) 86.66%, var(--fissiles) 98.88%, transparent 98.88%;
-
-    /* type CM = volatiles 1/5 (0-72 deg), organics 1/5 (72-144 deg), metals 2/5 (144-288 deg), fissiles 1/5 (288-360 deg) */
-    --gradient-type-cm: transparent 1.11%,
-        var(--volatiles) 1.11%, var(--volatiles) 18.88%, transparent 18.88%, transparent 21.11%,
-        var(--organics) 21.11%, var(--organics) 38.88%, transparent 38.88%, transparent 41.11%,
-        var(--metals) 41.11%, var(--metals) 78.88%, transparent 78.88%, transparent 81.11%,
-        var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
-
-    /* type CMS = volatiles 1/7 (0-52 deg), organics 1/7 (52-104 deg), metals 3/7 (104-256 deg), rare-earth 1/7 (256-308 deg), fissiles 1/7 (308-360 deg) */
-    --gradient-type-cms: transparent 1.11%,
-        var(--volatiles) 1.11%, var(--volatiles) 13.33%, transparent 13.33%, transparent 15.55%,
-        var(--organics) 15.55%, var(--organics) 27.77%, transparent 27.77%, transparent 30%,
-        var(--metals) 30%, var(--metals) 70%, transparent 70%, transparent 72.22%,
-        var(--rare-earth) 72.22%, var(--rare-earth) 84.44%, transparent 84.44%, transparent 86.66%,
-        var(--fissiles) 86.66%, var(--fissiles) 98.88%, transparent 98.88%;
-
-    /* type CS = volatiles 1/5 (0-72 deg), organics 1/5 (72-144 deg), metals 1/5 (144-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360 deg) */
-    --gradient-type-cs: transparent 1.11%,
-        var(--volatiles) 1.11%, var(--volatiles) 18.88%, transparent 18.88%, transparent 21.11%,
-        var(--organics) 21.11%, var(--organics) 38.88%, transparent 38.88%, transparent 41.11%,
-        var(--metals) 41.11%, var(--metals) 58.88%, transparent 58.88%, transparent 61.11%,
-        var(--rare-earth) 61.11%, var(--rare-earth) 78.88%, transparent 78.88%, transparent 81.11%,
-        var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
-
-    /* type I = volatiles 1/1 (0-360 deg) */
-    --gradient-type-i: var(--volatiles) 0%, var(--volatiles) 100%;
-
-    /* type M = metals 4/5 (0-288 deg), fissiles 1/5 (288-360 deg) */
-    --gradient-type-m: transparent 1.11%,
-        var(--metals) 1.11%, var(--metals) 78.88%, transparent 78.88%, transparent 81.11%,
-        var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
-
-    /* type S = metals 1/3 (0-120 deg), rare-earth 1/3 (120-240 deg), fissiles 1/3 (240-360 deg) */
-    --gradient-type-s: transparent 1.11%,
-        var(--metals) 1.11%, var(--metals) 32.22%, transparent 32.22%, transparent 34.44%,
-        var(--rare-earth) 34.44%, var(--rare-earth) 65.55%, transparent 65.55%, transparent 67.77%,
-        var(--fissiles) 67.77%, var(--fissiles) 98.88%, transparent 98.88%;
-
-    /* type SI = volatiles 2/5 (0-144 deg), metals 1/5 (144-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360 deg) */
-    --gradient-type-si: transparent 1.11%,
-        var(--volatiles) 1.11%, var(--volatiles) 38.88%, transparent 38.88%, transparent 41.11%,
-        var(--metals) 41.11%, var(--metals) 58.88%, transparent 58.88%, transparent 61.11%,
-        var(--rare-earth) 61.11%, var(--rare-earth) 78.88%, transparent 78.88%, transparent 81.11%,
-        var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
-
-    /* type SM = metals 3/5 (0-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360 deg) */
-    --gradient-type-sm: transparent 1.11%,
-        var(--metals) 1.11%, var(--metals) 58.88%, transparent 58.88%, transparent 61.11%,
-        var(--rare-earth) 61.11%, var(--rare-earth) 78.88%, transparent 78.88%, transparent 81.11%,
-        var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
-
-    /* type X = unknown / undefined */
-    --gradient-type-x: var(--default-text) 0%, var(--default-text) 100%;
+  --default-bg: #202634;
+  --default-overlay-bg: rgba(32, 38, 52, 0.95);
+  --dark-bg: #10131a;
+  --default-text: #a9acb3;
+  --default-text_semifaded: #a9acb380;
+  --default-text_faded: #a9acb333;
+  --brand-text: #ffd600;
+  --link: #3f80ea;
+  --link-hover: #6599ee;
+  --volatiles: #5bc0f5;
+  --volatiles_faded: #5bc0f508;
+  --organics: #78d356;
+  --organics_faded: #78d35608;
+  --metals: #ff852b;
+  --metals_faded: #ff852b08;
+  --rare-earth: #ff3636;
+  --rare-earth_faded: #ff363608;
+  --fissiles: #8a15ff;
+  --fissiles_faded: #8a15ff08;
+  --rarity-common: rgb(187, 187, 187);
+  --rarity-uncommon: rgb(105, 235, 244);
+  --rarity-rare: rgb(79, 144, 255);
+  --rarity-superior: rgb(136, 79, 255);
+  --rarity-exceptional: rgb(255, 152, 79);
+  --rarity-incomparable: rgb(255, 217, 79);
+  /* 1/3 = 120 deg, 1/5 = 72 deg, 1/7 ~= 52 deg (but then 3/7 = only 152 deg), transparent gap = +/- 4deg */
+  /* type C = volatiles 2/5 (0-144 deg), organics 3/5 (144-360 deg) */
+  --gradient-type-c: transparent 1.11%,
+      var(--volatiles) 1.11%, var(--volatiles) 38.88%, transparent 38.88%, transparent 41.11%,
+      var(--organics) 41.11%, var(--organics) 98.88%, transparent 98.88%;
+  /* type CI = volatiles 1/2 (0-180 deg), organics 1/2 (180-360 deg) */
+  --gradient-type-ci: transparent 1.11%,
+      var(--volatiles) 1.11%, var(--volatiles) 48.88%, transparent 48.88%, transparent 51.11%,
+      var(--organics) 51.11%, var(--organics) 98.88%, transparent 98.88%;
+  /* type CIS = volatiles 3/7 (0-152 deg), organics 1/7 (152-204 deg), metals 1/7 (204-256 deg), rare-earth 1/7 (256-308 deg), fissiles 1/7 (308-360 deg) */
+  --gradient-type-cis: transparent 1.11%,
+      var(--volatiles) 1.11%, var(--volatiles) 41.11%, transparent 41.11%, transparent 43.33%,
+      var(--organics) 43.33%, var(--organics) 55.55%, transparent 55.55%, transparent 57.77%,
+      var(--metals) 57.77%, var(--metals) 70%, transparent 70%, transparent 72.22%,
+      var(--rare-earth) 72.22%, var(--rare-earth) 84.44%, transparent 84.44%, transparent 86.66%,
+      var(--fissiles) 86.66%, var(--fissiles) 98.88%, transparent 98.88%;
+  /* type CM = volatiles 1/5 (0-72 deg), organics 1/5 (72-144 deg), metals 2/5 (144-288 deg), fissiles 1/5 (288-360 deg) */
+  --gradient-type-cm: transparent 1.11%,
+      var(--volatiles) 1.11%, var(--volatiles) 18.88%, transparent 18.88%, transparent 21.11%,
+      var(--organics) 21.11%, var(--organics) 38.88%, transparent 38.88%, transparent 41.11%,
+      var(--metals) 41.11%, var(--metals) 78.88%, transparent 78.88%, transparent 81.11%,
+      var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
+  /* type CMS = volatiles 1/7 (0-52 deg), organics 1/7 (52-104 deg), metals 3/7 (104-256 deg), rare-earth 1/7 (256-308 deg), fissiles 1/7 (308-360 deg) */
+  --gradient-type-cms: transparent 1.11%,
+      var(--volatiles) 1.11%, var(--volatiles) 13.33%, transparent 13.33%, transparent 15.55%,
+      var(--organics) 15.55%, var(--organics) 27.77%, transparent 27.77%, transparent 30%,
+      var(--metals) 30%, var(--metals) 70%, transparent 70%, transparent 72.22%,
+      var(--rare-earth) 72.22%, var(--rare-earth) 84.44%, transparent 84.44%, transparent 86.66%,
+      var(--fissiles) 86.66%, var(--fissiles) 98.88%, transparent 98.88%;
+  /* type CS = volatiles 1/5 (0-72 deg), organics 1/5 (72-144 deg), metals 1/5 (144-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360 deg) */
+  --gradient-type-cs: transparent 1.11%,
+      var(--volatiles) 1.11%, var(--volatiles) 18.88%, transparent 18.88%, transparent 21.11%,
+      var(--organics) 21.11%, var(--organics) 38.88%, transparent 38.88%, transparent 41.11%,
+      var(--metals) 41.11%, var(--metals) 58.88%, transparent 58.88%, transparent 61.11%,
+      var(--rare-earth) 61.11%, var(--rare-earth) 78.88%, transparent 78.88%, transparent 81.11%,
+      var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
+  /* type I = volatiles 1/1 (0-360 deg) */
+  --gradient-type-i: var(--volatiles) 0%, var(--volatiles) 100%;
+  /* type M = metals 4/5 (0-288 deg), fissiles 1/5 (288-360 deg) */
+  --gradient-type-m: transparent 1.11%,
+      var(--metals) 1.11%, var(--metals) 78.88%, transparent 78.88%, transparent 81.11%,
+      var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
+  /* type S = metals 1/3 (0-120 deg), rare-earth 1/3 (120-240 deg), fissiles 1/3 (240-360 deg) */
+  --gradient-type-s: transparent 1.11%,
+      var(--metals) 1.11%, var(--metals) 32.22%, transparent 32.22%, transparent 34.44%,
+      var(--rare-earth) 34.44%, var(--rare-earth) 65.55%, transparent 65.55%, transparent 67.77%,
+      var(--fissiles) 67.77%, var(--fissiles) 98.88%, transparent 98.88%;
+  /* type SI = volatiles 2/5 (0-144 deg), metals 1/5 (144-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360 deg) */
+  --gradient-type-si: transparent 1.11%,
+      var(--volatiles) 1.11%, var(--volatiles) 38.88%, transparent 38.88%, transparent 41.11%,
+      var(--metals) 41.11%, var(--metals) 58.88%, transparent 58.88%, transparent 61.11%,
+      var(--rare-earth) 61.11%, var(--rare-earth) 78.88%, transparent 78.88%, transparent 81.11%,
+      var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
+  /* type SM = metals 3/5 (0-216 deg), rare-earth 1/5 (216-288 deg), fissiles 1/5 (288-360 deg) */
+  --gradient-type-sm: transparent 1.11%,
+      var(--metals) 1.11%, var(--metals) 58.88%, transparent 58.88%, transparent 61.11%,
+      var(--rare-earth) 61.11%, var(--rare-earth) 78.88%, transparent 78.88%, transparent 81.11%,
+      var(--fissiles) 81.11%, var(--fissiles) 98.88%, transparent 98.88%;
+  /* type X = unknown / undefined */
+  --gradient-type-x: var(--default-text) 0%, var(--default-text) 100%;
 }
 
 * {
-    box-sizing: border-box;
-    font-weight: normal;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
 }
 
 h2 {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 h3 {
-    font-size: 1.1rem;
+  font-size: 1.1rem;
 }
 
 a {
-    color: var(--link);
-    text-decoration: none;
+  color: var(--link);
+  text-decoration: none;
 }
-
 a:hover {
-    color: var(--link-hover);
-    text-decoration: underline;
+  color: var(--link-hover);
+  text-decoration: underline;
 }
 
 ul {
-    list-style: none;
+  list-style: none;
 }
 
 label,
-input[type='range'] {
-    cursor: pointer;
+input[type=range] {
+  cursor: pointer;
 }
 
 .hidden {
-    display: none !important;
+  display: none !important;
 }
 
 .brand-text {
-    color: var(--brand-text);
+  color: var(--brand-text);
 }
 
 .influence-logo-icon {
-    width: 2rem;
-    height: 2rem;
-    background-image: url("./img/influence-logo.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  background-image: url("./img/influence-logo.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  border-radius: 50%;
 }
-
 .influence-logo-icon:hover {
-    animation: spin 500ms ease-in-out;
+  animation: spin 500ms ease-in-out;
 }
 
 body {
-    background-color: var(--default-bg);
-    color: var(--default-text);
-    font-family: Jura, sans-serif;
+  background-color: var(--default-bg);
+  color: var(--default-text);
+  font-family: Jura, sans-serif;
 }
 
-body.embed {
-    background-color: unset;
+.rarity-common {
+  color: var(--rarity-common);
 }
 
-body.embed::-webkit-scrollbar {
-    height: 7px;
-    width: 7px;
+.rarity-uncommon {
+  color: var(--rarity-uncommon);
 }
 
-body.embed::-webkit-scrollbar-track {
-    background: transparent;
+.rarity-rare {
+  color: var(--rarity-rare);
 }
 
-body.embed::-webkit-scrollbar-thumb {
-    background: hsla(0, 0%, 100%, .25);
+.rarity-superior {
+  color: var(--rarity-superior);
 }
 
-.rarity-common { color: var(--rarity-common); }
-.rarity-uncommon { color: var(--rarity-uncommon); }
-.rarity-rare { color: var(--rarity-rare); }
-.rarity-superior { color: var(--rarity-superior); }
-.rarity-exceptional { color: var(--rarity-exceptional); }
-.rarity-incomparable { color: var(--rarity-incomparable); }
+.rarity-exceptional {
+  color: var(--rarity-exceptional);
+}
 
+.rarity-incomparable {
+  color: var(--rarity-incomparable);
+}
 
 /* main */
-
 .main {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    padding: 5rem 2rem 2rem 2rem;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding: 5rem 2rem 2rem 2rem;
 }
 
 .topbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    display: flex;
-    background: var(--dark-bg);
-    font-size: 0.9rem;
-    margin-left: -2rem; /* match with padding-left of ".main" */
-    padding-left: 1.5rem;
-    z-index: 1;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  background: var(--dark-bg);
+  font-size: 0.9rem;
+  margin-left: -2rem; /* match with padding-left of ".main" */
+  padding-left: 1.5rem;
+  z-index: 1;
 }
-
-.embed > .main > .topbar:not(.topbar-sections) {
-    display: none;
+.topbar.topbar-sections {
+  justify-content: space-between;
 }
-
-.topbar-sections {
-    justify-content: space-between;
+.topbar.topbar-sections .topbar-section-left {
+  display: flex;
 }
-
-.topbar-section-left {
-    display: flex;
+.topbar.topbar-sections .topbar-section-right {
+  display: flex;
+  align-items: center;
+  margin: 0 1.5rem;
 }
-
-.embed .topbar-section-left {
-    width: 0;
-    overflow: hidden;
-}
-
 .topbar:not(.topbar-sections) > *,
-.topbar-section-left > * {
-    display: flex;
-    align-items: center;
-    height: 3rem;
-    padding: 0 1rem;
+.topbar .topbar-section-left > * {
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  padding: 0 1rem;
 }
-
-.topbar-section-right {
-    display: flex;
-    align-items: center;
-    margin: 0 1.5rem;
-}
-
 .topbar a {
-    cursor: pointer;
+  cursor: pointer;
 }
-
 .topbar .active {
-    background-color: var(--default-bg);
-    color: var(--brand-text);
+  background-color: var(--default-bg);
+  color: var(--brand-text);
+}
+.topbar #adalia-id-logo {
+  opacity: 0.8;
+}
+.topbar #adalia-id-logo:hover {
+  opacity: 1;
+}
+.topbar #adalia-id-logo img {
+  max-height: 60%;
+}
+.topbar #adalia-id-logo .logo-small {
+  display: none;
 }
 
-.topbar #dalia-id-logo {
-    opacity: 0.8;
+.embed {
+  background-color: unset;
 }
-
-.topbar #dalia-id-logo:hover {
-    opacity: 1;
+.embed::-webkit-scrollbar {
+  height: 7px;
+  width: 7px;
 }
-
-.topbar #dalia-id-logo img {
-    max-height: 60%;
+.embed::-webkit-scrollbar-track {
+  background: transparent;
 }
-
-.topbar #dalia-id-logo .logo-small {
-    display: none;
+.embed::-webkit-scrollbar-thumb {
+  background: hsla(0, 0%, 100%, 0.25);
 }
-
+.embed .topbar:not(.topbar-sections) {
+  display: none;
+}
+.embed .topbar .topbar-section-left {
+  width: 0;
+  overflow: hidden;
+}
 
 /* spectral types */
-
 .spectral-types ul {
-    display: grid;
-    grid-template-columns: repeat(11, 1fr);
-    column-gap: 1.5vw;
-    margin-top: 25px;
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  -moz-column-gap: 1.5vw;
+       column-gap: 1.5vw;
+  margin-top: 25px;
 }
 
 .spectral-types ul li,
 .spectral-types-circle {
-    aspect-ratio: 1 / 1;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
+  aspect-ratio: 1/1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 /* Source: https://stackoverflow.com/a/51496341 */
 .spectral-types ul li::before,
 .spectral-types-circle::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    padding: 0.5vmin;
-    border-radius: 50%;
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0.2;
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 0.5vmin;
+  border-radius: 50%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.2;
 }
 
 .spectral-types ul li:hover,
 .spectral-types-circle:not(.selected):hover {
-    background: rgba(255, 255, 255, 0.05);
-    cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
 }
 
 .spectral-types ul li.active,
 .spectral-types-circle:hover,
 .spectral-types-circle.selected {
-    color: #fff;
+  color: #fff;
 }
 
 .spectral-types ul li.active::before,
 .spectral-types-circle:hover::before {
-    opacity: 1;
+  opacity: 1;
 }
 
-.spectral-types ul li[data-value="c"]::before,
-.spectral-types ul li.active[data-value="c"]::before,
+.spectral-types ul li[data-value=c]::before,
+.spectral-types ul li.active[data-value=c]::before,
 .spectral-types-circle.type-C::before {
-    background: conic-gradient(var(--gradient-type-c));
-}
-.spectral-types ul li[data-value="ci"]::before,
-.spectral-types ul li.active[data-value="ci"]::before,
-.spectral-types-circle.type-CI::before {
-    background: conic-gradient(var(--gradient-type-ci));
-}
-.spectral-types ul li[data-value="cis"]::before,
-.spectral-types ul li.active[data-value="cis"]::before,
-.spectral-types-circle.type-CIS::before {
-    background: conic-gradient(var(--gradient-type-cis));
-}
-.spectral-types ul li[data-value="cm"]::before,
-.spectral-types ul li.active[data-value="cm"]::before,
-.spectral-types-circle.type-CM::before {
-    background: conic-gradient(var(--gradient-type-cm));
-}
-.spectral-types ul li[data-value="cms"]::before,
-.spectral-types ul li.active[data-value="cms"]::before,
-.spectral-types-circle.type-CMS::before {
-    background: conic-gradient(var(--gradient-type-cms));
-}
-.spectral-types ul li[data-value="cs"]::before,
-.spectral-types ul li.active[data-value="cs"]::before,
-.spectral-types-circle.type-CS::before {
-    background: conic-gradient(var(--gradient-type-cs));
-}
-.spectral-types ul li[data-value="i"]::before,
-.spectral-types ul li.active[data-value="i"]::before,
-.spectral-types-circle.type-I::before {
-    background: conic-gradient(var(--gradient-type-i));
-}
-.spectral-types ul li[data-value="m"]::before,
-.spectral-types ul li.active[data-value="m"]::before,
-.spectral-types-circle.type-M::before {
-    background: conic-gradient(var(--gradient-type-m));
-}
-.spectral-types ul li[data-value="s"]::before,
-.spectral-types ul li.active[data-value="s"]::before,
-.spectral-types-circle.type-S::before {
-    background: conic-gradient(var(--gradient-type-s));
-}
-.spectral-types ul li[data-value="si"]::before,
-.spectral-types ul li.active[data-value="si"]::before,
-.spectral-types-circle.type-SI::before {
-    background: conic-gradient(var(--gradient-type-si));
-}
-.spectral-types ul li[data-value="sm"]::before,
-.spectral-types ul li.active[data-value="sm"]::before,
-.spectral-types-circle.type-SM::before {
-    background: conic-gradient(var(--gradient-type-sm));
-}
-.spectral-types-circle.type-X::before {
-    background: conic-gradient(var(--gradient-type-x));
+  background: conic-gradient(var(--gradient-type-c));
 }
 
+.spectral-types ul li[data-value=ci]::before,
+.spectral-types ul li.active[data-value=ci]::before,
+.spectral-types-circle.type-CI::before {
+  background: conic-gradient(var(--gradient-type-ci));
+}
+
+.spectral-types ul li[data-value=cis]::before,
+.spectral-types ul li.active[data-value=cis]::before,
+.spectral-types-circle.type-CIS::before {
+  background: conic-gradient(var(--gradient-type-cis));
+}
+
+.spectral-types ul li[data-value=cm]::before,
+.spectral-types ul li.active[data-value=cm]::before,
+.spectral-types-circle.type-CM::before {
+  background: conic-gradient(var(--gradient-type-cm));
+}
+
+.spectral-types ul li[data-value=cms]::before,
+.spectral-types ul li.active[data-value=cms]::before,
+.spectral-types-circle.type-CMS::before {
+  background: conic-gradient(var(--gradient-type-cms));
+}
+
+.spectral-types ul li[data-value=cs]::before,
+.spectral-types ul li.active[data-value=cs]::before,
+.spectral-types-circle.type-CS::before {
+  background: conic-gradient(var(--gradient-type-cs));
+}
+
+.spectral-types ul li[data-value=i]::before,
+.spectral-types ul li.active[data-value=i]::before,
+.spectral-types-circle.type-I::before {
+  background: conic-gradient(var(--gradient-type-i));
+}
+
+.spectral-types ul li[data-value=m]::before,
+.spectral-types ul li.active[data-value=m]::before,
+.spectral-types-circle.type-M::before {
+  background: conic-gradient(var(--gradient-type-m));
+}
+
+.spectral-types ul li[data-value=s]::before,
+.spectral-types ul li.active[data-value=s]::before,
+.spectral-types-circle.type-S::before {
+  background: conic-gradient(var(--gradient-type-s));
+}
+
+.spectral-types ul li[data-value=si]::before,
+.spectral-types ul li.active[data-value=si]::before,
+.spectral-types-circle.type-SI::before {
+  background: conic-gradient(var(--gradient-type-si));
+}
+
+.spectral-types ul li[data-value=sm]::before,
+.spectral-types ul li.active[data-value=sm]::before,
+.spectral-types-circle.type-SM::before {
+  background: conic-gradient(var(--gradient-type-sm));
+}
+
+.spectral-types-circle.type-X::before {
+  background: conic-gradient(var(--gradient-type-x));
+}
 
 /* Overlays */
-
 #overlay-wrapper {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    /* do NOT use "display: flex" b/c an ".overlay-panel" taller than the window height can NOT be fully scrolled up/down */
-    display: grid;
-    align-items: center;
-    background: var(--default-overlay-bg);
-    overflow-y: auto;
-    z-index: 1;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* do NOT use "display: flex" b/c an ".overlay-panel" taller than the window height can NOT be fully scrolled up/down */
+  display: grid;
+  align-items: center;
+  background: var(--default-overlay-bg);
+  overflow-y: auto;
+  z-index: 1;
 }
-
 #overlay-wrapper.uberlay {
-    z-index: 10; /* ensure ".uberlay" above all other overlays, EXCEPT "#loading-overlay" */
+  z-index: 10; /* ensure ".uberlay" above all other overlays, EXCEPT "#loading-overlay" */
+}
+#overlay-wrapper .overlay-panel {
+  margin: 3rem auto;
+}
+#overlay-wrapper h3 {
+  margin-bottom: 1rem;
 }
 
 body:not(.overlay-visible) #overlay-wrapper {
-    display: none;
+  display: none;
 }
 
 body.overlay-visible {
-    overflow: hidden;
-}
-
-#overlay-wrapper .overlay-panel {
-    margin: 3rem auto;
-}
-
-#overlay-wrapper h3 {
-    margin-bottom: 1rem;
+  overflow: hidden;
 }
 
 /* Overlay - Product image */
-
 #overlay-product-image {
-    position: absolute;
-    display: grid;
-    align-items: center;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: 0 !important;
+  position: absolute;
+  display: grid;
+  align-items: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 !important;
 }
-
 #overlay-product-image img {
-    max-width: 100%;
-    max-height: 100%;
-    margin: 0 auto;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0 auto;
 }
 
 /* Overlay - Close */
-
 #ovrelay-close {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    line-height: 1.6rem;
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--default-text);
-    cursor: pointer;
-    padding: 1rem;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  line-height: 1.6rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--default-text);
+  cursor: pointer;
+  padding: 1rem;
 }
-
 #ovrelay-close:hover {
-    color: white;
+  color: white;
 }
-
 
 /* Loading overlay */
-
 #loading-overlay {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    background: var(--default-overlay-bg);
-    z-index: 20; /* ensure loading-overlay above ".uberlay" */
-    opacity: 0.8;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--default-overlay-bg);
+  z-index: 20; /* ensure loading-overlay above ".uberlay" */
+  opacity: 0.8;
 }
-
-#loading-overlay[class*="visible"] {
-    display: flex;
+#loading-overlay[class*=visible] {
+  display: flex;
 }
-
 #loading-overlay .influence-logo-icon {
-    width: 5rem;
-    height: 5rem;
-    animation: spin 1000ms linear infinite;
+  width: 5rem;
+  height: 5rem;
+  animation: spin 1000ms linear infinite;
 }
-
 
 /* screen below 700 px */
-
 @media only screen and (max-width: 700px) {
-    .topbar {
-        font-size: 0.8rem;
-    }
-
-    .topbar #dalia-id-logo .logo-large {
-        display: none;
-    }
-
-    .topbar #dalia-id-logo .logo-small {
-        display: block;
-    }
-}
+  .topbar {
+    font-size: 0.8rem;
+  }
+  .topbar #adalia-id-logo .logo-small {
+    display: block;
+  }
+  .topbar #adalia-id-logo .logo-large {
+    display: none;
+  }
+}/*# sourceMappingURL=style.css.map */
