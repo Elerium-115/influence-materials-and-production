@@ -4,7 +4,7 @@ const cache = require('../cache/index');
 const providerInfluencethIo = require('../providers/influenceth.io/index');
 const providerMock = require('../providers/mock/index');
 const providerMongoDB = require('../providers/mongodb/index');
-const utils = require('../utils/index');
+const providerZora = require('../providers/zora/index');
 
 const router = express.Router();
 
@@ -59,14 +59,6 @@ router.get(
         console.log(`--- [router] GET /asteroids/owned-by/${req.params.address}`); //// TEST
         const address = toChecksumAddress(req.params.address);
         console.log(`---> address = ${address}`); //// TEST
-        /* DISABLED call to Influence API for "asteroidsCount" b/c this can be derived from "asteroidsIds"
-        // Count ALL owned asteroids
-        const asteroidsCount = await providerInfluencethIo.fetchAsteroidsCountOwnedBy(address);
-        if (asteroidsCount.error) {
-            res.json({error: asteroidsCount.error});
-            return;
-        }
-        */
         // Get IDs of ALL owned asteroids (TBC for higher numbers, e.g. +100 owned asteroids?)
         let asteroidsIds;
         let cachedAsteroidsIds = cache.ownedAsteroidsIdsByAddress[address.toLowerCase()];
@@ -75,7 +67,7 @@ router.get(
             asteroidsIds = cachedAsteroidsIds.asteroidsIds;
             console.log(`---> found CACHED asteroidsIds`); //// TEST
         } else {
-            asteroidsIds = await providerInfluencethIo.fetchAsteroidsIdsOwnedBy(address);
+            asteroidsIds = await providerZora.fetchAsteroidsIdsOwnedBy(address);
             if (asteroidsIds.error) {
                 res.json({error: asteroidsIds.error});
                 return;
@@ -117,7 +109,7 @@ router.get(
                 // Pause for 1 second before each subsequent request, to not spam the API
                 await new Promise(r => setTimeout(r, 1000));
             }
-            const asteroidsMetadata = await providerInfluencethIo.fetchAsteroidsMetadataOwnedBy(address, page);
+            const asteroidsMetadata = await providerZora.fetchAsteroidsMetadataOwnedBy(address, page);
             if (asteroidsMetadata.error) {
                 res.json({error: asteroidsMetadata.error});
                 return;

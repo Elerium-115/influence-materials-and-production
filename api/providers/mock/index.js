@@ -2,6 +2,8 @@
  * This code is also duplicated in the client, to avoid API calls
  * for the example asteroids plan, since it's read-only anyway.
  */
+const mockProductionPlanDataById = {}; //// TEST
+/*
 const mockProductionPlanDataById = {
 	"mock1": {
 		"plannedProductName": "Aluminium",
@@ -352,6 +354,7 @@ const mockProductionPlanDataById = {
 		},
 	},
 };
+*/
 
 module.exports = {
     mockProductionPlanDataById,

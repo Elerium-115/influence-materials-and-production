@@ -1,13 +1,10 @@
 const axios = require('axios');
-const influenceUtils = require('influence-utils'); //// UNINSTALL?
 const influenceUtilsV2 = require('@influenceth/sdk');
 const utils = require('../../utils/index');
 
 /**
  * Provider:
- * https://www.npmjs.com/package/influence-utils
- * https://github.com/Influenceth/influence-utils
- * https://github.com/Influenceth/influence-utils/blob/master/index.js
+ * https://github.com/influenceth/sdk
  */
 
 const ASTEROIDS_PER_PAGE_MAX = 30;
@@ -80,33 +77,6 @@ async function fetchAsteroidMetadata(asteroidId) {
 }
 
 /**
- * Get count of ALL asteroids owned by address
- * @param address WARNING: case-sensitive on mainnet as of Sep 2022 (case-insensitive on testnet)
- */
-async function fetchAsteroidsCountOwnedBy(address) {
-    try {
-        var config = {
-            method: 'get',
-            url: `https://api.influenceth.io/v1/asteroids`,
-            params: {
-                ownedBy: address,
-                count: true,
-            },
-            headers: {
-                'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
-            },
-        };
-        console.log(`--- [fetchAsteroidsCountOwnedBy] ${config.method.toUpperCase()} ${config.url}`); //// TEST
-        const response = await axios(config);
-        console.log(`--- [fetchAsteroidsCountOwnedBy] response.data:`, response.data); //// TEST
-        return response.data;
-    } catch (error) {
-        console.log(`--- [fetchAsteroidsCountOwnedBy] ERROR:`, error); //// TEST
-        return {error};
-    }
-}
-
-/**
  * Get IDs for ALL (TBC?) asteroids owned by address
  * @param address WARNING: case-sensitive on mainnet as of Sep 2022 (case-insensitive on testnet)
  */
@@ -167,7 +137,6 @@ async function fetchAsteroidsMetadataOwnedBy(address, page) {
 module.exports = {
     ASTEROIDS_PER_PAGE_MAX,
     fetchAsteroidMetadata,
-    fetchAsteroidsCountOwnedBy,
     fetchAsteroidsIdsOwnedBy,
     fetchAsteroidsMetadataOwnedBy,
 };

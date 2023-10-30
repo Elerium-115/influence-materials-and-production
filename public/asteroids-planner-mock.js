@@ -1,3 +1,5 @@
+const mockAsteroidsPlan = []; //// TEST
+/*
 const mockAsteroidsPlan = [
 	{
 		"asteroid_name": "Asteroid #40291",
@@ -56,11 +58,14 @@ const mockAsteroidsPlan = [
 		],
 	},
 ];
+*/
 
 /**
  * This code is also duplicated here from the API, to avoid API calls
  * for the example asteroids plan, since it's read-only anyway.
  */
+const mockProductionPlanDataById = {}; //// TEST
+/*
 const mockProductionPlanDataById = {
 	"mock1": {
 		"plannedProductName": "Aluminium",
@@ -411,3 +416,4 @@ const mockProductionPlanDataById = {
 		},
 	},
 };
+*/
