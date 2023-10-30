@@ -1,5 +1,6 @@
 const axios = require('axios');
-const influenceUtils = require('influence-utils');
+const influenceUtils = require('influence-utils'); //// UNINSTALL?
+const influenceUtilsV2 = require('@influenceth/sdk');
 const utils = require('../../utils/index');
 
 /**
@@ -21,19 +22,26 @@ const BONUS_TYPE_PRETTY = {
 };
 
 function parseAsteroidMetadata(rawData) {
+    rawData = rawData[0];
+    // console.log(`--- [parseAsteroidMetadata] rawData:`, rawData); //// TEST
+    const asteroidId = rawData.id;
+    const celestial = rawData.Celestial;
+    const spectralTypeId = celestial.celestialType;
+    const bonuses = influenceUtilsV2.Asteroid.getBonuses(celestial.bonuses, spectralTypeId);
     const metadata = {
         // area: Math.floor(4 * Math.PI * Math.pow(rawData.radius, 2) / 1000000), // km2
-        area: rawData.lots,
-        bonuses: parseAsteroidBonuses(rawData.bonuses),
-        id: rawData.asteroidId,
-        name: rawData.name,
-        owner: rawData.owner,
-        rarity: influenceUtils.toRarity(rawData.bonuses),
-        scanned: rawData.scanned,
-        size: influenceUtils.toSize(rawData.radius),
-        type: influenceUtils.toSpectralType(rawData.spectralType).toUpperCase(),
-        url: `https://game.influenceth.io/asteroids/${rawData.asteroidId}`,
+        area: influenceUtilsV2.Asteroid.getSurfaceArea(asteroidId),
+        bonuses: parseAsteroidBonuses(bonuses),
+        id: asteroidId,
+        name: rawData.Name ? rawData.Name.name : influenceUtilsV2.Asteroid.getBaseName(asteroidId, spectralTypeId),
+        owner: rawData.Nft.owners.ethereum ? rawData.Nft.owners.ethereum : rawData.Nft.owners.starknet,
+        rarity: influenceUtilsV2.Asteroid.getRarity(bonuses),
+        scanned: celestial.scanStatus, // see "SCAN_STATUSES" @ SDK "asteroid.js"
+        size: influenceUtilsV2.Asteroid.getSize(celestial.radius),
+        type: influenceUtilsV2.Asteroid.getSpectralType(spectralTypeId).toUpperCase(),
+        url: `https://game.influenceth.io/asteroids/${asteroidId}`,
     };
+    // console.log(`---> [parseAsteroidMetadata] metadata:`, metadata); //// TEST
     return metadata;
 }
 
@@ -55,7 +63,8 @@ async function fetchAsteroidMetadata(asteroidId) {
     try {
         var config = {
             method: 'get',
-            url: `https://api.influenceth.io/v1/asteroids/${asteroidId}`,
+            // url: `https://api.influenceth.io/v1/asteroids/${asteroidId}`, // old v1
+            url: `https://api.influenceth.io/v2/entities?label=3&id=${asteroidId}`, // new v2
             headers: {
                 'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
             },

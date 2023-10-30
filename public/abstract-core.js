@@ -14,8 +14,8 @@ document.querySelectorAll('.options label > input').forEach(elInput => {
 
 let apiUrl = `https://elerium-influence-api.vercel.app`;
 if (window.location.hostname === '127.0.0.1') {
-    // localhost API @ http://127.0.0.1:3000
-    apiUrl = `${window.location.protocol}//${window.location.hostname}:3000`;
+    // localhost API @ http://127.0.0.1:3001
+    apiUrl = `${window.location.protocol}//${window.location.hostname}:3001`;
 }
 
 /**
