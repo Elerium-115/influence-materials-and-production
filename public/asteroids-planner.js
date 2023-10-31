@@ -1959,7 +1959,7 @@ function updateContent() {
             plannedProductData.shopping_list.inputs.forEach(inputData => {
                 inputsHtml += /*html*/ `
                     <div class="row" onclick="onClickSelectAsteroidForProduct('${inputData.input_name}')">
-                        <span class="name">${inputData.input_name}</span><span class="qty">${inputData.qty}</span>
+                        <span class="name">${inputData.input_name}</span><span class="qty">${getNiceNumber(inputData.qty)}</span>
                     </div>
                 `;
             });

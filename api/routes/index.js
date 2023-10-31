@@ -109,6 +109,7 @@ router.get(
                 // Pause for 1 second before each subsequent request, to not spam the API
                 await new Promise(r => setTimeout(r, 1000));
             }
+            //// TO DO: fetch based on "asteroidsIds" instead of "address"?
             const asteroidsMetadata = await providerZora.fetchAsteroidsMetadataOwnedBy(address, page);
             if (asteroidsMetadata.error) {
                 res.json({error: asteroidsMetadata.error});

@@ -13,7 +13,6 @@ const COLLECTION_ADDRESS_ASTEROIDS = '0x6e4c6d9b0930073e958abd2aba516b885260b8ff
 
 /**
  * Get IDs for ALL (TBC?) asteroids owned by address
- * - source: https://docs.zora.co/docs/guides/zdk-intro-guide#nft-balance-for-an-address
  */
 async function fetchAsteroidsIdsOwnedBy(address) {
     try {
@@ -43,8 +42,7 @@ async function fetchAsteroidsIdsOwnedBy(address) {
 }
 
 /**
- * Get metadata for max "ASTEROIDS_PER_PAGE_MAX" asteroids owned by address, per "page"
- * @param address WARNING: case-sensitive on mainnet as of Sep 2022 (case-insensitive on testnet)
+ * Get metadata for asteroids owned by address
  */
 async function fetchAsteroidsMetadataOwnedBy(address, page) {
     console.log(`--- [fetchAsteroidsMetadataOwnedBy] TEST NO asteroids`); return []; //// TEST
