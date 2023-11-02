@@ -233,18 +233,18 @@ body {
         background-color: var(--default-bg);
         color: var(--brand-text);
     }
-    
+
     #adalia-id-logo {
         opacity: 0.8;
 
         &:hover {
             opacity: 1;
         }
-        
+
         img {
             max-height: 60%;
         }
-        
+
         .logo-small {
             display: none;
         }

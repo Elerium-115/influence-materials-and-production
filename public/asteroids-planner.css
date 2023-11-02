@@ -219,7 +219,7 @@
 }
 
 #asteroids-planner-tree .planned-products-tree-item > .tree-label.connected-as-origin {
-    background: linear-gradient(90deg, transparent 50%, var(--overactive-bg) 100%); 
+    background: linear-gradient(90deg, transparent 50%, var(--overactive-bg) 100%);
     border-color: var(--link);
     border-radius: 0.5rem;
 }
@@ -430,7 +430,7 @@
 }
 
 #shopping-list-tree .shopping-tree ul .tree-label.connected {
-    background: linear-gradient(-90deg, transparent 50%, var(--overactive-bg) 100%); 
+    background: linear-gradient(-90deg, transparent 50%, var(--overactive-bg) 100%);
     border-color: var(--link);
 }
 

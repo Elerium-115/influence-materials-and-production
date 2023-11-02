@@ -1311,7 +1311,7 @@ function handleOverlayResponse(isConfirmed = false) {
     productionChainOverlayContainer.classList.add('hidden');
     if (!isConfirmed) {
         return;
-    } 
+    }
     // #1 - force-deselect the entire sub-chain of the currently-selected process variant
     deselectProcessItemId(overlaySelectedProcessNameContainer.dataset.currentlySelectedProcessItemId, true);
     // #2 - force-select the pending process

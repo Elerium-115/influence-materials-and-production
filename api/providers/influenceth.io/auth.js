@@ -2,7 +2,7 @@ const axios = require('axios');
 
 async function fetchAccessToken(clientId, clientKey) {
     try {
-        var config = {
+        const config = {
             method: 'post',
             url: `https://api.influenceth.io/v1/auth/token`,
             data: {

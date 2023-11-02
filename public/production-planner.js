@@ -167,34 +167,3 @@ if (!hashToPreselect) {
 selectPlannedProductHash(hashToPreselect);
 
 resetMinimap();
-
-//// FIX BUG re: qty of intermediate products should use the same formula as calculating the qty of inputs
-//// -- for each intermediate product, sum the (potentially-different!) qtys of all its selected-occurrences in the chain
-
-//// TO DO
-/*
-- add link in v1 chains for "incomplete" chains, recommending to view it in the v2 planner
-    - show link in both chains, to view the selected / planned product in the "other" chain
-- rework thumbs for v1+v2 prodction chains:
-    - do NOT inject ".thumb" into each item container (also reduces the HTML)
-    - insteaad, use a single thumb-container (e.g. toggled in the top-right?), with a curved leader-line towards the hovered item
-    - try to avoid the 404 error for missing images
-        - if all else fails, hardcode a list of all images (dynamic folder parsing only possible in NodeJS), and use that list to avoid loading a missing image
-    - if NOT reworking thumbs (i.e. distinct thumb injected for each item), then watch out:
-        - BUG:
-            - enable the code from "createProductContainerV2" that injects a thumb
-            - start with Warehouse
-            - select Concrete + Steel Beam + Steel Sheet > hover over Steel Sheet
-                => BUG = weird yellow highlight above the item-name, below the thumb (see Desktop > "Aug-06-2022 01-51-17")
-- estimate surface area required for the currently-selected production chain (i.e. count "active" process-varaints?)
-    - when user connected, show which of their asteroids meet the requirements of surface + spectral type (prioritize single asteroids, over combos of asteroids)
-        ^^ implement for both v1 + v2
-    - Discord #general
-        me: Another idea I had today for the production chains:
-            Would it be safe'ish to estimate the surface area required for a production chain (in its currently-selected state), by simply counting how many processes it contains? @protoplanetary#6428 
-            Basically assuming 1 process (incl. mining processes) = 1 km2.
-            EDIT: ignoring warehouses
-            Then, once a user is connected to the tool with their wallet, we can even highlight which of their asteroids (or a combo of asteroids) could fully support that chain - also taking into account the required spectral-types.
-            Going even further, a user could select one-or-more asteroids that they want to use for a production chain, and the tool would automatically try to expand the sub-chains, up to the available surface of those asteroid(s). The user would then see how much of that chain they can produce themselves, vs. what else they need to procure from market/alliance etc.
-- add text-inputs for unit-price of each item from the "shopping list" => calculate total = sum(item_qty * unit_price)
-*/

@@ -57,8 +57,6 @@ const elTemplateProductionPlan = document.getElementById('template-production-pl
 const elsConnectWalletCta = document.querySelectorAll('.connect-wallet-cta');
 const elsConnectedAddress = document.querySelectorAll('.connected-address');
 
-const swayPerLot = 6922; // as of 2023-03-16
-
 let asteroidsPlannerTree = [];
 let shoppingListTree = {};
 
@@ -201,7 +199,7 @@ function getWalletAsteroidCardHtml(metadata) {
             <div class="area area-km2">${metadata.area}</div>
             <a class="influence-logo-icon" href="${metadata.url}" target="_blank" title="View in-game"></a>
         </div>
-        <div class="sway-wrapper"><div class="sway">${(metadata.area * swayPerLot).toLocaleString()}</div></div>
+        <div class="sway-wrapper"><div class="sway">${(metadata.sway).toLocaleString()}</div></div>
     `;
 }
 
@@ -1169,7 +1167,7 @@ async function updateWalletAsteroidsPanel() {
                 ${getWalletAsteroidCardHtml(metadata)}
             </div>
         `;
-        claimableSwayValue += metadata.area * swayPerLot;
+        claimableSwayValue += metadata.sway;
     });
     document.getElementById('claimable-sway').textContent = claimableSwayValue.toLocaleString();
     /**

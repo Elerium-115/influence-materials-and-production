@@ -710,7 +710,7 @@
 }
 
 #production-chain-connections > * {
-    position: absolute; 
+    position: absolute;
     line-height: 1px;
     z-index: -1;
 }
