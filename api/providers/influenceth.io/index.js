@@ -93,12 +93,18 @@ async function fetchAsteroidMetadata(asteroidId) {
         const response = await axios(config);
         const rawData = response.data[0];
         console.log(`--- [fetchAsteroidMetadata] rawData KEYS:`, Object.keys(rawData)); //// TEST
+
+        let secondaryData;
+        //// DISABLED re: 504 error in production, when fetching secondary metadata @ "fetchAsteroidsMetadataOwnedBy"
+        /*
         // Fetch secondary metadata
         const secondaryConfig = getSecondaryDataConfig(asteroidId);
         console.log(`--- [fetchAsteroidMetadata] ${secondaryConfig.method.toUpperCase()} ${secondaryConfig.url}`); //// TEST
         const secondaryResponse = await axios(secondaryConfig);
-        const secondaryData = secondaryResponse.data;
+        secondaryData = secondaryResponse.data;
         console.log(`--- [fetchAsteroidMetadata] secondaryData has ATTRIBUTES:`, Object.keys(secondaryData).includes('attributes')); //// TEST
+        */
+
         return parseAsteroidMetadata(rawData, secondaryData);
     } catch (error) {
         console.log(`--- [fetchAsteroidMetadata] ERROR:`, error); //// TEST
@@ -116,7 +122,7 @@ async function fetchAsteroidsMetadataOwnedBy(address) {
             url: `https://api.influenceth.io/v2/entities`,
             params: {
                 label: 3, // asteroids
-                match: address.length === 42 ? `Nft.owners.ethereum:"${address}"` : `Nft.owners.starknet:"${address}"`,
+                match: address.length === ETHEREUM_ADDRESS_LENGTH ? `Nft.owners.ethereum:"${address}"` : `Nft.owners.starknet:"${address}"`,
             },
             headers: {
                 'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
@@ -128,13 +134,19 @@ async function fetchAsteroidsMetadataOwnedBy(address) {
         console.log(`--- [fetchAsteroidsMetadataOwnedBy] FETCHING secondary metadata for each asteroid...`);
         const asteroidsMetadata = [];
         for (const rawData of response.data) {
-            const asteroidId = rawData.id;
+            let secondaryData;
+
+            //// DISABLED re: 504 error in production, when fetching secondary metadata @ "fetchAsteroidsMetadataOwnedBy"
+            /*
             // Fetch secondary metadata
+            const asteroidId = rawData.id;
             const secondaryConfig = getSecondaryDataConfig(asteroidId);
             // console.log(`--- [fetchAsteroidsMetadataOwnedBy] ${secondaryConfig.method.toUpperCase()} ${secondaryConfig.url}`); //// TEST
             const secondaryResponse = await axios(secondaryConfig);
             const secondaryData = secondaryResponse.data;
             // console.log(`--- [fetchAsteroidsMetadataOwnedBy] secondaryData for #${asteroidId} has ATTRIBUTES:`, Object.keys(secondaryData).includes('attributes')); //// TEST
+            */
+
             asteroidsMetadata.push(parseAsteroidMetadata(rawData, secondaryData));
         }
         console.log(`--- [fetchAsteroidsMetadataOwnedBy] DONE fetching secondary metadata for each asteroid`);
