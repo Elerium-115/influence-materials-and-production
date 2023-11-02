@@ -19,13 +19,7 @@ const BONUS_TYPE_PRETTY = {
     fissile: 'Fissiles',
 };
 
-function canClaimSway(secondaryData) {
-    return secondaryData
-        && secondaryData.attributes
-        && secondaryData.attributes.some(attr => attr.trait_type === 'Can Claim SWAY' && attr.value === 'Yes');
-}
-
-function parseAsteroidMetadata(rawData, secondaryData) {
+function parseAsteroidMetadata(rawData) {
     // console.log(`--- [parseAsteroidMetadata] rawData:`, rawData); //// TEST
     const asteroidId = rawData.id;
     const celestial = rawData.Celestial;
@@ -46,8 +40,7 @@ function parseAsteroidMetadata(rawData, secondaryData) {
         type: influenceUtilsV2.Asteroid.getSpectralType(spectralTypeId).toUpperCase(),
         url: `https://game.influenceth.io/asteroids/${asteroidId}`,
     };
-    // Get claimable SWAY from secondary metadata
-    if (canClaimSway(secondaryData)) {
+    if (rawData.AsteroidReward && rawData.AsteroidReward.hasSwayClaim) {
         metadata.sway = metadata.area * SWAY_PER_LOT;
     }
     // console.log(`---> [parseAsteroidMetadata] metadata:`, metadata); //// TEST
@@ -68,13 +61,6 @@ function parseAsteroidBonuses(rawBonuses) {
     return bonuses;
 }
 
-function getSecondaryDataConfig(asteroidId) {
-    return {
-        method: 'get',
-        url: `https://api.influenceth.io/v2/metadata/asteroids/${asteroidId}`,
-    };
-}
-
 async function fetchAsteroidMetadata(asteroidId) {
     try {
         // Fetch primary metadata
@@ -83,6 +69,7 @@ async function fetchAsteroidMetadata(asteroidId) {
             url: `https://api.influenceth.io/v2/entities`,
             params: {
                 label: 3, // asteroids
+                components: 'AsteroidReward,Celestial,Name,Nft',
                 id: asteroidId,
             },
             headers: {
@@ -93,19 +80,7 @@ async function fetchAsteroidMetadata(asteroidId) {
         const response = await axios(config);
         const rawData = response.data[0];
         console.log(`--- [fetchAsteroidMetadata] rawData KEYS:`, Object.keys(rawData)); //// TEST
-
-        let secondaryData;
-        //// DISABLED re: 504 error in production, when fetching secondary metadata @ "fetchAsteroidsMetadataOwnedBy"
-        /*
-        // Fetch secondary metadata
-        const secondaryConfig = getSecondaryDataConfig(asteroidId);
-        console.log(`--- [fetchAsteroidMetadata] ${secondaryConfig.method.toUpperCase()} ${secondaryConfig.url}`); //// TEST
-        const secondaryResponse = await axios(secondaryConfig);
-        secondaryData = secondaryResponse.data;
-        console.log(`--- [fetchAsteroidMetadata] secondaryData has ATTRIBUTES:`, Object.keys(secondaryData).includes('attributes')); //// TEST
-        */
-
-        return parseAsteroidMetadata(rawData, secondaryData);
+        return parseAsteroidMetadata(rawData);
     } catch (error) {
         console.log(`--- [fetchAsteroidMetadata] ERROR:`, error); //// TEST
         return {error};
@@ -122,6 +97,7 @@ async function fetchAsteroidsMetadataOwnedBy(address) {
             url: `https://api.influenceth.io/v2/entities`,
             params: {
                 label: 3, // asteroids
+                components: 'AsteroidReward,Celestial,Name,Nft',
                 match: address.length === ETHEREUM_ADDRESS_LENGTH ? `Nft.owners.ethereum:"${address}"` : `Nft.owners.starknet:"${address}"`,
             },
             headers: {
@@ -131,26 +107,7 @@ async function fetchAsteroidsMetadataOwnedBy(address) {
         console.log(`--- [fetchAsteroidsMetadataOwnedBy] ${config.method.toUpperCase()} ${config.url} + params:`, config.params); //// TEST
         const response = await axios(config);
         console.log(`--- [fetchAsteroidsMetadataOwnedBy] response.data LENGTH = ${response.data.length}`); //// TEST
-        console.log(`--- [fetchAsteroidsMetadataOwnedBy] FETCHING secondary metadata for each asteroid...`);
-        const asteroidsMetadata = [];
-        for (const rawData of response.data) {
-            let secondaryData;
-
-            //// DISABLED re: 504 error in production, when fetching secondary metadata @ "fetchAsteroidsMetadataOwnedBy"
-            /*
-            // Fetch secondary metadata
-            const asteroidId = rawData.id;
-            const secondaryConfig = getSecondaryDataConfig(asteroidId);
-            // console.log(`--- [fetchAsteroidsMetadataOwnedBy] ${secondaryConfig.method.toUpperCase()} ${secondaryConfig.url}`); //// TEST
-            const secondaryResponse = await axios(secondaryConfig);
-            const secondaryData = secondaryResponse.data;
-            // console.log(`--- [fetchAsteroidsMetadataOwnedBy] secondaryData for #${asteroidId} has ATTRIBUTES:`, Object.keys(secondaryData).includes('attributes')); //// TEST
-            */
-
-            asteroidsMetadata.push(parseAsteroidMetadata(rawData, secondaryData));
-        }
-        console.log(`--- [fetchAsteroidsMetadataOwnedBy] DONE fetching secondary metadata for each asteroid`);
-        return asteroidsMetadata;
+        return response.data.map(rawData => parseAsteroidMetadata(rawData));
     } catch (error) {
         console.log(`--- [fetchAsteroidsMetadataOwnedBy] ERROR:`, error); //// TEST
         return {error};
