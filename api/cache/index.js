@@ -20,7 +20,7 @@ const asteroidsPlanByAddress = {};
  * Format:
  * ```
  * ownedAsteroidsIdsByAddress = {
- *   address_lowercase: {
+ *   0x_address_lowercase: {
  *     asteroidsIds: [1, 23, 456, 7890],
  *     date: Date,
  *   },

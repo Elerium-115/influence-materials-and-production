@@ -1,10 +1,8 @@
 const express = require('express');
-const { toChecksumAddress } = require('ethereum-checksum-address');
 const cache = require('../cache/index');
 const providerInfluencethIo = require('../providers/influenceth.io/index');
 const providerMock = require('../providers/mock/index');
 const providerMongoDB = require('../providers/mongodb/index');
-const providerZora = require('../providers/zora/index');
 
 const router = express.Router();
 
@@ -57,70 +55,49 @@ router.get(
     '/asteroids/owned-by/:address',
     async (req, res) => {
         console.log(`--- [router] GET /asteroids/owned-by/${req.params.address}`); //// TEST
-        const address = toChecksumAddress(req.params.address);
+        const address = req.params.address.toLowerCase();
         console.log(`---> address = ${address}`); //// TEST
         // Get IDs of ALL owned asteroids (TBC for higher numbers, e.g. +100 owned asteroids?)
         let asteroidsIds;
-        let cachedAsteroidsIds = cache.ownedAsteroidsIdsByAddress[address.toLowerCase()];
+        let asteroidsMetadata = [];
+        let cachedAsteroidsIds = cache.ownedAsteroidsIdsByAddress[address];
         if (cachedAsteroidsIds && (Date.now() - cachedAsteroidsIds.date) < ONE_HOUR) {
             // Use cache if not older than ONE_HOUR
             asteroidsIds = cachedAsteroidsIds.asteroidsIds;
             console.log(`---> found CACHED asteroidsIds`); //// TEST
+            /**
+             * Use cached metadata for owned asteroids. This should already be
+             * cached for ALL owned asteroids, if the asteroid IDs were also cached.
+             */
+            asteroidsIds.forEach(asteroidId => {
+                if (cache.asteroidsMetadataById[asteroidId]) {
+                    asteroidsMetadata.push(cache.asteroidsMetadataById[asteroidId]);
+                } else {
+                    // Unexpected error: not found cached metadata for an asteroid
+                    const errorMessage = `ERROR: not found CACHED metadata for asteroid ID ${asteroidId}`;
+                    console.log(`---> ${errorMessage}`); //// TEST
+                    res.json({error: errorMessage});
+                    return;
+                }
+            });
         } else {
-            asteroidsIds = await providerZora.fetchAsteroidsIdsOwnedBy(address);
-            if (asteroidsIds.error) {
-                res.json({error: asteroidsIds.error});
-                return;
-            }
-            // console.log(`---> asteroidsIds:`, asteroidsIds); //// TEST
-            cache.ownedAsteroidsIdsByAddress[address.toLowerCase()] = {
-                asteroidsIds,
-                date: Date.now(),
-            };
-        }
-        const asteroidsCount = asteroidsIds.length;
-        // Try to get cached metadata for ALL owned asteroids
-        const asteroidsMetadataCached = [];
-        asteroidsIds.forEach(asteroidId => {
-            if (cache.asteroidsMetadataById[asteroidId]) {
-                asteroidsMetadataCached.push(cache.asteroidsMetadataById[asteroidId]);
-            }
-        });
-        if (asteroidsMetadataCached.length === asteroidsCount) {
-            // Found cached metadata for ALL owned asteroids
-            console.log(`---> found CACHED metadata for ALL asteroids`); //// TEST
-            res.json(asteroidsMetadataCached);
-            return;
-        }
-        // Make requests (batched + delayed) to get metadata for ALL owned asteroids
-        const asteroidsMetadataFresh = [];
-        let batchesToFillAsteroidsCount = Math.ceil(asteroidsCount / providerInfluencethIo.ASTEROIDS_PER_PAGE_MAX);
-        console.log(`---> batchesToFillAsteroidsCount = ${batchesToFillAsteroidsCount}`); //// TEST
-        if (batchesToFillAsteroidsCount > 10) {
-            // Hard limit of 10 requests (i.e. max 300 asteroids) per wallet
-            console.log(`--->> WARNING: too high => hard limit 10 batches`); //// TEST
-            batchesToFillAsteroidsCount = 10;
-            return;
-        }
-        for (let page = 1; page <= batchesToFillAsteroidsCount; page++) {
-            console.log(`---> batch #${page}`); //// TEST
-            // Get metadata for max "ASTEROIDS_PER_PAGE_MAX" owned asteroids per "page"
-            if (page > 1) {
-                // Pause for 1 second before each subsequent request, to not spam the API
-                await new Promise(r => setTimeout(r, 1000));
-            }
-            //// TO DO: fetch based on "asteroidsIds" instead of "address"?
-            const asteroidsMetadata = await providerZora.fetchAsteroidsMetadataOwnedBy(address, page);
+            // Fetch fresh data and update the cache
+            asteroidsMetadata = await providerInfluencethIo.fetchAsteroidsMetadataOwnedBy(address);
             if (asteroidsMetadata.error) {
                 res.json({error: asteroidsMetadata.error});
                 return;
             }
             asteroidsMetadata.forEach(asteroidMetadata => {
                 cache.asteroidsMetadataById[asteroidMetadata.id] = asteroidMetadata;
-                asteroidsMetadataFresh.push(asteroidMetadata);
             });
+            asteroidsIds = asteroidsMetadata.map(metadata => metadata.id);
+            // console.log(`---> asteroidsIds:`, asteroidsIds); //// TEST
+            cache.ownedAsteroidsIdsByAddress[address] = {
+                asteroidsIds,
+                date: Date.now(),
+            };
         }
-        res.json(asteroidsMetadataFresh);
+        res.json(asteroidsMetadata);
     }
 );
 
@@ -206,7 +183,7 @@ router.get(
             return;
         }
         // Asteroids plan found for address in data storage => update it in cache
-        cache.asteroidsPlanByAddress[address.toLowerCase()] = asteroidsPlan;
+        cache.asteroidsPlanByAddress[address] = asteroidsPlan;
         res.json(asteroidsPlan);
     }
 );
@@ -228,7 +205,7 @@ router.post(
             return;
         }
         // Asteroids plan saved for address in data storage => update it in cache
-        cache.asteroidsPlanByAddress[address.toLowerCase()] = asteroidsPlan;
+        cache.asteroidsPlanByAddress[address] = asteroidsPlan;
         console.log(`---> SAVED asteroids plan = ${asteroidsPlan.length} asteroids`); //// TEST
         res.send(true);
     }

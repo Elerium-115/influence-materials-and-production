@@ -7,7 +7,7 @@ const utils = require('../../utils/index');
  * https://github.com/influenceth/sdk
  */
 
-const ASTEROIDS_PER_PAGE_MAX = 30;
+const ETHEREUM_ADDRESS_LENGTH = 42;
 
 const BONUS_TYPE_PRETTY = {
     yield: 'Yield',
@@ -19,7 +19,6 @@ const BONUS_TYPE_PRETTY = {
 };
 
 function parseAsteroidMetadata(rawData) {
-    rawData = rawData[0];
     // console.log(`--- [parseAsteroidMetadata] rawData:`, rawData); //// TEST
     const asteroidId = rawData.id;
     const celestial = rawData.Celestial;
@@ -60,16 +59,20 @@ async function fetchAsteroidMetadata(asteroidId) {
     try {
         var config = {
             method: 'get',
-            // url: `https://api.influenceth.io/v1/asteroids/${asteroidId}`, // old v1
-            url: `https://api.influenceth.io/v2/entities?label=3&id=${asteroidId}`, // new v2
+            url: `https://api.influenceth.io/v2/entities`,
+            params: {
+                label: 3, // asteroids
+                id: asteroidId,
+            },
             headers: {
                 'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
             },
         };
-        console.log(`--- [fetchAsteroidMetadata] ${config.method.toUpperCase()} ${config.url}`); //// TEST
+        console.log(`--- [fetchAsteroidMetadata] ${config.method.toUpperCase()} ${config.url} + params:`, config.params); //// TEST
         const response = await axios(config);
-        // console.log(`--- [fetchAsteroidMetadata] response.data KEYS:`, Object.keys(response.data)); //// TEST
-        return parseAsteroidMetadata(response.data);
+        const rawData = response.data[0];
+        console.log(`--- [fetchAsteroidMetadata] rawData KEYS:`, Object.keys(rawData)); //// TEST
+        return parseAsteroidMetadata(rawData);
     } catch (error) {
         console.log(`--- [fetchAsteroidMetadata] ERROR:`, error); //// TEST
         return {error};
@@ -77,57 +80,25 @@ async function fetchAsteroidMetadata(asteroidId) {
 }
 
 /**
- * Get IDs for ALL (TBC?) asteroids owned by address
- * @param address WARNING: case-sensitive on mainnet as of Sep 2022 (case-insensitive on testnet)
- */
-async function fetchAsteroidsIdsOwnedBy(address) {
-    try {
-        var config = {
-            method: 'get',
-            url: `https://api.influenceth.io/v1/asteroids`,
-            params: {
-                ownedBy: address,
-            },
-            headers: {
-                'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
-            },
-        };
-        console.log(`--- [fetchAsteroidsIdsOwnedBy] ${config.method.toUpperCase()} ${config.url}`); //// TEST
-        const response = await axios(config);
-        console.log(`--- [fetchAsteroidsIdsOwnedBy] response.data LENGTH = ${response.data.length}`); //// TEST
-        return response.data.map(rawData => {
-            return rawData.i;
-        });
-    } catch (error) {
-        console.log(`--- [fetchAsteroidsIdsOwnedBy] ERROR:`, error); //// TEST
-        return {error};
-    }
-}
-
-/**
- * Get metadata for max "ASTEROIDS_PER_PAGE_MAX" asteroids owned by address, per "page"
- * @param address WARNING: case-sensitive on mainnet as of Sep 2022 (case-insensitive on testnet)
+ * Get metadata for asteroids owned by address (Ethereum / Starknet both accepted)
  */
 async function fetchAsteroidsMetadataOwnedBy(address, page) {
     try {
         var config = {
             method: 'get',
-            url: `https://api.influenceth.io/v1/asteroids`,
+            url: `https://api.influenceth.io/v2/entities`,
             params: {
-                ownedBy: address,
-                perPage: ASTEROIDS_PER_PAGE_MAX, // Do NOT use higher values, because they are forced down to 10 per page
-                page: page,
+                label: 3, // asteroids
+                match: address.length === 42 ? `Nft.owners.ethereum:"${address}"` : `Nft.owners.starknet:"${address}"`,
             },
             headers: {
                 'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
             },
         };
-        console.log(`--- [fetchAsteroidsMetadataOwnedBy] ${config.method.toUpperCase()} ${config.url}`); //// TEST
+        console.log(`--- [fetchAsteroidsMetadataOwnedBy] ${config.method.toUpperCase()} ${config.url} + params:`, config.params); //// TEST
         const response = await axios(config);
         console.log(`--- [fetchAsteroidsMetadataOwnedBy] response.data LENGTH = ${response.data.length}`); //// TEST
-        return response.data.map(rawData => {
-            return parseAsteroidMetadata(rawData);
-        });
+        return response.data.map(rawData => parseAsteroidMetadata(rawData));
     } catch (error) {
         console.log(`--- [fetchAsteroidsMetadataOwnedBy] ERROR:`, error); //// TEST
         return {error};
@@ -135,8 +106,6 @@ async function fetchAsteroidsMetadataOwnedBy(address, page) {
 }
 
 module.exports = {
-    ASTEROIDS_PER_PAGE_MAX,
     fetchAsteroidMetadata,
-    fetchAsteroidsIdsOwnedBy,
     fetchAsteroidsMetadataOwnedBy,
 };
