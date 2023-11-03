@@ -816,7 +816,7 @@ const InfluenceProductionChainsJSON = {
       },
       {
         "id": "154",
-        "name": "Core Drill Sampler",
+        "name": "Core Drill Bit",
         "type": "Component"
       },
       {
@@ -4309,7 +4309,7 @@ const InfluenceProductionChainsJSON = {
       },
       {
         "id": "134",
-        "name": "Core Sampler Drill Milling",
+        "name": "Core Drill Bit Milling",
         "buildingId": "4",
         "inputs": [
           {
@@ -4328,7 +4328,7 @@ const InfluenceProductionChainsJSON = {
       },
       {
         "id": "135",
-        "name": "Core Sampler Thruster Assembly",
+        "name": "Core Drill Thruster Assembly",
         "buildingId": "4",
         "inputs": [
           {
@@ -4971,7 +4971,7 @@ const InfluenceProductionChainsJSON = {
       },
       {
         "id": "161",
-        "name": "Core Sampler Assembly",
+        "name": "Core Drill Assembly",
         "buildingId": "4",
         "inputs": [
           {

@@ -3378,7 +3378,7 @@ const InfluenceProductionChainsJSON = {
                 }
             ],
             "mAdalianHoursPerSR": "0.025",
-            "name": "Core Sampler Drill Milling",
+            "name": "Core Drill Bit Milling",
             "outputs": [
                 {
                     "productId": "154",
@@ -3409,7 +3409,7 @@ const InfluenceProductionChainsJSON = {
                 }
             ],
             "mAdalianHoursPerSR": "0.0833",
-            "name": "Core Sampler Thruster Assembly",
+            "name": "Core Drill Thruster Assembly",
             "outputs": [
                 {
                     "productId": "155",
@@ -4048,7 +4048,7 @@ const InfluenceProductionChainsJSON = {
                 }
             ],
             "mAdalianHoursPerSR": "0.0333",
-            "name": "Core Sampler Assembly",
+            "name": "Core Drill Assembly",
             "outputs": [
                 {
                     "productId": "175",
@@ -8371,7 +8371,7 @@ const InfluenceProductionChainsJSON = {
             "category": "35",
             "id": "154",
             "massKilogramsPerUnit": "2",
-            "name": "Core Drill Sampler",
+            "name": "Core Drill Bit",
             "quantized": true,
             "type": "Component",
             "volumeLitersPerUnit": "75"

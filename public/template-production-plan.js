@@ -43,13 +43,21 @@ const templateProductionPlan = /*html*/ `
                 <div id="user-selected-products-list" class="brand-text"><span>N/A</span></div>
             </div>
             <div id="production-chain-wrapper">
-                <div id="shopping-list-wrapper">
-                    <h3>Shopping List</h3>
+                <div id="shopping-list-wrapper" class="active-shopping">
+                    <div id="shopping-list-tabs">
+                        <div id="tab-shopping-list" class="shopping-list-tab active" onclick="onClickShoppingListTab(this)">Shopping List</div>
+                        <div id="tab-diy-list" class="shopping-list-tab" onclick="onClickShoppingListTab(this)">DIY List</div>
+                    </div>
                     <div id="shopping-list-qty-disclaimer">
                         <span>*Qty for final product</span>
-                        <span id="shopping-list-qty-final-product">1000</span>
+                        <span id="shopping-list-qty-final-product">1</span>
+                    </div>
+                    <div id="diy-list-qty-disclaimer" class="hidden">
+                        <span>*Qty for final product</span>
+                        <span id="diy-list-qty-final-product">1</span>
                     </div>
                     <div id="shopping-list"></div>
+                    <div id="diy-list" class="hidden"></div>
                     <div id="shopping-list-product-image-wrapper" onclick="onClickProductImage(this)">
                         <img id="shopping-list-product-image" src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image'); this.parentNode.classList.add('missing-image-wrapper');">
                         <div id="shopping-list-product-name"></div>

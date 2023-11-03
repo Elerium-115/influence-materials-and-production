@@ -145,9 +145,13 @@ let selectedProductItemIds = [];
 let shouldHandleHashchange = true;
 
 const shareLinkContainer = document.getElementById('share-link');
-const shoppingListContainer = document.getElementById('shopping-list');
+const shoppingListWrapperContainer = document.getElementById('shopping-list-wrapper');
 const shoppingListQtyDisclaimerContainer = document.getElementById('shopping-list-qty-disclaimer');
 const shoppingListQtyFinalProductContainer = document.getElementById('shopping-list-qty-final-product');
+const diyListQtyDisclaimerContainer = document.getElementById('diy-list-qty-disclaimer');
+const diyListQtyFinalProductContainer = document.getElementById('diy-list-qty-final-product');
+const shoppingListContainer = document.getElementById('shopping-list');
+const diyListContainer = document.getElementById('diy-list');
 const shoppingListProductImage = document.getElementById('shopping-list-product-image');
 const shoppingListProductName = document.getElementById('shopping-list-product-name');
 const productionChainOverlayContainer = document.getElementById('production-chain-overlay');
@@ -2010,6 +2014,33 @@ async function saveProductionPlan() {
     // Update the production plan ID, with the newly saved ID, in case it was null
     productionPlanId = savedProductionPlanData.productionPlanId;
     return savedProductionPlanData;
+}
+
+function onClickShoppingListTab(el) {
+    if (el.classList.contains('active')) {
+        return;
+    }
+    shoppingListWrapperContainer.querySelector('.shopping-list-tab.active').classList.remove('active');
+    el.classList.add('active');
+    switch (el.id) {
+        case 'tab-shopping-list':
+            shoppingListWrapperContainer.classList.remove('active-diy');
+            shoppingListWrapperContainer.classList.add('active-shopping');
+            diyListQtyDisclaimerContainer.classList.add('hidden');
+            shoppingListQtyDisclaimerContainer.classList.remove('hidden');
+            diyListContainer.classList.add('hidden');
+            shoppingListContainer.classList.remove('hidden');
+            break;
+        case 'tab-diy-list':
+            shoppingListWrapperContainer.classList.remove('active-shopping');
+            shoppingListWrapperContainer.classList.add('active-diy');
+            shoppingListQtyDisclaimerContainer.classList.add('hidden');
+            diyListQtyDisclaimerContainer.classList.remove('hidden');
+            shoppingListContainer.classList.add('hidden');
+            diyListContainer.classList.remove('hidden');
+            break;
+    }
+    refreshConnections();
 }
 
 // Toggle optimized vs. non-optimized process variants

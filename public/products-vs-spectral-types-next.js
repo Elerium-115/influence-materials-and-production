@@ -202,7 +202,7 @@ const productNamesBySustainingSpectralType = {
     "Chlorine",
     "Copper",
     "Copper Wire",
-    "Core Drill Sampler",
+    "Core Drill Bit",
     "Deionized Water",
     "Diepoxy Prepolymer Resin",
     "Epichlorohydrin",
@@ -340,7 +340,7 @@ const productNamesBySustainingSpectralType = {
     "Carbon Monoxide",
     "Chlorine",
     "Copper",
-    "Core Drill Sampler",
+    "Core Drill Bit",
     "Deionized Water",
     "Ferrochromium",
     "Graphite",
@@ -533,7 +533,7 @@ const productNamesBySustainingSpectralType = {
     "Chromia",
     "Copper",
     "Copper Wire",
-    "Core Drill Sampler",
+    "Core Drill Bit",
     "Deionized Water",
     "Diepoxy Prepolymer Resin",
     "Epichlorohydrin",
@@ -772,7 +772,7 @@ const productNamesBySustainingSpectralType = {
     "Coffinite",
     "Copper",
     "Copper Wire",
-    "Core Drill Sampler",
+    "Core Drill Bit",
     "Deionized Water",
     "Diepoxy Prepolymer Resin",
     "Diode",
@@ -872,7 +872,7 @@ const productNamesBySustainingSpectralType = {
     "Chromia",
     "Coffinite",
     "Copper",
-    "Core Drill Sampler",
+    "Core Drill Bit",
     "Deionized Water",
     "Feldspar",
     "Ferrite",
@@ -1035,7 +1035,7 @@ const productNamesBySustainingSpectralType = {
     "Copper",
     "Copper Wire",
     "Core Drill",
-    "Core Drill Sampler",
+    "Core Drill Bit",
     "Core Drill Thruster",
     "Deionized Water",
     "Diepoxy Prepolymer Resin",
@@ -3260,9 +3260,9 @@ const productDataByName = {
       "CIMS"
     ]
   },
-  "Core Drill Sampler": {
+  "Core Drill Bit": {
     "id": "154",
-    "name": "Core Drill Sampler",
+    "name": "Core Drill Bit",
     "type": "Component",
     "sustainingSpectralTypes": [
       "CM",
@@ -6208,7 +6208,7 @@ const productDataById = {
   },
   "154": {
     "id": "154",
-    "name": "Core Drill Sampler",
+    "name": "Core Drill Bit",
     "type": "Component",
     "sustainingSpectralTypes": [
       "CM",
@@ -7182,7 +7182,7 @@ const productNamesSorted = [
   "Copper",
   "Copper Wire",
   "Core Drill",
-  "Core Drill Sampler",
+  "Core Drill Bit",
   "Core Drill Thruster",
   "Deionized Water",
   "Diepoxy Prepolymer Resin",

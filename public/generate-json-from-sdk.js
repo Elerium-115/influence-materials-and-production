@@ -207,7 +207,7 @@ console.log({InfluenceProductionChainsJSON}); //// TEST
   "Cargo Module",
   "Cement",
   "Core Drill",
-  "Core Drill Sampler",
+  "Core Drill Bit", // ex-"Core Drill Sampler"
   "Core Drill Thruster",
   "Diepoxy Prepolymer Resin",
   "Hydrogen Heptafluorotantalate and Niobate",

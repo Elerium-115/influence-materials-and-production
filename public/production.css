@@ -1,1051 +1,1081 @@
+@charset "UTF-8";
 :root {
-    --active-bg: #293142;
-    --overactive-bg: #333c52;
-
-    --type-c: #5639cc;
-    --type-i: #4099ff;
-    --type-m: #ad3900;
-    --type-s: #c58f00;
-
-    --item-name: #ccc;
-
-    --tier-limit-highlight: #b34fff;
-
-    --flash-error: #8e373a;
-
-    --product-type-raw-material: #373737;
-    --product-type-refined-material: #1c323d;
-    --product-type-refined-metal: #1c323d;
-    --product-type-component: #315a6e;
-    --product-type-ship-component: #315a6e;
-    --product-type-finished-good: #47819e;
-    --product-type-ship: #47819e;
-    --product-type-building: #47819e;
-
-    --process: #482066;
-    --process-inferior: #211130;
+  --active-bg: #293142;
+  --overactive-bg: #333c52;
+  --type-c: #5639cc;
+  --type-i: #4099ff;
+  --type-m: #ad3900;
+  --type-s: #c58f00;
+  --item-name: #ccc;
+  --tier-limit-highlight: #b34fff;
+  --flash-error: #8e373a;
+  --product-type-raw-material: #373737;
+  --product-type-refined-material: #1c323d;
+  --product-type-refined-metal: #1c323d;
+  --product-type-component: #315a6e;
+  --product-type-ship-component: #315a6e;
+  --product-type-finished-good: #47819e;
+  --product-type-ship: #47819e;
+  --product-type-building: #47819e;
+  --process: #482066;
+  --process-inferior: #211130;
 }
 
-.flash-error { animation: flash-error 250ms; }
-.flash-error-glow { animation: flash-error-glow 250ms; }
+.flash-error {
+  animation: flash-error 250ms;
+}
 
-@keyframes flash-error { 50% { background: var(--flash-error); } }
-@keyframes flash-error-glow { 50% { filter: drop-shadow(0 0 0.8rem var(--flash-error)); opacity: 1; } }
+.flash-error-glow {
+  animation: flash-error-glow 250ms;
+}
 
+@keyframes flash-error {
+  50% {
+    background: var(--flash-error);
+  }
+}
+@keyframes flash-error-glow {
+  50% {
+    filter: drop-shadow(0 0 0.8rem var(--flash-error));
+    opacity: 1;
+  }
+}
 #production-wrapper {
-    font-size: 0.8rem;
+  font-size: 0.8rem;
 }
 
 /* options */
-
 .options label {
-    position: relative;
-    white-space: nowrap;
-    margin-right: 0.5rem;
-    padding: 0.5rem;
-    border: 1px solid transparent;
-    border-radius: 0.5rem;
+  position: relative;
+  white-space: nowrap;
+  margin-right: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
 }
 
 .options label:hover {
-    border-color: gray;
+  border-color: gray;
 }
 
 .options label.checked {
-    background: var(--active-bg);
+  background: var(--active-bg);
 }
 
 .options label.has-toggle-tooltip:hover {
-    border-bottom-color: transparent;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+  border-bottom-color: transparent;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .options label.has-toggle-tooltip:hover::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: -1px;
-    right: -1px;
-    height: 0.5rem;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-    border-bottom: 1px solid var(--active-bg);
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: -1px;
+  right: -1px;
+  height: 0.5rem;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  border-bottom: 1px solid var(--active-bg);
 }
 
 .options label.has-toggle-tooltip.checked:hover::after {
-    background: var(--active-bg);
+  background: var(--active-bg);
 }
 
 .options label input {
-    margin-right: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .options label .toggle-tooltip {
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    left: -1px;
-    display: block;
-    width: calc(100% + 5rem);
-    min-width: 15rem;
-    background: var(--dark-bg);
-    white-space: normal;
-    padding: 0.5rem;
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-    border-top-left-radius: 0;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: -1px;
+  display: block;
+  width: calc(100% + 5rem);
+  min-width: 15rem;
+  background: var(--dark-bg);
+  white-space: normal;
+  padding: 0.5rem;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  border-top-left-radius: 0;
 }
 
 .options label:not(:hover) .toggle-tooltip {
-    display: none;
+  display: none;
 }
 
 .options .separator {
-    display: inline-block;
-    width: 2rem;
+  display: inline-block;
+  width: 2rem;
 }
 
 #top-settings {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 #chain-settings {
-    margin-top: 2rem;
-    padding-bottom: 0.5rem; /* compensate for padding of options */
+  margin-top: 2rem;
+  padding-bottom: 0.5rem; /* compensate for padding of options */
 }
 
 #scale-slider {
-    position: relative;
-    display: flex;
+  position: relative;
+  display: flex;
 }
 
 #scale-slider::before {
-    content: 'Scale';
-    position: absolute;
-    top: -1.25rem;
-    width: 100%;
-    text-align: center;
+  content: "Scale";
+  position: absolute;
+  top: -1.25rem;
+  width: 100%;
+  text-align: center;
 }
 
 #scale-slider-range {
-    width: 5rem;
+  width: 5rem;
 }
 
 .missing-image {
-    /* If completely hiding this image, make sure lines are re-rendered ok */
-    opacity: 0.25;
+  /* If completely hiding this image, make sure lines are re-rendered ok */
+  opacity: 0.25;
 }
 
-.spectral-type { color: white; }
-.spectral-type.type-C { background: var(--type-c); }
-.spectral-type.type-I { background: var(--type-i); }
-.spectral-type.type-M { background: var(--type-m); }
-.spectral-type.type-S { background: var(--type-s); }
+.spectral-type {
+  color: white;
+}
+
+.spectral-type.type-C {
+  background: var(--type-c);
+}
+
+.spectral-type.type-I {
+  background: var(--type-i);
+}
+
+.spectral-type.type-M {
+  background: var(--type-m);
+}
+
+.spectral-type.type-S {
+  background: var(--type-s);
+}
 
 /* products list and filters */
-
 #products-list-wrapper {
-    display: inline-block;
-    position: relative;
-    margin-left: 0.5rem;
+  display: inline-block;
+  position: relative;
+  margin-left: 0.5rem;
 }
 
 #products-list-wrapper input {
-    width: 14rem;
-    line-height: 2rem;
-    padding: 0 2rem 0 1rem;
-    border: 1px solid var(--item-name);
+  width: 14rem;
+  line-height: 2rem;
+  padding: 0 2rem 0 1rem;
+  border: 1px solid var(--item-name);
 }
 
 #products-list-wrapper::after {
-    content: '✕';
-    position: absolute;
-    top: 0;
-    right: 1rem;
-    cursor: pointer;
-    line-height: 2rem;
+  content: "✕";
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  cursor: pointer;
+  line-height: 2rem;
 }
 
 #products-list-wrapper.list-hidden::after {
-    content: '▼';
-    margin: 1px -1px 0 0;
+  content: "▼";
+  margin: 1px -1px 0 0;
 }
 
 #products-list {
-    position: absolute;
-    z-index: 1;
-    width: 14rem;
-    max-height: 20rem; /* fit 10 list-items */
-    overflow: auto;
-    background: var(--overactive-bg);
-    border: 1px solid var(--item-name);
-    border-top: none;
+  position: absolute;
+  z-index: 1;
+  width: 14rem;
+  max-height: 20rem; /* fit 10 list-items */
+  overflow: auto;
+  background: var(--overactive-bg);
+  border: 1px solid var(--item-name);
+  border-top: none;
 }
 
 #products-list-wrapper.list-hidden #products-list,
 #products-list-wrapper.list-hidden #filters-list {
-    display: none;
+  display: none;
 }
 
 #products-list a {
-    display: block;
-    color: var(--item-name);
-    text-decoration: none;
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    /* do NOT use "line-height" instead of "padding", b/c multi-line product names should be compact */
+  display: block;
+  color: var(--item-name);
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  /* do NOT use "line-height" instead of "padding", b/c multi-line product names should be compact */
 }
 
 #products-list a:hover {
-    background: var(--dark-bg) !important;
+  background: var(--dark-bg) !important;
 }
 
 #products-list a.not-matching-search,
 #products-list a.not-matching-spectral-type {
-    display: none;
+  display: none;
 }
 
 #products-list a.item-type-finished-good {
-    color: white;
+  color: white;
 }
 
 #filters-list {
-    position: absolute;
-    top: 0;
-    right: -11rem;
-    z-index: 1;
-    width: 11rem;
-    background: white;
-    color: black;
-    border: 1px solid var(--item-name);
-    border-left: none;
-    border-top-right-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
+  position: absolute;
+  top: 0;
+  right: -11rem;
+  z-index: 1;
+  width: 11rem;
+  background: white;
+  color: black;
+  border: 1px solid var(--item-name);
+  border-left: none;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }
 
 #filters-list > * {
-    display: block;
-    padding: 0.5rem 2rem 0.5rem 1rem;
+  display: block;
+  padding: 0.5rem 2rem 0.5rem 1rem;
 }
 
 #filters-list .header {
-    border-bottom: 1px solid var(--item-name);
+  border-bottom: 1px solid var(--item-name);
 }
 
 #filters-list .option {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #filters-list .option:last-child {
-    border-bottom-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }
 
 #filters-list .option:hover {
-    background: var(--dark-bg) !important;
-    color: var(--item-name);
+  background: var(--dark-bg) !important;
+  color: var(--item-name);
 }
 
 #filters-list .checked {
-    position: relative;
-    color: var(--item-name);
+  position: relative;
+  color: var(--item-name);
 }
 
 #filters-list .checked::after {
-    content: '✅';
-    position: absolute;
-    right: 1rem;
+  content: "✅";
+  position: absolute;
+  right: 1rem;
 }
 
 #selected-production-chain {
-    display: flex;
-    gap: 2rem;
-    align-items: end;
-    margin-top: 2rem;
+  display: flex;
+  gap: 2rem;
+  align-items: end;
+  margin-top: 2rem;
 }
 
 .incomplete-chain #selected-production-chain {
-    background: rgba(255, 0, 0, 0.25);
+  background: rgba(255, 0, 0, 0.25);
 }
 
 #selected-production-chain h2 {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .incomplete-chain #selected-production-chain h2::after {
-    content: ' - INCOMPLETE';
+  content: " - INCOMPLETE";
 }
 
 #selected-item-name {
-    color: var(--brand-text);
+  color: var(--brand-text);
 }
 
 #selected-production-chain .chain-link {
-    align-items: center;
-    color: var(--link);
-    cursor: pointer;
-    display: flex;
-    font-size: 1rem;
-    white-space: nowrap;
+  align-items: center;
+  color: var(--link);
+  cursor: pointer;
+  display: flex;
+  font-size: 1rem;
+  white-space: nowrap;
 }
 
 #selected-production-chain .chain-link:hover {
-    color: var(--link-hover);
-    text-decoration: underline;
+  color: var(--link-hover);
+  text-decoration: underline;
 }
 
 #selected-production-chain .chain-link .link-icon-wrapper {
-    background: var(--link);
-    border-radius: 50%;
-    height: 1.4rem;
-    margin-right: 0.5rem;
-    padding: 0.2rem 0.1rem 0.1rem 0.15rem;
-    width: 1.4rem;
+  background: var(--link);
+  border-radius: 50%;
+  height: 1.4rem;
+  margin-right: 0.5rem;
+  padding: 0.2rem 0.1rem 0.1rem 0.15rem;
+  width: 1.4rem;
 }
 
 #selected-production-chain .chain-link:hover .link-icon-wrapper {
-    background: var(--link-hover);
+  background: var(--link-hover);
 }
 
 #selected-production-chain #share-link.is-showing-url .link-icon-wrapper,
 #selected-production-chain #share-link.is-showing-url:hover .link-icon-wrapper {
-    background: var(--brand-text);
+  background: var(--brand-text);
 }
 
 #selected-production-chain #share-link.is-showing-url:hover,
 #selected-production-chain #share-link.is-showing-url a {
-    color: var(--brand-text);
+  color: var(--brand-text);
 }
 
 /* tier slider */
-
 #tier-slider-wrapper {
-    display: inline-block;
+  display: inline-block;
 }
 
 #tier-slider-flex {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 #tier-legend-text {
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 }
 
 #tier-legend:hover #tier-legend-text {
-    background: var(--active-bg);
+  background: var(--active-bg);
 }
 
 #tier-legend-text i {
-    color: var(--link);
-    font-style: normal;
-    margin-left: 0.5rem;
+  color: var(--link);
+  font-style: normal;
+  margin-left: 0.5rem;
 }
 
 #tier-legend-details {
-    display: none;
-    position: absolute;
-    background: var(--active-bg);
-    line-height: 1.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    border-top-left-radius: 0;
-    z-index: 1;
+  display: none;
+  position: absolute;
+  background: var(--active-bg);
+  line-height: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border-top-left-radius: 0;
+  z-index: 1;
 }
 
 #tier-legend:hover #tier-legend-details {
-    display: block;
+  display: block;
 }
 
 #tier-legend-details ul {
-    list-style-type: disc;
-    list-style-position: inside;
+  list-style-type: disc;
+  list-style-position: inside;
 }
 
 #tier-value-box input {
-    text-align: center;
-    width: 2.5rem;
-    padding: 0.5rem 0;
-    border: none;
-    border-radius: 0.5rem;
+  text-align: center;
+  width: 2.5rem;
+  padding: 0.5rem 0;
+  border: none;
+  border-radius: 0.5rem;
 }
 
 #tier-slider {
-    padding-left: 1rem;
+  padding-left: 1rem;
 }
 
 #tier-slider-range {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #tier-slider-range.pulse {
-    /* "box-shadow" looks buggy on Chrome */
-    filter: drop-shadow(0 0 0 var(--tier-limit-highlight));
-	animation: pulse 2s infinite;
+  /* "box-shadow" looks buggy on Chrome */
+  filter: drop-shadow(0 0 0 var(--tier-limit-highlight));
+  animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-	0% { filter: drop-shadow(0 0 0 var(--tier-limit-highlight)); }
-	25% { filter: drop-shadow(0 0 0.4rem var(--tier-limit-highlight)); }
-	50% { filter: drop-shadow(0 0 0 var(--tier-limit-highlight)); }
+  0% {
+    filter: drop-shadow(0 0 0 var(--tier-limit-highlight));
+  }
+  25% {
+    filter: drop-shadow(0 0 0.4rem var(--tier-limit-highlight));
+  }
+  50% {
+    filter: drop-shadow(0 0 0 var(--tier-limit-highlight));
+  }
 }
-
 /* process variants */
-
 #process-variants-wrapper {
-    display: none;
-    margin-top: 2rem;
+  display: none;
+  margin-top: 2rem;
 }
 
 .has-process-variants #process-variants-wrapper {
-    display: block;
+  display: block;
 }
 
 .has-process-variants #process-variants-wrapper.no-visible-variants {
-    display: none;
+  display: none;
 }
 
 #process-variants {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 #process-variants .item {
-    display: inline-block;
-    background: var(--active-bg);
-    padding: 1rem;
-    border-radius: 0.5rem;
+  display: inline-block;
+  background: var(--active-bg);
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 
 #process-variants .item.irrelevant {
-    display: none;
+  display: none;
 }
 
 #process-variants .item .item-name {
-    font-size: 0.9rem;
-    font-weight: bold;
+  font-size: 0.9rem;
+  font-weight: bold;
 }
 
 #process-variants .item .process {
-    display: block;
-    position: relative;
-    margin: 0.5rem 0 0 -0.5rem;
-    padding: 0.5rem;
-    border: 1px solid transparent;
-    border-radius: 0.4rem;
+  display: block;
+  position: relative;
+  margin: 0.5rem 0 0 -0.5rem;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
 }
 
 #process-variants .item .process:hover {
-    border-color: gray;
+  border-color: gray;
 }
 
 #process-variants .item .process.checked {
-    background: var(--overactive-bg);
+  background: var(--overactive-bg);
 }
 
 #process-variants .item .process-inputs {
-    position: absolute;
-    top: -1px; /* compensate for border */
-    bottom: -1px; /* compensate for border */
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-    background: var(--active-bg);
-    padding: 0 0.5rem;
-    border: 1px solid gray;
-    border-left: none;
-    border-top-right-radius: 0.4rem;
-    border-bottom-right-radius: 0.4rem;
-    z-index: 1;
+  position: absolute;
+  top: -1px; /* compensate for border */
+  bottom: -1px; /* compensate for border */
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  background: var(--active-bg);
+  padding: 0 0.5rem;
+  border: 1px solid gray;
+  border-left: none;
+  border-top-right-radius: 0.4rem;
+  border-bottom-right-radius: 0.4rem;
+  z-index: 1;
 }
 
 #process-variants .item .process.checked .process-inputs {
-    background: var(--overactive-bg);
+  background: var(--overactive-bg);
 }
 
 #process-variants .item .process.flash-error .process-inputs {
-    background: inherit;
+  background: inherit;
 }
 
 #process-variants .item .process:not(:hover) .process-inputs {
-    display: none;
+  display: none;
 }
 
 /* production chain */
-
 #production-chain-wrapper {
-    text-align: center;
-    margin-top: 2rem;
+  text-align: center;
+  margin-top: 2rem;
 }
 
 .production-planner #production-chain-wrapper {
-    display: grid;
-    grid-template-columns: 13rem 1fr;
-    gap: 1.5rem;
+  display: grid;
+  grid-template-columns: 13rem 1fr;
+  gap: 1.5rem;
 }
 
 #production-chain-items {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-    margin-left: -1.5rem;
-    transform-origin: left top;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  margin-left: -1.5rem;
+  transform-origin: left top;
 }
 
 .incomplete-chain #production-chain-items {
-    background: rgba(255, 0, 0, 0.25);
+  background: rgba(255, 0, 0, 0.25);
 }
 
 #production-chain-items .level {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 1rem;
 }
 
 #production-chain-items .level:nth-child(odd) {
-    /* larger gaps only bettwen non-process items, for ".item-qty" overlays */
-    gap: 1.5rem;
+  /* larger gaps only bettwen non-process items, for ".item-qty" overlays */
+  gap: 1.5rem;
 }
 
 #production-chain-items [data-container-id] {
-    position: relative;
-    /* the gap between levels must be applied only for levels with VISIBLE items, after disabling an alternative production path */
-    margin: 0 1.5rem;
-    /* ensure some space remains around ".item-qty" overlays, e.g. for "Iron" */
-    /* also ensure most words fit in their container, e.g. "Computer" */
-    min-width: 5rem;
+  position: relative;
+  /* the gap between levels must be applied only for levels with VISIBLE items, after disabling an alternative production path */
+  margin: 0 1.5rem;
+  /* ensure some space remains around ".item-qty" overlays, e.g. for "Iron" */
+  /* also ensure most words fit in their container, e.g. "Computer" */
+  min-width: 5rem;
 }
 
 #production-chain-items [data-container-id]:hover {
-    z-index: 1;
+  z-index: 1;
 }
 
 #production-chain-items [data-container-id]:not(.item-type-process) {
-    border: 1px solid gray;
-    border-radius: 0.5rem;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
 }
 
 #production-chain-items.faded [data-container-id] {
-    opacity: 0.2;
+  opacity: 0.2;
 }
 
 #production-chain-items .active[data-container-id] {
-    opacity: 1;
+  opacity: 1;
 }
 
 /* highlight only the OTHER occurrences of this item */
 #production-chain-items .hover[data-container-id]:not(:hover) {
-    /* "box-shadow" does not work with "clip-path" from ".hexagon" */
-    filter: drop-shadow(0 0 0.4rem var(--item-name));
+  /* "box-shadow" does not work with "clip-path" from ".hexagon" */
+  filter: drop-shadow(0 0 0.4rem var(--item-name));
 }
 
 #production-chain-items .disabled[data-container-id] {
-    /* disabled items in v1 production chains are NOT visible */
-    /* for disabled items in v2 production chains, see ".disabled-item" */
-    display: none;
+  /* disabled items in v1 production chains are NOT visible */
+  /* for disabled items in v2 production chains, see ".disabled-item" */
+  display: none;
 }
 
 #production-chain-items [data-container-id].selected-item {
-    background: var(--dark-bg) !important;
-    border-color: var(--brand-text);
+  background: var(--dark-bg) !important;
+  border-color: var(--brand-text);
 }
 
 /* hover over products marked as ".tier-limit-highlight" */
 #production-chain-items .tier-limit-highlight[data-container-id]::before {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: var(--tier-limit-highlight);
-    color: black;
-    font-size: 0.7rem;
-    border: 1px solid var(--item-name);
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--tier-limit-highlight);
+  color: black;
+  font-size: 0.7rem;
+  border: 1px solid var(--item-name);
 }
+
 #production-chain-items .tier-limit-highlight[data-container-id]:hover {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
+
 #production-chain-items .tier-limit-highlight[data-container-id]:hover::before {
-    content: '▶';
-    left: 0;
-    top: -1px;
-    width: 1rem;
-    height: 100%;
-    margin-left: calc(-1rem - 1px); /* compensate for width and border */
-    border-right: none;
-    border-top-left-radius: 0.5rem;
-    border-bottom-left-radius: 0.5rem;
-    /* filter: drop-shadow(-0.25rem 0 0.25rem var(--tier-limit-highlight)); */
-    opacity: 0.6;
+  content: "▶";
+  left: 0;
+  top: -1px;
+  width: 1rem;
+  height: 100%;
+  margin-left: calc(-1rem - 1px); /* compensate for width and border */
+  border-right: none;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  /* filter: drop-shadow(-0.25rem 0 0.25rem var(--tier-limit-highlight)); */
+  opacity: 0.6;
 }
 
 /* hover over products in the production planner */
 .production-planner #production-chain-items [data-container-id]:not(.item-type-process)::before {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: var(--brand-text);
-    color: black;
-    font-size: 0.8rem;
-    font-weight: bold;
-    border: 1px solid var(--brand-text);
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--brand-text);
+  color: black;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border: 1px solid var(--brand-text);
 }
+
 .production-planner #production-chain-items [data-container-id]:not(.item-type-process, .selected-item):hover {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
-.production-planner #production-chain-items [data-container-id].selected-item:not(.item-type-process, [data-container-id='1']):hover {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+
+.production-planner #production-chain-items [data-container-id].selected-item:not(.item-type-process, [data-container-id="1"]):hover {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
-.production-planner #production-chain-items [data-container-id]:not(.item-type-process, [data-container-id='1']):hover::before {
-    top: -1px;
-    width: 1rem;
-    height: 100%;
+
+.production-planner #production-chain-items [data-container-id]:not(.item-type-process, [data-container-id="1"]):hover::before {
+  top: -1px;
+  width: 1rem;
+  height: 100%;
 }
+
 .production-planner #production-chain-items [data-container-id]:not(.item-type-process, .selected-item):hover::before {
-    content: '✛';
-    left: 0;
-    margin-left: calc(-1rem - 1px); /* compensate for width and border */
-    border-top-left-radius: 0.5rem;
-    border-bottom-left-radius: 0.5rem;
+  content: "✛";
+  left: 0;
+  margin-left: calc(-1rem - 1px); /* compensate for width and border */
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
 }
-.production-planner #production-chain-items [data-container-id].selected-item:not(.item-type-process, [data-container-id='1']):hover::before {
-    content: '✕';
-    right: 0;
-    margin-right: calc(-1rem - 1px); /* compensate for width and border */
-    border-top-right-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
+
+.production-planner #production-chain-items [data-container-id].selected-item:not(.item-type-process, [data-container-id="1"]):hover::before {
+  content: "✕";
+  right: 0;
+  margin-right: calc(-1rem - 1px); /* compensate for width and border */
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }
-.production-planner #production-chain-items [data-container-id='1']:hover {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+
+.production-planner #production-chain-items [data-container-id="1"]:hover {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
-.production-planner #production-chain-items [data-container-id='1']:hover::before {
-    content: 'Reset';
-    top: 0;
-    left: -1px;
-    width: 100%;
-    height: 1rem;
-    margin-top: calc(-1rem - 1px); /* compensate for height and border */
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+
+.production-planner #production-chain-items [data-container-id="1"]:hover::before {
+  content: "Reset";
+  top: 0;
+  left: -1px;
+  width: 100%;
+  height: 1rem;
+  margin-top: calc(-1rem - 1px); /* compensate for height and border */
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 }
 
 #production-chain-items [data-container-id] .item-name {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: var(--item-name);
-    font-size: 0.9rem;
-    cursor: pointer;
-    padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--item-name);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.5rem;
 }
 
 #production-chain-items .item-type-finished-good[data-container-id] .item-name {
-    color: white;
+  color: white;
 }
 
 #production-chain-items [data-container-id].selected-item .item-name {
-    color: var(--brand-text);
+  color: var(--brand-text);
 }
 
 #production-chain-items [data-container-id] .process-name {
-    color: var(--item-name);
-    font-size: 0.7rem;
-    padding: 0.5rem;
+  color: var(--item-name);
+  font-size: 0.7rem;
+  padding: 0.5rem;
 }
 
 .production-planner #production-chain-items [data-container-id] .process-name {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #production-chain-items [data-container-id] .spectral-types {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 #production-chain-items [data-container-id] .spectral-type {
-    display: inline-block;
-    font-size: 0.7rem;
-    line-height: 1rem;
-    width: 1rem;
-    border-radius: 50%;
+  display: inline-block;
+  font-size: 0.7rem;
+  line-height: 1rem;
+  width: 1rem;
+  border-radius: 50%;
 }
 
 #production-chain-items [data-container-id] .item-qty {
-    position: absolute;
-    top: -1.25rem;
-    left: calc(50% - 1.5rem);
-    min-width: 3rem;
-    height: 1.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: var(--process);
-    color: var(--item-name);
-    padding: 0 0.5rem;
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-    filter: drop-shadow(0 -0.25rem 0.25rem var(--dark-bg));
+  position: absolute;
+  top: -1.25rem;
+  left: calc(50% - 1.5rem);
+  min-width: 3rem;
+  height: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--process);
+  color: var(--item-name);
+  padding: 0 0.5rem;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  filter: drop-shadow(0 -0.25rem 0.25rem var(--dark-bg));
 }
 
 #production-chain-items [data-container-id]:not(.show-qty) .item-qty {
-    display: none;
+  display: none;
 }
 
 #production-chain-items [data-container-id] .item-qty::before {
-    content: '✕';
-    font-size: 0.5rem;
-    margin: 0.15rem 0.25rem 0 0;
+  content: "✕";
+  font-size: 0.5rem;
+  margin: 0.15rem 0.25rem 0 0;
 }
 
 #production-chain-connections > * {
-    position: absolute;
-    line-height: 1px;
-    z-index: -1;
+  position: absolute;
+  line-height: 1px;
+  z-index: -1;
 }
 
 #production-chain-connections .faded {
-    opacity: 0.2;
+  opacity: 0.2;
 }
 
 #production-chain-connections .arrow::after {
-    content: '▶';
-    position: absolute;
-    right: 0;
+  content: "▶";
+  position: absolute;
+  right: 0;
 }
 
 /* hide low-tier items, connections, and process variants */
 .low-tier-hidden {
-    display: none !important;
+  display: none !important;
 }
 
 .tier-limit-highlight {
-    box-shadow: 0 0 0.75rem var(--tier-limit-highlight);
+  box-shadow: 0 0 0.75rem var(--tier-limit-highlight);
 }
 
 /* item-type backgrounds */
-
 #products-list .item-type-raw-material,
 #filters-list #filter-raw-materials.checked,
 #production-chain-items [data-container-id].item-type-raw-material {
-    background: var(--product-type-raw-material);
+  background: var(--product-type-raw-material);
 }
 
 #products-list .item-type-refined-material,
 #filters-list #filter-refined-materials.checked,
 #production-chain-items [data-container-id].item-type-refined-material {
-    background: var(--product-type-refined-material);
+  background: var(--product-type-refined-material);
 }
 
 #products-list .item-type-refined-metal,
 #filters-list #filter-refined-metals.checked,
 #production-chain-items [data-container-id].item-type-refined-metal {
-    background: var(--product-type-refined-metal);
+  background: var(--product-type-refined-metal);
 }
 
 #products-list .item-type-component,
 #filters-list #filter-components.checked,
 #production-chain-items [data-container-id].item-type-component {
-    background: var(--product-type-component);
+  background: var(--product-type-component);
 }
 
 #products-list .item-type-ship-component,
 #filters-list #filter-ship-components.checked,
 #production-chain-items [data-container-id].item-type-ship-component {
-    background: var(--product-type-ship-component);
+  background: var(--product-type-ship-component);
 }
 
 #products-list .item-type-finished-good,
 #filters-list #filter-finished-goods.checked,
 #production-chain-items [data-container-id].item-type-finished-good {
-    background: var(--product-type-finished-good);
+  background: var(--product-type-finished-good);
 }
 
 #products-list .item-type-ship,
 #filters-list #filter-ships.checked,
 #production-chain-items [data-container-id].item-type-ship {
-    background: var(--product-type-ship);
+  background: var(--product-type-ship);
 }
 
 #products-list .item-type-building,
 #filters-list #filter-buildings.checked,
 #production-chain-items [data-container-id].item-type-building {
-    background: var(--product-type-building);
+  background: var(--product-type-building);
 }
 
 /* hexagon inside process container */
-
 #production-chain-items .hexagon, #production-chain-items .hexagon .process-name {
-    /* order of corners in clip-path below: right, bottom-right, bottom-left, left, top-left, top-right */
-    clip-path: polygon(
-        97% 40%, 98.5% 43%, 99.5% 46%, 100% 50%, 99.5% 54%, 98.5% 57%, 97% 60%,
-        80% 94%, 78.8% 95.5%, 77.3% 97%, 75.5% 98.2%, 73.7% 99.1%, 71.6% 99.7%, 69.5% 100%,
-        30.5% 100%, 28.4% 99.7%, 26.3% 99.1%, 24.5% 98.2%, 22.7% 97%, 21.2% 95.5%, 20% 94%,
-        3% 60%, 1.5% 57%, 0.5% 54%, 0% 50%, 0.5% 46%, 1.5% 43%, 3% 40%,
-        20% 6%, 21.2% 4.5%, 22.7% 3%, 24.5% 1.8%, 26.3% 0.9%, 28.4% 0.3%, 30.5% 0%,
-        69.5% 0%, 71.6% 0.3%, 73.7% 0.9%, 75.5% 1.8%, 77.3% 3%, 78.8% 4.5%, 80% 6%
-    );
+  /* order of corners in clip-path below: right, bottom-right, bottom-left, left, top-left, top-right */
+  -webkit-clip-path: polygon(97% 40%, 98.5% 43%, 99.5% 46%, 100% 50%, 99.5% 54%, 98.5% 57%, 97% 60%, 80% 94%, 78.8% 95.5%, 77.3% 97%, 75.5% 98.2%, 73.7% 99.1%, 71.6% 99.7%, 69.5% 100%, 30.5% 100%, 28.4% 99.7%, 26.3% 99.1%, 24.5% 98.2%, 22.7% 97%, 21.2% 95.5%, 20% 94%, 3% 60%, 1.5% 57%, 0.5% 54%, 0% 50%, 0.5% 46%, 1.5% 43%, 3% 40%, 20% 6%, 21.2% 4.5%, 22.7% 3%, 24.5% 1.8%, 26.3% 0.9%, 28.4% 0.3%, 30.5% 0%, 69.5% 0%, 71.6% 0.3%, 73.7% 0.9%, 75.5% 1.8%, 77.3% 3%, 78.8% 4.5%, 80% 6%);
+          clip-path: polygon(97% 40%, 98.5% 43%, 99.5% 46%, 100% 50%, 99.5% 54%, 98.5% 57%, 97% 60%, 80% 94%, 78.8% 95.5%, 77.3% 97%, 75.5% 98.2%, 73.7% 99.1%, 71.6% 99.7%, 69.5% 100%, 30.5% 100%, 28.4% 99.7%, 26.3% 99.1%, 24.5% 98.2%, 22.7% 97%, 21.2% 95.5%, 20% 94%, 3% 60%, 1.5% 57%, 0.5% 54%, 0% 50%, 0.5% 46%, 1.5% 43%, 3% 40%, 20% 6%, 21.2% 4.5%, 22.7% 3%, 24.5% 1.8%, 26.3% 0.9%, 28.4% 0.3%, 30.5% 0%, 69.5% 0%, 71.6% 0.3%, 73.7% 0.9%, 75.5% 1.8%, 77.3% 3%, 78.8% 4.5%, 80% 6%);
 }
 
 #production-chain-items .hexagon {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background: gray;
-    min-width: 6rem;
-    min-height: 4rem;
-    height: 100%;
-    border: 1px solid gray;
-    border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: gray;
+  min-width: 6rem;
+  min-height: 4rem;
+  height: 100%;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
 }
 
 #production-chain-items .hexagon .process-name {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--process);
-    padding: 0.5rem 1rem;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--process);
+  padding: 0.5rem 1rem;
 }
 
 /* item tooltip */
-
 #production-chain-items .item-tooltip-wrapper {
-    position: absolute;
-    display: none;
-    left: 50%;
-    white-space: nowrap;
+  position: absolute;
+  display: none;
+  left: 50%;
+  white-space: nowrap;
 }
 
 #production-chain-items [data-container-id]:hover .item-tooltip-wrapper {
-    display: block;
+  display: block;
 }
 
 #production-chain-items .item-tooltip-wrapper::before {
-    content: '⮕';
-    position: absolute;
-    left: -0.5rem;
-    width: 1rem;
-    font-size: 1.1rem;
-    line-height: 1.1rem;
-    transform: rotate(-90deg);
+  content: "⮕";
+  position: absolute;
+  left: -0.5rem;
+  width: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.1rem;
+  transform: rotate(-90deg);
 }
 
 #production-chain-items .item-tooltip-wrapper .item-tooltip {
-    position: relative;
-    left: -50%;
-    text-align: left;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-    filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
+  position: relative;
+  left: -50%;
+  text-align: left;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
 }
 
 /* item tooltip - process */
-
 #production-chain-items .item-tooltip-wrapper .process-tooltip {
-    background: var(--process);
+  background: var(--process);
 }
 
 #production-chain-items .item-tooltip-wrapper .process-tooltip .building {
-    background: var(--default-text);
-    color: var(--process);
-    text-align: center;
-    padding: 0.4rem;
-    border-radius: 0.4rem;
+  background: var(--default-text);
+  color: var(--process);
+  text-align: center;
+  padding: 0.4rem;
+  border-radius: 0.4rem;
 }
 
 #production-chain-items .item-tooltip-wrapper .process-tooltip .qty {
-    color: var(--default-text_semifaded);
+  color: var(--default-text_semifaded);
 }
 
 #production-chain-items .item-tooltip-wrapper .process-tooltip .qty::before {
-    content: "✕";
-    font-size: 0.5rem;
-    margin-left: 0.4rem;
-    margin-right: 0.2rem;
+  content: "✕";
+  font-size: 0.5rem;
+  margin-left: 0.4rem;
+  margin-right: 0.2rem;
 }
 
 #production-chain-items .item-type-process:not(.inferior-process) .item-tooltip-wrapper .process-tooltip .throughput {
-    color: var(--brand-text);
+  color: var(--brand-text);
 }
 
 #production-chain-items .item-type-process.has-sibling-variants:not(.inferior-process) .item-tooltip-wrapper .process-tooltip .throughput::after {
-    color: var(--default-text_semifaded);
-    content: '(best for selected output)';
-    display: block;
+  color: var(--default-text_semifaded);
+  content: "(best for selected output)";
+  display: block;
 }
 
 #production-chain-items .item-tooltip-wrapper .process-tooltip ul {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 #production-chain-items .item-tooltip-wrapper .process-tooltip ul li {
-    font-size: 0.7rem;
-    line-height: 1rem;
+  font-size: 0.7rem;
+  line-height: 1rem;
 }
 
 /* item tooltip - product */
-
 #production-chain-items .item-tooltip-wrapper .product-tooltip {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    background: black;
-    color: var(--item-name);
-    font-size: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: black;
+  color: var(--item-name);
+  font-size: 0.7rem;
 }
 
 #production-chain-items .item-tooltip-wrapper .product-tooltip .thumb {
-    display: block;
-    width: 5rem;
-    margin: 0 auto;
+  display: block;
+  width: 5rem;
+  margin: 0 auto;
 }
 
 #production-chain-items .item-tooltip-wrapper .product-tooltip .thumb.no-image {
-    display: none;
+  display: none;
 }
 
 #production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details::before {
-    display: block;
-    margin-bottom: 0.25rem;
-    opacity: 0.5;
+  display: block;
+  margin-bottom: 0.25rem;
+  opacity: 0.5;
 }
 
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.product-type::before { content: 'Product Type'; }
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.sustaining-spectral-types::before { content: 'Sustaining Spectral Types'; }
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.mass-volume::before { content: 'Mass & Volume per Unit'; }
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.max-units::before { content: 'Max Units per Storage'; }
+#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.product-type::before {
+  content: "Product Type";
+}
+
+#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.sustaining-spectral-types::before {
+  content: "Sustaining Spectral Types";
+}
+
+#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.mass-volume::before {
+  content: "Mass & Volume per Unit";
+}
+
+#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.max-units::before {
+  content: "Max Units per Storage";
+}
 
 #production-chain-items [data-container-id].prompt-message.--no-optimized-variant:hover .item-tooltip-wrapper .product-tooltip::after {
-    content: 'All process variants for this product were removed during the optimization, in order to avoid either an infinite production loop, or a highly inefficient production path.';
-    display: block;
-    opacity: 0.5;
-    white-space: normal;
+  content: "All process variants for this product were removed during the optimization, in order to avoid either an infinite production loop, or a highly inefficient production path.";
+  display: block;
+  opacity: 0.5;
+  white-space: normal;
 }
 
 /* required stuff */
-
 #required-stuff-wrapper {
-    position: relative;
-    display: inline-block;
-    width: 60rem;
-    background: var(--dark-bg);
-    margin-top: 2.5rem;
-    border-radius: 0.5rem;
+  position: relative;
+  display: inline-block;
+  width: 60rem;
+  background: var(--dark-bg);
+  margin-top: 2.5rem;
+  border-radius: 0.5rem;
 }
 
 #required-tabs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 #required-tabs a {
-    text-align: center;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
+  text-align: center;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 }
 
 #required-tabs .selected {
-    background: var(--active-bg);
+  background: var(--active-bg);
 }
 
 #required-content-wrapper {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    background: var(--active-bg);
-    padding: 1rem;
-    border-bottom-left-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: var(--active-bg);
+  padding: 1rem;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }
 
 #required-content {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 #required-content > * {
-    display: none;
+  display: none;
 }
 
 #required-content .selected {
-    display: block;
+  display: block;
 }
 
 .chain-type-derivatives #required-spectrals-and-raw-materials {
-    display: none;
+  display: none;
 }
 
 #required-spectrals-wrapper {
-    display: flex;
+  display: flex;
 }
 
 #required-spectrals {
-    /* same width and padding, as the first 2 columns from "#required-raw-materials ul li" */
-    width: 14rem;
-    padding-right: 2rem;
+  /* same width and padding, as the first 2 columns from "#required-raw-materials ul li" */
+  width: 14rem;
+  padding-right: 2rem;
 }
 
 #required-spectrals .spectral-types {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
 #required-spectrals .spectral-type {
-    font-weight: bold;
-    line-height: 2rem;
-    text-align: center;
-    width: 2rem;
-    border-radius: 50%;
+  font-weight: bold;
+  line-height: 2rem;
+  text-align: center;
+  width: 2rem;
+  border-radius: 50%;
 }
 
 #required-spectrals .spectral-type.disabled {
-    display: none;
+  display: none;
 }
 
 #required-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 #required-text .variants {
-    display: none;
+  display: none;
 }
 
 #required-text .variants.active {
-    display: block;
+  display: block;
 }
 
 #required-raw-materials {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 #required-raw-materials ul {
-    margin: 0 -1rem;
+  margin: 0 -1rem;
 }
 
 #required-raw-materials ul li {
-    display: grid;
-    grid-template-columns: 10rem 4rem 1fr;
-    margin-top: 0.1rem;
-    padding-left: 1rem; /* match with margin-left from "#required-raw-materials ul" */
-    padding-right: 1rem; /* match with margin-right from "#required-raw-materials ul" */
+  display: grid;
+  grid-template-columns: 10rem 4rem 1fr;
+  margin-top: 0.1rem;
+  padding-left: 1rem; /* match with margin-left from "#required-raw-materials ul" */
+  padding-right: 1rem; /* match with margin-right from "#required-raw-materials ul" */
 }
 
 /* keep margin-top (from "#required-raw-materials ul li") only for the first "li" of each material-type group */
@@ -1054,477 +1084,576 @@
 #required-raw-materials ul li.metals ~ li.metals,
 #required-raw-materials ul li.rare-earth ~ li.rare-earth,
 #required-raw-materials ul li.fissiles ~ li.fissiles {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 #required-raw-materials ul li:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 #required-raw-materials ul li > * {
-    padding-top: 0.1rem;
-    padding-bottom: 0.1rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
 }
 
 #required-raw-materials ul li .label {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 #required-raw-materials ul li:not(.active) .label,
 #required-raw-materials ul li:not(.active) .counter {
-    color:var(--default-text_faded);
+  color: var(--default-text_faded);
 }
 
 #required-raw-materials ul li .label a {
-    color: inherit;
+  color: inherit;
 }
 
 #required-raw-materials ul li .label a:hover {
-    color: var(--item-name);
+  color: var(--item-name);
 }
 
 #required-raw-materials ul li .counter {
-    text-align: right;
-    white-space: nowrap;
-    padding-right: 2rem;
+  text-align: right;
+  white-space: nowrap;
+  padding-right: 2rem;
 }
 
 #required-raw-materials ul li .counter::before {
-    content: "✕";
-    font-size: 0.5rem;
-    margin-right: 0.25rem;
+  content: "✕";
+  font-size: 0.5rem;
+  margin-right: 0.25rem;
 }
 
 #required-raw-materials ul li .ratio-cell {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 #required-raw-materials ul li .ratio-bar {
-    width: 2%; /* default minimum, overwritten with ratio for each raw-material */
-    height: 0.2rem;
+  width: 2%; /* default minimum, overwritten with ratio for each raw-material */
+  height: 0.2rem;
 }
 
 #required-raw-materials ul li:not(.active) .ratio-bar {
-    opacity: 0.2;
+  opacity: 0.2;
 }
 
-#required-raw-materials ul li.volatiles .ratio-bar { background-color: var(--volatiles); }
-#required-raw-materials ul li.organics .ratio-bar { background-color: var(--organics); }
-#required-raw-materials ul li.metals .ratio-bar { background-color: var(--metals); }
-#required-raw-materials ul li.rare-earth .ratio-bar { background-color: var(--rare-earth); }
-#required-raw-materials ul li.fissiles .ratio-bar { background-color: var(--fissiles); }
+#required-raw-materials ul li.volatiles .ratio-bar {
+  background-color: var(--volatiles);
+}
+
+#required-raw-materials ul li.organics .ratio-bar {
+  background-color: var(--organics);
+}
+
+#required-raw-materials ul li.metals .ratio-bar {
+  background-color: var(--metals);
+}
+
+#required-raw-materials ul li.rare-earth .ratio-bar {
+  background-color: var(--rare-earth);
+}
+
+#required-raw-materials ul li.fissiles .ratio-bar {
+  background-color: var(--fissiles);
+}
 
 /* background gradients for the entire row - 1st cell */
-#required-raw-materials ul li.volatiles .label { background: linear-gradient(-90deg, var(--volatiles_faded) 0%, transparent 100%); }
-#required-raw-materials ul li.organics .label { background: linear-gradient(-90deg, var(--organics_faded) 0%, transparent 100%); }
-#required-raw-materials ul li.metals .label { background: linear-gradient(-90deg, var(--metals_faded) 0%, transparent 100%); }
-#required-raw-materials ul li.rare-earth .label { background: linear-gradient(-90deg, var(--rare-earth_faded) 0%, transparent 100%); }
-#required-raw-materials ul li.fissiles .label { background: linear-gradient(-90deg, var(--fissiles_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.volatiles .label {
+  background: linear-gradient(-90deg, var(--volatiles_faded) 0%, transparent 100%);
+}
+
+#required-raw-materials ul li.organics .label {
+  background: linear-gradient(-90deg, var(--organics_faded) 0%, transparent 100%);
+}
+
+#required-raw-materials ul li.metals .label {
+  background: linear-gradient(-90deg, var(--metals_faded) 0%, transparent 100%);
+}
+
+#required-raw-materials ul li.rare-earth .label {
+  background: linear-gradient(-90deg, var(--rare-earth_faded) 0%, transparent 100%);
+}
+
+#required-raw-materials ul li.fissiles .label {
+  background: linear-gradient(-90deg, var(--fissiles_faded) 0%, transparent 100%);
+}
 
 /* background gradients for the entire row - 2nd cell */
-#required-raw-materials ul li.volatiles .counter { background: var(--volatiles_faded); }
-#required-raw-materials ul li.organics .counter { background: var(--organics_faded); }
-#required-raw-materials ul li.metals .counter { background: var(--metals_faded); }
-#required-raw-materials ul li.rare-earth .counter { background: var(--rare-earth_faded); }
-#required-raw-materials ul li.fissiles .counter { background: var(--fissiles_faded); }
+#required-raw-materials ul li.volatiles .counter {
+  background: var(--volatiles_faded);
+}
+
+#required-raw-materials ul li.organics .counter {
+  background: var(--organics_faded);
+}
+
+#required-raw-materials ul li.metals .counter {
+  background: var(--metals_faded);
+}
+
+#required-raw-materials ul li.rare-earth .counter {
+  background: var(--rare-earth_faded);
+}
+
+#required-raw-materials ul li.fissiles .counter {
+  background: var(--fissiles_faded);
+}
 
 /* background gradients for the entire row - 3rd cell */
-#required-raw-materials ul li.volatiles .ratio-cell { background: linear-gradient(90deg, var(--volatiles_faded) 0%, transparent 100%); }
-#required-raw-materials ul li.organics .ratio-cell { background: linear-gradient(90deg, var(--organics_faded) 0%, transparent 100%); }
-#required-raw-materials ul li.metals .ratio-cell { background: linear-gradient(90deg, var(--metals_faded) 0%, transparent 100%); }
-#required-raw-materials ul li.rare-earth .ratio-cell { background: linear-gradient(90deg, var(--rare-earth_faded) 0%, transparent 100%); }
-#required-raw-materials ul li.fissiles .ratio-cell { background: linear-gradient(90deg, var(--fissiles_faded) 0%, transparent 100%); }
+#required-raw-materials ul li.volatiles .ratio-cell {
+  background: linear-gradient(90deg, var(--volatiles_faded) 0%, transparent 100%);
+}
+
+#required-raw-materials ul li.organics .ratio-cell {
+  background: linear-gradient(90deg, var(--organics_faded) 0%, transparent 100%);
+}
+
+#required-raw-materials ul li.metals .ratio-cell {
+  background: linear-gradient(90deg, var(--metals_faded) 0%, transparent 100%);
+}
+
+#required-raw-materials ul li.rare-earth .ratio-cell {
+  background: linear-gradient(90deg, var(--rare-earth_faded) 0%, transparent 100%);
+}
+
+#required-raw-materials ul li.fissiles .ratio-cell {
+  background: linear-gradient(90deg, var(--fissiles_faded) 0%, transparent 100%);
+}
 
 #required-tier-details {
-    margin-top: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 #required-product-image-wrapper {
-    position: relative;
-    width: 11rem;
-    text-align: center;
-    border-radius: 1rem;
+  position: relative;
+  width: 11rem;
+  text-align: center;
+  border-radius: 1rem;
 }
 
 #required-product-image-wrapper:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
 }
 
 #required-product-image-wrapper:not(.missing-image-wrapper):hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #required-product-image-wrapper:not(.missing-image-wrapper)::after {
-    content: '+';
-    position: absolute;
-    top: 0;
-    right: 0.5rem;
-    font-size: 2rem;
-    opacity: 0;
+  content: "+";
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+  font-size: 2rem;
+  opacity: 0;
 }
 
 #required-product-image-wrapper:not(.missing-image-wrapper):hover::after {
-    opacity: 1;
+  opacity: 1;
 }
 
 #required-product-image {
-    width: 100%;
+  width: 100%;
 }
 
 #required-product-name {
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0 0.5rem 1rem 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0 0.5rem 1rem 0.5rem;
 }
 
 /* production planner - user selected products list */
 #user-selected-products-wrapper {
-    margin-top: 1.5rem;
-    font-size: 0.9rem;
-    line-height: 1.5rem;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.5rem;
 }
 
 #user-selected-products-wrapper .extra-info {
-    font-size: 0.8rem;
-    line-height: 1rem;
-    opacity: 0.5;
+  font-size: 0.8rem;
+  line-height: 1rem;
+  opacity: 0.5;
 }
 
 #user-selected-products-list {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0.5rem 0 0 -0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0.5rem 0 0 -0.5rem;
 }
 
 #user-selected-products-list > * {
-    white-space: nowrap;
-    padding: 0 0.5rem;
-    border-radius: 0.4rem;
+  white-space: nowrap;
+  padding: 0 0.5rem;
+  border-radius: 0.4rem;
 }
 
 #user-selected-products-list > *:hover {
-    background: var(--overactive-bg);
+  background: var(--overactive-bg);
 }
 
 #user-selected-products-list > *:not(:last-child)::after {
-    content: ',';
-    color: var(--default-text);
+  content: ",";
+  color: var(--default-text);
 }
 
 #user-selected-products-list a {
-    color: inherit;
+  color: inherit;
 }
 
 #user-selected-products-list .qty {
-    color: var(--default-text);
+  color: var(--default-text);
 }
 
 #user-selected-products-list .qty::before {
-    content: "✕";
-    font-size: 0.5rem;
-    margin-left: 0.4rem;
-    margin-right: 0.2rem;
+  content: "✕";
+  font-size: 0.5rem;
+  margin-left: 0.4rem;
+  margin-right: 0.2rem;
 }
 
 /* production planner - shopping list */
 #shopping-list-wrapper {
-    position: relative;
-    background: var(--active-bg);
-    padding: 1rem;
-    border-radius: 0.5rem;
+  position: relative;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+#shopping-list-wrapper.active-shopping {
+  background: var(--active-bg);
+}
+#shopping-list-wrapper.active-diy {
+  background: var(--dark-bg);
+}
+#shopping-list-wrapper #shopping-list-tabs {
+  display: grid;
+  grid-template-columns: auto auto;
+  font-size: 0.9rem;
+  line-height: 2rem;
+  margin: -1rem -1rem 0 -1rem;
+}
+#shopping-list-wrapper #shopping-list-tabs .shopping-list-tab:hover {
+  color: white;
+  text-decoration: underline;
+  cursor: pointer;
+}
+#shopping-list-wrapper #shopping-list-tabs .shopping-list-tab.active {
+  color: white;
+}
+#shopping-list-wrapper #shopping-list-tabs .shopping-list-tab#tab-shopping-list {
+  background: var(--active-bg);
+  border-top-left-radius: 0.5rem;
+}
+#shopping-list-wrapper #shopping-list-tabs .shopping-list-tab#tab-diy-list {
+  background: var(--dark-bg);
+  border-top-right-radius: 0.5rem;
 }
 
 .embed #shopping-list-wrapper {
-    background: unset;
-    backdrop-filter: opacity(1);
+  background: unset;
+  -webkit-backdrop-filter: opacity(1);
+          backdrop-filter: opacity(1);
 }
 
-#shopping-list-qty-disclaimer {
-    margin-top: 0.5rem;
+#shopping-list-qty-disclaimer,
+#diy-list-qty-disclaimer {
+  margin-top: 1rem;
 }
 
-#shopping-list-qty-final-product {
-    color: var(--brand-text);
+#shopping-list-qty-final-product,
+#diy-list-qty-final-product {
+  color: var(--brand-text);
 }
 
-#shopping-list-qty-final-product::before {
-    content: "✕";
-    font-size: 0.5rem;
-    margin-left: 0.25rem;
-    margin-right: 0.25rem;
+#shopping-list-qty-final-product::before,
+#diy-list-qty-final-product::before {
+  content: "✕";
+  font-size: 0.5rem;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
 }
 
-#shopping-list {
-    text-align: left;
-    margin-top: 1rem;
+#shopping-list,
+#diy-list {
+  text-align: left;
+  margin-top: 1rem;
 }
-
-#shopping-list .line-title {
-    text-align: left;
-    color: var(--link);
+#shopping-list .line-title,
+#diy-list .line-title {
+  text-align: left;
+  color: var(--link);
 }
-
-#shopping-list .line {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin: 0 -0.5rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: 0.4rem;
+#shopping-list .line,
+#diy-list .line {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 -0.5rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.4rem;
 }
-
-#shopping-list .line:not(.line-title, .line-spectral-types):hover {
-    background: rgba(255, 255, 255, 0.05);
+#shopping-list .line:not(.line-title, .line-spectral-types):hover,
+#diy-list .line:not(.line-title, .line-spectral-types):hover {
+  background: rgba(255, 255, 255, 0.05);
 }
-
-#shopping-list .line a {
-    color: inherit;
+#shopping-list .line a,
+#diy-list .line a {
+  color: inherit;
 }
-
-#shopping-list .line a:hover {
-    color: var(--item-name);
+#shopping-list .line a:hover,
+#diy-list .line a:hover {
+  color: var(--item-name);
 }
-
-#shopping-list .line .qty {
-    color: var(--default-text_semifaded);
+#shopping-list .line .qty,
+#diy-list .line .qty {
+  color: var(--default-text_semifaded);
 }
-
-#shopping-list .line .qty::before {
-    content: "✕";
-    font-size: 0.5rem;
-    margin-right: 0.25rem;
+#shopping-list .line .qty::before,
+#diy-list .line .qty::before {
+  content: "✕";
+  font-size: 0.5rem;
+  margin-right: 0.25rem;
 }
-
-#shopping-list .line-spectral-types {
-    justify-content: flex-start;
+#shopping-list .line-spectral-types,
+#diy-list .line-spectral-types {
+  justify-content: flex-start;
 }
-
-#shopping-list .line-spectral-types .spectral-type {
-    width: 2rem;
-    line-height: 2rem;
-    text-align: center;
-    border-radius: 50%;
+#shopping-list .line-spectral-types .spectral-type,
+#diy-list .line-spectral-types .spectral-type {
+  width: 2rem;
+  line-height: 2rem;
+  text-align: center;
+  border-radius: 50%;
 }
-
-#shopping-list .line-spectral-types .spectral-type.is-optional {
-    opacity: 0.5;
+#shopping-list .line-spectral-types .spectral-type.is-optional,
+#diy-list .line-spectral-types .spectral-type.is-optional {
+  opacity: 0.5;
 }
-
-#shopping-list .line-spectral-types .spectral-type.is-optional:hover {
-    opacity: 1;
+#shopping-list .line-spectral-types .spectral-type.is-optional:hover,
+#diy-list .line-spectral-types .spectral-type.is-optional:hover {
+  opacity: 1;
 }
-
-#shopping-list hr {
-    margin: 0.5rem;
-    border: none;
-    border-top: 1px solid var(--default-text_faded);
+#shopping-list hr,
+#diy-list hr {
+  margin: 0.5rem;
+  border: none;
+  border-top: 1px solid var(--default-text_faded);
 }
 
 #shopping-list-product-image-wrapper {
-    position: relative;
-    margin-top: 1rem;
-    border-radius: 1rem;
+  position: relative;
+  margin-top: 1rem;
+  border-radius: 1rem;
 }
 
 #shopping-list-product-image-wrapper:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
 }
 
 #shopping-list-product-image-wrapper:not(.missing-image-wrapper):hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #shopping-list-product-image-wrapper:not(.missing-image-wrapper)::after {
-    content: '+';
-    position: absolute;
-    top: 0;
-    right: 0.5rem;
-    font-size: 2rem;
-    opacity: 0;
+  content: "+";
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+  font-size: 2rem;
+  opacity: 0;
 }
 
 #shopping-list-product-image-wrapper:not(.missing-image-wrapper):hover::after {
-    opacity: 1;
+  opacity: 1;
 }
 
 #shopping-list-product-image {
-    width: 100%;
+  width: 100%;
 }
 
 #shopping-list-product-name {
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0 0.5rem 1rem 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0 0.5rem 1rem 0.5rem;
 }
 
 /* production planner - minimap */
 #minimap-wrapper {
-    position: fixed;
-    top: 0;
-    right: 0;
-    min-width: 8rem;
-    min-height: 3rem; /* match the height of the ".topbar" links */
-    background: var(--dark-bg); /* NOT using "-moz-element" re: only supported in Firefox */
-    padding: 0 1.5rem 0 1rem;
-    border-bottom-left-radius: 1rem;
-    z-index: 1;
-    opacity: 0.75;
+  position: fixed;
+  top: 0;
+  right: 0;
+  min-width: 8rem;
+  min-height: 3rem; /* match the height of the ".topbar" links */
+  background: var(--dark-bg); /* NOT using "-moz-element" re: only supported in Firefox */
+  padding: 0 1.5rem 0 1rem;
+  border-bottom-left-radius: 1rem;
+  z-index: 1;
+  opacity: 0.75;
 }
 
 #minimap-wrapper:hover {
-    opacity: 1;
+  opacity: 1;
 }
 
 #minimap-toggle {
-    position: absolute;
-    top: 0;
-    right: 1.5rem;
-    color: var(--link);
-    font-size: 0.9rem;
-    line-height: 3rem; /* match the height of the ".topbar" links */
-    cursor: pointer;
-    padding-right: 1.5rem;
+  position: absolute;
+  top: 0;
+  right: 1.5rem;
+  color: var(--link);
+  font-size: 0.9rem;
+  line-height: 3rem; /* match the height of the ".topbar" links */
+  cursor: pointer;
+  padding-right: 1.5rem;
 }
 
 #minimap-toggle:hover {
-    color: var(--link-hover);
+  color: var(--link-hover);
 }
 
 #minimap-toggle::after {
-    content: '✕';
-    position: absolute;
-    bottom: -0.1rem;
-    right: 0;
+  content: "✕";
+  position: absolute;
+  bottom: -0.1rem;
+  right: 0;
 }
 
 #minimap-wrapper.minimized #minimap-toggle::after {
-    content: '▼';
+  content: "▼";
 }
 
 #minimap-canvas {
-    display: block;
-    margin: 3rem auto 1rem auto; /* top-margin should match the height of the ".topbar" links */
+  display: block;
+  margin: 3rem auto 1rem auto; /* top-margin should match the height of the ".topbar" links */
 }
 
 #minimap-wrapper.minimized #minimap-canvas {
-    display: none;
+  display: none;
 }
 
 /* production planner - production chain overlay */
 #production-chain-overlay {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: var(--default-overlay-bg);
-    font-size: 1rem;
-    line-height: 1.5rem;
-    text-shadow: 0.2rem 0.2rem 0.4rem black;
-    padding: 1.5rem;
-    z-index: 1;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--default-overlay-bg);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-shadow: 0.2rem 0.2rem 0.4rem black;
+  padding: 1.5rem;
+  z-index: 1;
 }
 
 #production-chain-overlay .overlay-question {
-    margin: 1rem 0;
+  margin: 1rem 0;
 }
 
 #production-chain-overlay input {
-    filter: drop-shadow(0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.5));
 }
 
 #production-chain-overlay .overlay-responses {
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    margin-top: 1rem;
-    filter: drop-shadow(0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.25));
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 1rem;
+  filter: drop-shadow(0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.25));
 }
 
 #production-chain-overlay .overlay-responses .overlay-response {
-    cursor: pointer;
-    background: var(--overactive-bg);
-    text-shadow: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+  cursor: pointer;
+  background: var(--overactive-bg);
+  text-shadow: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
 }
 
 #production-chain-overlay .overlay-responses .overlay-response:hover {
-    background: var(--brand-text);
-    color: black;
+  background: var(--brand-text);
+  color: black;
 }
 
 /* production planner - user selected products info */
 #user-selected-products-info {
-    clear: both;
-    font-size: 0.9rem;
-    line-height: 1.5rem;
-    padding-top: 2rem;
+  clear: both;
+  font-size: 0.9rem;
+  line-height: 1.5rem;
+  padding-top: 2rem;
 }
 
 /* production planner - inactive / waiting selection */
 #production-chain-items .disabled-item {
-    /* disabled items in v2 production chains are faded, but visible */
-    /* for disabled items in v1 production chains, see ".disabled" */
-    opacity: 0.25;
+  /* disabled items in v2 production chains are faded, but visible */
+  /* for disabled items in v1 production chains, see ".disabled" */
+  opacity: 0.25;
 }
 
 #production-chain-items .disabled-item:hover {
-    opacity: 1;
+  opacity: 1;
 }
 
 #production-chain-items .item-type-process.waiting-selection:not(:hover) {
-    animation: pulse 2s infinite;
+  animation: pulse 2s infinite;
 }
 
 #production-chain-items .item-type-process.inferior-process {
-    --process: var(--process-inferior);
+  --process: var(--process-inferior);
 }
 
 #production-chain-items .item-type-process.selected-process .hexagon {
-    background: var(--brand-text);
-    border-color: var(--brand-text);
+  background: var(--brand-text);
+  border-color: var(--brand-text);
 }
 
 /* production planner - prompt message on (typically-selected) products */
 #production-chain-items .prompt-message .item-name::after {
-    white-space: pre;
-    background: var(--brand-text);
-    color: black;
-    /* font-family: Jura-Bold; */
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin: 0.5rem -0.5rem -0.5rem -0.5rem; /* compensate for ".item-name" padding */
-    padding: 0.5rem;
-    border-bottom-left-radius: 0.4rem;
-    border-bottom-right-radius: 0.4rem;
+  white-space: pre;
+  background: var(--brand-text);
+  color: black;
+  /* font-family: Jura-Bold; */
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin: 0.5rem -0.5rem -0.5rem -0.5rem; /* compensate for ".item-name" padding */
+  padding: 0.5rem;
+  border-bottom-left-radius: 0.4rem;
+  border-bottom-right-radius: 0.4rem;
 }
+
 .production-planner #production-chain-items .prompt-message:hover .item-name::after {
-    border-bottom-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
-#production-chain-items .prompt-message.--select-variant .item-name::after { content: 'Select one of the\Aprocess variants'; }
-#production-chain-items .prompt-message.--no-optimized-variant .item-name::after { content: 'No optimized process\Avariant available'; }
-#production-chain-items .prompt-message.--no-raw-variant .item-name::after { content: 'ERROR: No process\Avariant available'; }
+
+#production-chain-items .prompt-message.--select-variant .item-name::after {
+  content: "Select one of the\aprocess variants";
+}
+
+#production-chain-items .prompt-message.--no-optimized-variant .item-name::after {
+  content: "No optimized process\avariant available";
+}
+
+#production-chain-items .prompt-message.--no-raw-variant .item-name::after {
+  content: "ERROR: No process\avariant available";
+}
 
 /* debug */
 #debug {
-    position: fixed;
-    top: 0;
-    right: 0;
-    max-width: 20rem;
-    white-space: pre;
-    background: black;
-    color: white;
-    font-size: 0.8rem;
-    padding: 1rem;
-    border: 1px solid white;
-    border-radius: 0.5rem;
-    z-index: 1;
-}
+  position: fixed;
+  top: 0;
+  right: 0;
+  max-width: 20rem;
+  white-space: pre;
+  background: black;
+  color: white;
+  font-size: 0.8rem;
+  padding: 1rem;
+  border: 1px solid white;
+  border-radius: 0.5rem;
+  z-index: 1;
+}/*# sourceMappingURL=production.css.map */
