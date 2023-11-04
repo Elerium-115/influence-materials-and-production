@@ -1795,6 +1795,8 @@ function renderShoppingAndDiyList() {
             `;
         });
         shoppingListHtml += `<hr>`;
+    } else {
+        shoppingListHtml = `No products required from other sources.`;
     }
     shoppingListContainer.innerHTML = shoppingListHtml;
 

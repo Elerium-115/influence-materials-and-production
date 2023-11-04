@@ -1211,10 +1211,16 @@
         margin: -1rem -1rem 0 -1rem;
 
         .shopping-list-tab {
+            position: relative;
+
             &:hover {
                 color: white;
                 text-decoration: underline;
                 cursor: pointer;
+
+                .tab-tooltip {
+                    display: block;
+                }
             }
 
             &.active {
@@ -1224,11 +1230,34 @@
             &#tab-shopping-list {
                 background: var(--active-bg);
                 border-top-left-radius: 0.5rem;
+
+                .tab-tooltip {
+                    background: var(--active-bg);
+                    left: 0;
+                }
             }
 
             &#tab-diy-list {
                 background: var(--dark-bg);
                 border-top-right-radius: 0.5rem;
+
+                .tab-tooltip {
+                    background: var(--dark-bg);
+                    right: 0;
+                }
+            }
+
+            .tab-tooltip {
+                border-radius: 0.5rem;
+                bottom: calc(100% + 0.5rem);
+                color: var(--default-text);
+                display: none;
+                filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
+                font-size: 0.8rem;
+                line-height: normal;
+                padding: 0.5rem;
+                position: absolute;
+                width: 13rem;
             }
         }
     }

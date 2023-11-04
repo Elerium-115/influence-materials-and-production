@@ -40,8 +40,14 @@ const templateProductionPlan = /*html*/ `
             <div id="production-chain-wrapper">
                 <div id="shopping-list-wrapper" class="active-shopping">
                     <div id="shopping-list-tabs">
-                        <div id="tab-shopping-list" class="shopping-list-tab active" onclick="onClickShoppingListTab(this)">Shopping List</div>
-                        <div id="tab-diy-list" class="shopping-list-tab" onclick="onClickShoppingListTab(this)">DIY List</div>
+                        <div id="tab-shopping-list" class="shopping-list-tab active" onclick="onClickShoppingListTab(this)">
+                            <div>Shopping List</div>
+                            <div class="tab-tooltip">Products that you need to obtain from other sources, such as marketplaces, players or alliances.</div>
+                        </div>
+                        <div id="tab-diy-list" class="shopping-list-tab" onclick="onClickShoppingListTab(this)">
+                            <div>DIY List</div>
+                            <div class="tab-tooltip">"Do It Yourself" products that you selected, in addition to the final product, plus the required infrastructure.</div>
+                        </div>
                     </div>
                     <div id="shopping-list-qty-disclaimer">
                         <span>*Qty for final product</span>
