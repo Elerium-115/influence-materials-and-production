@@ -1682,24 +1682,24 @@ function updatePlannedProductDataBasedOnProductionPlanData(plannedProductData, p
             intermediate_product_name: intermediateProductData.name,
         };
     });
-    const shoppingList = getShoppingListForProductionPlan(productionPlanData.itemDataById);
-    if (!shoppingList) {
+    const shoppingAndDiyList = getShoppingAndDiyListForProductionPlan(productionPlanData.itemDataById);
+    if (!shoppingAndDiyList) {
         console.log(`%c--- ERROR: production plan was saved with process variants waiting selection`, 'background: maroon'); //// TEST
         return;
     }
-    const shoppingListInputs = shoppingList.inputs.map(inputData => {
+    const shoppingListInputs = shoppingAndDiyList.inputs.map(inputData => {
         return {
             input_name: inputData.name,
             qty: inputData.qty,
         };
     });
-    const shoppingListBuildings = shoppingList.buildings.map(buildingData => {
+    const shoppingListBuildings = shoppingAndDiyList.buildings.map(buildingData => {
         return {
             building_name: buildingData.name,
             qty: buildingData.qty,
         };
     });
-    const shoppingListSpectralTypes = shoppingList.spectralTypes.map(spectralTypeData => {
+    const shoppingListSpectralTypes = shoppingAndDiyList.spectralTypes.map(spectralTypeData => {
         return {
             spectral_type_name: spectralTypeData.name,
             is_optional: spectralTypeData.isOptional,
@@ -1752,7 +1752,6 @@ function updateContent() {
     }
     refreshAsteroidsPlannerBreadcrumbsHtml();
     elContent.innerHTML = '';
-    const qtyNoteHtml = /*html*/ `<div class="qty-note">Quantities are not final. They are only an example, assuming a required quantity of x2 for each input, of each process.</div>`;
     if (!asteroidName) {
         // Home
         let asteroidCardsHtml = '';
@@ -1994,7 +1993,6 @@ function updateContent() {
                     <div class="required-cell required-buildings can-add-product">${buildingsHtml}</div>
                     <div class="required-cell required-spectral-types">${spectralTypesHtml}</div>
                 </div>
-                ${qtyNoteHtml}
             `;
         } else {
             intermediateProductsAndShoppingListHtml = /*html*/ `
@@ -2071,7 +2069,6 @@ function updateContent() {
                     <span class="required-qty-disclaimer"></span>
                     <br><br>
                     To add or remove intermediate products, <a onclick="${onClickPlannedProductValue}">edit the production chain</a> for the planned product.
-                    ${qtyNoteHtml}
                 </div>
             </div>
         `;
@@ -2085,8 +2082,8 @@ function updateContent() {
              * Show disclaimer re: qty, if the same intermediate product name
              * also appears in the shopping list for this production plan.
              */
-            const shoppingList = getShoppingListForProductionPlan(itemDataById);
-            const sameProductInShoppingList = shoppingList.inputs.find(product => product.name === intermediateProductName);
+            const shoppingAndDiyList = getShoppingAndDiyListForProductionPlan(itemDataById);
+            const sameProductInShoppingList = shoppingAndDiyList.inputs.find(product => product.name === intermediateProductName);
             if (sameProductInShoppingList) {
                 elContent.querySelector('.required-qty-disclaimer').innerHTML = /*html*/ `
                     <br><br>Additionally, <a onclick="${onClickPlannedProductValue}">x${sameProductInShoppingList.qty} ${intermediateProductName}</a> (outsourced) also required as part of the Shopping List for the current production plan.

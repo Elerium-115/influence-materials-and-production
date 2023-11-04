@@ -324,10 +324,15 @@ function getIntermediateProductsForProductionPlan(itemDataById) {
     return getArraySortedByNameFromObjectValues(intermediateProductsData);
 }
 
-function getShoppingListForProductionPlan(itemDataById) {
+/**
+ * NOTE: This function returns an object that contains both "inputs"
+ * for the "Shopping List", and "diyInputs" for the "DIY List".
+ */
+function getShoppingAndDiyListForProductionPlan(itemDataById) {
     if (!itemDataById) {
         return {
             inputs: [],
+            diyInputs: [],
             buildings: [],
             spectralTypes: [],
         };
@@ -337,12 +342,12 @@ function getShoppingListForProductionPlan(itemDataById) {
         // if (doDebug) console.log(`--- NO shopping list, waiting for user to select a required process variant`);
         return null;
     }
-    const shoppingList = {};
+    const shoppingAndDiyList = {};
 
-    // #1 - required inputs
+    // #1 - required inputs for "Shopping List"
     const requiredInputs = {};
     for (const [itemId, itemData] of Object.entries(itemDataById)) {
-        // Parse only inputs (i.e. non-selected product-items) of process variants which are selected
+        // Parse only NON-selected inputs of process variants which are selected
         if (!itemData.isSelected && itemData.productId !== null && itemDataById[itemData.parentItemId].isSelected) {
             const productId = itemData.productId;
             // Shopping data for the current occurrence of this product
@@ -358,10 +363,35 @@ function getShoppingListForProductionPlan(itemDataById) {
             }
         }
     }
-    // Note: if NO required inputs => the planned product is a raw material, or has no process (e.g. Food as of Jul 2022)
-    shoppingList.inputs = getArraySortedByNameFromObjectValues(requiredInputs);
+    // Note: if NO required inputs for "Shopping List" => the planned product is a raw material, or has no process (e.g. Food as of Jul 2022)
+    shoppingAndDiyList.inputs = getArraySortedByNameFromObjectValues(requiredInputs);
 
-    // #2 - required buildings
+    // #2 - required inputs for "DIY List"
+    const requiredDiyInputs = {};
+    for (const [itemId, itemData] of Object.entries(itemDataById)) {
+        if (!itemData.parentItemId) {
+            // Skip the planned product
+            continue;
+        }
+        // Parse only SELECTED inputs (the parent process variants are guaranteed to be selected)
+        if (itemData.isSelected && itemData.productId !== null) {
+            const productId = itemData.productId;
+            // DIY data for the current occurrence of this product
+            const inputData = {
+                name: productDataById[productId].name,
+                qty: getTotalQtyForItemId(itemId, itemDataById),
+            };
+            if (!requiredDiyInputs[productId]) {
+                requiredDiyInputs[productId] = inputData;
+            } else {
+                // Add qtys of all occurrences of this product
+                requiredDiyInputs[productId].qty += inputData.qty;
+            }
+        }
+    }
+    shoppingAndDiyList.diyInputs = getArraySortedByNameFromObjectValues(requiredDiyInputs);
+
+    // #3 - required buildings
     const requiredBuildings = {};
     for (const itemData of Object.values(itemDataById)) {
         const processId = itemData.processId;
@@ -377,9 +407,9 @@ function getShoppingListForProductionPlan(itemDataById) {
             requiredBuildings[buildingName].qty++;
         }
     }
-    shoppingList.buildings = getArraySortedByNameFromObjectValues(requiredBuildings);
+    shoppingAndDiyList.buildings = getArraySortedByNameFromObjectValues(requiredBuildings);
 
-    // #3 - required spectral types, only if the user selected to extract at least one raw material
+    // #4 - required spectral types, only if the user selected to extract at least one raw material
     const requiredSpectralTypes = {};
     /**
      * Parse only selected processes that require an extractor.
@@ -415,9 +445,9 @@ function getShoppingListForProductionPlan(itemDataById) {
             }
         });
     });
-    shoppingList.spectralTypes = getArraySortedByNameFromObjectValues(requiredSpectralTypes);
+    shoppingAndDiyList.spectralTypes = getArraySortedByNameFromObjectValues(requiredSpectralTypes);
 
-    return shoppingList;
+    return shoppingAndDiyList;
 }
 
 /**
@@ -1728,47 +1758,34 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
     // if (doDebug) console.log(`------------------------------`);
 }
 
-function renderSelectedProductsList() {
-    const intermediateProducts = getIntermediateProductsForProductionPlan(itemDataById);
-    let intermediateProductsListHtml = '';
-    if (intermediateProducts.length) {
-        intermediateProducts.forEach(intermediateProductData => {
-            const hrefHtml = isToolProductionPlanner ? `href="#${getCompactName(intermediateProductData.name)}"` : '';
-            intermediateProductsListHtml += /*html*/ `<span><a ${hrefHtml} class="list-product-name">${intermediateProductData.name}</a>`;
-            if (intermediateProductData.qty > 1) {
-                intermediateProductsListHtml += `<span class="qty">${intermediateProductData.qty}</span>`;
-            }
-            intermediateProductsListHtml += `</span>`;
-        });
-    } else {
-        // NO intermediate products selected
-        intermediateProductsListHtml = '<span>N/A</span>';
-    }
-    document.getElementById('user-selected-products-list').innerHTML = intermediateProductsListHtml;
-}
-
-function renderShoppingList() {
+function renderShoppingAndDiyList() {
     shoppingListQtyDisclaimerContainer.classList.add('hidden');
-    const shoppingList = getShoppingListForProductionPlan(itemDataById);
-    if (!shoppingList) {
+    diyListQtyDisclaimerContainer.classList.add('hidden');
+
+    const shoppingAndDiyList = getShoppingAndDiyListForProductionPlan(itemDataById);
+
+    if (!shoppingAndDiyList) {
         // Waiting for user to select a required process variant => NO shopping list
-        shoppingListContainer.innerHTML = /*html*/ `<p class="brand-text">Please select a<br>required process variant.</p>`;
+        const requiredVariantHtml = /*html*/ `<p class="brand-text">Please select a<br>required process variant.</p>`;
+        shoppingListContainer.innerHTML = requiredVariantHtml;
+        diyListContainer.innerHTML = requiredVariantHtml;
         return;
     }
-    let shoppingListHtml = '';
 
-    // #1 - required inputs
-    if (shoppingList.inputs.length) {
-        // if (doDebug) console.log(`--- shoppingList.inputs:`, shoppingList.inputs);
+    // Render "Shopping List"
+    let shoppingListHtml = '';
+    // #1 - required inputs for "Shopping List"
+    if (shoppingAndDiyList.inputs.length) {
+        // if (doDebug) console.log(`--- shoppingAndDiyList.inputs:`, shoppingAndDiyList.inputs);
         let qtyMultiplier = 1;
-        if (shoppingList.inputs.some(inputData => inputData.qty < 1) && shoppingList.inputs.every(inputData => inputData.qty < 10)) {
+        if (shoppingAndDiyList.inputs.some(inputData => inputData.qty < 1) && shoppingAndDiyList.inputs.every(inputData => inputData.qty < 10)) {
             // Small quantities, with at least one of them lower than 1
             qtyMultiplier = 1000;
         }
         shoppingListQtyFinalProductContainer.textContent = qtyMultiplier;
         shoppingListQtyDisclaimerContainer.classList.remove('hidden');
         shoppingListHtml += /*html*/ `<div class="line line-title"><div>Inputs</div><div>Qty*</div></div>`;
-        shoppingList.inputs.forEach(inputData => {
+        shoppingAndDiyList.inputs.forEach(inputData => {
             const hrefHtml = isToolProductionPlanner ? `href="#${getCompactName(inputData.name)}"` : '';
             shoppingListHtml += /*html*/ `
                 <div class="line">
@@ -1779,54 +1796,76 @@ function renderShoppingList() {
         });
         shoppingListHtml += `<hr>`;
     }
+    shoppingListContainer.innerHTML = shoppingListHtml;
 
+    // Render "DIY List"
+    let diyListHtml = '';
+    // #1 - required inputs for "DIY List"
+    if (shoppingAndDiyList.diyInputs.length) {
+        // if (doDebug) console.log(`--- shoppingAndDiyList.diyInputs:`, shoppingAndDiyList.diyInputs);
+        let qtyMultiplier = 1;
+        if (shoppingAndDiyList.diyInputs.some(inputData => inputData.qty < 1) && shoppingAndDiyList.diyInputs.every(inputData => inputData.qty < 10)) {
+            // Small quantities, with at least one of them lower than 1
+            qtyMultiplier = 1000;
+        }
+        diyListQtyFinalProductContainer.textContent = qtyMultiplier;
+        diyListQtyDisclaimerContainer.classList.remove('hidden');
+        diyListHtml += /*html*/ `<div class="line line-title"><div>Inputs</div><div>Qty*</div></div>`;
+        shoppingAndDiyList.diyInputs.forEach(inputData => {
+            const hrefHtml = isToolProductionPlanner ? `href="#${getCompactName(inputData.name)}"` : '';
+            diyListHtml += /*html*/ `
+                <div class="line">
+                    <div><a ${hrefHtml} class="list-product-name">${inputData.name}</a></div>
+                    <div class="qty">${getNiceNumber(inputData.qty * qtyMultiplier)}</div>
+                </div>
+            `;
+        });
+        diyListHtml += `<hr>`;
+    }
     // #2 - required buildings
-    if (shoppingList.buildings.length) {
-        shoppingListHtml += /*html*/ `<div class="line line-title">Buildings</div>`; // including extractors and empty lots
-        shoppingList.buildings.forEach(buildingData => {
+    if (shoppingAndDiyList.buildings.length) {
+        diyListHtml += /*html*/ `<div class="line line-title"><div>Buildings</div><div>Count</div></div>`; // including extractors and empty lots
+        shoppingAndDiyList.buildings.forEach(buildingData => {
             // Do not link "#EmptyLot" (not a product)
             const hrefHtml = (isToolProductionPlanner && buildingData.name !== 'Empty Lot') ? `href="#${getCompactName(buildingData.name)}"` : '';
-            shoppingListHtml += /*html*/ `
+            diyListHtml += /*html*/ `
                 <div class="line">
                     <div><a ${hrefHtml} class="list-product-name">${buildingData.name}</a></div>
                     <div class="qty">${buildingData.qty}</div>
                 </div>
             `;
         });
-        shoppingListHtml += `<hr>`;
+        diyListHtml += `<hr>`;
     }
-
     // #3 - required spectral types, only if the user selected to extract at least one raw material
-    if (shoppingList.spectralTypes.length) {
+    if (shoppingAndDiyList.spectralTypes.length) {
         const optionalSpectrals = [];
-        shoppingListHtml += /*html*/ `<div class="line line-title">Spectral Types</div>`;
-        shoppingListHtml += /*html*/ `<div class="line line-spectral-types">`;
-        shoppingList.spectralTypes.forEach(spectralTypeData => {
+        diyListHtml += /*html*/ `<div class="line line-title">Spectral Types</div>`;
+        diyListHtml += /*html*/ `<div class="line line-spectral-types">`;
+        shoppingAndDiyList.spectralTypes.forEach(spectralTypeData => {
             const baseSpectral = spectralTypeData.name;
             let isOptionalClass = '';
             if (spectralTypeData.isOptional) {
                 isOptionalClass = 'is-optional';
                 optionalSpectrals.push(baseSpectral);
             }
-            shoppingListHtml += /*html*/ `<span class="spectral-type type-${baseSpectral} ${isOptionalClass}">${baseSpectral}</span>`;
+            diyListHtml += /*html*/ `<span class="spectral-type type-${baseSpectral} ${isOptionalClass}">${baseSpectral}</span>`;
         });
-        shoppingListHtml += `</div>`;
+        diyListHtml += `</div>`;
         if (optionalSpectrals.length) {
             let optionalSpectralsText = `Types ${optionalSpectrals.join(', ')} are optional`;
             if (optionalSpectrals.length === 1) {
                 optionalSpectralsText = `Type ${optionalSpectrals[0]} is optional`;
             }
-            shoppingListHtml += /*html*/ `<div class="line line-spectral-types">${optionalSpectralsText}</div>`;
+            diyListHtml += /*html*/ `<div class="line line-spectral-types">${optionalSpectralsText}</div>`;
         }
     }
-
-    shoppingListContainer.innerHTML = shoppingListHtml;
+    diyListContainer.innerHTML = diyListHtml;
 }
 
 function refreshDetailsAndConnections(skipHashEncoding = false) {
     // if (doDebug) console.log(`--- refreshDetailsAndConnections`);
-    renderSelectedProductsList();
-    renderShoppingList();
+    renderShoppingAndDiyList();
     refreshConnections();
     // Hash encoding is only used in the Production Planner tool
     if (!skipHashEncoding && isToolProductionPlanner) {
@@ -2017,7 +2056,6 @@ async function saveProductionPlan() {
 }
 
 function onClickShoppingListTab(el) {
-    return; //// TO DO: enable this after "DIY List" fully implemented
     if (el.classList.contains('active')) {
         return;
     }
@@ -2027,18 +2065,10 @@ function onClickShoppingListTab(el) {
         case 'tab-shopping-list':
             shoppingListWrapperContainer.classList.remove('active-diy');
             shoppingListWrapperContainer.classList.add('active-shopping');
-            diyListQtyDisclaimerContainer.classList.add('hidden');
-            shoppingListQtyDisclaimerContainer.classList.remove('hidden');
-            diyListContainer.classList.add('hidden');
-            shoppingListContainer.classList.remove('hidden');
             break;
         case 'tab-diy-list':
             shoppingListWrapperContainer.classList.remove('active-shopping');
             shoppingListWrapperContainer.classList.add('active-diy');
-            shoppingListQtyDisclaimerContainer.classList.add('hidden');
-            diyListQtyDisclaimerContainer.classList.remove('hidden');
-            shoppingListContainer.classList.add('hidden');
-            diyListContainer.classList.remove('hidden');
             break;
     }
     refreshConnections();
