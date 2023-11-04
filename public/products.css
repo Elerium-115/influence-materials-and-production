@@ -40,18 +40,40 @@
   cursor: pointer;
   font-size: 0.9rem;
   padding: 0.25rem 0.5rem;
+  position: relative;
 }
 #products-wrapper #products-list li:hover {
   background-color: rgba(255, 255, 255, 0.05);
   color: white;
 }
+#products-wrapper #products-list li:hover img {
+  display: block;
+}
 #products-wrapper #products-list li.multi-asteroid {
-  opacity: 0.25;
+  color: var(--default-text_faded);
 }
 #products-wrapper #products-list li.active {
   border-color: var(--brand-text);
   color: var(--brand-text);
 }
 #products-wrapper #products-list li.active.multi-asteroid {
-  opacity: 0.5;
+  color: var(--brand-text_semifaded);
+}
+#products-wrapper #products-list li img {
+  background-color: var(--dark-bg);
+  border-radius: 0.5rem;
+  display: none;
+  left: calc(100% + 1.1rem);
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+#products-wrapper #products-list.cursor-right li img {
+  left: unset;
+  right: calc(100% + 1.1rem);
+}
+#products-wrapper #products-list.cursor-bottom li img {
+  bottom: 0;
+  top: unset;
 }/*# sourceMappingURL=products.css.map */

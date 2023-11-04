@@ -2017,6 +2017,7 @@ async function saveProductionPlan() {
 }
 
 function onClickShoppingListTab(el) {
+    return; //// TO DO: enable this after "DIY List" fully implemented
     if (el.classList.contains('active')) {
         return;
     }

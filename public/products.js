@@ -60,6 +60,12 @@ for (const productName of productNamesSorted) {
     const elListItem = document.createElement('li');
     elListItem.textContent = productName;
     elListItem.dataset.value = productName;
+    // Add product image tooltip
+    const elListItemImage = document.createElement('img');
+    elListItemImage.loading = 'lazy';
+    elListItemImage.onerror = () => elListItemImage.classList.add('hidden');
+    elListItemImage.src = getProductImageSrc(productName, 'default');
+    elListItem.appendChild(elListItemImage);
     const productData = productDataByName[productName];
     // Mark product as "multi-asteroid" if it can not be sustained by any single "real" spectral type
     let isSustainedByRealSpectralType = false;
@@ -136,6 +142,24 @@ function updateProductsForActiveSpectralTypes() {
     // Hide links to Production Chain / Production Planner for the selected product
     elSelectedProduct.classList.add('hidden');
 }
+
+/**
+ * Mark the position of the cursor (left vs. right, top vs. bottom).
+ * The position of the product image tooltip will be adjusted accordingly
+ * via CSS, to prevent it from overflowing outside the screen.
+ */
+elProductsList.addEventListener('mousemove', event => {
+    if (event.clientX < document.body.clientWidth / 2) {
+        elProductsList.classList.remove('cursor-right');
+    } else {
+        elProductsList.classList.add('cursor-right');
+    }
+    if (event.clientY < window.innerHeight / 2) {
+        elProductsList.classList.remove('cursor-bottom');
+    } else {
+        elProductsList.classList.add('cursor-bottom');
+    }
+});
 
 let lastSelectedItemType = ''; // 'spectral-type' or 'product'
 

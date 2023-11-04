@@ -40,14 +40,19 @@
             cursor: pointer;
             font-size: 0.9rem;
             padding: 0.25rem 0.5rem;
+            position: relative;
 
             &:hover {
                 background-color: rgba(255, 255, 255, 0.05);
                 color: white;
+
+                img {
+                    display: block;
+                }
             }
 
             &.multi-asteroid {
-                opacity: 0.25;
+                color: var(--default-text_faded);
             }
 
             &.active {
@@ -55,9 +60,30 @@
                 color: var(--brand-text);
 
                 &.multi-asteroid {
-                    opacity: 0.5;
+                    color: var(--brand-text_semifaded);
                 }
             }
+
+            img {
+                background-color: var(--dark-bg);
+                border-radius: 0.5rem;
+                display: none;
+                left: calc(100% + 1.1rem);
+                position: absolute;
+                top: 0;
+                width: 100%;
+                z-index: 1;
+            }
+        }
+
+        &.cursor-right li img {
+            left: unset;
+            right: calc(100% + 1.1rem);
+        }
+
+        &.cursor-bottom li img {
+            bottom: 0;
+            top: unset;
         }
     }
 }
