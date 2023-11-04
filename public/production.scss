@@ -1355,6 +1355,10 @@
         margin: 0.5rem;
         border: none;
         border-top: 1px solid var(--default-text_faded);
+
+        &:last-child {
+            display: none; // hide last <hr> if no Spectral Types required
+        }
     }
 }
 

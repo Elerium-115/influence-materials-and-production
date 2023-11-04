@@ -1440,6 +1440,10 @@
   border: none;
   border-top: 1px solid var(--default-text_faded);
 }
+#shopping-list hr:last-child,
+#diy-list hr:last-child {
+  display: none;
+}
 
 #shopping-list-product-image-wrapper {
   position: relative;

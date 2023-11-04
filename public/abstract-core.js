@@ -51,7 +51,7 @@ function getCompactName(name) {
  * e.g. "Thin-film Resistor" => "thin-film-resistor"
  */
 function getItemNameSafe(itemName) {
-    return itemName.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]/g, '');
+    return itemName.toLowerCase().replace(/\s+|\//g, '-').replace(/[^\w\-]/g, '');
 }
 
 /**
