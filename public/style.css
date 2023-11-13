@@ -227,18 +227,6 @@ body {
   background-color: var(--default-bg);
   color: var(--brand-text);
 }
-.topbar #adalia-id-logo {
-  opacity: 0.8;
-}
-.topbar #adalia-id-logo:hover {
-  opacity: 1;
-}
-.topbar #adalia-id-logo img {
-  max-height: 60%;
-}
-.topbar #adalia-id-logo .logo-small {
-  display: none;
-}
 
 .embed {
   background-color: unset;
@@ -474,11 +462,5 @@ body.overlay-visible {
 @media only screen and (max-width: 700px) {
   .topbar {
     font-size: 0.8rem;
-  }
-  .topbar #adalia-id-logo .logo-small {
-    display: block;
-  }
-  .topbar #adalia-id-logo .logo-large {
-    display: none;
   }
 }/*# sourceMappingURL=style.css.map */
