@@ -1263,10 +1263,11 @@
     }
 }
 
-.embed #shopping-list-wrapper {
-    background: unset;
-    backdrop-filter: opacity(1);
-}
+//// DISABLED for embedding in new game client
+// .embed #shopping-list-wrapper {
+//     background: unset;
+//     backdrop-filter: opacity(1);
+// }
 
 #shopping-list-qty-disclaimer,
 #diy-list-qty-disclaimer {

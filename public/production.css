@@ -1335,12 +1335,6 @@
   width: 13rem;
 }
 
-.embed #shopping-list-wrapper {
-  background: unset;
-  -webkit-backdrop-filter: opacity(1);
-          backdrop-filter: opacity(1);
-}
-
 #shopping-list-qty-disclaimer,
 #diy-list-qty-disclaimer {
   margin-top: 1rem;

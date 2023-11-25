@@ -237,7 +237,8 @@ body {
 }
 
 .embed {
-    background-color: unset;
+    //// DISABLED for embedding in new game client
+    // background-color: unset;
 
     &::-webkit-scrollbar {
         height: 7px;
@@ -252,16 +253,17 @@ body {
         background: hsla(0, 0%, 100%, .25);
     }
 
-    .topbar {
-        &:not(.topbar-sections) {
-            display: none;
-        }
+    //// DISABLED for embedding in new game client
+    // .topbar {
+    //     &:not(.topbar-sections) {
+    //         display: none;
+    //     }
 
-        .topbar-section-left {
-            width: 0;
-            overflow: hidden;
-        }
-    }
+    //     .topbar-section-left {
+    //         width: 0;
+    //         overflow: hidden;
+    //     }
+    // }
 }
 
 

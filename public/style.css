@@ -228,9 +228,6 @@ body {
   color: var(--brand-text);
 }
 
-.embed {
-  background-color: unset;
-}
 .embed::-webkit-scrollbar {
   height: 7px;
   width: 7px;
@@ -240,13 +237,6 @@ body {
 }
 .embed::-webkit-scrollbar-thumb {
   background: hsla(0, 0%, 100%, 0.25);
-}
-.embed .topbar:not(.topbar-sections) {
-  display: none;
-}
-.embed .topbar .topbar-section-left {
-  width: 0;
-  overflow: hidden;
 }
 
 /* spectral types */
