@@ -38,71 +38,76 @@
 
 /* options */
 
-.options label {
-    position: relative;
-    white-space: nowrap;
-    margin-right: 0.5rem;
-    padding: 0.5rem;
-    border: 1px solid transparent;
-    border-radius: 0.5rem;
-}
+.options {
+    label {
+        border: 1px solid transparent;
+        border-radius: 0.5rem;
+        margin-right: 0.5rem;
+        padding: 0.5rem;
+        position: relative;
+        white-space: nowrap;
 
-.options label:hover {
-    border-color: gray;
-}
+        &:hover {
+            border-color: gray;
+        }
 
-.options label.checked {
-    background: var(--active-bg);
-}
+        &.checked {
+            background: var(--active-bg);
+        }
 
-.options label.has-toggle-tooltip:hover {
-    border-bottom-color: transparent;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-}
+        &.has-toggle-tooltip {
+            &:hover {
+                border-bottom-color: transparent;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                z-index: 1;
 
-.options label.has-toggle-tooltip:hover::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: -1px;
-    right: -1px;
-    height: 0.5rem;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-    border-bottom: 1px solid var(--active-bg);
-}
+                &::after {
+                    border-left: 1px solid gray;
+                    border-right: 1px solid gray;
+                    border-bottom: 1px solid var(--active-bg);
+                    content: '';
+                    height: 0.5rem;
+                    left: -1px;
+                    position: absolute;
+                    right: -1px;
+                    top: 100%;
+                }
+            }
 
-.options label.has-toggle-tooltip.checked:hover::after {
-    background: var(--active-bg);
-}
+            &.checked:hover::after {
+                background: var(--active-bg);
+            }
+        }
 
-.options label input {
-    margin-right: 0.5rem;
-}
+        & input {
+            margin-right: 0.5rem;
+        }
 
-.options label .toggle-tooltip {
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    left: -1px;
-    display: block;
-    width: calc(100% + 5rem);
-    min-width: 15rem;
-    background: var(--dark-bg);
-    white-space: normal;
-    padding: 0.5rem;
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-    border-top-left-radius: 0;
-}
+        & .toggle-tooltip {
+            background: var(--dark-bg);
+            border: 1px solid gray;
+            border-radius: 0.5rem;
+            border-top-left-radius: 0;
+            display: block;
+            left: -1px;
+            min-width: 15rem;
+            padding: 0.5rem;
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            width: calc(100% + 5rem);
+            white-space: normal;
+        }
 
-.options label:not(:hover) .toggle-tooltip {
-    display: none;
-}
+        &:not(:hover) .toggle-tooltip {
+            display: none;
+        }
+    }
 
-.options .separator {
-    display: inline-block;
-    width: 2rem;
+    .separator {
+        display: inline-block;
+        width: 2rem;
+    }
 }
 
 #top-settings {

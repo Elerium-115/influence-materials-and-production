@@ -3,6 +3,7 @@
  * 
  * WARNING: DO NOT USE this JSON re:
  * - obsolete data
+ * - NO associated "products-vs-spectral-types.js"
  */
 const InfluenceProductionChainsJSON = {
     "buildings":

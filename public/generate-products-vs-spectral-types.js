@@ -12,7 +12,6 @@
  * - "productNamesSorted"
  * 
  * These outputs need to be saved (manually) into "products-vs-spectral-types.js",
- * or into "products-vs-spectral-types-next.js" for the "next" version,
  * which is then used by other scripts - e.g. "products.js".
  * 
  * NOTE: To generate the "next" version, load the HTML with the query param "?next=true"
@@ -151,8 +150,10 @@ for (const spectralType of allSpectralTypes) {
     productNamesBySustainingSpectralType[spectralType].sort();
 }
 
-const outputJs = urlParams.get('next') ? 'products-vs-spectral-types-next.js' : 'products-vs-spectral-types.js';
-console.log(`%c--- SAVE THE OUTPUTS BELOW INTO "${outputJs}"`, 'background: lime; color: black;');
+const jsonVersion = urlParams.get('version') || '2024-02-24';
+const jsonSrc = `./production-data/${jsonVersion}/products-vs-spectral-types.js`;
+
+console.log(`%c--- SAVE THE OUTPUTS BELOW INTO "${jsonSrc}"`, 'background: lime; color: black;');
 console.log(`---> productNamesBySustainingSpectralType:`, productNamesBySustainingSpectralType);
 console.log(`---> productDataByName:`, productDataByName);
 console.log(`---> productDataById:`, productDataById);
