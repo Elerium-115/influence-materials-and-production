@@ -940,6 +940,9 @@
   font-size: 0.7rem;
   line-height: 1rem;
 }
+#production-chain-items .item-tooltip-wrapper .process-tooltip ul li.titled-details {
+  opacity: 0.5;
+}
 
 /* item tooltip - product */
 #production-chain-items .item-tooltip-wrapper .product-tooltip {

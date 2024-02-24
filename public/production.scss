@@ -941,6 +941,10 @@
 #production-chain-items .item-tooltip-wrapper .process-tooltip ul li {
     font-size: 0.7rem;
     line-height: 1rem;
+
+    &.titled-details {
+        opacity: 0.5;
+    }
 }
 
 /* item tooltip - product */

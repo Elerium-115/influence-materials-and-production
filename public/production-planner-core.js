@@ -538,6 +538,31 @@ function getUnitsPerHourForProcessOutput(outputProductId, processId) {
     return outputUnitsPerSR / getRealHours(processData.mAdalianHoursPerSR);
 }
 
+/**
+ * Get storage requirements (total mass & volume) for all inputs of a process
+ */
+function getStorageRequirementsForProcessInputs(processId) {
+    let massPerSR = 0;
+    let volumePerSR = 0;
+    processDataById[processId].inputs.forEach(input => {
+        productData = productDataById[input.productId];
+        if (productData.massKilogramsPerUnit) {
+            massPerSR += productData.massKilogramsPerUnit * input.qty;
+        } else {
+            if (doDebug) console.log(`%c--- WARNING: NO massKilogramsPerUnit found for input productId ${input.productId}`, 'background: brown');
+        }
+        if (productData.volumeLitersPerUnit) {
+            volumePerSR += productData.volumeLitersPerUnit * input.qty;
+        } else {
+            if (doDebug) console.log(`%c--- WARNING: NO volumeLitersPerUnit found for input productId ${input.productId}`, 'background: brown');
+        }
+    });
+    return {
+        massPerSR,
+        volumePerSR,
+    };
+}
+
 function getProcessVariantItemIdsForOutputProductItemId(outputProductItemId) {
     return Object.keys(itemDataById)
         .filter(itemId => itemDataById[itemId].parentItemId === outputProductItemId)
@@ -989,7 +1014,7 @@ function createProductContainerV2(itemId) {
     const sustainingSpectralTypes = getRealSpectralTypesSorted(productDataByName[itemName].sustainingSpectralTypes);
     const sustainingSpectralTypesText = sustainingSpectralTypes.length ? sustainingSpectralTypes.join(', ') : 'N/A';
     tooltipHtml += `<div class="titled-details sustaining-spectral-types">${sustainingSpectralTypesText}</div>`;
-    // show mass + volume
+    // show mass & volume per unit
     tooltipHtml += /*html*/ `
         <ul class="titled-details mass-volume">
             <li>Mass: ${Number(productData.massKilogramsPerUnit) ? productData.massKilogramsPerUnit + ' kg' : 'N/A'}</li>
@@ -1048,9 +1073,9 @@ function createProcessContainerV2(itemId) {
     // show durations only for processes with startup / runtime
     if (buildingIdsWithDurations.includes(processData.buildingId)) {
         tooltipHtml += '<ul>';
-        tooltipHtml += `<li>Startup: ${getNiceNumber(getRealHours(processData.bAdalianHoursPerAction))}h</li>`;
+        tooltipHtml += `<li>Startup: ${getNiceNumber(getRealHours(processData.bAdalianHoursPerAction))} h</li>`;
         if (getRealHours(processData.mAdalianHoursPerSR)) {
-            tooltipHtml += `<li>Runtime: ${getNiceNumber(getRealHours(processData.mAdalianHoursPerSR))}h/SR</li>`;
+            tooltipHtml += `<li>Runtime: ${getNiceNumber(getRealHours(processData.mAdalianHoursPerSR))} h/SR</li>`;
         }
         tooltipHtml += '</ul>';
     }
@@ -1059,15 +1084,24 @@ function createProcessContainerV2(itemId) {
         const unitsPerHour = getUnitsPerHourForProcessOutput(outputItemData.productId, processId);
         tooltipHtml += /*html*/ `
             <ul>
-                <li>Throughput:</li>
+                <li class="titled-details">Throughput:</li>
                 <li class="throughput">${getNiceNumber(unitsPerHour)} units/h</li>
             </ul>
         `;
     }
+    // show storage requirements for inputs (total mass & volume)
+    const storageRequirements = getStorageRequirementsForProcessInputs(processId);
+    tooltipHtml += /*html*/ `
+        <ul>
+            <li class="titled-details">Storage for Inputs:</li>
+            <li>Mass: ${getNiceNumber(storageRequirements.massPerSR)} kg/SR</li>
+            <li>Volume: ${getNiceNumber(storageRequirements.volumePerSR)} L/SR</li>
+        </ul>
+    `;
     // show other outputs, if any
     if (processData.outputs.length >= 2) {
         tooltipHtml += '<ul>';
-        tooltipHtml += `<li><strong>Other Outputs:</strong></li>`;
+        tooltipHtml += /*html*/ `<li class="titled-details"><strong>Other Outputs:</strong></li>`;
         processData.outputs
             .filter(outputData => outputData.productId !== outputProductData.id)
             .forEach(outputData => tooltipHtml += /*html*/ `

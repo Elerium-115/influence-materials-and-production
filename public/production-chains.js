@@ -442,8 +442,8 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     if (buildingIdsWithDurations.includes(processData.buildingId)) {
         processTooltipHtml += /*html*/ `
             <ul>
-                <li>Startup: ${getNiceNumber(processData.hPerAction)}h</li>
-                <li>Runtime: ${getNiceNumber(processData.hPerSR)}h/SR</li>
+                <li>Startup: ${getNiceNumber(processData.hPerAction)} h</li>
+                <li>Runtime: ${getNiceNumber(processData.hPerSR)} h/SR</li>
             </ul>
         `;
     }
