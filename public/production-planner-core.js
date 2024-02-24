@@ -980,7 +980,11 @@ function createProductContainerV2(itemId) {
     // show product image
     tooltipHtml += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('no-image');">`;
     // show product type
-    tooltipHtml += `<div class="titled-details product-type">${productData.type}</div>`;
+    let productTypeHtml = productData.type; // e.g. "Ship"
+    if (isJsonWithProductCategories() && productData.category) {
+        productTypeHtml = `${productData.type}<br>(${productData.category})`; // e.g. "Assembly (Ship Hull)"
+    }
+    tooltipHtml += `<div class="titled-details product-type">${productTypeHtml}</div>`;
     // show sustaining spectral types
     const sustainingSpectralTypes = getRealSpectralTypesSorted(productDataByName[itemName].sustainingSpectralTypes);
     const sustainingSpectralTypesText = sustainingSpectralTypes.length ? sustainingSpectralTypes.join(', ') : 'N/A';

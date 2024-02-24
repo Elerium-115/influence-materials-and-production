@@ -57,6 +57,21 @@ const buildingIdsWithDurations = InfluenceProductionChainsJSON.buildings
     .map(building => building.id);
 
 /**
+ * Distinct product types (not to be confused with product categories)
+ * - e.g. "Raw Material", "Refined Material" etc.
+ * 
+ * Source: https://stackoverflow.com/a/14438954
+ */
+const productTypes = [...new Set(InfluenceProductionChainsJSON.products.map(productData => productData.type))];
+
+/**
+ * Descriptive product categories were introduced in 2024 - e.g. "Volatile" instead of "2"
+ */
+function isJsonWithProductCategories() {
+    return parseInt(urlParams.get('version') || '2024-02-24') >= 2024;
+}
+
+/**
  * Keep only the real spectral types, from a list of spectral types
  * that may also include "virtual" spectral types (e.g. "IM").
  */
@@ -163,10 +178,25 @@ function resetFadedItemsAndConnectionsCore() {
     productChainItemsContainer.classList.remove('faded');
 }
 
+function populateProductsListFilters() {
+    const elFiltersList = document.querySelector('#filters-list');
+    if (!elFiltersList) {
+        return;
+    }
+    productTypes.forEach(productType => {
+        const elFilterOption = document.createElement('span');
+        // e.g. "Raw Material" => "filter-raw-material"
+        elFilterOption.id = `filter-${getItemNameSafe(productType)}`;
+        elFilterOption.classList.add('option', 'checked');
+        elFilterOption.textContent = productType;
+        elFiltersList.append(elFilterOption);
+    });
+}
+
 function filterProductsList() {
     document.querySelectorAll('#filters-list .option').forEach(elFilter => {
-        // e.g. "filter-raw-materials" => "item-type-raw-material"
-        const itemTypeClass = 'item-type-' + elFilter.id.replace(/^filter-(.+)s$/, '$1');
+        // e.g. "filter-raw-material" => "item-type-raw-material"
+        const itemTypeClass = 'item-type-' + elFilter.id.replace(/^filter-(.+)$/, '$1');
         productsListContainer.querySelectorAll(`.${itemTypeClass}`).forEach(elListItem => {
             if (elFilter.classList.contains('checked')) {
                 elListItem.classList.remove('hidden');
@@ -380,3 +410,5 @@ window.addEventListener('keydown', event => {
         }
     }
 });
+
+populateProductsListFilters();
