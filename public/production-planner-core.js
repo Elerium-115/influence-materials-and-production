@@ -981,7 +981,7 @@ function createProductContainerV2(itemId) {
     tooltipHtml += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('no-image');">`;
     // show product type
     let productTypeHtml = productData.type; // e.g. "Ship"
-    if (isJsonWithProductCategories() && productData.category) {
+    if (isProductionDataWithProductCategories() && productData.category) {
         productTypeHtml = `${productData.type}<br>(${productData.category})`; // e.g. "Assembly (Ship Hull)"
     }
     tooltipHtml += `<div class="titled-details product-type">${productTypeHtml}</div>`;

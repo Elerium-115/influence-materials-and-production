@@ -3,6 +3,7 @@
  * Do this by loading the HTML, and check the dev-tools console.
  * 
  * Inputs:
+ * - "productionDataVersion" from "loader-production-data-version.js"
  * - "processDataById" from "production-planner-core.js"
  * 
  * Outputs:
@@ -150,8 +151,7 @@ for (const spectralType of allSpectralTypes) {
     productNamesBySustainingSpectralType[spectralType].sort();
 }
 
-const jsonVersion = urlParams.get('version') || '2024-02-24';
-const jsonSrc = `./production-data/${jsonVersion}/products-vs-spectral-types.js`;
+const jsonSrc = `./production-data/${productionDataVersion}/products-vs-spectral-types.js`;
 
 console.log(`%c--- SAVE THE OUTPUTS BELOW INTO "${jsonSrc}"`, 'background: lime; color: black;');
 console.log(`---> productNamesBySustainingSpectralType:`, productNamesBySustainingSpectralType);

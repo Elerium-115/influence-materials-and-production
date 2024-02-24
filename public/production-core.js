@@ -65,13 +65,6 @@ const buildingIdsWithDurations = InfluenceProductionChainsJSON.buildings
 const productTypes = [...new Set(InfluenceProductionChainsJSON.products.map(productData => productData.type))];
 
 /**
- * Descriptive product categories were introduced in 2024 - e.g. "Volatile" instead of "2"
- */
-function isJsonWithProductCategories() {
-    return parseInt(urlParams.get('version') || '2024-02-24') >= 2024;
-}
-
-/**
  * Keep only the real spectral types, from a list of spectral types
  * that may also include "virtual" spectral types (e.g. "IM").
  */
