@@ -295,7 +295,7 @@ function getChildContainersOfItemId(itemId, onlySelectedContainers = false) {
     if (onlySelectedContainers) {
         selector = `.selected-item${selector}, .selected-process${selector}`;
     }
-    return productChainItemsContainer.querySelectorAll(selector);
+    return productionChainItemsContainer.querySelectorAll(selector);
 }
 
 function getArraySortedByNameFromObjectValues(obj) {
@@ -900,7 +900,7 @@ function fullyResetProductionPlan() {
     itemDataById = {};
     selectedProductItemIds = [];
     maxLevel = 0;
-    productChainItemsContainer.textContent = '';
+    productionChainItemsContainer.textContent = '';
 }
 
 function resetFadedItemsAndConnectionsV2() {
@@ -1373,7 +1373,7 @@ function selectProductItemId(itemId) {
      * trigger "mouseenter" to ensure that its sub-chain does NOT remain "faded".
      */
     setTimeout(() => {
-        if (productChainItemsContainer.querySelector(`[data-container-id="${itemId}"]:hover`)) {
+        if (productionChainItemsContainer.querySelector(`[data-container-id="${itemId}"]:hover`)) {
             itemContainer.dispatchEvent(new Event('mouseenter'));
         }
     }, 10);
@@ -1745,7 +1745,7 @@ function setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById) 
  */
 function getHashEncodedFromItemDataById() {
     // Do NOT encode a hash, if the planned product is the only selected product, and it has a single process variant
-    if (selectedProductItemIds.length === 1 && productChainItemsContainer.querySelectorAll('#level_2 .item-type-process').length === 1) {
+    if (selectedProductItemIds.length === 1 && productionChainItemsContainer.querySelectorAll('#level_2 .item-type-process').length === 1) {
         return null;
     }
     // if (doDebug) console.log(`--- RAW itemDataById (stringified) = ${JSON.stringify(itemDataById)}`);
@@ -1803,7 +1803,7 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
                     line.color = leaderLineColors.default;
                     // Fade connections from disabled items (re: disabled process variant), and to/from faded items
                     let isFaded = false;
-                    if (productChainItemsContainer.classList.contains('faded')) {
+                    if (productionChainItemsContainer.classList.contains('faded')) {
                         const itemIsActive = getItemContainerById(itemId).classList.contains('active');
                         // No need to check if the parent item exists, b/c the planned product (i.e. no parent) does NOT have a "line"
                         const parentItemIsActive = getItemContainerById(itemData.parentItemId).classList.contains('active');
@@ -2173,7 +2173,7 @@ on('mouseenter', '[data-container-id]', el => {
          */
         selector = `[data-process-code="${processCode}"]`;
     }
-    productChainItemsContainer.querySelectorAll(selector).forEach(itemContainer => {
+    productionChainItemsContainer.querySelectorAll(selector).forEach(itemContainer => {
         itemContainer.classList.add('active', 'hover');
     });
     // Activate fullchain only for the currently-hovered item
@@ -2182,7 +2182,7 @@ on('mouseenter', '[data-container-id]', el => {
     fullchain.forEach(itemId => {
         getItemContainerById(itemId).classList.add('active');
     });
-    productChainItemsContainer.classList.add('faded');
+    productionChainItemsContainer.classList.add('faded');
     refreshConnections();
     // Show quantities for inputs and outputs, if this is a process
     if (el.classList.contains('item-type-process')) {
@@ -2194,7 +2194,7 @@ on('mouseenter', '[data-container-id]', el => {
                 processQtyByProductId[productQtyData.productId] = productQtyData.qty;
             });
             const selectorInputsAndOutput = `[data-parent-container-id="${itemId}"], [data-container-id="${el.dataset.parentContainerId}"]`;
-            productChainItemsContainer.querySelectorAll(selectorInputsAndOutput).forEach(itemWithQty => {
+            productionChainItemsContainer.querySelectorAll(selectorInputsAndOutput).forEach(itemWithQty => {
                 const productId = itemDataById[itemWithQty.dataset.containerId].productId;
                 itemWithQty.querySelector('.item-qty').textContent = processQtyByProductId[productId];
                 itemWithQty.classList.add('show-qty');
@@ -2206,7 +2206,7 @@ on('mouseleave', '[data-container-id]', el => {
     resetFadedItemsAndConnectionsV2();
     // Hide quantities for inputs and outputs, if this is a process
     if (el.classList.contains('item-type-process')) {
-        productChainItemsContainer.querySelectorAll(`.show-qty`).forEach(itemWithQty => {
+        productionChainItemsContainer.querySelectorAll(`.show-qty`).forEach(itemWithQty => {
             itemWithQty.classList.remove('show-qty');
             itemWithQty.querySelector('.item-qty').textContent = '';
         });

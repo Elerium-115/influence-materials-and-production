@@ -125,7 +125,7 @@ function exploreProductItemId(itemId) {
      * trigger "mouseenter" to ensure that its sub-chain does NOT remain "faded".
      */
     setTimeout(() => {
-        if (productChainItemsContainer.querySelector(`[data-container-id="${itemId}"]:hover`)) {
+        if (productionChainItemsContainer.querySelector(`[data-container-id="${itemId}"]:hover`)) {
             itemContainer.dispatchEvent(new Event('mouseenter'));
         }
     }, 10);

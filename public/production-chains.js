@@ -293,9 +293,9 @@ itemNamesSorted.forEach(itemName => {
 function getSubchainElementsForItemContainerId(itemContainerId) {
     let subchainElements = [];
     // parse the processes that output this item-container (i.e. ignore raw materials)
-    productChainItemsContainer.querySelectorAll(`[data-parent-container-id="${itemContainerId}"]`).forEach(processContainer => {
+    productionChainItemsContainer.querySelectorAll(`[data-parent-container-id="${itemContainerId}"]`).forEach(processContainer => {
         const processContainerId = processContainer.dataset.containerId;
-        const inputContainers = productChainItemsContainer.querySelectorAll(`[data-parent-container-id="${processContainerId}"]`);
+        const inputContainers = productionChainItemsContainer.querySelectorAll(`[data-parent-container-id="${processContainerId}"]`);
         const connectionsIn = productChainConnectionsContainer.querySelectorAll(`[data-parent-container-id="${processContainerId}"]`);
         const connectionOut = productChainConnectionsContainer.querySelector(`[data-child-container-id="${processContainerId}"]`);
         subchainElements.push(processContainer);
@@ -336,8 +336,8 @@ function resetProductionChain() {
     requiredTextContainer.querySelector('.variants').classList.remove('active');
     requiredRawMaterialsContainer.textContent = '';
     requiredSpectralsContainer.textContent = '';
-    // remove only ".level" elements from "productChainItemsContainer" (keep "#required-spectrals")
-    productChainItemsContainer.querySelectorAll('.level').forEach(el => {
+    // remove only ".level" elements from "productionChainItemsContainer" (keep "#required-spectrals")
+    productionChainItemsContainer.querySelectorAll('.level').forEach(el => {
         el.parentElement.removeChild(el);
     });
     productChainConnectionsContainer.textContent = '';
@@ -484,7 +484,7 @@ function updateUpchainsFromRawMaterialsAndLongestSubchainLengths() {
     // reset "upchainsFromRawMaterials"
     upchainsFromRawMaterials = {};
     // reset the value of "data-longest-subchain-length" for all items (including derivative items)
-    productChainItemsContainer.querySelectorAll('[data-container-id]').forEach(itemContainer => {
+    productionChainItemsContainer.querySelectorAll('[data-container-id]').forEach(itemContainer => {
         itemContainer.dataset.longestSubchainLength = 0;
     });
     /**
@@ -492,7 +492,7 @@ function updateUpchainsFromRawMaterialsAndLongestSubchainLengths() {
      * this also updates the values of "data-longest-subchain-length"
      * for all non-disabled items, to exclude their disabled descendants
      */
-    productChainItemsContainer.querySelectorAll('.item-type-raw-material[data-container-id]:not(.disabled)').forEach(generateUpchainFromRawMaterial);
+    productionChainItemsContainer.querySelectorAll('.item-type-raw-material[data-container-id]:not(.disabled)').forEach(generateUpchainFromRawMaterial);
     // update the tier-slider, based on the selected item's new "data-longest-subchain-length"
     updateTierSlider();
 }
@@ -696,7 +696,7 @@ function connectContainerIds(parentContainerId, childContainerId, color, thickne
     }
     // fade connections between non-active items
     let faded = false;
-    if (productChainItemsContainer.classList.contains('faded')) {
+    if (productionChainItemsContainer.classList.contains('faded')) {
         if (!parentContainer.classList.contains('active') || !childContainer.classList.contains('active')) {
             faded = true;
         }
@@ -800,19 +800,19 @@ function initializeProcessVariants() {
 function disableItemContainerAndSubchain(itemContainer) {
     itemContainer.classList.add('disabled');
     const itemContainerId = itemContainer.dataset.containerId;
-    productChainItemsContainer.querySelectorAll(`[data-parent-container-id='${itemContainerId}']`).forEach(disableItemContainerAndSubchain);
+    productionChainItemsContainer.querySelectorAll(`[data-parent-container-id='${itemContainerId}']`).forEach(disableItemContainerAndSubchain);
 }
 
 function updateAllProcessVariants() {
     // first enable subchains for all process variants
-    productChainItemsContainer.querySelectorAll('.disabled[data-container-id]').forEach(itemContainer => {
+    productionChainItemsContainer.querySelectorAll('.disabled[data-container-id]').forEach(itemContainer => {
         itemContainer.classList.remove('disabled');
     });
     // then disable subchains for process variants which are not currently checked (for ALL items with process variants)
     document.querySelectorAll('.process:not(.checked) input').forEach(elProcess => {
         const processCode = elProcess.id;
         // disable all occurrences of this process in the production chain, along with their subchains
-        productChainItemsContainer.querySelectorAll(`[data-process-code="${processCode}"]`).forEach(disableItemContainerAndSubchain);
+        productionChainItemsContainer.querySelectorAll(`[data-process-code="${processCode}"]`).forEach(disableItemContainerAndSubchain);
     });
     /**
      * hide items from process-variants which have become irrelevant,
@@ -822,7 +822,7 @@ function updateAllProcessVariants() {
      */
     processVariantsContainer.querySelectorAll('.item').forEach(elItem => {
         const itemName = elItem.querySelector('.item-name').textContent;
-        if (productChainItemsContainer.querySelector(`[data-item-name='${itemName}']:not(.disabled)`)) {
+        if (productionChainItemsContainer.querySelector(`[data-item-name='${itemName}']:not(.disabled)`)) {
             elItem.classList.remove('irrelevant');
         } else {
             elItem.classList.add('irrelevant');
@@ -839,7 +839,7 @@ function updateRequiredSpectralsAndRawMaterials() {
     // then update the required raw materials which are not currently disabled, and enable their spectrals
     requiredRawMaterials = {};
     requiredRawMaterialsMaxCounter = 0;
-    productChainItemsContainer.querySelectorAll('.item-type-raw-material[data-container-id]:not(.disabled)').forEach(rawMaterialContainer => {
+    productionChainItemsContainer.querySelectorAll('.item-type-raw-material[data-container-id]:not(.disabled)').forEach(rawMaterialContainer => {
         const rawMaterialName = rawMaterialContainer.dataset.itemName;
         requiredRawMaterials[rawMaterialName] = requiredRawMaterials[rawMaterialName] ? requiredRawMaterials[rawMaterialName] + 1 : 1;
         requiredRawMaterialsMaxCounter = Math.max(requiredRawMaterialsMaxCounter, requiredRawMaterials[rawMaterialName]);
@@ -852,7 +852,7 @@ function updateRequiredSpectralsAndRawMaterials() {
     // show the ".variants" disclaimer, if multiple process variants are currently checked for any non-disabled item
     document.querySelectorAll('.process.checked input').forEach(elProcess => {
         const processCode = elProcess.id;
-        if (!productChainItemsContainer.querySelector(`[data-process-code="${processCode}"]:not(.disabled)`)) {
+        if (!productionChainItemsContainer.querySelector(`[data-process-code="${processCode}"]:not(.disabled)`)) {
             // all occurrences of this process in the production chain are disabled => irrelevant if multiple process variants checked
             return;
         }
@@ -876,7 +876,7 @@ function updateProductionChainForTierLimit(tierLimit) {
      * of different subchain-lengths, then the "shortest" process must NOT be hidden before the "longest" process)
      */
     const targetItemsSelector = '[data-container-id]:not(.item-type-process):not(.selected-item):not(.derivative-item)';
-    productChainItemsContainer.querySelectorAll(targetItemsSelector).forEach(itemContainer => {
+    productionChainItemsContainer.querySelectorAll(targetItemsSelector).forEach(itemContainer => {
         // subchain elements to be hidden/shown, based on item-container tier (i.e. based on longest-subchain-length)
         const subchainElements = getSubchainElementsForItemContainerId(itemContainer.dataset.containerId);
         if (parseInt(itemContainer.dataset.longestSubchainLength) <= subchainLengthLimit) {
@@ -902,7 +902,7 @@ function updateProductionChainForTierLimit(tierLimit) {
     // hide items from process-variants, if their corresponding processes are hidden, due to the current tier-limit
     processVariantsContainer.querySelectorAll('.item').forEach(elItem => {
         const firstProcessCode = elItem.querySelector('.process').getAttribute('for');
-        if (productChainItemsContainer.querySelector(`.low-tier-hidden[data-process-code='${firstProcessCode}']`)) {
+        if (productionChainItemsContainer.querySelector(`.low-tier-hidden[data-process-code='${firstProcessCode}']`)) {
             elItem.classList.add('low-tier-hidden');
         } else {
             elItem.classList.remove('low-tier-hidden');
@@ -921,7 +921,7 @@ function updateProductionChainForTierLimit(tierLimit) {
 
 // update the tier-slider values, after selecting an item, or after toggling a process variant
 function updateTierSlider() {
-    const selectedItemContainer = productChainItemsContainer.querySelector(`.selected-item[data-item-name]`);
+    const selectedItemContainer = productionChainItemsContainer.querySelector(`.selected-item[data-item-name]`);
     // e.g. longest-subchain-length 5 => tier 2 (after excluding processes)
     selectedItemTier = Math.floor(parseInt(selectedItemContainer.dataset.longestSubchainLength) / 2);
     // hide "..." from tier-legend (corresponding to tier 2), if "selectedItemTier" also 2
@@ -1063,7 +1063,7 @@ on('change', '.process input', el => {
          * (otherwise the qty-overlay remains visible on output of this process variant)
          */
         const processCode = el.closest('.process').getAttribute('for');
-        productChainItemsContainer.querySelectorAll(`[data-process-code='${processCode}']`).forEach(processContainer => {
+        productionChainItemsContainer.querySelectorAll(`[data-process-code='${processCode}']`).forEach(processContainer => {
             processContainer.dispatchEvent(new Event('mouseleave'));
         });
     }
@@ -1089,7 +1089,7 @@ on('mouseenter', '[data-container-id]:not(.derivative-item)', el => {
          */
         selector = `[data-process-code='${processCode}']`;
     }
-    productChainItemsContainer.querySelectorAll(selector).forEach(itemContainer => {
+    productionChainItemsContainer.querySelectorAll(selector).forEach(itemContainer => {
         itemContainer.classList.add('active', 'hover');
     });
     // activate fullchain only for the currently-hovered item
@@ -1098,7 +1098,7 @@ on('mouseenter', '[data-container-id]:not(.derivative-item)', el => {
     fullchain.forEach(itemContainerId => {
         getItemContainerById(itemContainerId).classList.add('active');
     });
-    productChainItemsContainer.classList.add('faded');
+    productionChainItemsContainer.classList.add('faded');
     updateAllConnections();
     // show quantities for inputs and outputs, if this is a process
     if (el.classList.contains('item-type-process')) {
@@ -1122,14 +1122,14 @@ on('mouseleave', '[data-container-id]:not(.derivative-item)', el => {
 on('mouseenter', '.process.checked', el => {
     // fake "mouseenter" on all occurrences of this process in the production chain
     const processCode = el.getAttribute('for');
-    productChainItemsContainer.querySelectorAll(`[data-process-code='${processCode}']`).forEach(processContainer => {
+    productionChainItemsContainer.querySelectorAll(`[data-process-code='${processCode}']`).forEach(processContainer => {
         processContainer.dispatchEvent(new Event('mouseenter'));
     });
 });
 on('mouseleave', '.process.checked', el => {
     // fake "mouseleave" on all occurrences of this process in the production chain
     const processCode = el.getAttribute('for');
-    productChainItemsContainer.querySelectorAll(`[data-process-code='${processCode}']`).forEach(processContainer => {
+    productionChainItemsContainer.querySelectorAll(`[data-process-code='${processCode}']`).forEach(processContainer => {
         processContainer.dispatchEvent(new Event('mouseleave'));
     });
 });

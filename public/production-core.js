@@ -15,7 +15,7 @@ const productsListContainer = document.getElementById('products-list');
 const scaleSliderRange = document.getElementById('scale-slider-range');
 const selectedItemNameContainer = document.getElementById('selected-item-name');
 const chainTypeLinkContainer = document.getElementById('chain-type-link');
-const productChainItemsContainer = document.getElementById('production-chain-items');
+const productionChainItemsContainer = document.getElementById('production-chain-items');
 const elMinimapWrapper = document.getElementById('minimap-wrapper');
 
 // Load state for "Optimize Process Variants" toggle from local-storage (if set), otherwise default to TRUE
@@ -73,7 +73,7 @@ function getRealSpectralTypesSorted(spectralTypes) {
 }
 
 function getItemContainerById(itemContainerId) {
-    return productChainItemsContainer.querySelector(`[data-container-id='${itemContainerId}']`);
+    return productionChainItemsContainer.querySelector(`[data-container-id='${itemContainerId}']`);
 }
 
 /**
@@ -166,9 +166,9 @@ function getCurrentHash() {
 }
 
 function resetFadedItemsAndConnectionsCore() {
-    productChainItemsContainer.querySelectorAll('.active[data-container-id]').forEach(el => el.classList.remove('active'));
-    productChainItemsContainer.querySelectorAll('.hover[data-container-id]').forEach(el => el.classList.remove('hover'));
-    productChainItemsContainer.classList.remove('faded');
+    productionChainItemsContainer.querySelectorAll('.active[data-container-id]').forEach(el => el.classList.remove('active'));
+    productionChainItemsContainer.querySelectorAll('.hover[data-container-id]').forEach(el => el.classList.remove('hover'));
+    productionChainItemsContainer.classList.remove('faded');
 }
 
 function populateProductsListFilters() {
@@ -219,7 +219,7 @@ function injectLevelContainerIfNeeded(renderOnLevel) {
         levelContainer = document.createElement('div');
         levelContainer.id = levelId;
         levelContainer.classList.add('level');
-        productChainItemsContainer.appendChild(levelContainer);
+        productionChainItemsContainer.appendChild(levelContainer);
     }
     return levelContainer;
 }
@@ -255,7 +255,7 @@ function resetMinimap() {
     elMinimapWrapper.appendChild(elMinimapCanvasNew);
     // Source: https://larsjung.de/pagemap/
     pagemap(elMinimapCanvasNew, {
-        // viewport: productChainItemsContainer,
+        // viewport: productionChainItemsContainer,
         styles: {
             'div.item-type-raw-material': 'rgba(55, 55, 55, 1)', // var(--product-type-raw-material) + alpha
             'div.item-type-refined-material': 'rgba(28, 50, 61, 1)', // var(--product-type-refined-material) + alpha
@@ -367,20 +367,20 @@ on('click', '#filters-list .option', el => {
 
 // Highlight all occurrences of a product, on hover over a product name from any list
 on('mouseenter', '.list-product-name', el => {
-    if (!productChainItemsContainer) {
+    if (!productionChainItemsContainer) {
         // Does not exist in the "Asteroids Planner"
         return;
     }
-    productChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
+    productionChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
         itemContainer.classList.add('hover');
     });
 });
 on('mouseleave', '.list-product-name', el => {
-    if (!productChainItemsContainer) {
+    if (!productionChainItemsContainer) {
         // Does not exist in the "Asteroids Planner"
         return;
     }
-    productChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
+    productionChainItemsContainer.querySelectorAll(`[data-item-name="${el.textContent}"]`).forEach(itemContainer => {
         itemContainer.classList.remove('hover');
     });
 });
@@ -388,7 +388,7 @@ on('mouseleave', '.list-product-name', el => {
 // Scale the production chain
 if (scaleSliderRange) {
     scaleSliderRange.oninput = function() {
-        productChainItemsContainer.style.scale = scaleSliderRange.value / 100;
+        productionChainItemsContainer.style.scale = scaleSliderRange.value / 100;
         refreshConnections();
     }
 }
