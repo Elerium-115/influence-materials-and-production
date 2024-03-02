@@ -52,6 +52,7 @@ const elSpectralTypesList = document.querySelector('.spectral-types ul');
 const elsSpectralTypes = elSpectralTypesList.querySelectorAll('li');
 const elSelectedProduct = document.getElementById('selected-product');
 const elSelectedProductChain = document.getElementById('selected-product-chain');
+const elSelectedProductDerived = document.getElementById('selected-product-derived');
 const elSelectedProductPlanner = document.getElementById('selected-product-planner');
 const elSelectedProductName = document.getElementById('selected-product-name');
 const elProductsList = document.getElementById('products-list');
@@ -91,6 +92,7 @@ for (const productName of productNamesSorted) {
         // Show links to Production Chain / Production Planner for the selected product
         elSelectedProductName.textContent = productName;
         const productNameCompact = getCompactName(productName);
+        elSelectedProductDerived.href = `./derived-products.html#${productNameCompact}`;
         // elSelectedProductChain.href = `./production-chains.html#${productNameCompact}`; //// DISABLED production chains
         elSelectedProductPlanner.href = `./production-planner.html#${productNameCompact}`;
         elSelectedProduct.classList.remove('hidden');
