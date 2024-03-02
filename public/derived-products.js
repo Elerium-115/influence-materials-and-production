@@ -57,6 +57,8 @@ function selectDerivedProductId(derivedProductId) {
 function selectDerivedProductHash(hash) {
     hideAndResetProductsList();
     const derivedProductCompactName = hash;
+    // Update link to other production chain type, for the same product
+    chainTypeLinkContainer.querySelector('a').setAttribute('href', `./production-planner.html#${derivedProductCompactName}`);
     // Select the derived product from the hash
     const productName = productNamesByHash[derivedProductCompactName];
     if (productName) {
