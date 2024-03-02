@@ -43,6 +43,7 @@ const buildingDataById = {};
 const buildingIdByName = {};
 const productNamesByHash = {}; // "itemNamesByHash" in "production-chains.js"
 const processDataById = {};
+const processDerivedIdsByProductId = {};
 const processVariantIdsByProductId = {};
 InfluenceProductionChainsJSON.buildings.forEach(building => {
     buildingDataById[building.id] = building;
@@ -60,6 +61,15 @@ InfluenceProductionChainsJSON.processes.forEach(process => {
         return output;
     });
     processDataById[process.id] = process;
+    // Populate "processDerivedIdsByProductId"
+    process.inputs.forEach(input => {
+        const productId = input.productId;
+        if (!processDerivedIdsByProductId[productId]) {
+            processDerivedIdsByProductId[productId] = [];
+        }
+        processDerivedIdsByProductId[productId].push(process.id);
+    });
+    // Populate "processVariantIdsByProductId"
     process.outputs.forEach(output => {
         const productId = output.productId;
         if (!processVariantIdsByProductId[productId]) {
@@ -157,6 +167,7 @@ const shoppingListProductName = document.getElementById('shopping-list-product-n
 const productionChainOverlayContainer = document.getElementById('production-chain-overlay');
 const overlaySelectedProcessNameContainer = document.getElementById('overlay-selected-process-name');
 
+let isToolDerivedProducts = false;
 let isToolProductionPlanner = false;
 
 /**
@@ -899,8 +910,13 @@ function resetFadedItemsAndConnectionsV2() {
 
 function getLeaderLineOptionsForCurrentLayout() {
     const leaderLineOptions = {...leaderLineOptionsProductionChain};
-    leaderLineOptions.startSocket = 'right';
-    leaderLineOptions.endSocket = 'left';
+    if (isToolDerivedProducts) {
+        leaderLineOptions.startSocket = 'left';
+        leaderLineOptions.endSocket = 'right';
+    } else {
+        leaderLineOptions.startSocket = 'right';
+        leaderLineOptions.endSocket = 'left';
+    }
     return leaderLineOptions;
 }
 
@@ -915,11 +931,17 @@ function connectItemIds(startItemId, endItemId) {
      */
     const line = new LeaderLine(getItemContainerById(startItemId), getItemContainerById(endItemId));
     const leaderLineOptions = getLeaderLineOptionsForCurrentLayout();
-    // Show arrow only when connecting the planned product
+    // Show arrow only when connecting the derived / planned product
     if (startItemId === 1 || endItemId === 1) {
-        leaderLineOptions.endPlug = 'arrow1';
-        leaderLineOptions.endPlugSize = 3;
-        leaderLineOptions.endPlugColor = '#a9acb3';
+        if (isToolDerivedProducts) {
+            leaderLineOptions.startPlug = 'arrow1';
+            leaderLineOptions.startPlugSize = 3;
+            leaderLineOptions.startPlugColor = '#a9acb3';
+        } else {
+            leaderLineOptions.endPlug = 'arrow1';
+            leaderLineOptions.endPlugSize = 3;
+            leaderLineOptions.endPlugColor = '#a9acb3';
+        }
     }
     line.setOptions(leaderLineOptions);
     markNewLeaderLine('leader-line-production-plan');
@@ -1039,18 +1061,23 @@ function createProductContainerV2(itemId) {
     return productContainer;
 }
 
-function createProcessContainerV2(itemId) {
+function createProcessContainerV2(itemId, isProcessDerived) {
     const itemData = itemDataById[itemId];
     const processId = itemData.processId;
     const processData = processDataById[processId];
     const processName = processData.name;
-    const outputItemData = itemDataById[itemData.parentItemId];
-    const outputProductData = productDataById[outputItemData.productId];
+    /**
+     * NOTE: In this context, "parent" is either:
+     * - the INPUT being derived, if "isProcessDerived" TRUE
+     * - the OUTPUT being planned, if "isProcessDerived" FALSE
+     */
+    const parentItemData = itemDataById[itemData.parentItemId];
+    const parentProductData = productDataById[parentItemData.productId];
     const processContainer = document.createElement('div');
     processContainer.dataset.containerId = itemId;
     processContainer.dataset.parentContainerId = itemData.parentItemId;
     processContainer.dataset.processName = processName;
-    processContainer.dataset.processCode = getCompactName(outputProductData.name) + '-' + getCompactName(processName);
+    processContainer.dataset.processCode = getCompactName(parentProductData.name) + '-' + getCompactName(processName);
     processContainer.classList.add('item-type-process');
     /**
      * inner-container required for styling the outer-container with "filter: drop-shadow",
@@ -1079,15 +1106,17 @@ function createProcessContainerV2(itemId) {
         }
         tooltipHtml += '</ul>';
     }
-    // show throughput for the current output, if numeric runtime ("mAdalianHoursPerSR" NOT "N/A")
-    if (getRealHours(processData.mAdalianHoursPerSR)) {
-        const unitsPerHour = getUnitsPerHourForProcessOutput(outputItemData.productId, processId);
-        tooltipHtml += /*html*/ `
-            <ul>
-                <li class="titled-details">Throughput:</li>
-                <li class="throughput">${getNiceNumber(unitsPerHour)} units/h</li>
-            </ul>
-        `;
+    if (!isProcessDerived) {
+        // show throughput for the current output, if numeric runtime ("mAdalianHoursPerSR" NOT "N/A")
+        if (getRealHours(processData.mAdalianHoursPerSR)) {
+            const unitsPerHour = getUnitsPerHourForProcessOutput(parentItemData.productId, processId);
+            tooltipHtml += /*html*/ `
+                <ul>
+                    <li class="titled-details">Throughput:</li>
+                    <li class="throughput">${getNiceNumber(unitsPerHour)} units/h</li>
+                </ul>
+            `;
+        }
     }
     // show storage requirements for inputs (total mass & volume)
     const storageRequirements = getStorageRequirementsForProcessInputs(processId);
@@ -1103,7 +1132,7 @@ function createProcessContainerV2(itemId) {
         tooltipHtml += '<ul>';
         tooltipHtml += /*html*/ `<li class="titled-details"><strong>Other Outputs:</strong></li>`;
         processData.outputs
-            .filter(outputData => outputData.productId !== outputProductData.id)
+            .filter(outputData => outputData.productId !== parentProductData.id) //// TO DO: rework for "isProcessDerived" TRUE
             .forEach(outputData => tooltipHtml += /*html*/ `
                 <li>
                     - ${productDataById[outputData.productId].name}
@@ -1122,7 +1151,7 @@ function createProcessContainerV2(itemId) {
 /**
  * Returns "itemId" of the newly added item
  */
-function addItemToChain(itemData, overwriteItemId = null) {
+function addItemToChain(itemData, overwriteItemId = null, isProcessDerived = false) {
     let itemId;
     if (overwriteItemId !== null) {
         itemId = Number(overwriteItemId)
@@ -1135,7 +1164,7 @@ function addItemToChain(itemData, overwriteItemId = null) {
     const renderOnLevel = itemData.level;
     maxLevel = Math.max(maxLevel, renderOnLevel);
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
-    const itemContainer = itemData.productId !== null ? createProductContainerV2(itemId) : createProcessContainerV2(itemId);
+    const itemContainer = itemData.productId !== null ? createProductContainerV2(itemId) : createProcessContainerV2(itemId, isProcessDerived);
     if (itemData.isSelected) {
         itemContainer.classList.add(itemData.productId !== null ? 'selected-item' : 'selected-process');
     }

@@ -274,9 +274,9 @@
   right: 1rem;
 }
 
-#filters-list #filter-finished-good,
-#filters-list #filter-ship,
-#filters-list #filter-building {
+#filters-list #filter-finished-good.checked,
+#filters-list #filter-ship.checked,
+#filters-list #filter-building.checked {
   color: white;
 }
 
@@ -520,6 +520,10 @@
   justify-content: flex-end;
   margin-left: -1.5rem;
   transform-origin: left top;
+}
+#production-chain-items.derived-products {
+  flex-direction: unset;
+  justify-content: unset;
 }
 
 .incomplete-chain #production-chain-items {

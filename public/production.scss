@@ -273,7 +273,9 @@
 #filters-list #filter-finished-good, // obsolete as of 2024
 #filters-list #filter-ship,
 #filters-list #filter-building {
-    color: white;
+    &.checked {
+        color: white;
+    }
 }
 
 #selected-production-chain {
@@ -514,6 +516,11 @@
     justify-content: flex-end;
     margin-left: -1.5rem;
     transform-origin: left top;
+
+    &.derived-products {
+        flex-direction: unset;
+        justify-content: unset;    
+    }
 }
 
 .incomplete-chain #production-chain-items {

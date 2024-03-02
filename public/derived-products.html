@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./production.css">
+    <link rel="stylesheet" href="./template-footer-about.css">
+    <link rel="icon" href="./img/site-icon.png" type="image/png">
+    <title>Influence Derived Products</title>
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Influence Derived Products">
+    <meta name="twitter:image" content="https://influence.elerium.dev/img/site-icon.png">
+    <meta name="twitter:creator" content="@elerium115">
+    <meta name="twitter:description" content="Explore what you can make with a specific product.">
+    <meta name="description" content="Explore what you can make with a specific product.">
+    <meta name="author" content="@elerium115">
+</head>
+<body class="embed">
+    <script>
+        // Run embedding logic ASAP, instead of requesting it via a script file.
+        // Source: https://stackoverflow.com/a/326076/11071601
+        function inIframe() {
+            try {
+                return window.self !== window.top;
+            } catch (e) {
+                return true;
+            }
+        }
+        if (!inIframe()) {
+            document.body.classList.remove('embed');
+        }
+    </script>
+    <div class="main production-planner">
+        <nav class="topbar">
+            <a href="./">Raw Materials</a>
+            <a href="./ratios.html">Materials Ratios</a>
+            <a href="./products.html">Products</a>
+            <a href="./derived-products.html" class="active">Derived Products</a>
+            <!-- DISABLED production chains -->
+            <!-- <a href="./production-chains.html">Production Chains</a> -->
+            <a href="./production-planner.html">Production Planner</a>
+            <a href="./asteroids-planner.html?version=2023-08-16">Asteroids Planner</a>
+        </nav>
+
+        <div id="production-wrapper" class="chain-type-combined">
+            <div id="top-settings" class="options">
+                <span>Select product:</span>
+                <div id="products-list-wrapper" class="list-hidden">
+                    <input type="text">
+                    <div id="products-list"></div>
+                    <div id="filters-list">
+                        <span class="header">Filter</span>
+                    </div>
+                </div>
+                <span class="separator"></span>
+                <div id="scale-slider">
+                    <input type="range" min="50" max="100" value="100" id="scale-slider-range">
+                </div>
+            </div>
+            <div id="selected-production-chain">
+                <h2><span id="selected-item-name"></span> - Derived Products</h2>
+            </div>
+            <div id="production-chain-wrapper">
+                <div id="production-chain-items" class="derived-products"></div>
+            </div>
+        </div>
+
+        <div id="template-footer-about"></div>
+        <script type="module">
+            import {templateFooterAbout} from './template-footer-about.js';
+            document.getElementById('template-footer-about').innerHTML = templateFooterAbout;
+        </script>
+
+        <div id="minimap-wrapper">
+            <div id="minimap-toggle" class="pointer" onclick="toggleMinimap()">Minimap</div>
+        </div>
+
+        <div id="production-chain-overlay" class="hidden">
+            <div>
+                <div>
+                    Selecting this process variant will deselect the entire sub-chain<br>
+                    of the currently-selected process - "<span id="overlay-selected-process-name"></span>".
+                </div>
+                <div class="overlay-question brand-text">Are you sure?</div>
+                <div class="options">
+                    <label for="toggle-always-confirm"><input type="checkbox" id="toggle-always-confirm">Always confirm automatically</label>
+                </div>
+                <div class="overlay-responses">
+                    <span id="overlay-response-no" class="overlay-response" onclick="handleOverlayResponse(false)">No</span>
+                    <span id="overlay-response-yes" class="overlay-response" onclick="handleOverlayResponse(true)">Yes</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay-wrapper">
+        <div id="overlay-product-image" class="overlay-panel hidden" onclick="closeOverlay()">
+            <img src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image');">
+        </div>
+        <div id="ovrelay-close" onclick="closeOverlay()">✕</div>
+    </div>
+
+    <div id="debug" class="hidden"></div>
+
+    <!-- Third-party and "core" scripts, loaded first -->
+    <script src="./js-deflate/base64.js"></script>
+    <script src="./js-deflate/rawdeflate.js"></script>
+    <script src="./js-deflate/rawinflate.js"></script>
+    <script src="./leader-line.min.js"></script>
+    <script src="./pagemap-1.4.0.min.js"></script>
+    <script src="./loader-production-data-version.js"></script>
+    <script src="./loader-production-chains.js"></script>
+    <script src="./loader-products-vs-spectral-types.js"></script>
+    <script src="./abstract-core.js"></script>
+    <script src="./production-core.js"></script>
+    <script src="./production-planner-core.js"></script>
+
+    <!-- Scripts specific to this tool, loaded at the very end -->
+    <script src="./derived-products.js"></script>
+</body>
+</html>
