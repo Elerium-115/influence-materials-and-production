@@ -1024,26 +1024,32 @@ function createProductContainerV2(itemId) {
     productContainer.appendChild(tooltipWrapper);
     // inject details into tooltip
     let tooltipHtml = '';
-    // show product image
+    // -- show link to Production Planner
+    tooltipHtml += /*html*/ `
+        <div class="link-production-plan" onclick="event.stopPropagation();">
+            <a href="./production-planner.html#${getCompactName(itemName)}">Production Plan</a>
+        </div>
+    `;
+    // -- show product image
     tooltipHtml += `<img class="thumb" src="${getProductImageSrc(itemName, 'thumb')}" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('no-image');">`;
-    // show product type
+    // -- show product type
     let productTypeHtml = productData.type; // e.g. "Ship"
     if (isProductionDataWithProductCategories() && productData.category) {
         productTypeHtml = `${productData.type}<br>(${productData.category})`; // e.g. "Assembly (Ship Hull)"
     }
     tooltipHtml += `<div class="titled-details product-type">${productTypeHtml}</div>`;
-    // show sustaining spectral types
+    // -- show sustaining spectral types
     const sustainingSpectralTypes = getRealSpectralTypesSorted(productDataByName[itemName].sustainingSpectralTypes);
     const sustainingSpectralTypesText = sustainingSpectralTypes.length ? sustainingSpectralTypes.join(', ') : 'N/A';
     tooltipHtml += `<div class="titled-details sustaining-spectral-types">${sustainingSpectralTypesText}</div>`;
-    // show mass & volume per unit
+    // -- show mass & volume per unit
     tooltipHtml += /*html*/ `
         <ul class="titled-details mass-volume">
             <li>Mass: ${Number(productData.massKilogramsPerUnit) ? productData.massKilogramsPerUnit + ' kg' : 'N/A'}</li>
             <li>Volume: ${Number(productData.volumeLitersPerUnit) ? productData.volumeLitersPerUnit + ' L' : 'N/A'}</li>
         </ul>
     `;
-    // show max units per storage, if BOTH mass + volume set
+    // -- show max units per storage, if BOTH mass + volume set
     if (Number(productData.massKilogramsPerUnit) && Number(productData.volumeLitersPerUnit)) {
         let maxUnitsHtml = '<ul class="titled-details max-units">';
         const maxUnitsPerStorage = getMaxUnitsPerStorageForMassAndVolume(productData.massKilogramsPerUnit, productData.volumeLitersPerUnit);
@@ -1094,7 +1100,7 @@ function createProcessContainerV2(itemId) {
     tooltip.classList.add('item-tooltip', 'process-tooltip');
     tooltipWrapper.appendChild(tooltip);
     processContainer.appendChild(tooltipWrapper);
-    // -- inject details into tooltip
+    // inject details into primary tooltip
     let tooltipHtml = '';
     tooltipHtml += `<div class="building">${getBuildingNameForProcessId(processId)}</div>`;
     // -- show durations only for processes with startup / runtime
@@ -1150,7 +1156,7 @@ function createProcessContainerV2(itemId) {
         tooltip.classList.add('item-tooltip', 'process-tooltip');
         tooltipWrapper.appendChild(tooltip);
         processContainer.appendChild(tooltipWrapper);
-        // -- inject details into secondary tooltip
+        // inject details into secondary tooltip
         let tooltipHtml = '';
         // -- show other inputs, if any
         if (processData.inputs.length >= 2) {

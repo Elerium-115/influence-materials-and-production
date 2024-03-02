@@ -931,6 +931,10 @@
   color: var(--item-name);
   font-size: 0.7rem;
 }
+#production-chain-items .item-tooltip-wrapper .item-tooltip.product-tooltip .link-production-plan {
+  text-align: center;
+  font-size: 0.8rem;
+}
 #production-chain-items .item-tooltip-wrapper .item-tooltip.product-tooltip .thumb {
   display: block;
   width: 5rem;
