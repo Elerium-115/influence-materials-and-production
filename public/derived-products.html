@@ -55,12 +55,16 @@
                     </div>
                 </div>
                 <span class="separator"></span>
+                <label for="toggle-auto-replicate" class="checked has-toggle-tooltip">
+                    <input type="checkbox" id="toggle-auto-replicate" checked>Auto-Replicate
+                    <div class="toggle-tooltip">Enabling this will automatically select the same products and process variants, that you already selected in other parts of the production chain.</div>
+                </label>
                 <div id="scale-slider">
                     <input type="range" min="50" max="100" value="100" id="scale-slider-range">
                 </div>
             </div>
             <div id="selected-production-chain">
-                <h2 class="wip"><span id="selected-item-name"></span> - Derived Products</h2>
+                <h2><span id="selected-item-name"></span> - Derived Products</h2>
             </div>
             <div id="production-chain-wrapper">
                 <div id="production-chain-items" class="derived-products"></div>

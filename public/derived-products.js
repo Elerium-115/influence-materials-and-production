@@ -21,118 +21,8 @@ productNamesSorted.forEach(productName => {
     productsListContainer.appendChild(listItem);
 });
 
-/**
- * NOTE: This function should only be called for input-products, NOT for processes.
- * For the given "inputItemId", add its derivative process(es) and output(s) to the production chain.
- */
-function addProcessesAndOutputsForInputItemId(inputItemId) {
-    const inputItemData = itemDataById[inputItemId];
-    const inputProductId = inputItemData.productId;
-    // if (doDebug) console.log(`%c--- inputItemId #${inputItemId} (product #${inputProductId}: ${productDataById[inputProductId].name})`, 'background: yellow; color: black;');
-    if (inputProductId === null) {
-        if (doDebug) console.log(`%c--- ERROR: addProcessesAndOutputsForInputItemId called for non-product inputItemId ${inputItemId}`, 'background: maroon');
-        return;
-    }
-    const processDerivedItemIds = [];
-    const processDerivedIds = processDerivedIdsByProductId[inputProductId] || []; // e.g. finished goods can not be derived further
-    processDerivedIds.forEach(processId => {
-        const processItemData = {
-            isDisabled: false,
-            isSelected: false,
-            level: inputItemData.level + 1,
-            parentItemId: Number(inputItemId),
-            processId: Number(processId),
-            productId: null,
-        };
-        const processItemId = addItemToChain(processItemData, null, true);
-        processDerivedItemIds.push(processItemId);
-        processDataById[processId].outputs.forEach(outputData => {
-            const outputProductId = outputData.productId;
-            const outputItemData = {
-                isDisabled: false,
-                isSelected: false,
-                level: processItemData.level + 1,
-                parentItemId: Number(processItemId),
-                processId: null,
-                productId: String(outputProductId),
-            };
-            addItemToChain(outputItemData); // not using the return value, in this context
-        });
-    });
-    //// TO DO: continue to rework re: derived process IDs
-    //// -- search "processVariant" => "processDerived"
-    return; //// TEST
-    if (!processVariantItemIds.length) {
-        /**
-         * NO process variant for this output. This may signal either:
-         * - a production loop or other issues that filtered-out all process variants for this output - see "getFilteredProcessVariantIds"
-         * - a product without process variants in the JSON (this was the case for "Food" in the old JSON from 2022)
-         */
-        if (doDebug) console.log(`%c--- WARNING: NO processVariantIds found for output productId ${inputProductId}`, 'background: brown');
-        //  No process variants in the JSON?
-        getItemContainerById(inputItemId).classList.add('prompt-message', '--no-raw-variant');
-        return;
-    }
-    if (processVariantItemIds.length === 1) {
-        // Single process variant => auto-select it
-        // if (doDebug) console.log(`--- AUTO-SELECT single process variant`);
-        selectProcessItemId(processVariantItemIds[0]);
-    }
-    if (processVariantItemIds.length > 1) {
-        // Multiple process variants => prompt the user to select one
-        // if (doDebug) console.log(`%c--- PROMPT the user to select one of the processVariantItemIds: [${String(processVariantItemIds)}]`, 'background: yellow; color: black;');
-        const preferredProcessVariantItemId = getPreferredProcessVariantItemId(inputProductId, processVariantItemIds);
-        processVariantItemIds.forEach(itemId => {
-            // Mark all process variants as having sibling variants
-            getItemContainerById(itemId).classList.add('has-sibling-variants');
-            // Mark all process variants from this group as waiting selection
-            itemDataById[itemId].processVariantItemIds = processVariantItemIds;
-            markProcessWaitingSelection(itemId);
-            // Mark "inferior" (non-default) process variants from this group
-            if (itemId !== preferredProcessVariantItemId) {
-                markProcessInferior(itemId);
-            }
-        });
-        // Mark this output to prompt for selecting a process variant
-        getItemContainerById(inputItemId).classList.add('prompt-message', '--select-variant');
-    }
-}
-
-/**
- * NOTE: This function should only be called for output-products, NOT for processes.
- * Select an output-product item from the exploration chain, to be produced by the user.
- * This adds the process(es) + output(s) for the selected output-item (now an input).
- * The exploration chain is then re-rendered.
- */
-function exploreProductItemId(itemId) {
-    // if (doDebug) console.log(`--- exploreProductItemId arg:`, {itemId});
-    itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
-    if (selectedProductItemIds.includes(itemId)) {
-        if (doDebug) console.log(`%c--- WARNING: itemId ${itemId} is already selected`, 'background: brown');
-        return;
-    }
-    const itemData = itemDataById[itemId];
-    const itemContainer = getItemContainerById(itemId);
-    selectedProductItemIds.push(itemId);
-    itemData.isSelected = true;
-    itemContainer.classList.add('selected-item');
-    addProcessesAndOutputsForInputItemId(itemId);
-    //// TO DO: continue implementing similar to "selectProductItemId"
-    return; //// TEST
-    refreshDetailsAndConnections();
-    /**
-     * If, after a short delay, the mouse is still over the newly selected item,
-     * trigger "mouseenter" to ensure that its sub-chain does NOT remain "faded".
-     */
-    setTimeout(() => {
-        if (productionChainItemsContainer.querySelector(`[data-container-id="${itemId}"]:hover`)) {
-            itemContainer.dispatchEvent(new Event('mouseenter'));
-        }
-    }, 10);
-}
-
-function injectExploredProductNameAndImage(exploredProductId) {
-    const productName = productDataById[exploredProductId].name;
+function injectDerivedProductNameAndImage(derivedProductId) {
+    const productName = productDataById[derivedProductId].name;
     productsListWrapper.querySelector('input').placeholder = productName;
     selectedItemNameContainer.textContent = productName;
     //// TO DO: rework similar to shopping-list?
@@ -145,34 +35,34 @@ function injectExploredProductNameAndImage(exploredProductId) {
     */
 }
 
-function selectExploredProductId(exploredProductId) {
-    // if (doDebug) console.log(`--- SELECTING explored product ${exploredProductId} (${productDataById[exploredProductId].name})`);
+function selectDerivedProductId(derivedProductId) {
+    // if (doDebug) console.log(`--- SELECTING derived product ${derivedProductId} (${productDataById[derivedProductId].name})`);
     fullyResetProductionPlan();
-    injectExploredProductNameAndImage(exploredProductId);
-    const exploredProductItemData = {
+    injectDerivedProductNameAndImage(derivedProductId);
+    const derivedProductItemData = {
         isDisabled: false,
         isSelected: false,
         level: 1,
         parentItemId: 0, // top-level item (i.e. no parent)
         processId: null,
-        productId: String(exploredProductId),
+        productId: String(derivedProductId),
     };
-    const exploredProductItemId = addItemToChain(exploredProductItemData);
-    exploreProductItemId(exploredProductItemId);
+    const derivedProductItemId = addItemToChain(derivedProductItemData);
+    selectProductItemId(derivedProductItemId);
 }
 
 /**
  * The "hash" is a single product, generated via "getCompactName" (e.g. "Thin-filmResistor")
  */
-function selectExploredProductHash(hash) {
+function selectDerivedProductHash(hash) {
     hideAndResetProductsList();
-    const exploredProductCompactName = hash;
-    // Select the explored product from the hash
-    const productName = productNamesByHash[exploredProductCompactName];
+    const derivedProductCompactName = hash;
+    // Select the derived product from the hash
+    const productName = productNamesByHash[derivedProductCompactName];
     if (productName) {
-        // if (doDebug) console.log(`%c--- RENDER only the explored product and its derivatives`, 'background: blue');
-        const exploredProductId = String(productDataByName[productName].id);
-        selectExploredProductId(exploredProductId);
+        // if (doDebug) console.log(`%c--- RENDER only the derived product and its derivatives`, 'background: blue');
+        const derivedProductId = String(productDataByName[productName].id);
+        selectDerivedProductId(derivedProductId);
         // SEO optimizations
         document.title = `${productName} - ${defaultPageTitle}`;
         document.querySelector("meta[name='twitter:title']").content = document.title;
@@ -197,7 +87,7 @@ window.addEventListener('hashchange', () => {
     }
     const hashToSelect = getCurrentHash();
     // if (doDebug) console.log(`--- TRIGGERED hashchange w/ hashToSelect = ${hashToSelect}`);
-    selectExploredProductHash(hashToSelect);
+    selectDerivedProductHash(hashToSelect);
 });
 
 // Pre-select the product from #Hash on page-load
@@ -206,6 +96,6 @@ if (!hashToPreselect) {
     // Pre-select "Steel" by default, if empty #Hash given
     hashToPreselect = 'Steel';
 }
-selectExploredProductHash(hashToPreselect);
+selectDerivedProductHash(hashToPreselect);
 
 resetMinimap();

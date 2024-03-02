@@ -294,10 +294,6 @@
 #selected-production-chain h2 {
   white-space: nowrap;
 }
-#selected-production-chain h2.wip::after {
-  content: " // work in progress";
-  color: var(--metals);
-}
 
 .incomplete-chain #selected-production-chain h2::after {
   content: " - INCOMPLETE";

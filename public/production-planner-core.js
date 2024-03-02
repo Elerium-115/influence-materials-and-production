@@ -1269,6 +1269,51 @@ function addProcessesAndInputsForOutputItemId(outputItemId) {
     }
 }
 
+/**
+ * NOTE: This function should only be called for input-products, NOT for processes.
+ * For the given "inputItemId", add its derivative process(es) and output(s) to the production chain.
+ */
+function addProcessesAndOutputsForInputItemId(inputItemId) {
+    const inputItemData = itemDataById[inputItemId];
+    const inputProductId = inputItemData.productId;
+    // if (doDebug) console.log(`%c--- inputItemId #${inputItemId} (product #${inputProductId}: ${productDataById[inputProductId].name})`, 'background: yellow; color: black;');
+    if (inputProductId === null) {
+        if (doDebug) console.log(`%c--- ERROR: addProcessesAndOutputsForInputItemId called for non-product inputItemId ${inputItemId}`, 'background: maroon');
+        return;
+    }
+    const processDerivedItemIds = [];
+    const processDerivedIds = processDerivedIdsByProductId[inputProductId] || []; // e.g. finished goods can not be derived further
+    processDerivedIds.forEach(processId => {
+        const processItemData = {
+            isDisabled: false,
+            isSelected: false,
+            level: inputItemData.level + 1,
+            parentItemId: Number(inputItemId),
+            processId: Number(processId),
+            productId: null,
+        };
+        const processItemId = addItemToChain(processItemData, null, true);
+        processDerivedItemIds.push(processItemId);
+        processDataById[processId].outputs.forEach(outputData => {
+            const outputProductId = outputData.productId;
+            const outputItemData = {
+                isDisabled: false,
+                isSelected: false,
+                level: processItemData.level + 1,
+                parentItemId: Number(processItemId),
+                processId: null,
+                productId: String(outputProductId),
+            };
+            addItemToChain(outputItemData); // not using the return value, in this context
+        });
+    });
+    if (processDerivedItemIds.length === 1) {
+        // Single process variant => auto-select it
+        // if (doDebug) console.log(`--- AUTO-SELECT single process variant`);
+        selectProcessItemId(processDerivedItemIds[0]);
+    }
+}
+
 function removeItemIdFromSelectedProductItemIds(itemId) {
     selectedProductItemIds = selectedProductItemIds.filter(someItemId => someItemId !== itemId);
 }
@@ -1316,7 +1361,14 @@ function toggleProductItemId(itemId) {
 }
 
 /**
- * NOTE: This function should only be called for input-products, NOT for processes.
+ * NOTE: This function should only be called:
+ * 
+ * - if "isToolDerivedProducts" TRUE => for output-products, NOT for processes.
+ * Select an output-product item from the derived chain, to be produced by the user.
+ * This adds the process(es) + output(s) for the selected output-item (now an input).
+ * The derived chain is then re-rendered.
+ * 
+ * - if "isToolDerivedProducts" FALSE => for input-products, NOT for processes.
  * Select an input-product item from the production chain, to be produced by the user.
  * This adds the process(es) + input(s) for the selected input-item (now an output).
  * The production chain is then re-rendered, and the "shopping list" is also updated.
@@ -1330,41 +1382,47 @@ function selectProductItemId(itemId) {
     }
     const itemData = itemDataById[itemId];
     const itemContainer = getItemContainerById(itemId);
-    // Prevent selection of items from sub-chains of disabled process variants
-    if (itemData.isDisabled) {
-        // if (doDebug) console.log(`--- WARNING: itemId ${itemId} is disabled`);
-        const parentItemContainer = getItemContainerById(itemData.parentItemId);
-        // Flash error
-        itemContainer.classList.add('flash-error');
-        parentItemContainer.classList.add('flash-error-glow');
-        setTimeout(() => {
-            itemContainer.classList.remove('flash-error');
-            parentItemContainer.classList.remove('flash-error-glow');
-        }, 250); // match the animation duration for "flash-error"
-        return;
-    }
-    if (itemContainer.classList.contains('waiting-selection')) {
-        // Auto-select this input's parent process variant, if they are both waiting selection.
-        // if (doDebug) console.log(`--- AUTO-SELECT parent process variant`);
-        selectProcessItemId(itemData.parentItemId);
+    if (!isToolDerivedProducts) {
+        // Prevent selection of items from sub-chains of disabled process variants
+        if (itemData.isDisabled) {
+            // if (doDebug) console.log(`--- WARNING: itemId ${itemId} is disabled`);
+            const parentItemContainer = getItemContainerById(itemData.parentItemId);
+            // Flash error
+            itemContainer.classList.add('flash-error');
+            parentItemContainer.classList.add('flash-error-glow');
+            setTimeout(() => {
+                itemContainer.classList.remove('flash-error');
+                parentItemContainer.classList.remove('flash-error-glow');
+            }, 250); // match the animation duration for "flash-error"
+            return;
+        }
+        if (itemContainer.classList.contains('waiting-selection')) {
+            // Auto-select this input's parent process variant, if they are both waiting selection.
+            // if (doDebug) console.log(`--- AUTO-SELECT parent process variant`);
+            selectProcessItemId(itemData.parentItemId);
+        }
     }
     selectedProductItemIds.push(itemId);
     itemData.isSelected = true;
     itemContainer.classList.add('selected-item');
-    addProcessesAndInputsForOutputItemId(itemId);
-    if (autoReplicate) {
-        // Auto-select the process variant cached for auto-replication, for the current output (if any)
-        const outputProductId = itemData.productId;
-        const autoReplicateProcessId = autoReplicateProcessSelection[outputProductId];
-        if (autoReplicateProcessId) {
-            // if (doDebug) console.log(`---> [selectProductItemId] CALL selectProcessForAllSelectedOutput`);
-            selectProcessForAllSelectedOutput(outputProductId, autoReplicateProcessId);
-        }
-        if (isAutoReplicating) {
-            // Do NOT refresh details, connections etc. while auto-replicating selections
-            return;
-        } else {
-            autoReplicateProductSelections();
+    if (isToolDerivedProducts) {
+        addProcessesAndOutputsForInputItemId(itemId);
+    } else {
+        addProcessesAndInputsForOutputItemId(itemId);
+        if (autoReplicate) {
+            // Auto-select the process variant cached for auto-replication, for the current output (if any)
+            const outputProductId = itemData.productId;
+            const autoReplicateProcessId = autoReplicateProcessSelection[outputProductId];
+            if (autoReplicateProcessId) {
+                // if (doDebug) console.log(`---> [selectProductItemId] CALL selectProcessForAllSelectedOutput`);
+                selectProcessForAllSelectedOutput(outputProductId, autoReplicateProcessId);
+            }
+            if (isAutoReplicating) {
+                // Do NOT refresh details, connections etc. while auto-replicating selections
+                return;
+            } else {
+                autoReplicateProductSelections();
+            }
         }
     }
     refreshDetailsAndConnections();
@@ -1934,7 +1992,9 @@ function renderShoppingAndDiyList() {
 
 function refreshDetailsAndConnections(skipHashEncoding = false) {
     // if (doDebug) console.log(`--- refreshDetailsAndConnections`);
-    renderShoppingAndDiyList();
+    if (!isToolDerivedProducts) {
+        renderShoppingAndDiyList();
+    }
     refreshConnections();
     // Hash encoding is only used in the Production Planner tool
     if (!skipHashEncoding && isToolProductionPlanner) {
