@@ -1061,15 +1061,15 @@ function createProductContainerV2(itemId) {
     return productContainer;
 }
 
-function createProcessContainerV2(itemId, isProcessDerived) {
+function createProcessContainerV2(itemId) {
     const itemData = itemDataById[itemId];
     const processId = itemData.processId;
     const processData = processDataById[processId];
     const processName = processData.name;
     /**
      * NOTE: In this context, "parent" is either:
-     * - the INPUT being derived, if "isProcessDerived" TRUE
-     * - the OUTPUT being planned, if "isProcessDerived" FALSE
+     * - the INPUT being derived, if "isToolDerivedProducts" TRUE
+     * - the OUTPUT being planned, if "isToolDerivedProducts" FALSE
      */
     const parentItemData = itemDataById[itemData.parentItemId];
     const parentProductData = productDataById[parentItemData.productId];
@@ -1087,17 +1087,17 @@ function createProcessContainerV2(itemId, isProcessDerived) {
     processHexagon.innerHTML = `<span class="process-name">${getItemNameWithSmartLinebreaks(processName)}</span>`;
     processHexagon.classList.add('hexagon');
     processContainer.appendChild(processHexagon);
-    // tooltip for process details
+    // primary tooltip for process details
     const tooltipWrapper = document.createElement('div');
     tooltipWrapper.classList.add('item-tooltip-wrapper');
     const tooltip = document.createElement('div');
     tooltip.classList.add('item-tooltip', 'process-tooltip');
     tooltipWrapper.appendChild(tooltip);
     processContainer.appendChild(tooltipWrapper);
-    // inject details into tooltip
+    // -- inject details into tooltip
     let tooltipHtml = '';
     tooltipHtml += `<div class="building">${getBuildingNameForProcessId(processId)}</div>`;
-    // show durations only for processes with startup / runtime
+    // -- show durations only for processes with startup / runtime
     if (buildingIdsWithDurations.includes(processData.buildingId)) {
         tooltipHtml += '<ul>';
         tooltipHtml += `<li>Startup: ${getNiceNumber(getRealHours(processData.bAdalianHoursPerAction))} h</li>`;
@@ -1106,8 +1106,8 @@ function createProcessContainerV2(itemId, isProcessDerived) {
         }
         tooltipHtml += '</ul>';
     }
-    if (!isProcessDerived) {
-        // show throughput for the current output, if numeric runtime ("mAdalianHoursPerSR" NOT "N/A")
+    if (!isToolDerivedProducts) {
+        // -- show throughput for the current output, if numeric runtime ("mAdalianHoursPerSR" NOT "N/A")
         if (getRealHours(processData.mAdalianHoursPerSR)) {
             const unitsPerHour = getUnitsPerHourForProcessOutput(parentItemData.productId, processId);
             tooltipHtml += /*html*/ `
@@ -1118,7 +1118,7 @@ function createProcessContainerV2(itemId, isProcessDerived) {
             `;
         }
     }
-    // show storage requirements for inputs (total mass & volume)
+    // -- show storage requirements for inputs (total mass & volume)
     const storageRequirements = getStorageRequirementsForProcessInputs(processId);
     tooltipHtml += /*html*/ `
         <ul>
@@ -1127,12 +1127,12 @@ function createProcessContainerV2(itemId, isProcessDerived) {
             <li>Volume: ${getNiceNumber(storageRequirements.volumePerSR)} L/SR</li>
         </ul>
     `;
-    // show other outputs, if any
-    if (processData.outputs.length >= 2) {
+    // -- show other outputs, if any (except in "Derived Products")
+    if (processData.outputs.length >= 2 && !isToolDerivedProducts) {
         tooltipHtml += '<ul>';
         tooltipHtml += /*html*/ `<li class="titled-details"><strong>Other Outputs:</strong></li>`;
         processData.outputs
-            .filter(outputData => outputData.productId !== parentProductData.id) //// TO DO: rework for "isProcessDerived" TRUE
+            .filter(outputData => outputData.productId !== parentProductData.id)
             .forEach(outputData => tooltipHtml += /*html*/ `
                 <li>
                     - ${productDataById[outputData.productId].name}
@@ -1142,6 +1142,34 @@ function createProcessContainerV2(itemId, isProcessDerived) {
         tooltipHtml += '</ul>';
     }
     tooltip.innerHTML = tooltipHtml;
+    if (isToolDerivedProducts) {
+        // secondary tooltip for additional process details in "Derived Products"
+        const tooltipWrapper = document.createElement('div');
+        tooltipWrapper.classList.add('item-tooltip-wrapper', 'secondary-tooltip');
+        const tooltip = document.createElement('div');
+        tooltip.classList.add('item-tooltip', 'process-tooltip');
+        tooltipWrapper.appendChild(tooltip);
+        processContainer.appendChild(tooltipWrapper);
+        // -- inject details into secondary tooltip
+        let tooltipHtml = '';
+        // -- show other inputs, if any
+        if (processData.inputs.length >= 2) {
+            tooltipHtml += '<ul>';
+            tooltipHtml += /*html*/ `<li class="other-inputs"><strong>Other Inputs:</strong></li>`;
+            processData.inputs
+                .filter(inputData => inputData.productId !== parentProductData.id)
+                .forEach(inputData => tooltipHtml += /*html*/ `
+                    <li>
+                        - ${productDataById[inputData.productId].name}
+                        <span class="qty">${inputData.unitsPerSR}</span>
+                    </li>
+                `);
+            tooltipHtml += '</ul>';
+        } else {
+            tooltipWrapper.classList.add('empty-tooltip');
+        }
+        tooltip.innerHTML = tooltipHtml;
+    }
     processContainer.addEventListener('click', event => {
         selectProcessItemId(itemId); // the user may only select a process, not deselect it
     });
@@ -1151,7 +1179,7 @@ function createProcessContainerV2(itemId, isProcessDerived) {
 /**
  * Returns "itemId" of the newly added item
  */
-function addItemToChain(itemData, overwriteItemId = null, isProcessDerived = false) {
+function addItemToChain(itemData, overwriteItemId = null) {
     let itemId;
     if (overwriteItemId !== null) {
         itemId = Number(overwriteItemId)
@@ -1164,7 +1192,7 @@ function addItemToChain(itemData, overwriteItemId = null, isProcessDerived = fal
     const renderOnLevel = itemData.level;
     maxLevel = Math.max(maxLevel, renderOnLevel);
     const levelContainer = injectLevelContainerIfNeeded(renderOnLevel);
-    const itemContainer = itemData.productId !== null ? createProductContainerV2(itemId) : createProcessContainerV2(itemId, isProcessDerived);
+    const itemContainer = itemData.productId !== null ? createProductContainerV2(itemId) : createProcessContainerV2(itemId);
     if (itemData.isSelected) {
         itemContainer.classList.add(itemData.productId !== null ? 'selected-item' : 'selected-process');
     }
@@ -1292,7 +1320,7 @@ function addProcessesAndOutputsForInputItemId(inputItemId) {
             processId: Number(processId),
             productId: null,
         };
-        const processItemId = addItemToChain(processItemData, null, true);
+        const processItemId = addItemToChain(processItemData, null);
         processDerivedItemIds.push(processItemId);
         processDataById[processId].outputs.forEach(outputData => {
             const outputProductId = outputData.productId;

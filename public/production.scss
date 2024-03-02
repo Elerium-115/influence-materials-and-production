@@ -519,7 +519,7 @@
 
     &.derived-products {
         flex-direction: unset;
-        justify-content: unset;    
+        justify-content: unset;
     }
 }
 
@@ -872,63 +872,140 @@
     padding: 0.5rem 1rem;
 }
 
-/* item tooltip */
+#production-chain-items {
+    .item-tooltip-wrapper {
+        position: absolute;
+        display: none;
+        left: 50%;
+        white-space: nowrap;
 
-#production-chain-items .item-tooltip-wrapper {
-    position: absolute;
-    display: none;
-    left: 50%;
-    white-space: nowrap;
-}
+        &::before {
+            content: '⮕';
+            position: absolute;
+            left: -0.5rem;
+            width: 1rem;
+            font-size: 1.1rem;
+            line-height: 1.1rem;
+            transform: rotate(-90deg);
+        }
 
-#production-chain-items [data-container-id]:hover .item-tooltip-wrapper {
-    display: block;
-}
+        .item-tooltip {
+            position: relative;
+            left: -50%;
+            text-align: left;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border: 1px solid gray;
+            border-radius: 0.5rem;
+            filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
 
-#production-chain-items .item-tooltip-wrapper::before {
-    content: '⮕';
-    position: absolute;
-    left: -0.5rem;
-    width: 1rem;
-    font-size: 1.1rem;
-    line-height: 1.1rem;
-    transform: rotate(-90deg);
-}
+            &.process-tooltip {
+                background: var(--process);
 
-#production-chain-items .item-tooltip-wrapper .item-tooltip {
-    position: relative;
-    left: -50%;
-    text-align: left;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-    filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
-}
+                .building {
+                    background: var(--default-text);
+                    color: var(--process);
+                    text-align: center;
+                    padding: 0.4rem;
+                    border-radius: 0.4rem;
+                }
 
-/* item tooltip - process */
+                .qty {
+                    color: var(--default-text_semifaded);
 
-#production-chain-items .item-tooltip-wrapper .process-tooltip {
-    background: var(--process);
-}
+                    &::before {
+                        content: "✕";
+                        font-size: 0.5rem;
+                        margin-left: 0.4rem;
+                        margin-right: 0.2rem;
+                    }
+                }
 
-#production-chain-items .item-tooltip-wrapper .process-tooltip .building {
-    background: var(--default-text);
-    color: var(--process);
-    text-align: center;
-    padding: 0.4rem;
-    border-radius: 0.4rem;
-}
+                ul {
+                    margin-top: 1rem;
 
-#production-chain-items .item-tooltip-wrapper .process-tooltip .qty {
-    color: var(--default-text_semifaded);
-}
+                    li {
+                        font-size: 0.7rem;
+                        line-height: 1rem;
 
-#production-chain-items .item-tooltip-wrapper .process-tooltip .qty::before {
-    content: "✕";
-    font-size: 0.5rem;
-    margin-left: 0.4rem;
-    margin-right: 0.2rem;
+                        &.titled-details {
+                            opacity: 0.5;
+                        }
+                    }
+                }
+            }
+
+            &.product-tooltip {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                background: black;
+                color: var(--item-name);
+                font-size: 0.7rem;
+
+                .thumb {
+                    display: block;
+                    width: 5rem;
+                    margin: 0 auto;
+
+                    &.no-image {
+                        display: none;
+                    }
+                }
+
+                .titled-details {
+                    &::before {
+                        display: block;
+                        margin-bottom: 0.25rem;
+                        opacity: 0.5;
+                    }
+
+                    &.product-type::before { content: 'Product Type'; }
+                    &.sustaining-spectral-types::before { content: 'Sustaining Spectral Types'; }
+                    &.mass-volume::before { content: 'Mass & Volume per Unit'; }
+                    &.max-units::before { content: 'Max Units per Storage'; }
+                }
+            }
+        }
+
+        &.secondary-tooltip {
+            bottom: 100%;
+
+            &::before {
+                bottom: 0;
+                transform: rotate(90deg);
+            }
+
+            .item-tooltip {
+                margin-bottom: 1rem;
+                margin-top: unset;
+
+                &.process-tooltip {
+                    background: black;
+                    color: var(--item-name);
+
+                    .qty {
+                        color: unset;
+                        opacity: 0.5;
+                    }
+
+                    ul {
+                        margin-top: unset;
+                    }
+                }
+            }
+        }
+
+        &.empty-tooltip {
+            display: none !important;
+        }
+    }
+
+    [data-container-id]:hover {
+        .item-tooltip-wrapper {
+            display: block;
+        }
+    }
 }
 
 #production-chain-items .item-type-process:not(.inferior-process) .item-tooltip-wrapper .process-tooltip .throughput {
@@ -940,51 +1017,6 @@
     content: '(best for selected output)';
     display: block;
 }
-
-#production-chain-items .item-tooltip-wrapper .process-tooltip ul {
-    margin-top: 1rem;
-}
-
-#production-chain-items .item-tooltip-wrapper .process-tooltip ul li {
-    font-size: 0.7rem;
-    line-height: 1rem;
-
-    &.titled-details {
-        opacity: 0.5;
-    }
-}
-
-/* item tooltip - product */
-
-#production-chain-items .item-tooltip-wrapper .product-tooltip {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    background: black;
-    color: var(--item-name);
-    font-size: 0.7rem;
-}
-
-#production-chain-items .item-tooltip-wrapper .product-tooltip .thumb {
-    display: block;
-    width: 5rem;
-    margin: 0 auto;
-}
-
-#production-chain-items .item-tooltip-wrapper .product-tooltip .thumb.no-image {
-    display: none;
-}
-
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details::before {
-    display: block;
-    margin-bottom: 0.25rem;
-    opacity: 0.5;
-}
-
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.product-type::before { content: 'Product Type'; }
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.sustaining-spectral-types::before { content: 'Sustaining Spectral Types'; }
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.mass-volume::before { content: 'Mass & Volume per Unit'; }
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.max-units::before { content: 'Max Units per Storage'; }
 
 #production-chain-items [data-container-id].prompt-message.--no-optimized-variant:hover .item-tooltip-wrapper .product-tooltip::after {
     content: 'All process variants for this product were removed during the optimization, in order to avoid either an infinite production loop, or a highly inefficient production path.';

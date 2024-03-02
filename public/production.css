@@ -869,18 +869,12 @@
   padding: 0.5rem 1rem;
 }
 
-/* item tooltip */
 #production-chain-items .item-tooltip-wrapper {
   position: absolute;
   display: none;
   left: 50%;
   white-space: nowrap;
 }
-
-#production-chain-items [data-container-id]:hover .item-tooltip-wrapper {
-  display: block;
-}
-
 #production-chain-items .item-tooltip-wrapper::before {
   content: "⮕";
   position: absolute;
@@ -890,7 +884,6 @@
   line-height: 1.1rem;
   transform: rotate(-90deg);
 }
-
 #production-chain-items .item-tooltip-wrapper .item-tooltip {
   position: relative;
   left: -50%;
@@ -901,29 +894,95 @@
   border-radius: 0.5rem;
   filter: drop-shadow(0 0.25rem 0.25rem var(--dark-bg));
 }
-
-/* item tooltip - process */
-#production-chain-items .item-tooltip-wrapper .process-tooltip {
+#production-chain-items .item-tooltip-wrapper .item-tooltip.process-tooltip {
   background: var(--process);
 }
-
-#production-chain-items .item-tooltip-wrapper .process-tooltip .building {
+#production-chain-items .item-tooltip-wrapper .item-tooltip.process-tooltip .building {
   background: var(--default-text);
   color: var(--process);
   text-align: center;
   padding: 0.4rem;
   border-radius: 0.4rem;
 }
-
-#production-chain-items .item-tooltip-wrapper .process-tooltip .qty {
+#production-chain-items .item-tooltip-wrapper .item-tooltip.process-tooltip .qty {
   color: var(--default-text_semifaded);
 }
-
-#production-chain-items .item-tooltip-wrapper .process-tooltip .qty::before {
+#production-chain-items .item-tooltip-wrapper .item-tooltip.process-tooltip .qty::before {
   content: "✕";
   font-size: 0.5rem;
   margin-left: 0.4rem;
   margin-right: 0.2rem;
+}
+#production-chain-items .item-tooltip-wrapper .item-tooltip.process-tooltip ul {
+  margin-top: 1rem;
+}
+#production-chain-items .item-tooltip-wrapper .item-tooltip.process-tooltip ul li {
+  font-size: 0.7rem;
+  line-height: 1rem;
+}
+#production-chain-items .item-tooltip-wrapper .item-tooltip.process-tooltip ul li.titled-details {
+  opacity: 0.5;
+}
+#production-chain-items .item-tooltip-wrapper .item-tooltip.product-tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: black;
+  color: var(--item-name);
+  font-size: 0.7rem;
+}
+#production-chain-items .item-tooltip-wrapper .item-tooltip.product-tooltip .thumb {
+  display: block;
+  width: 5rem;
+  margin: 0 auto;
+}
+#production-chain-items .item-tooltip-wrapper .item-tooltip.product-tooltip .thumb.no-image {
+  display: none;
+}
+#production-chain-items .item-tooltip-wrapper .item-tooltip.product-tooltip .titled-details::before {
+  display: block;
+  margin-bottom: 0.25rem;
+  opacity: 0.5;
+}
+#production-chain-items .item-tooltip-wrapper .item-tooltip.product-tooltip .titled-details.product-type::before {
+  content: "Product Type";
+}
+#production-chain-items .item-tooltip-wrapper .item-tooltip.product-tooltip .titled-details.sustaining-spectral-types::before {
+  content: "Sustaining Spectral Types";
+}
+#production-chain-items .item-tooltip-wrapper .item-tooltip.product-tooltip .titled-details.mass-volume::before {
+  content: "Mass & Volume per Unit";
+}
+#production-chain-items .item-tooltip-wrapper .item-tooltip.product-tooltip .titled-details.max-units::before {
+  content: "Max Units per Storage";
+}
+#production-chain-items .item-tooltip-wrapper.secondary-tooltip {
+  bottom: 100%;
+}
+#production-chain-items .item-tooltip-wrapper.secondary-tooltip::before {
+  bottom: 0;
+  transform: rotate(90deg);
+}
+#production-chain-items .item-tooltip-wrapper.secondary-tooltip .item-tooltip {
+  margin-bottom: 1rem;
+  margin-top: unset;
+}
+#production-chain-items .item-tooltip-wrapper.secondary-tooltip .item-tooltip.process-tooltip {
+  background: black;
+  color: var(--item-name);
+}
+#production-chain-items .item-tooltip-wrapper.secondary-tooltip .item-tooltip.process-tooltip .qty {
+  color: unset;
+  opacity: 0.5;
+}
+#production-chain-items .item-tooltip-wrapper.secondary-tooltip .item-tooltip.process-tooltip ul {
+  margin-top: unset;
+}
+#production-chain-items .item-tooltip-wrapper.empty-tooltip {
+  display: none !important;
+}
+#production-chain-items [data-container-id]:hover .item-tooltip-wrapper {
+  display: block;
 }
 
 #production-chain-items .item-type-process:not(.inferior-process) .item-tooltip-wrapper .process-tooltip .throughput {
@@ -934,60 +993,6 @@
   color: var(--default-text_semifaded);
   content: "(best for selected output)";
   display: block;
-}
-
-#production-chain-items .item-tooltip-wrapper .process-tooltip ul {
-  margin-top: 1rem;
-}
-
-#production-chain-items .item-tooltip-wrapper .process-tooltip ul li {
-  font-size: 0.7rem;
-  line-height: 1rem;
-}
-#production-chain-items .item-tooltip-wrapper .process-tooltip ul li.titled-details {
-  opacity: 0.5;
-}
-
-/* item tooltip - product */
-#production-chain-items .item-tooltip-wrapper .product-tooltip {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  background: black;
-  color: var(--item-name);
-  font-size: 0.7rem;
-}
-
-#production-chain-items .item-tooltip-wrapper .product-tooltip .thumb {
-  display: block;
-  width: 5rem;
-  margin: 0 auto;
-}
-
-#production-chain-items .item-tooltip-wrapper .product-tooltip .thumb.no-image {
-  display: none;
-}
-
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details::before {
-  display: block;
-  margin-bottom: 0.25rem;
-  opacity: 0.5;
-}
-
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.product-type::before {
-  content: "Product Type";
-}
-
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.sustaining-spectral-types::before {
-  content: "Sustaining Spectral Types";
-}
-
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.mass-volume::before {
-  content: "Mass & Volume per Unit";
-}
-
-#production-chain-items .item-tooltip-wrapper .product-tooltip .titled-details.max-units::before {
-  content: "Max Units per Storage";
 }
 
 #production-chain-items [data-container-id].prompt-message.--no-optimized-variant:hover .item-tooltip-wrapper .product-tooltip::after {
