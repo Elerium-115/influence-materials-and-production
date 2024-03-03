@@ -1315,9 +1315,15 @@ function addProcessesAndOutputsForInputItemId(inputItemId) {
         if (doDebug) console.log(`%c--- ERROR: addProcessesAndOutputsForInputItemId called for non-product inputItemId ${inputItemId}`, 'background: maroon');
         return;
     }
+    const ancestorProductIds = getAllAncestorProductIdsOfItemId(inputItemId);
     const processDerivedItemIds = [];
     const processDerivedIds = processDerivedIdsByProductId[inputProductId] || []; // e.g. finished goods can not be derived further
     processDerivedIds.forEach(processId => {
+        const outputs = processDataById[processId].outputs;
+        if (outputs.length === 1 && ancestorProductIds.includes(outputs[0].productId)) {
+            // Skip process if it has a single output, and that output is among "ancestorProductIds"
+            return;
+        }
         const processItemData = {
             isDisabled: false,
             isSelected: false,
@@ -1328,8 +1334,12 @@ function addProcessesAndOutputsForInputItemId(inputItemId) {
         };
         const processItemId = addItemToChain(processItemData, null);
         processDerivedItemIds.push(processItemId);
-        processDataById[processId].outputs.forEach(outputData => {
+        outputs.forEach(outputData => {
             const outputProductId = outputData.productId;
+            if (ancestorProductIds.includes(outputProductId)) {
+                // Skip output if it's among "ancestorProductIds"
+                return;
+            }
             const outputItemData = {
                 isDisabled: false,
                 isSelected: false,
@@ -1478,7 +1488,7 @@ function deselectProductItemId(itemId, skipRefreshDetailsAndConnections = false)
     // if (doDebug) console.log(`--- deselectProductItemId(${itemId})`);
     itemId = Number(itemId); // required if this function is called with itemId = "...dataset.containerId" (string)
     if (itemId === 1) {
-        resetPlannedProduct();
+        resetOriginProduct();
         return;
     }
     if (!selectedProductItemIds.includes(itemId)) {
@@ -2075,9 +2085,13 @@ function selectPlannedProductId(plannedProductId) {
     selectProductItemId(plannedProductItemId);
 }
 
-function resetPlannedProduct() {
+function resetOriginProduct() {
     getItemContainerById(1).dispatchEvent(new Event('mouseleave'));
-    selectPlannedProductId(itemDataById[1].productId);
+    if (isToolDerivedProducts) {
+        selectDerivedProductId(itemDataById[1].productId);
+    } else {
+        selectPlannedProductId(itemDataById[1].productId);
+    }
 }
 
 function renderItemByIdAndData(itemId, itemData) {
