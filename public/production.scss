@@ -1273,11 +1273,20 @@
     padding: 0 0.5rem 1rem 0.5rem;
 }
 
-/* production planner - shopping list */
-#shopping-list-wrapper {
+#origin-panel-wrapper {
     position: relative;
     padding: 1rem;
     border-radius: 0.5rem;
+
+    &.active-derived-products {
+        align-items: center;
+        background: var(--active-bg);
+        display: flex;
+
+        #origin-panel-product-image-wrapper {
+            margin-top: unset;
+        }
+    }
 
     &.active-shopping {
         background: var(--active-bg);
@@ -1358,7 +1367,7 @@
 }
 
 //// DISABLED for embedding in new game client
-// .embed #shopping-list-wrapper {
+// .embed #origin-panel-wrapper {
 //     background: unset;
 //     backdrop-filter: opacity(1);
 // }
@@ -1452,42 +1461,44 @@
     }
 }
 
-#shopping-list-product-image-wrapper {
+#origin-panel-product-image-wrapper {
     position: relative;
     margin-top: 1rem;
     border-radius: 1rem;
-}
 
-#shopping-list-product-image-wrapper:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
-}
+    &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+    }
 
-#shopping-list-product-image-wrapper:not(.missing-image-wrapper):hover {
-    cursor: pointer;
-}
+    &:not(.missing-image-wrapper) {
+        &::after {
+            content: '+';
+            position: absolute;
+            top: 0;
+            right: 0.5rem;
+            font-size: 2rem;
+            opacity: 0;
+        }
 
-#shopping-list-product-image-wrapper:not(.missing-image-wrapper)::after {
-    content: '+';
-    position: absolute;
-    top: 0;
-    right: 0.5rem;
-    font-size: 2rem;
-    opacity: 0;
-}
+        &:hover {
+            cursor: pointer;
 
-#shopping-list-product-image-wrapper:not(.missing-image-wrapper):hover::after {
-    opacity: 1;
-}
+            &::after {
+                opacity: 1;
+            }
+        }
+    }
 
-#shopping-list-product-image {
-    width: 100%;
-}
+    #origin-panel-product-image {
+        width: 100%;
+    }
 
-#shopping-list-product-name {
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0 0.5rem 1rem 0.5rem;
+    #origin-panel-product-name {
+        font-size: 1rem;
+        font-weight: bold;
+        padding: 0 0.5rem 1rem 0.5rem;
+    }
 }
 
 /* production planner - minimap */

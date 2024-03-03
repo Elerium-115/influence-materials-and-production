@@ -38,7 +38,7 @@ const templateProductionPlan = /*html*/ `
                 <h2><span id="selected-item-name"></span> - Production Plan</h2>
             </div>
             <div id="production-chain-wrapper">
-                <div id="shopping-list-wrapper" class="active-shopping">
+                <div id="origin-panel-wrapper" class="active-shopping">
                     <div id="shopping-list-tabs">
                         <div id="tab-shopping-list" class="shopping-list-tab active" onclick="onClickShoppingListTab(this)">
                             <div>Shopping List</div>
@@ -59,9 +59,9 @@ const templateProductionPlan = /*html*/ `
                     </div>
                     <div id="shopping-list"></div>
                     <div id="diy-list"></div>
-                    <div id="shopping-list-product-image-wrapper" onclick="onClickProductImage(this)">
-                        <img id="shopping-list-product-image" src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image'); this.parentNode.classList.add('missing-image-wrapper');">
-                        <div id="shopping-list-product-name"></div>
+                    <div id="origin-panel-product-image-wrapper" onclick="onClickProductImage(this)">
+                        <img id="origin-panel-product-image" src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image'); this.parentNode.classList.add('missing-image-wrapper');">
+                        <div id="origin-panel-product-name"></div>
                     </div>
                 </div>
                 <div id="production-chain-items"></div>

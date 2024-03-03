@@ -155,15 +155,15 @@ let selectedProductItemIds = [];
 let shouldHandleHashchange = true;
 
 const shareLinkContainer = document.getElementById('share-link');
-const shoppingListWrapperContainer = document.getElementById('shopping-list-wrapper');
+const originPanelWrapperContainer = document.getElementById('origin-panel-wrapper');
+const originPanelProductImage = document.getElementById('origin-panel-product-image');
+const originPanelProductName = document.getElementById('origin-panel-product-name');
 const shoppingListQtyDisclaimerContainer = document.getElementById('shopping-list-qty-disclaimer');
 const shoppingListQtyFinalProductContainer = document.getElementById('shopping-list-qty-final-product');
 const diyListQtyDisclaimerContainer = document.getElementById('diy-list-qty-disclaimer');
 const diyListQtyFinalProductContainer = document.getElementById('diy-list-qty-final-product');
 const shoppingListContainer = document.getElementById('shopping-list');
 const diyListContainer = document.getElementById('diy-list');
-const shoppingListProductImage = document.getElementById('shopping-list-product-image');
-const shoppingListProductName = document.getElementById('shopping-list-product-name');
 const productionChainOverlayContainer = document.getElementById('production-chain-overlay');
 const overlaySelectedProcessNameContainer = document.getElementById('overlay-selected-process-name');
 
@@ -2059,11 +2059,11 @@ function injectPlannedProductNameAndImage(plannedProductId) {
         productsListWrapper.querySelector('input').placeholder = productName;
     }
     selectedItemNameContainer.textContent = productName;
-    shoppingListProductImage.parentNode.classList.remove('missing-image-wrapper');
-    shoppingListProductImage.classList.remove('missing-image');
-    shoppingListProductImage.src = getProductImageSrc(productName);
-    shoppingListProductImage.dataset.productName = productName;
-    shoppingListProductName.textContent = productName;
+    originPanelProductImage.parentNode.classList.remove('missing-image-wrapper');
+    originPanelProductImage.classList.remove('missing-image');
+    originPanelProductImage.src = getProductImageSrc(productName);
+    originPanelProductImage.dataset.productName = productName;
+    originPanelProductName.textContent = productName;
 }
 
 /**
@@ -2236,16 +2236,16 @@ function onClickShoppingListTab(el) {
     if (el.classList.contains('active')) {
         return;
     }
-    shoppingListWrapperContainer.querySelector('.shopping-list-tab.active').classList.remove('active');
+    originPanelWrapperContainer.querySelector('.shopping-list-tab.active').classList.remove('active');
     el.classList.add('active');
     switch (el.id) {
         case 'tab-shopping-list':
-            shoppingListWrapperContainer.classList.remove('active-diy');
-            shoppingListWrapperContainer.classList.add('active-shopping');
+            originPanelWrapperContainer.classList.remove('active-diy');
+            originPanelWrapperContainer.classList.add('active-shopping');
             break;
         case 'tab-diy-list':
-            shoppingListWrapperContainer.classList.remove('active-shopping');
-            shoppingListWrapperContainer.classList.add('active-diy');
+            originPanelWrapperContainer.classList.remove('active-shopping');
+            originPanelWrapperContainer.classList.add('active-diy');
             break;
     }
     refreshConnections();

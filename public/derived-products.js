@@ -25,14 +25,11 @@ function injectDerivedProductNameAndImage(derivedProductId) {
     const productName = productDataById[derivedProductId].name;
     productsListWrapper.querySelector('input').placeholder = productName;
     selectedItemNameContainer.textContent = productName;
-    //// TO DO: rework similar to shopping-list?
-    /*
-    shoppingListProductImage.parentNode.classList.remove('missing-image-wrapper');
-    shoppingListProductImage.classList.remove('missing-image');
-    shoppingListProductImage.src = getProductImageSrc(productName);
-    shoppingListProductImage.dataset.productName = productName;
-    shoppingListProductName.textContent = productName;
-    */
+    originPanelProductImage.parentNode.classList.remove('missing-image-wrapper');
+    originPanelProductImage.classList.remove('missing-image');
+    originPanelProductImage.src = getProductImageSrc(productName);
+    originPanelProductImage.dataset.productName = productName;
+    originPanelProductName.textContent = productName;
 }
 
 function selectDerivedProductId(derivedProductId) {

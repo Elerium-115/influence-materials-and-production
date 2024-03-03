@@ -74,6 +74,12 @@
                 </div>
             </div>
             <div id="production-chain-wrapper">
+                <div id="origin-panel-wrapper" class="active-derived-products">
+                    <div id="origin-panel-product-image-wrapper" onclick="onClickProductImage(this)">
+                        <img id="origin-panel-product-image" src="" alt="" onerror="this.src='./img/site-icon.png'; this.classList.add('missing-image'); this.parentNode.classList.add('missing-image-wrapper');">
+                        <div id="origin-panel-product-name"></div>
+                    </div>
+                </div>
                 <div id="production-chain-items" class="derived-products"></div>
             </div>
         </div>
