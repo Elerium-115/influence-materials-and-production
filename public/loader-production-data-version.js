@@ -2,7 +2,7 @@
  * This loader needs to be included before all other production
  * loaders and scripts, in order to determine the production data version.
  */
-const productionDataVersionDefault = '2024-02-24';
+const productionDataVersionDefault = '2024-03-04';
 const productionDataVersion = new URLSearchParams(location.search).get('version') || productionDataVersionDefault;
 
 /**

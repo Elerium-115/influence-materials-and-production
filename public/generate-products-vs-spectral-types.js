@@ -14,8 +14,6 @@
  * 
  * These outputs need to be saved (manually) into "products-vs-spectral-types.js",
  * which is then used by other scripts - e.g. "products.js".
- * 
- * NOTE: To generate the "next" version, load the HTML with the query param "?next=true"
  */
 
 /** All spectral types = Real spectral types + Virtual spectral types */
