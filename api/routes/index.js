@@ -3,6 +3,7 @@ const cache = require('../cache/index');
 const providerInfluencethIo = require('../providers/influenceth.io/index');
 const providerMock = require('../providers/mock/index');
 const providerMongoDB = require('../providers/mongodb/index');
+const dataTools = require('../data/tools');
 
 const router = express.Router();
 
@@ -208,6 +209,18 @@ router.post(
         cache.asteroidsPlanByAddress[address] = asteroidsPlan;
         console.log(`---> SAVED asteroids plan = ${asteroidsPlan.length} asteroids`); //// TEST
         res.send(true);
+    }
+);
+
+/**
+ * @desc        Get community-developed tools for Influence
+ * @route       GET /data/tools
+ */
+router.get(
+    '/data/tools',
+    (req, res) => {
+        console.log(`--- [router] GET /data/tools`); //// TEST
+        res.json(dataTools.tools);
     }
 );
 
