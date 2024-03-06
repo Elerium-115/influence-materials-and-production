@@ -1955,10 +1955,9 @@ function renderShoppingAndDiyList() {
         shoppingListQtyDisclaimerContainer.classList.remove('hidden');
         shoppingListHtml += /*html*/ `<div class="line line-title"><div>Inputs</div><div>Qty*</div></div>`;
         shoppingAndDiyList.inputs.forEach(inputData => {
-            const hrefHtml = isToolProductionPlanner ? `href="#${getCompactName(inputData.name)}"` : '';
             shoppingListHtml += /*html*/ `
                 <div class="line">
-                    <div><a ${hrefHtml} class="list-product-name">${inputData.name}</a></div>
+                    <div class="list-product-name">${inputData.name}</div>
                     <div class="qty">${getNiceNumber(inputData.qty * qtyMultiplier)}</div>
                 </div>
             `;
@@ -1983,10 +1982,9 @@ function renderShoppingAndDiyList() {
         diyListQtyDisclaimerContainer.classList.remove('hidden');
         diyListHtml += /*html*/ `<div class="line line-title"><div>Inputs</div><div>Qty*</div></div>`;
         shoppingAndDiyList.diyInputs.forEach(inputData => {
-            const hrefHtml = isToolProductionPlanner ? `href="#${getCompactName(inputData.name)}"` : '';
             diyListHtml += /*html*/ `
                 <div class="line">
-                    <div><a ${hrefHtml} class="list-product-name">${inputData.name}</a></div>
+                    <div class="list-product-name">${inputData.name}</div>
                     <div class="qty">${getNiceNumber(inputData.qty * qtyMultiplier)}</div>
                 </div>
             `;
@@ -1997,11 +1995,9 @@ function renderShoppingAndDiyList() {
     if (shoppingAndDiyList.buildings.length) {
         diyListHtml += /*html*/ `<div class="line line-title"><div>Buildings</div><div>Count</div></div>`; // including extractors and empty lots
         shoppingAndDiyList.buildings.forEach(buildingData => {
-            // Do not link "#EmptyLot" (not a product)
-            const hrefHtml = (isToolProductionPlanner && buildingData.name !== 'Empty Lot') ? `href="#${getCompactName(buildingData.name)}"` : '';
             diyListHtml += /*html*/ `
                 <div class="line">
-                    <div><a ${hrefHtml} class="list-product-name">${buildingData.name}</a></div>
+                    <div class="list-product-name">${buildingData.name}</div>
                     <div class="qty">${buildingData.qty}</div>
                 </div>
             `;
