@@ -4,6 +4,7 @@ const providerInfluencethIo = require('../providers/influenceth.io/index');
 const providerMock = require('../providers/mock/index');
 const providerMongoDB = require('../providers/mongodb/index');
 const dataTools = require('../data/tools');
+const dataWidgets = require('../data/widgets');
 
 const router = express.Router();
 
@@ -221,6 +222,18 @@ router.get(
     (req, res) => {
         console.log(`--- [router] GET /data/tools`); //// TEST
         res.json(dataTools.tools);
+    }
+);
+
+/**
+ * @desc        Get community-developed widgets for Influence
+ * @route       GET /data/widgets
+ */
+router.get(
+    '/data/widgets',
+    (req, res) => {
+        console.log(`--- [router] GET /data/widgets`); //// TEST
+        res.json(dataWidgets.widgets);
     }
 );
 
