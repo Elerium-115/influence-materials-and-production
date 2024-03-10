@@ -59,7 +59,7 @@ function getItemNameSafe(itemName) {
  * Valid formats: "thumb" (low-res) / "default" (medium-res) / "original" (high-res)
  */
 function getProductImageSrc(productName, format = 'default') {
-    const root = isWidget ? '..' : '.';
+    const root = (typeof isWidget !== 'undefined' && isWidget) ? '..' : '.';
     return `${root}/img/products/${format}/${getItemNameSafe(productName)}.png`;
 }
 
