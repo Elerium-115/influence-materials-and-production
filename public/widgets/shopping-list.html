@@ -4,27 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping List - Influence Widget</title>
-    <style>
-        @font-face {
-            font-family: Jura;
-            src: url("../font/Jura-Regular.ttf");
-        }
-
-        * {
-            box-sizing: border-box;
-            font-weight: normal;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            color: #ccc;
-            font-family: Jura, sans-serif;
-            padding: 16px;
-        }
-    </style>
+    <link rel="stylesheet" href="./style/shopping-list.css">
 </head>
 <body>
-    <div>Tinkering...</div>
+    <section id="planned-products-section" class="root-section">
+        <div class="section-title" onclick="this.parentElement.classList.toggle('closed')">
+            Planned Products
+        </div>
+        <ul id="planned-products-list">
+            <li>
+                <div class="product-name">Warehouse</div>
+                <input type="number" value="2" class="qty">
+            </li>
+            <li>
+                <div class="product-name">Heavy Transport</div>
+                <input type="number" value="1" class="qty">
+            </li>
+            <li>
+                <div class="product-name">Core Drill</div>
+                <input type="number" value="150" class="qty">
+            </li>
+        </ul>
+        <div id="add-product-wrapper">
+            <input type="text" placeholder="Select Product" id="add-product-input">
+            <div id="add-product-button" class="cta">Add</div>
+        </div>
+    </section>
+    <section id="shopping-list-section" class="root-section">
+        <div class="section-title" onclick="this.parentElement.classList.toggle('closed')">
+            Shopping List
+        </div>
+        <div id="shopping-list">Coming Soon...</div>
+        <!-- copy-paste icons for both product-names + qtys -->
+    </section>
 </body>
 </html>

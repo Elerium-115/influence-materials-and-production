@@ -1,0 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=Jura:wght@300;400;700");
+:root {
+  --color-influence: rgb(54, 167, 205);
+  --color-influence-faded-25: rgba(54, 167, 205, 0.25);
+  --color-text: #ccc;
+  --cursor-url-active: url("../assets/images/cursor-active.png");
+  --cursor-url-default: url("../assets/images/cursor.png");
+  --size-base: 40px;
+  --size-padding: 16px;
+}
+
+html, body {
+  cursor: var(--cursor-url-default) 5 5, auto;
+  color: var(--color-text);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  scrollbar-color: rgba(255, 255, 255, 0.25) rgba(50, 50, 50, 0.3);
+  width: 100%;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Jura, sans-serif;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+
+input {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--color-text);
+  height: 30px;
+  padding: 0 8px;
+}
+input[type=number] {
+  padding-right: 0;
+}
+
+.cta {
+  cursor: var(--cursor-url-active) 5 5, auto;
+  align-items: center;
+  background: black;
+  border: 1px solid var(--color-influence);
+  color: var(--color-influence);
+  display: flex;
+  height: 30px;
+  justify-content: center;
+  padding: 0 8px;
+  transition: all 300ms ease 0s;
+}
+.cta:hover {
+  background: var(--color-influence-faded-25);
+  color: white;
+}/*# sourceMappingURL=widgets-core.css.map */
