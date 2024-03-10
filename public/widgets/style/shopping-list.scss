@@ -1,10 +1,13 @@
 @import './widgets-core.scss';
 
 .root-section {
+    padding-bottom: calc(var(--size-padding) * 2);
+
     .section-title {
         @include cursor-active;
         background: rgba(0, 0, 0, 0.5);
         color: var(--color-influence);
+        font-weight: bold;
         line-height: var(--size-base);
         padding: 0 var(--size-padding);
         position: relative;
@@ -15,7 +18,7 @@
             color: white;
 
             &::after {
-                content: '✕';
+                content: '▲';
                 position: absolute;
                 right: var(--size-padding);
             }
@@ -36,29 +39,82 @@
     }
 }
 
+.products-list {
+    li {
+        align-items: center;
+        display: flex;
+        gap: var(--size-padding);
+        height: var(--size-base);
+        justify-content: space-between;
+        padding: 0 var(--size-padding);
+        position: relative;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        &:not(:hover) {
+            .product-image {
+                display: none;
+            }
+        }
+
+        .product-name {
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .product-image {
+            background: black;
+            left: var(--size-padding);
+            position: absolute;
+            width: calc(var(--size-base) * 2);
+            z-index: 1;
+
+            &:hover {
+                display: none; // ensure the product image does not block hovering over the next product
+            }
+        }
+    }
+}
+
 #planned-products-section {
     #planned-products-list {
         li {
-            align-items: center;
-            display: flex;
-            gap: var(--size-padding);
-            height: var(--size-base);
-            justify-content: space-between;
-            padding: 0 var(--size-padding);
+            padding-right: 0;
 
-            &:hover {
-                background: rgba(255, 255, 255, 0.05);
-            }
-
-            .product-name {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+            &:not(:hover) {
+                .remove {
+                    opacity: 0;
+                }
             }
 
             .qty {
-                width: 100px;
-            }        
+                width: 90px;
+            }
+
+            .remove {
+                line-height: var(--size-base);
+                text-align: center;
+                width: var(--size-base);
+
+                &::after {
+                    content: '✕';
+                }
+
+                &:hover {
+                    @include cursor-active;
+                    background: rgba(255, 255, 255, 0.1);
+                    color: var(--color-warning);
+                }
+            }
+
+            .product-image {
+                box-shadow: 0 10px 20px black;
+                top: 100%;
+            }
         }
     }
 
@@ -66,8 +122,9 @@
         display: flex;
         gap: var(--size-padding);
         justify-content: space-between;
-        margin: var(--size-padding) 0 calc(var(--size-padding) * 2) 0;
-        padding: 0 var(--size-padding);
+        margin-top: var(--size-padding);
+        padding-left: var(--size-padding);
+        padding-right: calc(var(--size-padding) + var(--size-base));
 
         #add-product-input {
             flex-grow: 1;
@@ -77,8 +134,11 @@
 
 #shopping-list-section {
     #shopping-list {
-        line-height: var(--size-base);
-        padding: 0 var(--size-padding);
-        padding-bottom: calc(var(--size-padding) * 2);
+        li {
+            .product-image {
+                bottom: 100%;
+                box-shadow: 0 -10px 20px black;
+            }
+        }
     }
 }

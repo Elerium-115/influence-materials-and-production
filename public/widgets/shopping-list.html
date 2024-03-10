@@ -3,30 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping List - Influence Widget</title>
     <link rel="stylesheet" href="./style/shopping-list.css">
+    <link rel="icon" href="../img/site-icon.png" type="image/png">
+    <title>Shopping List - Influence Widget</title>
+    <meta name="description" content="View the inputs required for making a selection of planned products.">
+    <meta name="author" content="@elerium115">
 </head>
 <body>
     <section id="planned-products-section" class="root-section">
         <div class="section-title" onclick="this.parentElement.classList.toggle('closed')">
             Planned Products
         </div>
-        <ul id="planned-products-list">
-            <li>
-                <div class="product-name">Warehouse</div>
-                <input type="number" value="2" class="qty">
-            </li>
-            <li>
-                <div class="product-name">Heavy Transport</div>
-                <input type="number" value="1" class="qty">
-            </li>
-            <li>
-                <div class="product-name">Core Drill</div>
-                <input type="number" value="150" class="qty">
-            </li>
-        </ul>
+        <ul id="planned-products-list" class="products-list"></ul>
         <div id="add-product-wrapper">
-            <input type="text" placeholder="Select Product" id="add-product-input">
+            <input type="text" placeholder="Search Product" id="add-product-input">
             <div id="add-product-button" class="cta">Add</div>
         </div>
     </section>
@@ -34,8 +24,18 @@
         <div class="section-title" onclick="this.parentElement.classList.toggle('closed')">
             Shopping List
         </div>
-        <div id="shopping-list">Coming Soon...</div>
-        <!-- copy-paste icons for both product-names + qtys -->
+        <ul id="shopping-list" class="products-list"></ul>
     </section>
+
+    <script>
+        const isWidget = true; // required for the relative "root" in other scripts
+    </script>
+    <script src="../loader-production-data-version.js"></script>
+    <script src="../loader-production-chains.js"></script>
+    <script src="../loader-products-vs-spectral-types.js"></script>
+    <script src="../abstract-core.js"></script>
+    <script src="../production-core.js"></script>
+    <script src="../production-planner-core.js"></script>
+    <script src="./shopping-list.js"></script>
 </body>
 </html>

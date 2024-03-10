@@ -4,6 +4,7 @@
     --color-influence: rgb(54, 167, 205);
     --color-influence-faded-25: rgba(54, 167, 205, 0.25);
     --color-text: #ccc;
+    --color-warning: rgb(223, 67, 0);
     --cursor-url-active: url('../assets/images/cursor-active.png');
     --cursor-url-default: url('../assets/images/cursor.png');
     --size-base: 40px;
@@ -55,6 +56,7 @@ input {
     justify-content: center;
     padding: 0 8px;
     transition: all 300ms ease 0s;
+    user-select: none;
 
     &:hover {
         background: var(--color-influence-faded-25);
