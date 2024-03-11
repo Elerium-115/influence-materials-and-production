@@ -1,0 +1,98 @@
+@charset "UTF-8";
+#products-list-wrapper {
+  display: inline-block;
+  margin-left: 0.5rem;
+  position: relative;
+}
+#products-list-wrapper input {
+  border: 1px solid var(--item-name);
+  line-height: 2rem;
+  padding: 0 2rem 0 1rem;
+  width: 14rem;
+}
+#products-list-wrapper::after {
+  content: "✕";
+  cursor: pointer;
+  line-height: 2rem;
+  position: absolute;
+  right: 1rem;
+  top: 0;
+}
+#products-list-wrapper.list-hidden::after {
+  content: "▼";
+  margin: 1px -1px 0 0;
+}
+#products-list-wrapper.list-hidden #products-list,
+#products-list-wrapper.list-hidden #filters-list {
+  display: none;
+}
+#products-list-wrapper #products-list {
+  background: var(--overactive-bg);
+  border: 1px solid var(--item-name);
+  border-top: none;
+  max-height: 20rem;
+  overflow: auto;
+  position: absolute;
+  width: 14rem;
+  z-index: 1;
+}
+#products-list-wrapper #products-list a {
+  color: var(--item-name);
+  cursor: pointer;
+  display: block;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+}
+#products-list-wrapper #products-list a:hover {
+  background: var(--dark-bg) !important;
+}
+#products-list-wrapper #products-list a[class*=not-matching] {
+  display: none;
+}
+#products-list-wrapper #products-list a.item-type-finished-good, #products-list-wrapper #products-list a.item-type-ship, #products-list-wrapper #products-list a.item-type-building {
+  color: white;
+}
+#products-list-wrapper #filters-list {
+  background: white;
+  border: 1px solid var(--item-name);
+  border-bottom-right-radius: 0.5rem;
+  border-left: none;
+  border-top-right-radius: 0.5rem;
+  color: black;
+  position: absolute;
+  right: -11rem;
+  top: 0;
+  width: 11rem;
+  z-index: 1;
+}
+#products-list-wrapper #filters-list > * {
+  display: block;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+}
+#products-list-wrapper #filters-list .header {
+  border-bottom: 1px solid var(--item-name);
+}
+#products-list-wrapper #filters-list .option {
+  cursor: pointer;
+}
+#products-list-wrapper #filters-list .option:last-child {
+  border-bottom-right-radius: 0.5rem;
+}
+#products-list-wrapper #filters-list .option:hover {
+  background: var(--dark-bg) !important;
+  color: var(--item-name);
+}
+#products-list-wrapper #filters-list .checked {
+  color: var(--item-name);
+  position: relative;
+}
+#products-list-wrapper #filters-list .checked::after {
+  content: "✅";
+  position: absolute;
+  right: 1rem;
+}
+#products-list-wrapper #filters-list #filter-finished-good.checked,
+#products-list-wrapper #filters-list #filter-ship.checked,
+#products-list-wrapper #filters-list #filter-building.checked {
+  color: white;
+}/*# sourceMappingURL=products-list.css.map */

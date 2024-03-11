@@ -1,4 +1,5 @@
 @import './widgets-core.scss';
+@import '../../products-list.scss';
 
 .root-section {
     padding-bottom: calc(var(--size-padding) * 2);
@@ -39,7 +40,7 @@
     }
 }
 
-.products-list {
+.products-shopping-list {
     li {
         align-items: center;
         display: flex;
@@ -53,10 +54,9 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
-        &:not(:hover) {
-            .product-image {
-                display: none;
-            }
+        .product-image {
+            height: var(--size-base);
+            width: var(--size-base);
         }
 
         .product-name {
@@ -64,18 +64,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-        }
-
-        .product-image {
-            background: black;
-            left: var(--size-padding);
-            position: absolute;
-            width: calc(var(--size-base) * 2);
-            z-index: 1;
-
-            &:hover {
-                display: none; // ensure the product image does not block hovering over the next product
-            }
         }
     }
 }
@@ -97,8 +85,8 @@
 
             .remove {
                 line-height: var(--size-base);
+                min-width: var(--size-base);
                 text-align: center;
-                width: var(--size-base);
 
                 &::after {
                     content: '✕';
@@ -110,34 +98,92 @@
                     color: var(--color-warning);
                 }
             }
-
-            .product-image {
-                box-shadow: 0 10px 20px black;
-                top: 100%;
-            }
         }
     }
 
     #add-product-wrapper {
-        display: flex;
-        gap: var(--size-padding);
-        justify-content: space-between;
+        // Align w/ planned products (on the left) and their qty-inputs (on the right)
+        margin-left: var(--size-padding);
+        margin-right: calc(var(--size-padding) + var(--size-base));
         margin-top: var(--size-padding);
-        padding-left: var(--size-padding);
-        padding-right: calc(var(--size-padding) + var(--size-base));
 
-        #add-product-input {
-            flex-grow: 1;
+        // Overwrite styles from "products-list.scss"
+        #products-list-wrapper {
+            display: block;
+            margin-left: unset;
+
+            &::after {
+                @include cursor-active;
+                align-items: center;
+                bottom: 0;
+                display: flex;
+                font-size: 0.8rem;
+                line-height: unset;
+            }
+
+            input {
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                line-height: unset;
+                padding: 0 8px;
+                width: 100%;
+            }
+
+            #products-list {
+                --size-line-height: 30px;
+                background: rgb(15, 15, 15);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                font-size: 0.9rem;
+                line-height: var(--size-line-height);
+                max-height: calc(var(--size-line-height) * 10); // fit 10 list-items
+                transition: all 300ms ease 0s;
+                width: 100%;
+
+                a {
+                    @include cursor-active;
+                    color: unset;
+                    overflow: hidden;
+                    padding: 0 8px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+
+                    &:hover {
+                        background: rgba(255, 255, 255, 0.05) !important;
+                    }
+                }
+            }
+
+            &.list-hidden {
+                #products-list {
+                    display: block;
+                    max-height: 0px;
+                    opacity: 0;
+                }
+            }
+
+            &:not(.list-hidden) {
+                z-index: 2;
+
+                input {
+                    background: black;
+                }
+
+                #products-list {
+                    box-shadow: 0 10px 20px black;
+                    opacity: 1;
+                }
+            }
         }
     }
 }
 
 #shopping-list-section {
     #shopping-list {
-        li {
-            .product-image {
-                bottom: 100%;
-                box-shadow: 0 -10px 20px black;
+        &:empty {
+            &::before {
+                content: 'No planned products';
+                line-height: var(--size-base);
+                opacity: 0.5;
+                padding: 0 var(--size-padding);
             }
         }
     }

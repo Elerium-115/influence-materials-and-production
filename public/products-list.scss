@@ -1,0 +1,122 @@
+#products-list-wrapper {
+    display: inline-block;
+    margin-left: 0.5rem;
+    position: relative;
+
+    input {
+        border: 1px solid var(--item-name);
+        line-height: 2rem;
+        padding: 0 2rem 0 1rem;
+        width: 14rem;
+    }
+
+    &::after {
+        content: '✕';
+        cursor: pointer;
+        line-height: 2rem;
+        position: absolute;
+        right: 1rem;
+        top: 0;
+    }
+
+    &.list-hidden {
+        &::after {
+            content: '▼';
+            margin: 1px -1px 0 0;
+        }
+
+        #products-list,
+        #filters-list {
+            display: none;
+        }
+    }
+
+    #products-list {
+        background: var(--overactive-bg);
+        border: 1px solid var(--item-name);
+        border-top: none;
+        max-height: 20rem; // fit 10 list-items
+        overflow: auto;
+        position: absolute;
+        width: 14rem;
+        z-index: 1;
+
+        a {
+            color: var(--item-name);
+            cursor: pointer;
+            display: block;
+            // do NOT use "line-height" instead of "padding", b/c multi-line product names should be compact
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+
+            &:hover {
+                background: var(--dark-bg) !important;
+            }
+
+            &[class*="not-matching"] {
+                display: none;
+            }
+
+            &.item-type-finished-good, // obsolete as of 2024
+            &.item-type-ship,
+            &.item-type-building {
+                color: white;
+            }
+        }
+    }
+
+    #filters-list {
+        background: white;
+        border: 1px solid var(--item-name);
+        border-bottom-right-radius: 0.5rem;
+        border-left: none;
+        border-top-right-radius: 0.5rem;
+        color: black;
+        position: absolute;
+        right: -11rem;
+        top: 0;
+        width: 11rem;
+        z-index: 1;
+
+        > * {
+            display: block;
+            padding: 0.5rem 2rem 0.5rem 1rem;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--item-name);
+        }
+
+        .option {
+            cursor: pointer;
+
+            &:last-child {
+                border-bottom-right-radius: 0.5rem;
+            }
+
+            &:hover {
+                background: var(--dark-bg) !important;
+                color: var(--item-name);
+            }
+        }
+
+        .checked {
+            color: var(--item-name);
+            position: relative;
+
+            &::after {
+                content: '✅';
+                position: absolute;
+                right: 1rem;
+            }
+        }
+
+        #filter-finished-good, // obsolete as of 2024
+        #filter-ship,
+        #filter-building {
+            &.checked {
+                color: white;
+            }
+        }
+    }
+}

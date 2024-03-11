@@ -207,6 +207,7 @@ function hideAndResetProductsList() {
     productsListContainer.querySelectorAll('*').forEach(elListItem => {
         elListItem.classList.remove('not-matching-search');
         elListItem.classList.remove('not-matching-spectral-type');
+        // NOT removing class "not-matching-planned" b/c this is controlled exclusively by "widgets/shopping-list.js"
     });
     // Re-filter the products list, required after a SOFT-reload which preserves the disabled filters
     filterProductsList();
@@ -396,7 +397,7 @@ if (scaleSliderRange) {
 window.addEventListener('keydown', event => {
     // Pressing "Enter" while the product-search input is focused, selects the first matching product
     if (event.key === 'Enter') {
-        const firstSearchMatch = productsListContainer.querySelector('*:not(.not-matching-search):not(.not-matching-spectral-type)');
+        const firstSearchMatch = productsListContainer.querySelector('*:not([class*="not-matching"])');
         if (productSearchInput === document.activeElement && productSearchInput.value.length && firstSearchMatch) {
             productSearchInput.blur();
             firstSearchMatch.click();

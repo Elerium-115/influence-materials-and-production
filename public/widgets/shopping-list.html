@@ -14,17 +14,19 @@
         <div class="section-title" onclick="this.parentElement.classList.toggle('closed')">
             Planned Products
         </div>
-        <ul id="planned-products-list" class="products-list"></ul>
+        <ul id="planned-products-list" class="products-shopping-list"></ul>
         <div id="add-product-wrapper">
-            <input type="text" placeholder="Search Product" id="add-product-input">
-            <div id="add-product-button" class="cta">Add</div>
+            <div id="products-list-wrapper" class="list-hidden">
+                <input type="text" placeholder="Add Product">
+                <div id="products-list"></div>
+            </div>
         </div>
     </section>
     <section id="shopping-list-section" class="root-section">
         <div class="section-title" onclick="this.parentElement.classList.toggle('closed')">
             Shopping List
         </div>
-        <ul id="shopping-list" class="products-list"></ul>
+        <ul id="shopping-list" class="products-shopping-list"></ul>
     </section>
 
     <script>
