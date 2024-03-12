@@ -1252,20 +1252,26 @@
 
 #shopping-list-qty-disclaimer,
 #diy-list-qty-disclaimer {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     margin-top: 1rem;
 }
 
 #shopping-list-qty-final-product,
 #diy-list-qty-final-product {
-    color: var(--brand-text);
+    background-color: var(--dark-bg);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0.3rem;
+    color: var(--default-text);
+    padding: 0.25rem 0.5rem;
+    text-align: center;
+    width: 6rem;
 }
 
-#shopping-list-qty-final-product::before,
-#diy-list-qty-final-product::before {
-    content: "✕";
-    font-size: 0.5rem;
-    margin-left: 0.25rem;
-    margin-right: 0.25rem;
+#diy-list-qty-final-product {
+    background-color: var(--active-bg);
 }
 
 #shopping-list,

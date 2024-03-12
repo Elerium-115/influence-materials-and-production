@@ -1,22 +1,22 @@
 @charset "UTF-8";
 #products-list-wrapper {
   display: inline-block;
-  position: relative;
   margin-left: 0.5rem;
+  position: relative;
 }
 #products-list-wrapper input {
-  width: 14rem;
+  border: 1px solid var(--item-name);
   line-height: 2rem;
   padding: 0 2rem 0 1rem;
-  border: 1px solid var(--item-name);
+  width: 14rem;
 }
 #products-list-wrapper::after {
   content: "✕";
-  position: absolute;
-  top: 0;
-  right: 1rem;
   cursor: pointer;
   line-height: 2rem;
+  position: absolute;
+  right: 1rem;
+  top: 0;
 }
 #products-list-wrapper.list-hidden::after {
   content: "▼";
@@ -27,22 +27,21 @@
   display: none;
 }
 #products-list-wrapper #products-list {
-  position: absolute;
-  z-index: 1;
-  width: 14rem;
-  max-height: 20rem; /* fit 10 list-items */
-  overflow: auto;
   background: var(--overactive-bg);
   border: 1px solid var(--item-name);
   border-top: none;
+  max-height: 20rem;
+  overflow: auto;
+  position: absolute;
+  width: 14rem;
+  z-index: 1;
 }
 #products-list-wrapper #products-list a {
-  display: block;
   color: var(--item-name);
-  text-decoration: none;
   cursor: pointer;
+  display: block;
   padding: 0.5rem 1rem;
-  /* do NOT use "line-height" instead of "padding", b/c multi-line product names should be compact */
+  text-decoration: none;
 }
 #products-list-wrapper #products-list a:hover {
   background: var(--dark-bg) !important;
@@ -54,17 +53,17 @@
   color: white;
 }
 #products-list-wrapper #filters-list {
-  position: absolute;
-  top: 0;
-  right: -11rem;
-  z-index: 1;
-  width: 11rem;
   background: white;
-  color: black;
   border: 1px solid var(--item-name);
+  border-bottom-right-radius: 0.5rem;
   border-left: none;
   border-top-right-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
+  color: black;
+  position: absolute;
+  right: -11rem;
+  top: 0;
+  width: 11rem;
+  z-index: 1;
 }
 #products-list-wrapper #filters-list > * {
   display: block;
@@ -84,8 +83,8 @@
   color: var(--item-name);
 }
 #products-list-wrapper #filters-list .checked {
-  position: relative;
   color: var(--item-name);
+  position: relative;
 }
 #products-list-wrapper #filters-list .checked::after {
   content: "✅";
@@ -1361,20 +1360,26 @@
 
 #shopping-list-qty-disclaimer,
 #diy-list-qty-disclaimer {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   margin-top: 1rem;
 }
 
 #shopping-list-qty-final-product,
 #diy-list-qty-final-product {
-  color: var(--brand-text);
+  background-color: var(--dark-bg);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.3rem;
+  color: var(--default-text);
+  padding: 0.25rem 0.5rem;
+  text-align: center;
+  width: 6rem;
 }
 
-#shopping-list-qty-final-product::before,
-#diy-list-qty-final-product::before {
-  content: "✕";
-  font-size: 0.5rem;
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
+#diy-list-qty-final-product {
+  background-color: var(--active-bg);
 }
 
 #shopping-list,

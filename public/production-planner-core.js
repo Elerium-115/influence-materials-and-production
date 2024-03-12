@@ -1946,12 +1946,7 @@ function renderShoppingAndDiyList() {
     // #1 - required inputs for "Shopping List"
     if (shoppingAndDiyList.inputs.length) {
         // if (doDebug) console.log(`--- shoppingAndDiyList.inputs:`, shoppingAndDiyList.inputs);
-        let qtyMultiplier = 1;
-        if (shoppingAndDiyList.inputs.some(inputData => inputData.qty < 1) && shoppingAndDiyList.inputs.every(inputData => inputData.qty < 10)) {
-            // Small quantities, with at least one of them lower than 1
-            qtyMultiplier = 1000;
-        }
-        shoppingListQtyFinalProductContainer.textContent = qtyMultiplier;
+        const qtyMultiplier = shoppingListQtyFinalProductContainer.value;
         shoppingListQtyDisclaimerContainer.classList.remove('hidden');
         shoppingListHtml += /*html*/ `<div class="line line-title"><div>Inputs</div><div>Qty*</div></div>`;
         shoppingAndDiyList.inputs.forEach(inputData => {
@@ -1973,12 +1968,7 @@ function renderShoppingAndDiyList() {
     // #1 - required inputs for "DIY List"
     if (shoppingAndDiyList.diyInputs.length) {
         // if (doDebug) console.log(`--- shoppingAndDiyList.diyInputs:`, shoppingAndDiyList.diyInputs);
-        let qtyMultiplier = 1;
-        if (shoppingAndDiyList.diyInputs.some(inputData => inputData.qty < 1) && shoppingAndDiyList.diyInputs.every(inputData => inputData.qty < 10)) {
-            // Small quantities, with at least one of them lower than 1
-            qtyMultiplier = 1000;
-        }
-        diyListQtyFinalProductContainer.textContent = qtyMultiplier;
+        const qtyMultiplier = diyListQtyFinalProductContainer.value;
         diyListQtyDisclaimerContainer.classList.remove('hidden');
         diyListHtml += /*html*/ `<div class="line line-title"><div>Inputs</div><div>Qty*</div></div>`;
         shoppingAndDiyList.diyInputs.forEach(inputData => {
@@ -2315,6 +2305,18 @@ on('mouseleave', '[data-container-id]', el => {
             itemWithQty.querySelector('.item-qty').textContent = '';
         });
     }
+});
+
+// Handle change of qty for final product, in the currently-active list ("Shoppy List" / "DIY List")
+on('change', '#origin-panel-wrapper.active-shopping #shopping-list-qty-final-product, #origin-panel-wrapper.active-diy #diy-list-qty-final-product', el => {
+    // Ensure positive integer qty
+    const positiveIntegerValue = Math.abs(parseInt(el.value));
+    el.value = isNaN(positiveIntegerValue) ? 1 : positiveIntegerValue;
+    // Update qty for final product in the inactive list
+    const elQtyInactiveList = originPanelWrapperContainer.classList.contains('active-shopping') ? diyListQtyFinalProductContainer : shoppingListQtyFinalProductContainer;
+    elQtyInactiveList.value = el.value;
+    // Update quantities in "Shopping List" and "DIY List"
+    renderShoppingAndDiyList();
 });
 
 // Debug itemData on hover
