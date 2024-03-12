@@ -22,7 +22,7 @@ function addPlannedProductName(productName) {
     elListItem.innerHTML = /*html*/ `
         <img class="product-image" src="${getProductImageSrc(productName, 'thumb')}">
         <div class="product-name">${productName}</div>
-        <input type="number" value="1" class="qty" onchange="updateQty(this)">
+        <input type="number" value="1" class="qty-input" onchange="updateQty(this)">
         <div class="remove" onclick="removePlannedProduct(this)"></div>
     `;
     elPlannedProductsList.append(elListItem);
@@ -93,15 +93,30 @@ function updateShoppingList() {
         });
     });
     elShoppingList.textContent = '';
+    let hasNonIntegerQty = false;
     const shoppingListInputsSorted = Object.values(shoppingListInputs).sort(compareListItemsByName);
     shoppingListInputsSorted.forEach(input => {
         const elListItem = document.createElement('li');
-        //// TO DO: also inject mini-buttons to copy-paste the product name / qty?
+        const qtyNice = getNiceNumber(input.qty);
+        // Check if the "nice" qty is integer (NOT the "raw" qty, re: JS rounding issues)
+        const isIntegerQty = Number.isInteger(qtyNice);
+        const qtyClass = isIntegerQty ? 'qty' : 'qty warning';
         elListItem.innerHTML = /*html*/ `
             <img class="product-image" src="${getProductImageSrc(input.name, 'thumb')}">
             <div class="product-name">${input.name}</div>
-            <div class="qty">${getNiceNumber(input.qty)}</div>
+            <div class="${qtyClass}">${qtyNice}</div>
         `;
         elShoppingList.append(elListItem);
+        hasNonIntegerQty = hasNonIntegerQty || !isIntegerQty;
     });
+    elShoppingList.classList.toggle('warning', hasNonIntegerQty);
 }
+
+// Click on product-name / qty in Shopping List => copy to clipboard + flash
+on('click', '#shopping-list .product-name, #shopping-list .qty', el => {
+    const textToCopy = el.textContent;
+    navigator.clipboard.writeText(textToCopy);
+    el.classList.add('flash');
+    // Stop flashing after 3 flashes (based on animation-duration of ".flash" in SCSS)
+    setTimeout(() => el.classList.remove('flash'), 600);
+});

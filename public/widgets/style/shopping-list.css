@@ -161,7 +161,7 @@ input[type=number] {
 }
 
 .root-section {
-  padding-bottom: calc(var(--size-padding) * 2);
+  padding-bottom: var(--size-base);
 }
 .root-section .section-title {
   cursor: var(--cursor-url-active) 5 5, auto;
@@ -202,8 +202,11 @@ input[type=number] {
 .products-shopping-list li:hover {
   background: rgba(255, 255, 255, 0.05);
 }
+.products-shopping-list li > * {
+  line-height: var(--size-base);
+  position: relative;
+}
 .products-shopping-list li .product-image {
-  height: var(--size-base);
   width: var(--size-base);
 }
 .products-shopping-list li .product-name {
@@ -219,7 +222,7 @@ input[type=number] {
 #planned-products-section #planned-products-list li:not(:hover) .remove {
   opacity: 0;
 }
-#planned-products-section #planned-products-list li .qty {
+#planned-products-section #planned-products-list li .qty-input {
   width: 90px;
 }
 #planned-products-section #planned-products-list li .remove {
@@ -300,4 +303,68 @@ input[type=number] {
   line-height: var(--size-base);
   opacity: 0.5;
   padding: 0 var(--size-padding);
+}
+#shopping-list-section #shopping-list.warning::before {
+  content: "You may need to round up some quantities";
+  color: var(--color-warning);
+  line-height: var(--size-base);
+  padding: 0 var(--size-padding);
+}
+#shopping-list-section #shopping-list li {
+  --copy-icon-offset: 3px;
+  --copy-icon-size: 10px;
+  gap: 0;
+}
+#shopping-list-section #shopping-list li .product-name,
+#shopping-list-section #shopping-list li .qty {
+  padding-left: var(--size-padding);
+}
+#shopping-list-section #shopping-list li .product-name:hover,
+#shopping-list-section #shopping-list li .qty:hover {
+  cursor: var(--cursor-url-active) 5 5, auto;
+  color: var(--color-influence);
+}
+#shopping-list-section #shopping-list li .product-name:hover::before, #shopping-list-section #shopping-list li .product-name:hover::after,
+#shopping-list-section #shopping-list li .qty:hover::before,
+#shopping-list-section #shopping-list li .qty:hover::after {
+  background: black;
+  border: 1px solid var(--color-influence);
+  color: var(--color-influence);
+  content: "";
+  height: var(--copy-icon-size);
+  line-height: var(--copy-icon-size);
+  position: absolute;
+  text-align: center;
+  width: var(--copy-icon-size);
+}
+#shopping-list-section #shopping-list li .product-name:hover::before,
+#shopping-list-section #shopping-list li .qty:hover::before {
+  left: 0;
+  top: 0;
+}
+#shopping-list-section #shopping-list li .product-name:hover::after,
+#shopping-list-section #shopping-list li .qty:hover::after {
+  content: "+";
+  left: var(--copy-icon-offset);
+  top: var(--copy-icon-offset);
+}
+#shopping-list-section #shopping-list li .product-name.flash,
+#shopping-list-section #shopping-list li .qty.flash {
+  animation: flash 200ms infinite;
+  transition: all 200ms;
+}
+@keyframes flash {
+  50% {
+    color: white;
+  }
+}
+#shopping-list-section #shopping-list li .qty {
+  padding-right: 8px;
+}
+#shopping-list-section #shopping-list li .qty.warning {
+  color: var(--color-warning);
+}
+#shopping-list-section #shopping-list li .qty.warning::before, #shopping-list-section #shopping-list li .qty.warning::after {
+  border-color: var(--color-warning);
+  color: var(--color-warning);
 }/*# sourceMappingURL=shopping-list.css.map */
