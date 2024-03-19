@@ -15,6 +15,8 @@ const tools = [
             {title: 'Derived Products', author: 'Elerium115', url: 'https://influence.elerium.dev/derived-products.html'},
             {title: 'Production Planner', author: 'Elerium115', url: 'https://influence.elerium.dev/production-planner.html'},
             // {title: 'Production Chains', author: 'Elerium115', url: 'https://influence.elerium.dev/production.html'}, // to be reworked
+            {title: 'Process Finder', author: 'Denker', url: 'https://www.adalia.info/tools/process-finder'},
+            {title: 'Production Tracker', author: 'Denker', url: 'https://www.adalia.info/tools/production-tracker'},
             {title: 'Product List', author: 'Daharius', url: 'https://influence.daharius.com/ProductList'},
         ],
     },
@@ -39,13 +41,23 @@ const tools = [
             {title: 'Crewmate Metadata Lookup by trevis', author: 'trevis & Dirac', url: 'https://starksight.plus/collection/INFC/1'},
             {title: 'Crew Planner', author: 'Daharius', url: 'https://influence.daharius.com/CrewPlanner'},
             {title: 'Crew Builder', author: 'Grey Area', url: 'https://adalia.academy/POC/index.html'},
+            {title: 'Crew Tracker', author: 'Denker', url: 'https://www.adalia.info/tools/crew-tracker'},
             {title: 'Action Planner', author: 'Elerium115', url: 'https://elerium-115.github.io/influence-css/tool-action-planner/'},
+        ],
+    },
+    {
+        category_short: 'Flight',
+        category: 'Flight Tools',
+        items: [
+            {title: 'Flight Chart Zoom (Chrome)', author: 'RGR', url: 'https://chromewebstore.google.com/detail/influence-flight-chart-zo/makjdbggcjkjclglokiopecpghgmkgba'},
+            {title: 'Flight Chart Zoom (Firefox)', author: 'RGR', url: 'https://addons.mozilla.org/en-US/firefox/addon/influence-flight-zoom-chart/'},
         ],
     },
     {
         category_short: 'Information',
         category: 'Information Tools',
         items: [
+            {title: 'Wendash', author: 'Joosh & Admiral', url: 'https://influence.wendash.com/'},
             {title: 'Adalia Academy', author: 'Grey Area & Skippy', url: 'https://adalia.academy/'},
             {title: 'Influence Sales', author: 'Teandy', url: 'https://influence-sales.space/'},
             {title: 'Adalia.Guide', author: 'Korivak', url: 'https://adalia.guide/'},
