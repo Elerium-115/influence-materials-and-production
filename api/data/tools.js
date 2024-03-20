@@ -17,7 +17,7 @@ const tools = [
             // {title: 'Production Chains', author: 'Elerium115', url: 'https://influence.elerium.dev/production.html'}, // to be reworked
             {title: 'Process Finder', author: 'Denker', url: 'https://www.adalia.info/tools/process-finder'},
             {title: 'Production Tracker', author: 'Denker', url: 'https://www.adalia.info/tools/production-tracker'},
-            {title: 'Product List', author: 'Daharius', url: 'https://influence.daharius.com/ProductList'},
+            // {title: 'Product List', author: 'Daharius', url: 'https://influence.daharius.com/ProductList'}, // removed as requested by Daharius @ 2024-03-19
         ],
     },
     {
@@ -39,7 +39,7 @@ const tools = [
             {title: 'Crew Member Services', author: 'Tyrell-Yutani', url: 'https://tyrell-yutani.app/#/crew'},
             {title: 'Crewmate Metadata Lookup by Daharius', author: 'Daharius', url: 'https://influence.daharius.com/CrewmateMetadata/1'},
             {title: 'Crewmate Metadata Lookup by trevis', author: 'trevis & Dirac', url: 'https://starksight.plus/collection/INFC/1'},
-            {title: 'Crew Planner', author: 'Daharius', url: 'https://influence.daharius.com/CrewPlanner'},
+            // {title: 'Crew Planner', author: 'Daharius', url: 'https://influence.daharius.com/CrewPlanner'}, // removed as requested by Daharius @ 2024-03-19
             {title: 'Crew Builder', author: 'Grey Area', url: 'https://adalia.academy/POC/index.html'},
             {title: 'Crew Tracker', author: 'Denker', url: 'https://www.adalia.info/tools/crew-tracker'},
             {title: 'Action Planner', author: 'Elerium115', url: 'https://elerium-115.github.io/influence-css/tool-action-planner/'},
