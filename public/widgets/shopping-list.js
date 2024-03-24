@@ -5,6 +5,7 @@ let plannedProducts = [];
 
 const elPlannedProductsList = document.getElementById('planned-products-list');
 const elShoppingList = document.getElementById('shopping-list');
+const elPriceTotal = document.getElementById('price-total');
 
 // Populate the products-list
 productNamesSorted.forEach(productName => {
@@ -94,22 +95,31 @@ function updateShoppingList() {
     });
     elShoppingList.textContent = '';
     let hasNonIntegerQty = false;
+    let priceTotal = 0;
     const shoppingListInputsSorted = Object.values(shoppingListInputs).sort(compareListItemsByName);
     shoppingListInputsSorted.forEach(input => {
         const elListItem = document.createElement('li');
         const qtyNice = getNiceNumber(input.qty);
         // Check if the "nice" qty is integer (NOT the "raw" qty, re: JS rounding issues)
         const isIntegerQty = Number.isInteger(qtyNice);
-        const qtyClass = isIntegerQty ? 'qty' : 'qty warning';
+        const qtyWarningClass = isIntegerQty ? '' : 'warning';
+        const price = prices[input.name] * qtyNice;
+        priceTotal += price;
         elListItem.innerHTML = /*html*/ `
             <img class="product-image" src="${getProductImageSrc(input.name, 'thumb')}">
             <div class="product-name">${input.name}</div>
-            <div class="${qtyClass}">${qtyNice}</div>
+            <div class="qty-wrapper">
+                <div class="qty ${qtyWarningClass}">${qtyNice}</div>
+                <div class="price">${getNiceNumber(price)}</div>
+            </div>
         `;
         elShoppingList.append(elListItem);
         hasNonIntegerQty = hasNonIntegerQty || !isIntegerQty;
     });
     elShoppingList.classList.toggle('warning', hasNonIntegerQty);
+    elShoppingList.classList.toggle('prices-visible', true); //// TEST - force visible
+    elPriceTotal.querySelector('.price-value').textContent = getNiceNumber(priceTotal);
+    elPriceTotal.classList.toggle('hidden', !shoppingListInputsSorted.length);
 }
 
 // Click on product-name / qty in Shopping List => copy to clipboard + flash

@@ -298,6 +298,9 @@ input[type=number] {
   opacity: 1;
 }
 
+#shopping-list-section {
+  --padding-right: 8px;
+}
 #shopping-list-section #shopping-list:empty::before {
   content: "No planned products";
   line-height: var(--size-base);
@@ -359,7 +362,7 @@ input[type=number] {
   }
 }
 #shopping-list-section #shopping-list li .qty {
-  padding-right: 8px;
+  padding-right: var(--padding-right);
 }
 #shopping-list-section #shopping-list li .qty.warning {
   color: var(--color-warning);
@@ -367,4 +370,66 @@ input[type=number] {
 #shopping-list-section #shopping-list li .qty.warning::before, #shopping-list-section #shopping-list li .qty.warning::after {
   border-color: var(--color-warning);
   color: var(--color-warning);
+}
+#shopping-list-section #shopping-list li .qty-wrapper {
+  --price-height: 16px;
+  padding-bottom: var(--price-height);
+  position: relative;
+}
+#shopping-list-section #shopping-list li .qty-wrapper .price {
+  align-items: center;
+  display: flex;
+  font-size: 0.8rem;
+  opacity: 0.5;
+  position: absolute;
+  right: var(--padding-right);
+  top: 16px;
+  z-index: -1;
+}
+#shopping-list-section #shopping-list li .qty-wrapper .price::before {
+  background-image: url("../assets/images/sway.svg");
+  background-position-y: center;
+  background-repeat: no-repeat;
+  content: "";
+  display: block;
+  height: var(--price-height);
+  width: var(--price-height);
+}
+#shopping-list-section #shopping-list.prices-visible li {
+  height: calc(var(--size-base) * 1.2);
+}
+#shopping-list-section #shopping-list:not(.prices-visible) li .qty-wrapper {
+  padding-bottom: unset;
+}
+#shopping-list-section #shopping-list:not(.prices-visible) li .qty-wrapper .price {
+  display: none;
+}
+#shopping-list-section #price-total {
+  color: var(--color-influence);
+  display: flex;
+  gap: var(--size-padding);
+  line-height: var(--size-base);
+  padding: 0 var(--size-padding);
+  position: relative;
+}
+#shopping-list-section #price-total.hidden {
+  display: none;
+}
+#shopping-list-section #price-total .price-label {
+  flex-grow: 1;
+  text-align: right;
+}
+#shopping-list-section #price-total .price-value {
+  align-items: center;
+  display: flex;
+  padding-right: var(--padding-right);
+}
+#shopping-list-section #price-total .price-value::before {
+  background-image: url("../assets/images/sway.svg");
+  background-position-y: center;
+  background-repeat: no-repeat;
+  content: "";
+  display: block;
+  height: 16px;
+  width: 16px;
 }/*# sourceMappingURL=shopping-list.css.map */

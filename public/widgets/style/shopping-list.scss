@@ -1,6 +1,14 @@
 @import './widgets-core.scss';
 @import '../../products-list.scss';
 
+@mixin price-icon {
+    background-image: url('../assets/images/sway.svg');
+    background-position-y: center;
+    background-repeat: no-repeat;
+    content: '';
+    display: block;
+}
+
 .root-section {
     padding-bottom: var(--size-base);
 
@@ -181,6 +189,8 @@
 }
 
 #shopping-list-section {
+    --padding-right: 8px; // compensate for scrollbar
+
     #shopping-list {
         &:empty {
             &::before {
@@ -248,7 +258,7 @@
             }
 
             .qty {
-                padding-right: 8px; // compensate for scrollbar
+                padding-right: var(--padding-right);
 
                 &.warning {
                     color: var(--color-warning);
@@ -259,6 +269,77 @@
                         color: var(--color-warning);
                     }
                 }
+            }
+
+            .qty-wrapper {
+                --price-height: 16px;
+                padding-bottom: var(--price-height);
+                position: relative;
+
+                .price {
+                    align-items: center;
+                    display: flex;
+                    font-size: 0.8rem;
+                    opacity: 0.5;
+                    position: absolute;
+                    right: var(--padding-right);
+                    top: 16px;
+                    z-index: -1;
+
+                    &::before {
+                        @include price-icon;
+                        height: var(--price-height);
+                        width: var(--price-height);
+                    }
+                }
+            }
+        }
+
+        &.prices-visible {
+            li {
+                height: calc(var(--size-base) * 1.2);
+            }
+        }
+
+        &:not(.prices-visible) {
+            li {
+                .qty-wrapper {
+                    padding-bottom: unset;
+
+                    .price {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+
+    #price-total {
+        color: var(--color-influence);
+        display: flex;
+        gap: var(--size-padding);
+        line-height: var(--size-base);
+        padding: 0 var(--size-padding);
+        position: relative;
+
+        &.hidden {
+            display: none;
+        }
+
+        .price-label {
+            flex-grow: 1;
+            text-align: right;
+        }
+
+        .price-value {
+            align-items: center;
+            display: flex;
+            padding-right: var(--padding-right);
+
+            &::before {
+                @include price-icon;
+                height: 16px;
+                width: 16px;
             }
         }
     }
