@@ -4,6 +4,7 @@
 let plannedProducts = [];
 
 const elPlannedProductsList = document.getElementById('planned-products-list');
+const elShoppingListSection = document.getElementById('shopping-list-section');
 const elShoppingList = document.getElementById('shopping-list');
 const elPriceTotal = document.getElementById('price-total');
 
@@ -117,7 +118,7 @@ function updateShoppingList() {
         hasNonIntegerQty = hasNonIntegerQty || !isIntegerQty;
     });
     elShoppingList.classList.toggle('warning', hasNonIntegerQty);
-    elShoppingList.classList.toggle('prices-visible', true); //// TEST - force visible
+    elShoppingListSection.classList.toggle('prices-visible', true); //// TEST - force visible
     elPriceTotal.querySelector('.price-value').textContent = getNiceNumber(priceTotal);
     elPriceTotal.classList.toggle('hidden', !shoppingListInputsSorted.length);
 }

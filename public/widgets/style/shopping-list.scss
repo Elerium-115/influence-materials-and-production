@@ -294,24 +294,6 @@
                 }
             }
         }
-
-        &.prices-visible {
-            li {
-                height: calc(var(--size-base) * 1.2);
-            }
-        }
-
-        &:not(.prices-visible) {
-            li {
-                .qty-wrapper {
-                    padding-bottom: unset;
-
-                    .price {
-                        display: none;
-                    }
-                }
-            }
-        }
     }
 
     #price-total {
@@ -341,6 +323,40 @@
                 height: 16px;
                 width: 16px;
             }
+        }
+    }
+
+    #price-disclaimer {
+        font-size: 0.8rem;
+        opacity: 0.5;
+        padding: 0 var(--size-padding);
+        text-align: right;
+    }
+
+    &.prices-visible {
+        #shopping-list {
+            li {
+                height: calc(var(--size-base) * 1.2);
+            }
+        }
+    }
+
+    &:not(.prices-visible) {
+        #shopping-list {
+            li {
+                .qty-wrapper {
+                    padding-bottom: unset;
+
+                    .price {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        #price-total,
+        #price-disclaimer {
+            display: none;
         }
     }
 }

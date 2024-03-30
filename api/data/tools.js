@@ -58,6 +58,7 @@ const tools = [
         category: 'Information Tools',
         items: [
             {title: 'Wendash', author: 'Joosh & Admiral', url: 'https://influence.wendash.com/'},
+            {title: 'Trader Dashboard', author: 'Denker', url: 'https://www.adalia.info/tools/trader-dashboard'},
             {title: 'Adalia Academy', author: 'Grey Area & Skippy', url: 'https://adalia.academy/'},
             {title: 'Influence Sales', author: 'Teandy', url: 'https://influence-sales.space/'},
             {title: 'Adalia.Guide', author: 'Korivak', url: 'https://adalia.guide/'},

@@ -395,15 +395,6 @@ input[type=number] {
   height: var(--price-height);
   width: var(--price-height);
 }
-#shopping-list-section #shopping-list.prices-visible li {
-  height: calc(var(--size-base) * 1.2);
-}
-#shopping-list-section #shopping-list:not(.prices-visible) li .qty-wrapper {
-  padding-bottom: unset;
-}
-#shopping-list-section #shopping-list:not(.prices-visible) li .qty-wrapper .price {
-  display: none;
-}
 #shopping-list-section #price-total {
   color: var(--color-influence);
   display: flex;
@@ -432,4 +423,23 @@ input[type=number] {
   display: block;
   height: 16px;
   width: 16px;
+}
+#shopping-list-section #price-disclaimer {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  padding: 0 var(--size-padding);
+  text-align: right;
+}
+#shopping-list-section.prices-visible #shopping-list li {
+  height: calc(var(--size-base) * 1.2);
+}
+#shopping-list-section:not(.prices-visible) #shopping-list li .qty-wrapper {
+  padding-bottom: unset;
+}
+#shopping-list-section:not(.prices-visible) #shopping-list li .qty-wrapper .price {
+  display: none;
+}
+#shopping-list-section:not(.prices-visible) #price-total,
+#shopping-list-section:not(.prices-visible) #price-disclaimer {
+  display: none;
 }/*# sourceMappingURL=shopping-list.css.map */
