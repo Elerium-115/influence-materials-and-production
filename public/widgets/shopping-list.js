@@ -22,7 +22,9 @@ function addPlannedProductName(productName) {
     const elListItem = document.createElement('li');
     elListItem.dataset.productId = productId;
     elListItem.innerHTML = /*html*/ `
-        <img class="product-image" src="${getProductImageSrc(productName, 'thumb')}">
+        <div class="product-image">
+            <img src="${getProductImageSrc(productName, 'thumb')}">
+        </div>
         <div class="product-name">${productName}</div>
         <input type="number" value="1" class="qty-input" onchange="updateQty(this)">
         <div class="remove" onclick="removePlannedProduct(this)"></div>
@@ -78,6 +80,10 @@ function compareListItemsByName(item1, item2) {
     return item1.name.localeCompare(item2.name);
 }
 
+function toggleShoppingListItem(el) {
+    el.closest('li').classList.toggle('done');
+}
+
 function updateShoppingList() {
     const shoppingListInputs = {};
     plannedProducts.forEach(product => {
@@ -107,7 +113,9 @@ function updateShoppingList() {
         const price = prices[input.name] * qtyNice;
         priceTotal += price;
         elListItem.innerHTML = /*html*/ `
-            <img class="product-image" src="${getProductImageSrc(input.name, 'thumb')}">
+            <div class="product-image" onclick="toggleShoppingListItem(this)">
+                <img src="${getProductImageSrc(input.name, 'thumb')}">
+            </div>
             <div class="product-name">${input.name}</div>
             <div class="qty-wrapper">
                 <div class="qty ${qtyWarningClass}">${qtyNice}</div>

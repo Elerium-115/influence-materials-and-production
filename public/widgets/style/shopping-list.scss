@@ -68,7 +68,11 @@
         }
 
         .product-image {
-            width: var(--size-base);
+            height: var(--size-base);
+
+            img {
+                width: var(--size-base);
+            }
         }
 
         .product-name {
@@ -215,12 +219,33 @@
             --copy-icon-size: 10px;
             gap: 0;
 
+            > * {
+                @include cursor-active;
+            }
+
+            .product-image {
+                position: relative;
+
+                &::after {
+                    align-items: center;
+                    color: var(--text);
+                    content: '✕';
+                    display: flex;
+                    font-size: 2rem;
+                    height: var(--size-base);
+                    justify-content: center;
+                    left: 0;
+                    position: absolute;
+                    top: 0;
+                    width: var(--size-base);
+                }
+            }
+
             .product-name,
             .qty {
                 padding-left: var(--size-padding);
 
                 &:hover {
-                    @include cursor-active;
                     color: var(--color-influence);
 
                     // Copy-to-clipboard icon
@@ -291,6 +316,17 @@
                         height: var(--price-height);
                         width: var(--price-height);
                     }
+                }
+            }
+
+            &.done {
+                opacity: 0.25;
+                text-decoration: line-through;
+            }
+
+            &:not(.done) {
+                .product-image:not(:hover)::after {
+                    display: none;
                 }
             }
         }

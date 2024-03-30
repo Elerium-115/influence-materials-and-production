@@ -207,6 +207,9 @@ input[type=number] {
   position: relative;
 }
 .products-shopping-list li .product-image {
+  height: var(--size-base);
+}
+.products-shopping-list li .product-image img {
   width: var(--size-base);
 }
 .products-shopping-list li .product-name {
@@ -318,13 +321,31 @@ input[type=number] {
   --copy-icon-size: 10px;
   gap: 0;
 }
+#shopping-list-section #shopping-list li > * {
+  cursor: var(--cursor-url-active) 5 5, auto;
+}
+#shopping-list-section #shopping-list li .product-image {
+  position: relative;
+}
+#shopping-list-section #shopping-list li .product-image::after {
+  align-items: center;
+  color: var(--text);
+  content: "✕";
+  display: flex;
+  font-size: 2rem;
+  height: var(--size-base);
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: var(--size-base);
+}
 #shopping-list-section #shopping-list li .product-name,
 #shopping-list-section #shopping-list li .qty {
   padding-left: var(--size-padding);
 }
 #shopping-list-section #shopping-list li .product-name:hover,
 #shopping-list-section #shopping-list li .qty:hover {
-  cursor: var(--cursor-url-active) 5 5, auto;
   color: var(--color-influence);
 }
 #shopping-list-section #shopping-list li .product-name:hover::before, #shopping-list-section #shopping-list li .product-name:hover::after,
@@ -394,6 +415,13 @@ input[type=number] {
   display: block;
   height: var(--price-height);
   width: var(--price-height);
+}
+#shopping-list-section #shopping-list li.done {
+  opacity: 0.25;
+  text-decoration: line-through;
+}
+#shopping-list-section #shopping-list li:not(.done) .product-image:not(:hover)::after {
+  display: none;
 }
 #shopping-list-section #price-total {
   color: var(--color-influence);
