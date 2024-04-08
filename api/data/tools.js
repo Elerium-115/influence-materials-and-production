@@ -4,7 +4,7 @@ const tools = [
         category: 'Mining Tools',
         items: [
             {title: 'Raw Materials', author: 'Elerium115', url: 'https://influence.elerium.dev/'},
-            {title: 'Materials Ratios', author: 'Elerium115', url: 'https://influence.elerium.dev/ratios.html'},
+            // {title: 'Materials Ratios', author: 'Elerium115', url: 'https://influence.elerium.dev/ratios.html'}, // misleading unless reworked
         ],
     },
     {
