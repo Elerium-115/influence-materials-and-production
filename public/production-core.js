@@ -156,6 +156,9 @@ function getRealHours(adalianHoursOrNaN) {
 
 // Source: https://stackoverflow.com/a/59103453
 function getNiceNumber(num) {
+    if (!num) {
+        return 0;
+    }
     const integerDigits = Math.floor(Math.log10(Math.abs(num))+1);
     const mult = 10**(5-integerDigits); // also consider integer digits
     return Math.round(num * mult) / mult;

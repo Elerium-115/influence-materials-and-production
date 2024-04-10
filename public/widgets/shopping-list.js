@@ -1,14 +1,23 @@
 /**
- * Array of objects with format: `{id: '123', name: 'Warehouse', qty: 2, processId: '456'}`
+ * Array of objects with format:
+ * - `{id: '123', name: 'Warehouse', qty: 2, processId: '456'}`
+ * 
+ * Pre-load from local-storage (if set), otherwise default to empty-array.
+ * Whenever this is changed, it should also trigger "onUpdatePlannedProducts".
  */
-let plannedProducts = [];
+let plannedProducts = JSON.parse(localStorage.getItem('widgetPlannedProducts')) || [];
 
 const elPlannedProductsList = document.getElementById('planned-products-list');
 const elShoppingListSection = document.getElementById('shopping-list-section');
 const elShoppingList = document.getElementById('shopping-list');
 const elPriceTotal = document.getElementById('price-total');
 
-// Populate the products-list
+// Populate the planned products from local-storage
+plannedProducts.forEach(plannedProduct => {
+    addPlannedProductName(plannedProduct.name, plannedProduct.qty);
+});
+
+// Populate the products-list dropdown
 productNamesSorted.forEach(productName => {
     const listItem = document.createElement('a');
     listItem.textContent = productName;
@@ -16,7 +25,7 @@ productNamesSorted.forEach(productName => {
     productsListContainer.appendChild(listItem);
 });
 
-function addPlannedProductName(productName) {
+function addPlannedProductName(productName, productQty = 1) {
     hideAndResetProductsList();
     const productId = productDataByName[productName].id;
     const elListItem = document.createElement('li');
@@ -26,7 +35,7 @@ function addPlannedProductName(productName) {
             <img src="${getProductImageSrc(productName, 'thumb')}">
         </div>
         <div class="product-name">${productName}</div>
-        <input type="number" value="1" class="qty-input" onchange="updateQty(this)">
+        <input type="number" value="${productQty}" class="qty-input" onchange="updateQty(this)">
         <div class="remove" onclick="removePlannedProduct(this)"></div>
     `;
     elPlannedProductsList.append(elListItem);
@@ -35,12 +44,19 @@ function addPlannedProductName(productName) {
     const processVariantIds = processVariantIdsByProductId[productId];
     const processVariantId = processVariantIds[0]; //// TEST - force the 1st process variant
 
-    plannedProducts.push({
-        id: productId,
-        name: productName,
-        qty: 1,
-        processId: processVariantId,
-    });
+    /**
+     * Push this product into "plannedProducts" only if it was manually selected,
+     * i.e. NOT if it's being pre-populated from local-storage.
+     */
+    if (!plannedProducts.some(plannedProduct => plannedProduct.id === productId)) {
+        plannedProducts.push({
+            id: productId,
+            name: productName,
+            qty: productQty,
+            processId: processVariantId,
+        });
+        onUpdatePlannedProducts();
+    }
     updateShoppingList();
     // Make this product hidden in the products-list
     productsListContainer.querySelectorAll('*').forEach(elListItem => {
@@ -56,6 +72,7 @@ function updateQty(el) {
         const elListItem = el.closest('li');
         const productId = elListItem.dataset.productId;
         plannedProducts.find(product => product.id === productId).qty = qtyNew;
+        onUpdatePlannedProducts();
         updateShoppingList();
     } else {
         el.value = 1;
@@ -67,6 +84,7 @@ function removePlannedProduct(el) {
     const productId = elListItem.dataset.productId;
     elListItem.parentElement.removeChild(elListItem);
     plannedProducts = plannedProducts.filter(product => product.id !== productId);
+    onUpdatePlannedProducts();
     updateShoppingList();
     // Make this product visible in the products-list
     productsListContainer.querySelectorAll('*').forEach(elListItem => {
@@ -110,7 +128,7 @@ function updateShoppingList() {
         // Check if the "nice" qty is integer (NOT the "raw" qty, re: JS rounding issues)
         const isIntegerQty = Number.isInteger(qtyNice);
         const qtyWarningClass = isIntegerQty ? '' : 'warning';
-        const price = prices[input.name] * qtyNice;
+        const price = prices[input.name] ? prices[input.name] * qtyNice : 0;
         priceTotal += price;
         elListItem.innerHTML = /*html*/ `
             <div class="product-image" onclick="toggleShoppingListItem(this)">
@@ -126,9 +144,14 @@ function updateShoppingList() {
         hasNonIntegerQty = hasNonIntegerQty || !isIntegerQty;
     });
     elShoppingList.classList.toggle('warning', hasNonIntegerQty);
-    elShoppingListSection.classList.toggle('prices-visible', true); //// TEST - force visible
+    const shouldShowPrices = shoppingListInputsSorted.length && true; //// TEST - force visible
+    elShoppingListSection.classList.toggle('prices-visible', shouldShowPrices);
     elPriceTotal.querySelector('.price-value').textContent = getNiceNumber(priceTotal);
     elPriceTotal.classList.toggle('hidden', !shoppingListInputsSorted.length);
+}
+
+function onUpdatePlannedProducts() {
+    localStorage.setItem('widgetPlannedProducts', JSON.stringify(plannedProducts));
 }
 
 // Click on product-name / qty in Shopping List => copy to clipboard + flash
