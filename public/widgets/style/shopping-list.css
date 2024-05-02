@@ -30,6 +30,10 @@ html, body {
   padding: 0;
 }
 
+a {
+  color: var(--color-influence);
+}
+
 input {
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(0, 0, 0, 0.5);
@@ -455,7 +459,8 @@ input[type=number] {
 #shopping-list-section #price-disclaimer {
   font-size: 0.8rem;
   opacity: 0.5;
-  padding: 0 var(--size-padding);
+  padding-right: calc(var(--size-padding) + var(--padding-right));
+  padding-top: 20px;
   text-align: right;
 }
 #shopping-list-section.prices-visible #shopping-list li {

@@ -365,7 +365,8 @@
     #price-disclaimer {
         font-size: 0.8rem;
         opacity: 0.5;
-        padding: 0 var(--size-padding);
+        padding-right: calc(var(--size-padding) + var(--padding-right));
+        padding-top: 20px;
         text-align: right;
     }
 
