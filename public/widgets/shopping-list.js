@@ -7,6 +7,16 @@
  */
 let plannedProducts = JSON.parse(localStorage.getItem('widgetPlannedProducts')) || [];
 
+/**
+ * Object containing the price of each product, with format:
+ * - `{Hydrogen: 0.027822, Ammonia: 0.033441, ...}`
+ * 
+ * Pre-load from local-storage (if set), otherwise default to "prices" from "prices.js".
+ * Then periodically update via API call.
+ * Whenever this is changed, it should also trigger "onUpdatePrices".
+ */
+let pricesDynamic = JSON.parse(localStorage.getItem('widgetPrices')) || prices;
+
 const elPlannedProductsList = document.getElementById('planned-products-list');
 const elShoppingListSection = document.getElementById('shopping-list-section');
 const elShoppingList = document.getElementById('shopping-list');
@@ -128,7 +138,7 @@ function updateShoppingList() {
         // Check if the "nice" qty is integer (NOT the "raw" qty, re: JS rounding issues)
         const isIntegerQty = Number.isInteger(qtyNice);
         const qtyWarningClass = isIntegerQty ? '' : 'warning';
-        const price = prices[input.name] ? prices[input.name] * qtyNice : 0;
+        const price = pricesDynamic[input.name] ? pricesDynamic[input.name] * qtyNice : 0;
         priceTotal += price;
         elListItem.innerHTML = /*html*/ `
             <div class="product-image" onclick="toggleShoppingListItem(this)">
@@ -150,9 +160,49 @@ function updateShoppingList() {
     elPriceTotal.classList.toggle('hidden', !shoppingListInputsSorted.length);
 }
 
+// Update prices via API call
+async function refreshPrices() {
+    const config = {
+        method: 'get',
+        url: `${apiUrl}/data/prices`,
+    };
+    try {
+        const response = await axios(config);
+        const rawData = response.data;
+        // console.log(`--- rawData from API:`, rawData); //// TEST
+        if (rawData.error) {
+            // Abort re: error in data from API
+            console.log(`--- ERROR in data from API:`, rawData.error); //// TEST
+            return;
+        }
+        // Sanity check
+        if (!rawData['Hydrogen']) {
+            // Abort re: failed sanity check
+            console.log(`--- FAILED sanity check re: rawData['Hydrogen']`); //// TEST
+            return;
+        }
+        pricesDynamic = rawData;
+        onUpdatePrices();
+        updateShoppingList();
+    } catch (error) {
+        // Abort re: error from API
+        console.log(`--- ERROR from API:`, error); //// TEST
+        return;
+    }
+}
+
 function onUpdatePlannedProducts() {
     localStorage.setItem('widgetPlannedProducts', JSON.stringify(plannedProducts));
 }
+
+function onUpdatePrices() {
+    localStorage.setItem('widgetPrices', JSON.stringify(pricesDynamic));
+}
+
+// Periodically update prices via API call
+const pricesTimeoutMs = 1000 * 60 * 60; // 1 hour
+refreshPrices();
+setInterval(refreshPrices, pricesTimeoutMs);
 
 // Click on product-name / qty in Shopping List => copy to clipboard + flash
 on('click', '#shopping-list .product-name, #shopping-list .qty', el => {

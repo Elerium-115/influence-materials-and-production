@@ -3,6 +3,7 @@ const cache = require('../cache/index');
 const providerInfluencethIo = require('../providers/influenceth.io/index');
 const providerMock = require('../providers/mock/index');
 const providerMongoDB = require('../providers/mongodb/index');
+const providerStarkSightPlus = require('../providers/starksight.plus/index');
 const dataTools = require('../data/tools');
 const dataWidgets = require('../data/widgets');
 
@@ -210,6 +211,23 @@ router.post(
         cache.asteroidsPlanByAddress[address] = asteroidsPlan;
         console.log(`---> SAVED asteroids plan = ${asteroidsPlan.length} asteroids`); //// TEST
         res.send(true);
+    }
+);
+
+/**
+ * @desc        Get marketplace prices (via starksight.plus)
+ * @route       GET /data/prices
+ */
+router.get(
+    '/data/prices',
+    async (req, res) => {
+        console.log(`--- [router] GET /data/prices`); //// TEST
+        const pricesData = await providerStarkSightPlus.fetchPrices();
+        if (pricesData.error) {
+            res.json({error: pricesData.error});
+            return;
+        }
+        res.json(pricesData);
     }
 );
 
