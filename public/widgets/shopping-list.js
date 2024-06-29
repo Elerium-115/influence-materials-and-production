@@ -9,13 +9,16 @@ let plannedProducts = JSON.parse(localStorage.getItem('widgetPlannedProducts')) 
 
 /**
  * Object containing the price of each product, with format:
- * - `{Hydrogen: 0.027822, Ammonia: 0.033441, ...}`
+ * - `{"Acetylene": 0.008972, "Acrylonitrile": 0.15838, ...}`
  * 
  * Pre-load from local-storage (if set), otherwise default to "prices" from "prices.js".
  * Then periodically update via API call.
  * Whenever this is changed, it should also trigger "onUpdatePrices".
  */
 let pricesDynamic = JSON.parse(localStorage.getItem('widgetPrices')) || prices;
+
+// Disabled API prices, until I find a source of real-time prices on mainnet
+const isDisabledApiPrices = true;
 
 const elPlannedProductsList = document.getElementById('planned-products-list');
 const elShoppingListSection = document.getElementById('shopping-list-section');
@@ -162,6 +165,12 @@ function updateShoppingList() {
 
 // Update prices via API call
 async function refreshPrices() {
+    if (isDisabledApiPrices) {
+        pricesDynamic = prices;
+        onUpdatePrices();
+        updateShoppingList();
+        return;
+    }
     const config = {
         method: 'get',
         url: `${apiUrl}/data/prices`,
