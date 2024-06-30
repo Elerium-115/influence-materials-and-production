@@ -17,8 +17,11 @@ let plannedProducts = JSON.parse(localStorage.getItem('widgetPlannedProducts')) 
  */
 let pricesDynamic = JSON.parse(localStorage.getItem('widgetPrices')) || prices;
 
-// Disabled API prices, until I find a source of real-time prices on mainnet
-const isDisabledApiPrices = true;
+/**
+ * Use this to quickly disable API prices (i.e. use only default prices),
+ * in case of issues with the source of real-time prices on mainnet.
+ */
+const isDisabledApiPrices = false;
 
 const elPlannedProductsList = document.getElementById('planned-products-list');
 const elShoppingListSection = document.getElementById('shopping-list-section');
@@ -168,7 +171,6 @@ async function refreshPrices() {
     if (isDisabledApiPrices) {
         pricesDynamic = prices;
         onUpdatePrices();
-        updateShoppingList();
         return;
     }
     const config = {
@@ -190,9 +192,17 @@ async function refreshPrices() {
             console.log(`--- FAILED sanity check re: rawData['Hydrogen']`); //// TEST
             return;
         }
-        pricesDynamic = rawData;
+        // Always start with the default prices, e.g. in case the prices from local-storage are borked
+        pricesDynamic = prices;
+        // Update prices only for products which have a dynamic price (i.e. already being traded)
+        for (const [productName, price] of Object.entries(rawData)) {
+            if (!pricesDynamic[productName]) {
+                // All products should already exist in "pricesDynamic", from the default prices
+                console.log(`--- UNEXPECTED API product "${productName}", API price: ${price}`); //// TEST
+            }
+            pricesDynamic[productName] = price;
+        }
         onUpdatePrices();
-        updateShoppingList();
     } catch (error) {
         // Abort re: error from API
         console.log(`--- ERROR from API:`, error); //// TEST
@@ -206,6 +216,7 @@ function onUpdatePlannedProducts() {
 
 function onUpdatePrices() {
     localStorage.setItem('widgetPrices', JSON.stringify(pricesDynamic));
+    updateShoppingList();
 }
 
 // Periodically update prices via API call
