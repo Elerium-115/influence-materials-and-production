@@ -896,6 +896,9 @@ function isProcessVariantWaitingSelection(itemDataById) {
 }
 
 function fullyResetProductionPlan() {
+    // Auto-mark the production plan as NOT finalized
+    setFinalizePlan(false);
+    resetFadedItemsAndConnectionsCore();
     refreshConnections(false, 'delete'); // delete connections
     itemDataById = {};
     selectedProductItemIds = [];
@@ -1913,8 +1916,12 @@ function refreshConnections(hasChangedLayout = false, action = 'reposition') {
                             isFaded = true;
                         }
                     }
-                    if (itemData.isDisabled || isFaded) {
+                    if (isFaded) {
                         line.color = leaderLineColors.disabled;
+                    }
+                    if (itemData.isDisabled) {
+                        // Hide connections for a disabled item, if the production plan is "finalized"
+                        line.color = finalizePlan ? 'transparent' : leaderLineColors.disabled;
                     }
                     line.position();
                     break;
@@ -2245,6 +2252,11 @@ on('change', '#toggle-optimize-variants', el => {
 // Toggle auto-replicate selections of the same process variant, for all occurrences of a selected product
 on('change', '#toggle-auto-replicate', el => {
     toggleAutoReplicate(el);
+});
+
+// Toggle finalized vs. non-finalized plan
+on('change', '#toggle-finalize-plan', el => {
+    toggleFinalzePlan(el);
 });
 
 /**

@@ -1600,11 +1600,12 @@
   /* for disabled items in v1 production chains, see ".disabled" */
   opacity: 0.25;
 }
-
 #production-chain-items .disabled-item:hover {
   opacity: 1;
 }
-
+#production-chain-items.finalized .disabled-item {
+  display: none;
+}
 #production-chain-items .item-type-process.waiting-selection:not(:hover) {
   animation: pulse 2s infinite;
 }

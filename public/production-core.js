@@ -8,6 +8,7 @@
 // DOM elements should be selected first, before executing any other logic that may require them
 const elToggleOptimizeVariants = document.getElementById('toggle-optimize-variants');
 const elToggleAutoReplicate = document.getElementById('toggle-auto-replicate');
+const elToggleFinalizePlan = document.getElementById('toggle-finalize-plan');
 const productionWrapper = document.getElementById('production-wrapper');
 const productsListWrapper = document.getElementById('products-list-wrapper');
 const productSearchInput = productsListWrapper ? productsListWrapper.querySelector('input') : null;
@@ -27,6 +28,9 @@ setOptimizeVariants(optimizeVariants);
 const autoReplicateLocal = localStorage.getItem('autoReplicate');
 let autoReplicate = autoReplicateLocal !== null ? autoReplicateLocal === 'true' : true;
 setAutoReplicate(autoReplicate);
+
+// Do NOT use local-storage for "Finalize Plan" toggle
+let finalizePlan = false;
 
 let maxLevel = 0;
 
@@ -304,6 +308,17 @@ function setAutoReplicate(autoReplicateNew) {
     autoReplicate = autoReplicateNew;
 }
 
+function setFinalizePlan(finalizePlanNew) {
+    if (!elToggleFinalizePlan) {
+        return;
+    }
+    elToggleFinalizePlan.checked = finalizePlanNew;
+    updateCheckboxLabel(elToggleFinalizePlan);
+    finalizePlan = finalizePlanNew;
+    productionChainItemsContainer.classList.toggle('finalized', finalizePlanNew);
+    refreshConnections();
+}
+
 function toggleOptimizeVariants(el) {
     // The state of "el.checked" has already changed => update everything else, pending the user's confirmation
     if (!confirm(`The entire chain will be reset. Are you sure you want to continue?`)) {
@@ -322,6 +337,11 @@ function toggleOptimizeVariants(el) {
 function toggleAutoReplicate(el) {
     // The state of "el.checked" has already changed => update everything else
     setAutoReplicate(el.checked);
+}
+
+function toggleFinalzePlan(el) {
+    // The state of "el.checked" has already changed => update everything else
+    setFinalizePlan(el.checked);
 }
 
 // Toggle products-list when clicking on "▼" / "✕"

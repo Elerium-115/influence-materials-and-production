@@ -1495,18 +1495,27 @@
 }
 
 /* production planner - inactive / waiting selection */
-#production-chain-items .disabled-item {
-    /* disabled items in v2 production chains are faded, but visible */
-    /* for disabled items in v1 production chains, see ".disabled" */
-    opacity: 0.25;
-}
+#production-chain-items {
+    .disabled-item {
+        /* disabled items in v2 production chains are faded, but visible */
+        /* for disabled items in v1 production chains, see ".disabled" */
+        opacity: 0.25;
 
-#production-chain-items .disabled-item:hover {
-    opacity: 1;
-}
+        &:hover {
+            opacity: 1;
+        }
+    }
 
-#production-chain-items .item-type-process.waiting-selection:not(:hover) {
-    animation: pulse 2s infinite;
+    &.finalized {
+        // Hide disabled items if the production plan is "finalized"
+        .disabled-item {
+            display: none;
+        }
+    }
+
+    .item-type-process.waiting-selection:not(:hover) {
+        animation: pulse 2s infinite;
+    }
 }
 
 #production-chain-items .item-type-process.inferior-process {

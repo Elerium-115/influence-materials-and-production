@@ -166,4 +166,10 @@ if (!hashToPreselect) {
 }
 selectPlannedProductHash(hashToPreselect);
 
+// Auto-mark the production plan as finalized, if the #Hash on page-load contains an encoded plan
+const [plannedProductCompactName, hashEncodedFromItemDataById] = hashToPreselect.split('__');
+if (hashEncodedFromItemDataById) {
+    setFinalizePlan(true);
+}
+
 resetMinimap();
