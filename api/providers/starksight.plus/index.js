@@ -4,7 +4,7 @@ async function fetchPrices() {
     try {
         const config = {
             method: 'get',
-            url: `https://sepolia.starksight.plus/api/data/market/prices/json`,
+            url: `https://starksight.plus/api/data/market/prices/json`,
             params: {
                 key: process.env.STARKSIGHT_PLUS_API_KEY,
             },
