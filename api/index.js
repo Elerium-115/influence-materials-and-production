@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const utils = require('./utils/index');
+const utils = require('./utils/utils');
 
 console.log(`------`); //// TEST
 
@@ -26,13 +26,19 @@ app.use(cors());
 // Async initialize "cache.accessTokens.influencethIo"
 utils.loadAccessToken('influencethIo');
 
+console.log(`---> #A`); //// TEST
+
 // Routes
-app.use('/', require('./routes/index'));
+app.use('/', require('./routes/routes'));
+
+console.log(`---> #B`); //// TEST
 
 const PORT = Number(process.env.PORT) || 3001; // avoid "Error: listen EADDRINUSE: address already in use :::3000"
 app.listen(PORT, () => {
     console.log(`--- listening on port ${PORT}`);
 });
+
+console.log(`---> #C`); //// TEST
 
 async function connectMongoDB() {
     /**

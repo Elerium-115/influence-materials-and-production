@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const AsteroidsPlanRecord = require('./asteroids-plan-record-schema');
 const ProductionPlanRecord = require('./production-plan-schema');
-const utils = require('../../utils/index');
+const utils = require('../../utils/utils');
 
 /*
 NOTE:

@@ -1,6 +1,6 @@
 const axios = require('axios');
 const influenceUtilsV2 = require('@influenceth/sdk');
-const utils = require('../../utils/index');
+const utils = require('../../utils/utils');
 
 /**
  * Provider:

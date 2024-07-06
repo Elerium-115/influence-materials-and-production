@@ -1,4 +1,4 @@
-const cache = require('../cache/index');
+const cache = require('../cache/cache');
 const authInfluencethIo = require('../providers/influenceth.io/auth');
 
 /**

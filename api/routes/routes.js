@@ -1,5 +1,5 @@
 const express = require('express');
-const cache = require('../cache/index');
+const cache = require('../cache/cache');
 const providerInfluencethIo = require('../providers/influenceth.io/index');
 const providerMock = require('../providers/mock/index');
 const providerMongoDB = require('../providers/mongodb/index');
