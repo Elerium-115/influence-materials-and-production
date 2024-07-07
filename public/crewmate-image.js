@@ -70,20 +70,20 @@ async function generateCrewmateImage() {
     // Generate the combined SVG
     elWorkflow.classList.remove('hidden');
     elCrewmateImageWrapper.textContent = '';
-    // Start black-gradient at 12.5% from top = 150px of total height 1200px = how much will be cropped by hedra.com
+    // Start black-gradient at 10% from top = 120px of total height 1200px = how much the child-SVGs are cropped
     const svgCombined = /*html*/ `
-        <svg id="svg-combined" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="900" height="1200">
+        <svg id="svg-combined" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="900" height="1080">
             <defs>
                 <linearGradient id="fadetoblack" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="12.5%" stop-color="black"/>
+                    <stop offset="10%" stop-color="black"/>
                     <stop offset="50%" stop-color="transparent"/>
                 </linearGradient>
             </defs>
-            <g class="child-svg-wrapper">
+            <g class="child-svg-wrapper" transform="translate(0 -120)">
                 ${svgFull}
             </g>
             <rect width="100%" height="100%" fill="url(#fadetoblack)"></rect>
-            <g class="child-svg-wrapper">
+            <g class="child-svg-wrapper" transform="translate(0 -120)">
                 ${svgBust}
             </g>
         </svg>
