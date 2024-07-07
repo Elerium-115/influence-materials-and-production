@@ -1,0 +1,62 @@
+.cta {
+  background: white;
+  border-radius: 0.5rem;
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+}
+.cta:hover {
+  background: black;
+  color: var(--brand-text);
+}
+
+#crewmate-id-wrapper {
+  display: flex;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+#crewmate-id-wrapper #crewmate-id-input {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.3rem;
+  color: white;
+  padding: 0.5rem;
+  width: 7.5rem;
+}
+
+#workflow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+#workflow ol, #workflow ul {
+  padding-left: 2.5rem;
+}
+#workflow ol li, #workflow ul li {
+  margin-top: 0.5rem;
+}
+#workflow ol li:last-child, #workflow ul li:last-child {
+  margin-bottom: 0.5rem;
+}
+#workflow ul {
+  list-style-type: disc;
+}
+#workflow .disclaimer {
+  font-size: 0.9rem;
+  opacity: 0.5;
+}
+#workflow #step-0 {
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  width: 900px;
+}
+#workflow #step-1 {
+  align-items: center;
+  display: flex;
+  gap: 1.5rem;
+}
+
+#crewmate-image-wrapper.error {
+  color: var(--color-warning);
+}/*# sourceMappingURL=crewmate-image.css.map */

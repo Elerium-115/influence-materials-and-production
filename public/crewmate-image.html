@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./crewmate-image.css">
+    <link rel="stylesheet" href="./template-footer-about.css">
+    <link rel="icon" href="./img/site-icon.png" type="image/png">
+    <title>Influence Crewmate Image Generator</title>
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Influence Crewmate Image Generator">
+    <meta name="twitter:image" content="https://materials.adalia.id/img/site-icon.png">
+    <meta name="twitter:creator" content="@elerium115">
+    <meta name="twitter:description" content="Generate a cleaned-up SVG image of your crewmate.">
+    <meta name="description" content="Generate a cleaned-up SVG image of your crewmate.">
+    <meta name="author" content="@elerium115">
+</head>
+<body class="embed">
+    <script>
+        // Run embedding logic ASAP, instead of requesting it via a script file.
+        // Source: https://stackoverflow.com/a/326076/11071601
+        function inIframe() {
+            try {
+                return window.self !== window.top;
+            } catch (e) {
+                return true;
+            }
+        }
+        if (!inIframe()) {
+            document.body.classList.remove('embed');
+        }
+    </script>
+    <div class="main">
+        <nav class="topbar">
+            <a href="./">Resources</a>
+            <a href="./ratios.html">Ratios</a>
+            <a href="./products.html">Products</a>
+            <a href="./derived-products.html">Derived Products</a>
+            <!-- DISABLED production chains -->
+            <!-- <a href="./production-chains.html">Production Chains</a> -->
+            <a href="./production-planner.html">Production Planner</a>
+            <a href="./asteroids-planner.html">Asteroids Planner</a>
+            <a href="./crewmate-image.html" class="active">Crewmate Image</a>
+            <a href="https://chromewebstore.google.com/detail/influence-tools/kopdkjlnbfiegpdjiebogkakjfppfglj" target="_blank">Chrome Extension</a>
+        </nav>
+
+        <h2>Crewmate Image Generator</h2>
+        <div id="crewmate-id-wrapper">
+            <input id="crewmate-id-input" type="text" placeholder="Crewmate ID">
+            <div class="cta" onclick="onClickGenerateSvg()">Generate SVG</div>
+        </div>
+        <div id="workflow" class="hidden">
+            <div id="step-0"></div>
+            <div id="step-1">
+                <div class="cta" onclick="onClickDownloadSvg()">Download SVG</div>
+                <div class="disclaimer">NOTE: Right-click > "Save Image As..." will NOT produce the same image, as this is a multi-layered SVG.</div>
+            </div>
+            <div id="step-2">
+                <div>Then use <a href="https://www.svgviewer.dev/svg-to-png" target="_blank">svgviewer.dev/svg-to-png</a> to convert your SVG into PNG:</div>
+                <ol>
+                    <li>Upload your SVG on that page.</li>
+                    <li>Wait around 20 seconds, until the scaled-down image and the "Download PNG" button appears in the bottom-right.</li>
+                    <li>Then click the "Download PNG" button on that page.</li>
+                </ol>
+                <div class="disclaimer">NOTE: Other converters may not produce the correct PNG.</div>
+            </div>
+            <div id="step-3">
+                <div>Finally, use the resulting PNG to generate your crewmate video on <a href="https://www.hedra.com/" target="_blank">hedra.com</a></div>
+                <ul>
+                    <li>TIP: Use <a href="https://elevenlabs.io/text-to-speech" target="_blank">elevenlabs.io/text-to-speech</a> for a more customizable audio, that you can import on Hedra.</li>
+                    <li>
+                        If this is the captain of your crew, you can have the video displayed in-game via the <a href="https://chromewebstore.google.com/detail/influence-tools/kopdkjlnbfiegpdjiebogkakjfppfglj" target="_blank">Influence Tools</a> Chrome extension.<br>
+                        Contact me - <span class="brand-text">Elerium115</span> - on Discord, to arrange this.
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="crewmate-image-wrapper"></div>
+
+        <div id="template-footer-about"></div>
+        <script type="module">
+            import {templateFooterAbout} from './template-footer-about.js';
+            document.getElementById('template-footer-about').innerHTML = templateFooterAbout;
+        </script>
+    </div>
+
+    <!-- Third-party and "core" scripts, loaded first -->
+    <script src="./axios.min.js"></script>
+    <script src="./abstract-core.js"></script>
+
+    <!-- Scripts specific to this tool, loaded at the very end -->
+    <script src="./crewmate-image.js"></script>
+</body>
+</html>

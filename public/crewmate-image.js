@@ -1,14 +1,24 @@
-const crewmateId = urlParams.get('id');
+let crewmateId;
 
+const elCrewmateIdInput = document.getElementById('crewmate-id-input');
+const elWorkflow = document.getElementById('workflow');
 const elCrewmateImageWrapper = document.getElementById('crewmate-image-wrapper');
-const elDownloadSvg = document.getElementById('download-svg');
+
+function onErrorGenerateCrewmateImage(errorMessage) {
+    elWorkflow.classList.add('hidden');
+    elCrewmateImageWrapper.textContent = errorMessage;
+    elCrewmateImageWrapper.classList.add('error');
+}
 
 // Update prices via API call
 async function generateCrewmateImage() {
+    elCrewmateImageWrapper.classList.remove('error');
     if (!crewmateId) {
-        console.log(`--- MISSING crewmateId`); //// TEST
+        console.log(`--- ERROR re: crewmateId`); //// TEST
+        onErrorGenerateCrewmateImage('ERROR: Crewmate ID missing or invalid');
         return;
     }
+    elCrewmateImageWrapper.textContent = `Generating image for crewmate #${crewmateId}...`;
     let apiResponse = null;
 
     // Get the "bust" SVG
@@ -23,7 +33,7 @@ async function generateCrewmateImage() {
         if (rawData.error) {
             // Abort re: error in data from API
             console.log(`--- ERROR in data from API:`, rawData.error); //// TEST
-            elCrewmateImageWrapper.textContent = 'ERROR';
+            onErrorGenerateCrewmateImage('ERROR in data from API');
             return;
         }
         apiResponse = rawData;
@@ -46,7 +56,7 @@ async function generateCrewmateImage() {
         if (rawData.error) {
             // Abort re: error in data from API
             console.log(`--- ERROR in data from API:`, rawData.error); //// TEST
-            elCrewmateImageWrapper.textContent = 'ERROR';
+            onErrorGenerateCrewmateImage('ERROR in data from API');
             return;
         }
         apiResponse = rawData;
@@ -57,8 +67,9 @@ async function generateCrewmateImage() {
     }
     const svgFull = apiResponse.svg_full;
 
+    // Generate the combined SVG
+    elWorkflow.classList.remove('hidden');
     elCrewmateImageWrapper.textContent = '';
-    elDownloadSvg.style.display = 'unset';
     // Start black-gradient at 12.5% from top = 150px of total height 1200px = how much will be cropped by hedra.com
     const svgCombined = /*html*/ `
         <svg id="svg-combined" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="900" height="1200">
@@ -80,20 +91,19 @@ async function generateCrewmateImage() {
     // Source: https://stackoverflow.com/a/24109000
     const parser = new DOMParser();
     const docSvgTest = parser.parseFromString(svgCombined, 'image/svg+xml');
-    const elSvgTest = docSvgTest.documentElement;
-    elSvgTest.style.background = 'black';
+    const elSvgCombined = docSvgTest.documentElement;
     /**
      * Show only the first <image> tag inside each child-SVG (i.e. the actual crewmate).
      * All other tags inside the child-SVGs will be hidden via CSS (i.e. overlayed graphics / texts).
      */
-    [...elSvgTest.querySelectorAll('.child-svg-wrapper > svg')].forEach((childSvg, idx) => {
+    [...elSvgCombined.querySelectorAll('.child-svg-wrapper > svg')].forEach((childSvg, idx) => {
         [...childSvg.children].forEach(childInsideSvg => {
             childInsideSvg.style.display = 'none';
         });
         // The actual crewmate is the first image inside each child-SVG
         childSvg.querySelector('image').style.display = 'unset';
     });
-    elCrewmateImageWrapper.append(elSvgTest);
+    elCrewmateImageWrapper.append(elSvgCombined);
 }
 
 // Source: https://stackoverflow.com/a/46403589
@@ -111,6 +121,12 @@ function saveSvg(svgEl, name) {
     document.body.removeChild(downloadLink);
 }
 
+function onClickGenerateSvg() {
+    const elCrewmateIdRaw = parseInt(elCrewmateIdInput.value);
+    crewmateId = isNaN(elCrewmateIdRaw) ? null : elCrewmateIdRaw;
+    generateCrewmateImage();
+}
+
 function onClickDownloadSvg() {
     const elSvgCombined = document.getElementById('svg-combined');
     if (!elSvgCombined) {
@@ -119,5 +135,3 @@ function onClickDownloadSvg() {
     }
     saveSvg(elSvgCombined, `${crewmateId}.svg`);
 }
-
-generateCrewmateImage();
