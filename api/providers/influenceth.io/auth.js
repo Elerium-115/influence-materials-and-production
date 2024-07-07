@@ -11,6 +11,7 @@ async function fetchAccessToken(clientId, clientKey) {
                 client_secret: clientKey,
             },
         };
+        // In case of error "unsupported_grant_type" => try to also set header "Content-Type: application/json"
         console.log(`--- [influencethIo > fetchAccessToken] ${config.method.toUpperCase()} ${config.url}`); //// TEST
         const response = await axios(config);
         console.log(`--- [influencethIo > fetchAccessToken] response.data KEYS:`, Object.keys(response.data)); //// TEST

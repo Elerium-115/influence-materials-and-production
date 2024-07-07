@@ -268,4 +268,31 @@ router.get(
     }
 );
 
+/**
+ * @desc        Get crewmate images with "bustOnly" both true and false
+ * @route       GET /crewmate-images
+ */
+router.get(
+    '/crewmate-images/:id',
+    async (req, res) => {
+        console.log(`--- [router] GET /crewmate-images/${req.params.id}`); //// TEST
+        const crewmateId = req.params.id;
+        // NO caching b/c the images are too large
+        const svgBust = await providerInfluencethIo.fetchCrewmateImage(crewmateId, true);
+        if (svgBust.error) {
+            res.json({error: svgBust.error});
+            return;
+        }
+        const svgFull = await providerInfluencethIo.fetchCrewmateImage(crewmateId);
+        if (svgFull.error) {
+            res.json({error: svgFull.error});
+            return;
+        }
+        res.json({
+            svg_bust: svgBust,
+            svg_full: svgFull,
+        });
+    }
+);
+
 module.exports = router;

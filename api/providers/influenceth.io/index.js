@@ -114,7 +114,30 @@ async function fetchAsteroidsMetadataOwnedBy(address) {
     }
 }
 
+async function fetchCrewmateImage(crewmateId, bustOnly = false) {
+    try {
+        const config = {
+            method: 'get',
+            url: `https://images.influenceth.io/v1/crew/${crewmateId}/image.svg`,
+            params: {
+                bustOnly, // if true => crewmate bust only, no background, no overlayed graphics / texts
+            },
+            headers: {
+                'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
+            },
+        };
+        console.log(`--- [fetchCrewmateImage] ${config.method.toUpperCase()} ${config.url} + params:`, config.params); //// TEST
+        const response = await axios(config);
+        console.log(`--- [fetchCrewmateImage] response.data LENGTH = ${response.data.length}`); //// TEST
+        return response.data;
+    } catch (error) {
+        console.log(`--- [fetchCrewmateImage] ERROR:`, error); //// TEST
+        return {error};
+    }
+}
+
 module.exports = {
     fetchAsteroidMetadata,
     fetchAsteroidsMetadataOwnedBy,
+    fetchCrewmateImage,
 };
