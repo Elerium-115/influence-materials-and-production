@@ -269,28 +269,37 @@ router.get(
 );
 
 /**
- * @desc        Get crewmate images with "bustOnly" both true and false
- * @route       GET /crewmate-images
+ * @desc        Get crewmate image with "bustOnly" either true and false
+ * @route       GET /crewmate-image/:type/:id
  */
 router.get(
-    '/crewmate-images/:id',
+    '/crewmate-image/:type/:id/',
     async (req, res) => {
-        console.log(`--- [router] GET /crewmate-images/${req.params.id}`); //// TEST
+        console.log(`--- [router] GET /crewmate-image/${req.params.type}/${req.params.id}`); //// TEST
+        let bustOnly;
+        // Fetching only 1 image at a time, otherwise Axios throws error re: response > 4.5 MB
+        const crewmateImageType = req.params.type;
+        switch (crewmateImageType) {
+            case 'bust':
+                bustOnly = true;
+                break;
+            case 'full':
+                bustOnly = false;
+                break;
+            default:
+                res.json({error: 'Invalid "type" parameter'});
+                return;
+        }
         const crewmateId = req.params.id;
         // NO caching b/c the images are too large
-        const svgBust = await providerInfluencethIo.fetchCrewmateImage(crewmateId, true);
-        if (svgBust.error) {
-            res.json({error: svgBust.error});
+        const svg = await providerInfluencethIo.fetchCrewmateImage(crewmateId, bustOnly);
+        if (svg.error) {
+            res.json({error: svg.error});
             return;
         }
-        const svgFull = await providerInfluencethIo.fetchCrewmateImage(crewmateId);
-        if (svgFull.error) {
-            res.json({error: svgFull.error});
-            return;
-        }
+        const svgKey = `svg_${crewmateImageType}`; // "svg_bust" or "svg_full"
         res.json({
-            svg_bust: svgBust,
-            svg_full: svgFull,
+            [svgKey]: svg,
         });
     }
 );

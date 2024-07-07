@@ -10,12 +10,14 @@ async function generateCrewmateImage() {
         return;
     }
     let apiResponse = null;
-    const config = {
+
+    // Get the "bust" SVG
+    const configBust = {
         method: 'get',
-        url: `${apiUrl}/crewmate-images/${crewmateId}`,
+        url: `${apiUrl}/crewmate-image/bust/${crewmateId}`,
     };
     try {
-        const response = await axios(config);
+        const response = await axios(configBust);
         const rawData = response.data;
         // console.log(`--- rawData from API:`, rawData); //// TEST
         if (rawData.error) {
@@ -30,6 +32,31 @@ async function generateCrewmateImage() {
         console.log(`--- ERROR from API:`, error); //// TEST
         return;
     }
+    const svgBust = apiResponse.svg_bust;
+
+    // Get the "full" SVG
+    const configFull = {
+        method: 'get',
+        url: `${apiUrl}/crewmate-image/full/${crewmateId}`,
+    };
+    try {
+        const response = await axios(configFull);
+        const rawData = response.data;
+        // console.log(`--- rawData from API:`, rawData); //// TEST
+        if (rawData.error) {
+            // Abort re: error in data from API
+            console.log(`--- ERROR in data from API:`, rawData.error); //// TEST
+            elCrewmateImageWrapper.textContent = 'ERROR';
+            return;
+        }
+        apiResponse = rawData;
+    } catch (error) {
+        // Abort re: error from API
+        console.log(`--- ERROR from API:`, error); //// TEST
+        return;
+    }
+    const svgFull = apiResponse.svg_full;
+
     elCrewmateImageWrapper.textContent = '';
     elDownloadSvg.style.display = 'unset';
     // Start black-gradient at 12.5% from top = 150px of total height 1200px = how much will be cropped by hedra.com
@@ -42,11 +69,11 @@ async function generateCrewmateImage() {
                 </linearGradient>
             </defs>
             <g class="child-svg-wrapper">
-                ${apiResponse.svg_full}
+                ${svgFull}
             </g>
             <rect width="100%" height="100%" fill="url(#fadetoblack)"></rect>
             <g class="child-svg-wrapper">
-                ${apiResponse.svg_bust}
+                ${svgBust}
             </g>
         </svg>
     `;
