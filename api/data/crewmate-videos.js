@@ -8,6 +8,7 @@ const crewmateIdsWithVideo = [
     5807, // [1ST] Skippy The Magnificent (crew 159)
     20193, // Elerium 115 (crew 129)
     27392, // Elerium 115 (crew 3574)
+    29933, // Elerium 115 (crew 4951)
 ];
 
 crewmateIdsWithVideo.forEach(crewmateId => {
