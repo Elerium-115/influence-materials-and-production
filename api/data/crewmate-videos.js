@@ -3,6 +3,7 @@ const crewmateVideosBaseUrl = 'https://influence.elerium.dev/assets/crewmate-vid
 const crewmateVideos = {};
 
 const crewmateIdsWithVideo = [
+    2428, // Elerium 115 (crew 3814)
     3547, // [1ST] Skippy The Magnificent (crew 2438)
     5097, // [1ST] Skippy The Magnificent (crew 169)
     5807, // [1ST] Skippy The Magnificent (crew 159)
