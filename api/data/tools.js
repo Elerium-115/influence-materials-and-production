@@ -38,6 +38,7 @@ const tools = [
         items: [
             {title: 'Crew Tracker', author: 'Denker', url: 'https://www.adalia.info/tools/crew-tracker'},
             {title: 'Crew Member Services', author: 'Tyrell-Yutani', url: 'https://tyrell-yutani.app/#/crew'},
+            {title: 'Adalian Crew Simulator', author: 'jpmti2016', url: 'https://influence-crew-builder.vercel.app/'},
             {title: 'Crewmate Metadata Lookup by Daharius', author: 'Daharius', url: 'https://influence.daharius.com/CrewmateMetadata/1'},
             {title: 'Crewmate Metadata Lookup by trevis', author: 'trevis & Dirac', url: 'https://starksight.plus/collection/INFC/1'},
             // {title: 'Crew Planner', author: 'Daharius', url: 'https://influence.daharius.com/CrewPlanner'}, // removed as requested by Daharius @ 2024-03-19
