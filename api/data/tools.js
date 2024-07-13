@@ -61,7 +61,7 @@ const tools = [
         category_short: 'Information',
         category: 'Information Tools',
         items: [
-            {title: 'Influence Wiki', author: '[official]', url: 'https://wiki.influenceth.io/'},
+            {title: 'Influence Wiki', author: '[official]', url: 'https://wiki.influenceth.io/'}, // blocked in iframe
             // {title: 'Wendash', author: 'Joosh & Admiral', url: 'https://influence.wendash.com/'}, // password gated
             {title: 'Trader Dashboard', author: 'Denker', url: 'https://www.adalia.info/tools/trader-dashboard'},
             {title: 'Marketplace Trades Summary', author: 'trevis & Dirac', url: 'https://starksight.plus/trades'},
@@ -71,7 +71,7 @@ const tools = [
             {title: 'Adalia.Guide', author: 'Korivak', url: 'https://adalia.guide/'},
             {title: 'Adalia Info', author: 'Denker', url: 'https://adalia.info/'},
             {title: 'StarkSight Topics', author: '[community]', url: 'https://starksight.plus/topics'},
-            {title: 'Analytics on Dune', author: 'brakmaar', url: 'https://dune.com/brakmaar/Influence-asteroids'}, // blocked by "dune.com"
+            {title: 'Analytics on Dune', author: 'brakmaar', url: 'https://dune.com/brakmaar/Influence-asteroids'}, // blocked in iframe
             // {title: 'Adalia.id', author: 'strwrsfrk & Myrhea', url: 'https://my.adalia.id/'}, // abandoned?
         ],
     },
@@ -80,8 +80,8 @@ const tools = [
         category: 'Influence Lore',
         items: [
             {title: 'Last Night in Space', author: 'Korivak', url: 'https://lastnight.space/'},
-            {title: 'Influence Lore by Korivak', author: 'Korivak', url: 'https://matthew.debarth.com/influence'}, // individual articles blocked by "medium.com"
-            {title: 'Influence Lore by strwrsfrk', author: 'strwrsfrk', url: 'https://strwrsfrk.medium.com/'}, // blocked by "medium.com"
+            {title: 'Influence Lore by Korivak', author: 'Korivak', url: 'https://matthew.debarth.com/influence'}, // individual articles blocked in iframe
+            {title: 'Influence Lore by strwrsfrk', author: 'strwrsfrk', url: 'https://strwrsfrk.medium.com/'}, // blocked in iframe
         ],
     },
     {

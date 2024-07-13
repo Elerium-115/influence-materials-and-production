@@ -882,7 +882,7 @@
   border-radius: 0.4rem;
 }
 #production-chain-items .item-tooltip-wrapper .item-tooltip.process-tooltip .qty {
-  color: var(--default-text_semifaded);
+  opacity: 0.75;
 }
 #production-chain-items .item-tooltip-wrapper .item-tooltip.process-tooltip .qty::before {
   content: "✕";
@@ -954,7 +954,7 @@
 }
 #production-chain-items .item-tooltip-wrapper.secondary-tooltip .item-tooltip.process-tooltip .qty {
   color: unset;
-  opacity: 0.5;
+  opacity: 0.75;
 }
 #production-chain-items .item-tooltip-wrapper.secondary-tooltip .item-tooltip.process-tooltip ul {
   margin-top: unset;
@@ -1415,7 +1415,7 @@
 }
 #shopping-list .line .qty,
 #diy-list .line .qty {
-  color: var(--default-text_semifaded);
+  opacity: 0.75;
 }
 #shopping-list .line .qty::before,
 #diy-list .line .qty::before {

@@ -789,7 +789,7 @@
                 }
 
                 .qty {
-                    color: var(--default-text_semifaded);
+                    opacity: 0.75;
 
                     &::before {
                         content: "✕";
@@ -869,7 +869,7 @@
 
                     .qty {
                         color: unset;
-                        opacity: 0.5;
+                        opacity: 0.75;
                     }
 
                     ul {
@@ -1306,7 +1306,7 @@
     }
 
     .line .qty {
-        color: var(--default-text_semifaded);
+        opacity: 0.75;
     }
 
     .line .qty::before {

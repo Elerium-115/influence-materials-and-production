@@ -3,14 +3,18 @@ const crewmateVideosBaseUrl = 'https://influence.elerium.dev/assets/crewmate-vid
 const crewmateVideos = {};
 
 const crewmateIdsWithVideo = [
-    2426, // Elerium 115 (crew 3814)
-    2428, // Elerium 115 (crew 4951)
-    3547, // [1ST] Skippy The Magnificent (crew 2438)
-    5097, // [1ST] Skippy The Magnificent (crew 169)
-    5807, // [1ST] Skippy The Magnificent (crew 159)
-    20193, // Elerium 115 (crew 129)
-    27392, // Elerium 115 (crew 3574)
-    29933, // Elerium 115 (crew 5515)
+    1477, // [1ST] Deryck Goldfinger | BIgE92
+    2426, // Elerium 115
+    2428, // Elerium 115
+    3547, // [1ST] Skippy The Magnificent
+    5097, // [1ST] Skippy The Magnificent
+    5807, // [1ST] Skippy The Magnificent
+    7383, // [1ST] Deryck Goldfinger | BIgE92
+    20193, // Elerium 115
+    20457, // [1ST] Deryck Goldfinger | BIgE92
+    26207, // [1ST] Deryck Goldfinger | BIgE92
+    27392, // Elerium 115
+    29933, // Elerium 115
 ];
 
 crewmateIdsWithVideo.forEach(crewmateId => {

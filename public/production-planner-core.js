@@ -10,6 +10,7 @@
  * 
  * Common code used in:
  * - Production Planner tool + any other tool that includes "template-production-plan"
+ * - Derived Products tool
  * - Asteroids Planner tool
  */
 
@@ -1031,6 +1032,9 @@ function createProductContainerV2(itemId) {
     tooltipHtml += /*html*/ `
         <div class="link-production-plan" onclick="event.stopPropagation();">
             <a href="./production-planner.html#${getCompactName(itemName)}">Production Plan</a>
+        </div>
+        <div class="link-production-plan" onclick="event.stopPropagation();">
+            <a href="./derived-products.html#${getCompactName(itemName)}">Derived Products</a>
         </div>
     `;
     // -- show product image
