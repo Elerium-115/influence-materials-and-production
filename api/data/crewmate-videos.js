@@ -4,6 +4,7 @@ const crewmateVideos = {};
 
 const crewmateIdsWithVideo = [
     1477, // [1ST] Deryck Goldfinger | BIgE92
+    1663, // [1ST] Deryck Goldfinger | BIgE92
     2426, // Elerium 115
     2428, // Elerium 115
     3547, // [1ST] Skippy The Magnificent
