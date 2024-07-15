@@ -989,6 +989,13 @@ function compareListElementsByName(el1, el2) {
 }
 
 /**
+ * Sort array of objects alphabetically, based on the "productId" property of each object
+ */
+function compareListElementsByProductIdAlphabetically(el1, el2) {
+    return productDataById[el1.productId].name.localeCompare(productDataById[el2.productId].name);
+}
+
+/**
  * Sort array of item IDs by "level" ascending
  */
 function compareItemIdsByLevel(itemId1, itemId2) {
@@ -1146,6 +1153,7 @@ function createProcessContainerV2(itemId) {
         tooltipHtml += /*html*/ `<li class="titled-details"><strong>Other Outputs:</strong></li>`;
         processData.outputs
             .filter(outputData => outputData.productId !== parentProductData.id)
+            .sort(compareListElementsByProductIdAlphabetically)
             .forEach(outputData => tooltipHtml += /*html*/ `
                 <li>
                     - ${productDataById[outputData.productId].name}
@@ -1171,6 +1179,7 @@ function createProcessContainerV2(itemId) {
             tooltipHtml += /*html*/ `<li class="other-inputs"><strong>Other Inputs:</strong></li>`;
             processData.inputs
                 .filter(inputData => inputData.productId !== parentProductData.id)
+                .sort(compareListElementsByProductIdAlphabetically)
                 .forEach(inputData => tooltipHtml += /*html*/ `
                     <li>
                         - ${productDataById[inputData.productId].name}
