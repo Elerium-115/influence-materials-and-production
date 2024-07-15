@@ -65,6 +65,13 @@ function selectPlannedProductHash(hash) {
     const [plannedProductCompactName, hashEncodedFromItemDataById] = hash.split('__');
     // Update link to other production chain type, for the same product
     chainTypeLinkContainer.querySelector('a').setAttribute('href', `./derived-products.html#${plannedProductCompactName}`);
+    const productName = productNamesByHash[plannedProductCompactName];
+    if (productName) {
+        // SEO optimizations
+        document.title = `${productName} - ${defaultPageTitle}`;
+        document.querySelector("meta[name='twitter:title']").content = document.title;
+        document.querySelector("meta[name='twitter:image']").content = location.origin + getProductImageSrc(productName).replace(/^\./, '');
+    }
     // Re-render the entire planned chain on page-load, based on the decoded hash, if any
     if (hashEncodedFromItemDataById) {
         // if (doDebug) console.log(`%c--- RENDER the entire planned chain, based on the decoded hash`, 'background: blue');
@@ -78,15 +85,10 @@ function selectPlannedProductHash(hash) {
         return;
     }
     // Select the planned product from the hash
-    const productName = productNamesByHash[plannedProductCompactName];
     if (productName) {
         // if (doDebug) console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue');
         const plannedProductId = String(productDataByName[productName].id);
         selectPlannedProductId(plannedProductId);
-        // SEO optimizations
-        document.title = `${productName} - ${defaultPageTitle}`;
-        document.querySelector("meta[name='twitter:title']").content = document.title;
-        document.querySelector("meta[name='twitter:image']").content = location.origin + getProductImageSrc(productName).replace(/^\./, '');
     }
 }
 
