@@ -15,6 +15,7 @@ const crewmateIdsWithVideo = [
     20457, // [1ST] Deryck Goldfinger | BIgE92
     26207, // [1ST] Deryck Goldfinger | BIgE92
     27392, // Elerium 115
+    27395, // Elerium 115
     29933, // Elerium 115
 ];
 
