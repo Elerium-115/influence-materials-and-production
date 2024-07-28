@@ -16,6 +16,8 @@ const asteroidsMetadataById = {};
  */
 const asteroidsPlanByAddress = {};
 
+const crewsDataById = {};
+
 /**
  * Format:
  * ```
@@ -36,6 +38,7 @@ module.exports = {
     accessTokens,
     asteroidsMetadataById,
     asteroidsPlanByAddress,
+    crewsDataById,
     ownedAsteroidsIdsByAddress,
     productionPlanDataById,
 };

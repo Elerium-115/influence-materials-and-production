@@ -269,6 +269,31 @@ router.get(
 );
 
 /**
+ * @desc        Get crew data for crew ID
+ * @route       GET /crew-data/:id
+ */
+router.get(
+    '/crew-data/:id/',
+    async (req, res) => {
+        console.log(`--- [router] GET /crew-data/${req.params.id}`); //// TEST
+        const crewId = req.params.id;
+        const cachedData = cache.crewsDataById[crewId];
+        if (cachedData) {
+            console.log(`---> found CACHED data`); //// TEST
+            res.json(cachedData);
+            return;
+        }
+        const data = await providerInfluencethIo.fetchCrewDataByCrewId(crewId);
+        if (data.error) {
+            res.json({error: data.error});
+            return;
+        }
+        cache.crewsDataById[crewId] = data;
+        res.json(data);
+    }
+);
+
+/**
  * @desc        Get crewmate image with "bustOnly" either true and false
  * @route       GET /crewmate-image/:type/:id
  */

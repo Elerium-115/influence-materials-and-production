@@ -1,6 +1,7 @@
 const axios = require('axios');
 const influenceUtilsV2 = require('@influenceth/sdk');
 const utils = require('../../utils/utils');
+const dataPlayerByAddress = require('../../data/player-by-address');
 
 /**
  * Provider:
@@ -114,6 +115,49 @@ async function fetchAsteroidsMetadataOwnedBy(address) {
     }
 }
 
+function parseCrewData(rawData) {
+    // console.log(`--- [parseCrewMetadata] rawData:`, rawData); //// TEST
+    const crewId = rawData.id;
+    const delegatedToAddress = rawData.Crew.delegatedTo;
+    const ownerAddress = rawData.Nft.owners.ethereum ? rawData.Nft.owners.ethereum : rawData.Nft.owners.starknet;
+    const metadata = {
+        // _raw: rawData, //// TEST
+        crewId,
+        delegatedToAddress,
+        delegatedToName: dataPlayerByAddress.playerByAddress[delegatedToAddress.toLowerCase()] || null,
+        ownerAddress,
+        ownerName: dataPlayerByAddress.playerByAddress[ownerAddress.toLowerCase()] || null,
+    };
+    // console.log(`---> [parseCrewMetadata] metadata:`, metadata); //// TEST
+    return metadata;
+}
+
+async function fetchCrewDataByCrewId(crewId) {
+    try {
+        // Fetch primary metadata
+        const config = {
+            method: 'get',
+            url: `https://api.influenceth.io/v2/entities`,
+            params: {
+                label: 1, // crews
+                components: 'Crew,Nft',
+                id: crewId,
+            },
+            headers: {
+                'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
+            },
+        };
+        console.log(`--- [fetchCrewDataByCrewId] ${config.method.toUpperCase()} ${config.url} + params:`, config.params); //// TEST
+        const response = await axios(config);
+        const rawData = response.data[0];
+        console.log(`--- [fetchCrewDataByCrewId] rawData KEYS:`, Object.keys(rawData)); //// TEST
+        return parseCrewData(rawData);
+    } catch (error) {
+        console.log(`--- [fetchCrewDataByCrewId] ERROR:`, error); //// TEST
+        return {error};
+    }
+}
+
 async function fetchCrewmateImage(crewmateId, bustOnly = false) {
     try {
         const config = {
@@ -139,5 +183,6 @@ async function fetchCrewmateImage(crewmateId, bustOnly = false) {
 module.exports = {
     fetchAsteroidMetadata,
     fetchAsteroidsMetadataOwnedBy,
+    fetchCrewDataByCrewId,
     fetchCrewmateImage,
 };
