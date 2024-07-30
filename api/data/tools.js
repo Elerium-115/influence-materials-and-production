@@ -84,7 +84,7 @@ const tools = [
             {title: 'Last Night in Space', author: 'Korivak', url: 'https://lastnight.space/'},
             {title: 'Influence Lore by Korivak', author: 'Korivak', url: 'https://matthew.debarth.com/influence'}, // individual articles blocked in iframe
             {title: 'Influence Lore by strwrsfrk', author: 'strwrsfrk', url: 'https://strwrsfrk.medium.com/'}, // blocked in iframe
-            {title: 'The Letters of Asterion South', author: 'Asterion South', url: 'https://asterionsouth.substack.com/'},
+            {title: 'The Letters of Asterion South', author: 'Asterion South', url: 'https://asterionsouth.substack.com/'}, // blocked in iframe
         ],
     },
     {
