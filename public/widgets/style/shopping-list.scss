@@ -9,45 +9,6 @@
     display: block;
 }
 
-.root-section {
-    padding-bottom: var(--size-base);
-
-    .section-title {
-        @include cursor-active;
-        background: rgba(0, 0, 0, 0.5);
-        color: var(--color-influence);
-        font-weight: bold;
-        line-height: var(--size-base);
-        padding: 0 var(--size-padding);
-        position: relative;
-        transition: all 300ms ease 0s;
-
-        &:hover {
-            background: black;
-            color: white;
-
-            &::after {
-                content: '▲';
-                position: absolute;
-                right: var(--size-padding);
-            }
-        }
-    }
-
-    &.closed {
-        height: var(--size-base);
-        overflow: hidden;
-
-        .section-title {
-            &:hover {
-                &::after {
-                    content: '▼';
-                }
-            }
-        }
-    }
-}
-
 .products-shopping-list {
     li {
         align-items: center;

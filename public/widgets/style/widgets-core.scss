@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Jura:wght@300;400;700');
 
+// NOTE: After any updates in this file, regenerate the CSS files for all other SCSS files which import this!
+
 :root {
     --color-influence: rgb(54, 167, 205);
     --color-influence-faded-25: rgba(54, 167, 205, 0.25);
@@ -66,5 +68,46 @@ input {
     &:hover {
         background: var(--color-influence-faded-25);
         color: white;
+    }
+}
+
+.root-section {
+    padding-bottom: var(--size-base);
+
+    .section-title {
+        @include cursor-active;
+        background: rgba(0, 0, 0, 0.5);
+        color: var(--color-influence);
+        font-weight: bold;
+        line-height: var(--size-base);
+        padding: 0 var(--size-padding);
+        position: relative;
+        transition: all 300ms ease 0s;
+
+        &:hover {
+            background: black;
+            color: white;
+        }
+
+        &.has-toggle:hover {
+            &::after {
+                content: '▲';
+                position: absolute;
+                right: var(--size-padding);
+            }
+        }
+    }
+
+    &.closed {
+        height: var(--size-base);
+        overflow: hidden;
+
+        .section-title {
+            &.has-toggle:hover {
+                &::after {
+                    content: '▼';
+                }
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ const playerByAddress = {
     '0x019f0f563f9468e1995cc55fec8dfddfc30bb667ce4b020a6c8b7d9aa412aa06': '[1ST] NeilKD',
     '0x013fb68a3fd7b98e32397f9d2dc5214bb14f7ffb9717b20485c6200c6dfea906': '[1ST] ProfessorSabre',
     '0x0631acdbf5a79758cbcc84301b387aebfb5c0ec7476aa48a0ceb98662973c5ce': '[1ST] Skippy The Magnificent',
+    '0x0614872dd2f3324f3e9a047d0cfaab9e9573bbdfa6081877f49f7108116b8ae0': '[SG] Gnarly Narwhal',
 };
 
 module.exports = {
