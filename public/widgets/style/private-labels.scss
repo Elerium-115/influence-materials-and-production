@@ -1,1 +1,90 @@
 @import './widgets-core.scss';
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#add-private-label {
+    #add-private-label-form {
+        display: flex;
+        flex-direction: column;
+        gap: var(--size-padding);
+        padding: var(--size-padding);
+        padding-bottom: 0;
+
+        .form-row {
+            display: flex;
+            gap: var(--size-padding);
+
+            input {
+                width: 100%;
+            }
+        }
+    }
+}
+
+#private-labels {
+    height: 100%;
+    overflow: hidden;
+
+    #private-labels-list {
+        font-size: 90%;
+        height: 100%;
+        overflow: auto;
+        padding-bottom: var(--size-base);
+
+        li {
+            align-items: center;
+            display: grid;
+            gap: var(--size-padding);
+            grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) auto;
+            justify-content: space-between;
+            padding: 0 var(--size-padding);
+            position: relative;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            &:not(:hover) {
+                .remove {
+                    opacity: 0;
+                }
+            }
+
+            > * {
+                position: relative;
+            }
+
+            .address,
+            .label {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .label {
+                color: var(--color-influence-green);
+                flex-grow: 1;
+            }
+
+            .remove {
+                line-height: var(--size-base);
+                min-width: var(--size-base);
+                text-align: center;
+
+                &::after {
+                    content: '✕';
+                }
+
+                &:hover {
+                    @include cursor-active;
+                    background: rgba(255, 255, 255, 0.1);
+                    color: var(--color-warning);
+                }
+            }
+        }
+    }
+}

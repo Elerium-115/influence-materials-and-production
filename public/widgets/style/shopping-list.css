@@ -3,6 +3,7 @@
 :root {
   --color-influence: rgb(54, 167, 205);
   --color-influence-faded-25: rgba(54, 167, 205, 0.25);
+  --color-influence-green: rgb(136, 230, 117);
   --color-text: #ccc;
   --color-warning: rgb(223, 67, 0);
   --cursor-url-active: url("../assets/images/cursor-active.png");

@@ -2218,7 +2218,7 @@ async function updateWalletCtaInstancesOnAccountsChanged() {
         elsConnectedAddress.forEach(el => {
             el.innerHTML = /*html*/ `
                 <img src="https://api.dicebear.com/7.x/identicon/svg?seed=${connectedAddress}" class="identicon">
-                ${connectedAddress.replace(/^(.{6}).+(.{4})$/, '$1...$2')}
+                ${getCompactAddress(connectedAddress)}
             `;
             el.title = connectedAddress;
             el.classList.remove('hidden');

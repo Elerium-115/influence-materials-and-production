@@ -10,10 +10,23 @@
     <meta name="author" content="@elerium115">
 </head>
 <body>
-    <section class="root-section">
-        <div class="section-title">
-            Private Labels - coming soon
+    <section id="add-private-label" class="root-section">
+        <div class="section-title">Add / Edit Private Label</div>
+        <div id="add-private-label-form">
+            <div class="form-row">
+                <input id="input-starknet-address" type="text" placeholder="Starknet Address">
+            </div>
+            <div class="form-row">
+                <input id="input-private-label" type="text" placeholder="Label">
+                <div class="cta" onclick="addPrivateLabel()">Add</div>
+            </div>
         </div>
+    </section>
+    <section id="private-labels" class="root-section">
+        <div class="section-title">
+            Private Labels
+        </div>
+        <ul id="private-labels-list"></ul>
     </section>
 
     <script>

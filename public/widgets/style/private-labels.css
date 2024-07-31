@@ -3,6 +3,7 @@
 :root {
   --color-influence: rgb(54, 167, 205);
   --color-influence-faded-25: rgba(54, 167, 205, 0.25);
+  --color-influence-green: rgb(136, 230, 117);
   --color-text: #ccc;
   --color-warning: rgb(223, 67, 0);
   --cursor-url-active: url("../assets/images/cursor-active.png");
@@ -94,4 +95,77 @@ input[type=number] {
 }
 .root-section.closed .section-title.has-toggle:hover::after {
   content: "▼";
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#add-private-label #add-private-label-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-padding);
+  padding: var(--size-padding);
+  padding-bottom: 0;
+}
+#add-private-label #add-private-label-form .form-row {
+  display: flex;
+  gap: var(--size-padding);
+}
+#add-private-label #add-private-label-form .form-row input {
+  width: 100%;
+}
+
+#private-labels {
+  height: 100%;
+  overflow: hidden;
+}
+#private-labels #private-labels-list {
+  font-size: 90%;
+  height: 100%;
+  overflow: auto;
+  padding-bottom: var(--size-base);
+}
+#private-labels #private-labels-list li {
+  align-items: center;
+  display: grid;
+  gap: var(--size-padding);
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) auto;
+  justify-content: space-between;
+  padding: 0 var(--size-padding);
+  position: relative;
+}
+#private-labels #private-labels-list li:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+#private-labels #private-labels-list li:not(:hover) .remove {
+  opacity: 0;
+}
+#private-labels #private-labels-list li > * {
+  position: relative;
+}
+#private-labels #private-labels-list li .address,
+#private-labels #private-labels-list li .label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#private-labels #private-labels-list li .label {
+  color: var(--color-influence-green);
+  flex-grow: 1;
+}
+#private-labels #private-labels-list li .remove {
+  line-height: var(--size-base);
+  min-width: var(--size-base);
+  text-align: center;
+}
+#private-labels #private-labels-list li .remove::after {
+  content: "✕";
+}
+#private-labels #private-labels-list li .remove:hover {
+  cursor: var(--cursor-url-active) 5 5, auto;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-warning);
 }/*# sourceMappingURL=private-labels.css.map */

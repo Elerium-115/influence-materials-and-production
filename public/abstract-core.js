@@ -80,6 +80,13 @@ function getItemTypeClass(itemType) {
     return `item-type-${getItemNameSafe(itemType)}`;
 }
 
+function getCompactAddress(address) {
+    if (!address) {
+        return null;
+    }
+    return address.replace(/^(.{6}).+(.{4})$/, '$1...$2');
+}
+
 function uniquePushToArray(arr, value) {
     if (arr.indexOf(value) === -1) {
         arr.push(value);

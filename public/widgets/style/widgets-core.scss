@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Jura:wght@300;400;700');
 
-// NOTE: After any updates in this file, regenerate the CSS files for all other SCSS files which import this!
+// WARNING: After any updates in this file, regenerate the CSS files for all other SCSS files which import this!
 
 :root {
     --color-influence: rgb(54, 167, 205);
     --color-influence-faded-25: rgba(54, 167, 205, 0.25);
+    --color-influence-green: rgb(136, 230, 117);
     --color-text: #ccc;
     --color-warning: rgb(223, 67, 0);
     --cursor-url-active: url('../assets/images/cursor-active.png');
