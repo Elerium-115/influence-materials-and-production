@@ -64,8 +64,21 @@ function addPrivateLabel() {
     elInputPrivateLabel.value = '';
 }
 
+/**
+ * Save the private labels into local-storage for the widget,
+ * and emit event for saving them into the local-storage for the extension.
+ */
 function savePrivateLabels() {
-    localStorage.setItem('widgetPrivateLabels', JSON.stringify(privateLabels));
+    const privateLabelsString = JSON.stringify(privateLabels);
+    localStorage.setItem('widgetPrivateLabels', privateLabelsString);
+    // Emit event to parent window, after updating the private labels in the widget
+    if (window.self !== window.top) {
+        const widgetEventData = {
+            widgetEventKey: 'PRIVATE_LABELS_UPDATED',
+            widgetEventValue: privateLabelsString,
+        };
+        window.parent.postMessage(widgetEventData, '*');
+    }
 }
 
 /**

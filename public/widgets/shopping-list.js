@@ -233,7 +233,7 @@ on('click', '#shopping-list .product-name, #shopping-list .qty', el => {
     setTimeout(() => el.classList.remove('flash'), 600);
     // Emit event to parent window, when clicking on product name
     if (window.self !== window.top && el.classList.contains('product-name')) {
-        var widgetEventData = {
+        const widgetEventData = {
             widgetEventKey: 'SHOPPING_LIST_CLICKED_PRODUCT_NAME',
             widgetEventValue: textToCopy,
         };
