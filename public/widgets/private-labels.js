@@ -10,6 +10,8 @@ const privateLabels = JSON.parse(localStorage.getItem('widgetPrivateLabels'));
 const elInputStarknetAddress = document.getElementById('input-starknet-address');
 const elInputPrivateLabel = document.getElementById('input-private-label');
 const elPrivateLabelsList = document.getElementById('private-labels-list');
+const elImportButton = document.getElementById('import-button');
+const elInputUpload = document.getElementById('input-upload');
 
 function injectElListItem(address, label) {
     const elListItem = document.createElement('li');
@@ -86,13 +88,55 @@ function savePrivateLabels() {
  */
 function renderPrivateLabels() {
     elPrivateLabelsList.textContent = '';
-    Object.values(privateLabels)
-        .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-        .forEach(label => {
-            const address = Object.keys(privateLabels).find(address => privateLabels[address] === label);
+    const labelsSorted = Object.values(privateLabels).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+    const labelsSortedUnique = [...new Set(labelsSorted)];
+    labelsSortedUnique.forEach(label => {
+        // The same label may be associated with multiple addresses
+        const addresses = Object.keys(privateLabels).filter(address => privateLabels[address] === label);
+        addresses.forEach(address => {
             injectElListItem(address, label);
         });
+    });
 }
+
+function uploadPrivateLabels() {
+    elInputUpload.click(); // trigger upload via file selection
+}
+
+function downloadPrivateLabels() {
+    const elLink = document.createElement('a');
+    const blob = new Blob([JSON.stringify(privateLabels)], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    elLink.setAttribute('href', url);
+    elLink.setAttribute('download', 'influence-private-labels.json');
+    elLink.click(); // trigger download
+}
+
+function handleUpload() {
+    if (!this.files || !this.files.length) {
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        const fileText = event.target.result;
+        const privateLabelsNew = JSON.parse(fileText);
+        // Add new labels + update existing labels
+        for (const [address, label] of Object.entries(privateLabelsNew)) {
+            privateLabels[address] = label;
+        }
+        savePrivateLabels();
+        renderPrivateLabels();
+        // Reset the file input
+        elInputUpload.value = '';
+        // Flash the import button
+        elImportButton.classList.add('flash-import');
+        // Stop flashing after 3 flashes (based on animation-duration of ".flash-import" in SCSS)
+        setTimeout(() => elImportButton.classList.remove('flash-import'), 900);
+    };
+    reader.readAsText(this.files[0]);
+}
+
+elInputUpload.addEventListener('change', handleUpload, false);
 
 // Inject the list of private labels, based on initial "privateLabels" from local-storage
 renderPrivateLabels();

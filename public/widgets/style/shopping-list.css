@@ -46,6 +46,9 @@ input {
 input[type=number] {
   padding-right: 0;
 }
+input[type=file] {
+  display: none;
+}
 
 .cta {
   cursor: var(--cursor-url-active) 5 5, auto;
@@ -61,6 +64,7 @@ input[type=number] {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+  white-space: nowrap;
 }
 .cta:hover {
   background: var(--color-influence-faded-25);

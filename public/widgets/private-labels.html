@@ -10,21 +10,38 @@
     <meta name="author" content="@elerium115">
 </head>
 <body>
-    <section id="add-private-label" class="root-section">
-        <div class="section-title">Add / Edit Private Label</div>
-        <div id="add-private-label-form">
+    <section class="root-section">
+        <div class="section-title has-toggle" onclick="this.parentElement.classList.toggle('closed')">
+            Add / Update Private Label
+        </div>
+        <div class="section-form">
             <div class="form-row">
                 <input id="input-starknet-address" type="text" placeholder="Starknet Address">
             </div>
             <div class="form-row">
                 <input id="input-private-label" type="text" placeholder="Label">
-                <div class="cta" onclick="addPrivateLabel()">Add</div>
+                <div class="cta" onclick="addPrivateLabel()">Add / Update</div>
             </div>
+        </div>
+    </section>
+    <section id="import-export-section" class="root-section">
+        <div class="section-title has-toggle" onclick="this.parentElement.classList.toggle('closed')">
+            Import / Export Private Labels
+        </div>
+        <div class="section-form">
+            <div class="form-row">
+                <div id="import-button" class="cta" onclick="uploadPrivateLabels()">
+                    Import JSON
+                    <input type="file" id="input-upload" class="hidden" accept=".json">
+                </div>
+                <div class="cta" onclick="downloadPrivateLabels()">Export JSON</div>
+            </div>
+            <div class="form-row disclaimer">Importing will update the labels for existing addresses, and will preserve all other labels.</div>
         </div>
     </section>
     <section id="private-labels" class="root-section">
         <div class="section-title">
-            Private Labels
+            My Private Labels
         </div>
         <ul id="private-labels-list"></ul>
     </section>

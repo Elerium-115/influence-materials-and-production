@@ -46,6 +46,9 @@ input {
 input[type=number] {
   padding-right: 0;
 }
+input[type=file] {
+  display: none;
+}
 
 .cta {
   cursor: var(--cursor-url-active) 5 5, auto;
@@ -61,6 +64,7 @@ input[type=number] {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+  white-space: nowrap;
 }
 .cta:hover {
   background: var(--color-influence-faded-25);
@@ -103,19 +107,37 @@ body {
   height: 100%;
 }
 
-#add-private-label #add-private-label-form {
+.root-section .section-form {
   display: flex;
   flex-direction: column;
   gap: var(--size-padding);
   padding: var(--size-padding);
   padding-bottom: 0;
 }
-#add-private-label #add-private-label-form .form-row {
+.root-section .section-form .form-row {
+  align-items: center;
   display: flex;
   gap: var(--size-padding);
 }
-#add-private-label #add-private-label-form .form-row input {
+.root-section .section-form .form-row.disclaimer {
+  font-size: 0.9rem;
+  opacity: 0.5;
+}
+.root-section .section-form .form-row input {
   width: 100%;
+}
+
+#import-export-section:not(:hover) .disclaimer {
+  display: none;
+}
+#import-export-section .flash-import {
+  animation: flash-import 300ms infinite;
+}
+@keyframes flash-import {
+  50% {
+    border-color: var(--color-influence-green);
+    color: var(--color-influence-green);
+  }
 }
 
 #private-labels {
