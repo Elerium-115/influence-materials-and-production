@@ -16,7 +16,7 @@ const elInputUpload = document.getElementById('input-upload');
 function injectElListItem(address, label) {
     const elListItem = document.createElement('li');
     elListItem.innerHTML = /*html*/ `
-        <div class="address" title=""></div>
+        <div class="address" title="" onclick="onClickAddress(this)"></div>
         <div class="label"></div>
         <div class="remove" onclick="removeLabelForElAddress(this)"></div>
     `;
@@ -26,6 +26,18 @@ function injectElListItem(address, label) {
     elListItem.querySelector('.label').textContent = label;
     elListItem.dataset.address = address;
     elPrivateLabelsList.append(elListItem);
+}
+
+function onClickAddress(elAddress) {
+    const elListItem = elAddress.closest('li');
+    if (!elListItem) {
+        return;
+    }
+    const address = elListItem.dataset.address;
+    navigator.clipboard.writeText(address);
+    elAddress.classList.add('flash-copy');
+    // Stop flashing after 3 flashes (based on animation-duration of ".flash-copy" in SCSS)
+    setTimeout(() => elAddress.classList.remove('flash-copy'), 600);
 }
 
 function removeLabelForElAddress(elRemove) {

@@ -10,20 +10,6 @@
     <meta name="author" content="@elerium115">
 </head>
 <body>
-    <section class="root-section">
-        <div class="section-title has-toggle" onclick="this.parentElement.classList.toggle('closed')">
-            Add / Update Private Label
-        </div>
-        <div class="section-form">
-            <div class="form-row">
-                <input id="input-starknet-address" type="text" placeholder="Starknet Address">
-            </div>
-            <div class="form-row">
-                <input id="input-private-label" type="text" placeholder="Label">
-                <div class="cta" onclick="addPrivateLabel()">Add / Update</div>
-            </div>
-        </div>
-    </section>
     <section id="import-export-section" class="root-section">
         <div class="section-title has-toggle" onclick="this.parentElement.classList.toggle('closed')">
             Import / Export Private Labels
@@ -37,6 +23,20 @@
                 <div class="cta" onclick="downloadPrivateLabels()">Export JSON</div>
             </div>
             <div class="form-row disclaimer">Importing will update the labels for existing addresses, and will preserve all other labels.</div>
+        </div>
+    </section>
+    <section class="root-section">
+        <div class="section-title has-toggle" onclick="this.parentElement.classList.toggle('closed')">
+            Add / Update Private Label
+        </div>
+        <div class="section-form">
+            <div class="form-row">
+                <input id="input-starknet-address" type="text" placeholder="Starknet Address">
+            </div>
+            <div class="form-row">
+                <input id="input-private-label" type="text" placeholder="Label">
+                <div class="cta" onclick="addPrivateLabel()">Add / Update</div>
+            </div>
         </div>
     </section>
     <section id="private-labels" class="root-section">

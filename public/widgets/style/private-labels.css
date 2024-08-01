@@ -168,15 +168,31 @@ body {
 #private-labels #private-labels-list li > * {
   position: relative;
 }
-#private-labels #private-labels-list li .address,
-#private-labels #private-labels-list li .label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+#private-labels #private-labels-list li .address {
+  cursor: var(--cursor-url-active) 5 5, auto;
+}
+#private-labels #private-labels-list li .address:hover {
+  color: var(--color-influence);
+}
+#private-labels #private-labels-list li .address:hover::after {
+  content: "❏";
+  margin: -5px 0 0 8px;
+}
+#private-labels #private-labels-list li .address.flash-copy {
+  animation: flash-copy 200ms infinite;
+  transition: color 200ms;
+}
+@keyframes flash-copy {
+  50% {
+    color: white;
+  }
 }
 #private-labels #private-labels-list li .label {
   color: var(--color-influence-green);
   flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 #private-labels #private-labels-list li .remove {
   line-height: var(--size-base);

@@ -83,16 +83,32 @@ body {
                 position: relative;
             }
 
-            .address,
-            .label {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+            .address {
+                @include cursor-active;
+
+                &:hover {
+                    color: var(--color-influence);
+    
+                    &::after {
+                        content: '❏'; // copy-to-clipboard symbol
+                        margin: -5px 0 0 8px;
+                    }
+                }
+
+                &.flash-copy {
+                    animation: flash-copy 200ms infinite;
+                    transition: color 200ms;
+    
+                    @keyframes flash-copy { 50% { color: white; } }
+                }
             }
 
             .label {
                 color: var(--color-influence-green);
                 flex-grow: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
 
             .remove {
