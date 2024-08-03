@@ -175,7 +175,7 @@ body {
   color: var(--color-influence);
 }
 #private-labels #private-labels-list li .address:hover::after {
-  content: "❏";
+  content: "❐";
   margin: -5px 0 0 8px;
 }
 #private-labels #private-labels-list li .address.flash-copy {

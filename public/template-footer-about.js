@@ -9,7 +9,7 @@ export const templateFooterAbout = /*html*/ `
             Materials & Production Tools
         </div>
         <div class="primary">
-            created by <a href="https://twitter.com/elerium115" target="_blank" title="Elerium115">Elerium115</a>
+            tinkered by <a href="https://twitter.com/elerium115" target="_blank" title="Elerium115">Elerium115</a>
         </div>
         <div class="secondary extra-info">
             for <a href="https://www.influenceth.io/" target="_blank" title="Influence">

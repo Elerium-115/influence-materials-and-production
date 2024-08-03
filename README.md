@@ -38,4 +38,4 @@ The Asteroids Planner allows players, or alliances, to plan their production cha
   - Plan one or more production chains, on each asteroid.
   - Connect your wallet, to automatically save your plan.
 
-Created by [@elerium115](https://twitter.com/elerium115) for the space strategy sandbox MMO [Influence](https://www.influenceth.io/)
+Tinkered by [@elerium115](https://twitter.com/elerium115) for the space strategy sandbox MMO [Influence](https://www.influenceth.io/)

@@ -90,7 +90,7 @@ body {
                     color: var(--color-influence);
     
                     &::after {
-                        content: '❏'; // copy-to-clipboard symbol
+                        content: '❐'; // copy-to-clipboard symbol
                         margin: -5px 0 0 8px;
                     }
                 }

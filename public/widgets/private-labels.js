@@ -1,3 +1,5 @@
+const urlParamAddAddress = urlParams.get('add_address');
+
 const privateLabelsDefault = {};
 
 // Save default list of private labels by address into local-storage, if needed
@@ -152,3 +154,10 @@ elInputUpload.addEventListener('change', handleUpload, false);
 
 // Inject the list of private labels, based on initial "privateLabels" from local-storage
 renderPrivateLabels();
+
+if (urlParamAddAddress) {
+    // Populate the address received via URL params (e.g. from the Chrome extension)
+    elInputStarknetAddress.value = urlParamAddAddress.trim().toLowerCase();
+    // Focus the label input
+    elInputPrivateLabel.focus();
+}
