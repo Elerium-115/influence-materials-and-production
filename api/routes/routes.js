@@ -329,4 +329,29 @@ router.get(
     }
 );
 
+/**
+ * @desc        Get ship data for ship ID
+ * @route       GET /ship-data/:id
+ */
+router.get(
+    '/ship-data/:id/',
+    async (req, res) => {
+        console.log(`--- [router] GET /ship-data/${req.params.id}`); //// TEST
+        const shipId = req.params.id;
+        const cachedData = cache.shipsDataById[shipId];
+        if (cachedData) {
+            console.log(`---> found CACHED data`); //// TEST
+            res.json(cachedData);
+            return;
+        }
+        const data = await providerInfluencethIo.fetchShipDataByShipId(shipId);
+        if (data.error) {
+            res.json({error: data.error});
+            return;
+        }
+        cache.shipsDataById[shipId] = data;
+        res.json(data);
+    }
+);
+
 module.exports = router;

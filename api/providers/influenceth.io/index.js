@@ -132,6 +132,35 @@ function parseCrewData(rawData) {
     return metadata;
 }
 
+function parseShipData(rawData) {
+    // console.log(`--- [parseShipData] rawData:`, rawData); //// TEST
+    const shipId = rawData.id;
+    let shipLoadedPropellantPercent = 0;
+    if (rawData.Ship && rawData.Inventories) {
+        // Get the propellant inventory specs for this ship type
+        const shipTypeData = influenceUtilsV2.Ship.TYPES[rawData.Ship.shipType];
+        const propellantInventoryType = shipTypeData.propellantInventoryType;
+        const inventoryTypeData = influenceUtilsV2.Inventory.TYPES[propellantInventoryType];
+        const propellantMassMax = inventoryTypeData.massConstraint / 1000; // convert from grams to kg
+        const propellantProductId = shipTypeData.propellantType;
+        // Get the loaded propellant percent for this ship
+        const shipPropellantInventory = rawData.Inventories.find(inventoryRaw => inventoryRaw.inventoryType === propellantInventoryType);
+        const shipLoadedPropellantData = shipPropellantInventory.contents.find(contentData => contentData.product === propellantProductId);
+        let shipLoadedPropellantAmount = 0;
+        if (shipLoadedPropellantData) {
+            shipLoadedPropellantAmount = shipLoadedPropellantData.amount;
+        }
+        shipLoadedPropellantPercent = 100 * shipLoadedPropellantAmount / propellantMassMax;
+    }
+    const metadata = {
+        // _raw: rawData, //// TEST
+        shipId,
+        shipLoadedPropellantPercent,
+    };
+    // console.log(`---> [parseCrewMetadata] metadata:`, metadata); //// TEST
+    return metadata;
+}
+
 async function fetchCrewDataByCrewId(crewId) {
     try {
         // Fetch primary metadata
@@ -180,9 +209,36 @@ async function fetchCrewmateImage(crewmateId, bustOnly = false) {
     }
 }
 
+async function fetchShipDataByShipId(shipId) {
+    try {
+        // Fetch primary metadata
+        const config = {
+            method: 'get',
+            url: `https://api.influenceth.io/v2/entities`,
+            params: {
+                label: 6, // ships
+                // components: 'Inventories,Ship', // DISABLED b/c filtering by "Inventories" does NOT retrieve the expected data
+                id: shipId,
+            },
+            headers: {
+                'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
+            },
+        };
+        console.log(`--- [fetchShipDataByShipId] ${config.method.toUpperCase()} ${config.url} + params:`, config.params); //// TEST
+        const response = await axios(config);
+        const rawData = response.data[0];
+        console.log(`--- [fetchShipDataByShipId] rawData KEYS:`, Object.keys(rawData)); //// TEST
+        return parseShipData(rawData);
+    } catch (error) {
+        console.log(`--- [fetchShipDataByShipId] ERROR:`, error); //// TEST
+        return {error};
+    }
+}
+
 module.exports = {
     fetchAsteroidMetadata,
     fetchAsteroidsMetadataOwnedBy,
     fetchCrewDataByCrewId,
     fetchCrewmateImage,
+    fetchShipDataByShipId,
 };

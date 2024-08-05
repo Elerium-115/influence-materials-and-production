@@ -18,6 +18,8 @@ const asteroidsPlanByAddress = {};
 
 const crewsDataById = {};
 
+const shipsDataById = {};
+
 /**
  * Format:
  * ```
@@ -41,6 +43,7 @@ module.exports = {
     crewsDataById,
     ownedAsteroidsIdsByAddress,
     productionPlanDataById,
+    shipsDataById,
 };
 
 //// TO DO: expire "asteroidsMetadataById" for a given asteroid if older than e.g. 1 day (in case the name changes)
