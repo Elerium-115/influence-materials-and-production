@@ -206,4 +206,8 @@ body {
   cursor: var(--cursor-url-active) 5 5, auto;
   background: rgba(255, 255, 255, 0.1);
   color: var(--color-warning);
+}
+#private-labels #private-labels-list li.is-blacklisted .address,
+#private-labels #private-labels-list li.is-blacklisted .label {
+  color: var(--color-warning);
 }/*# sourceMappingURL=private-labels.css.map */

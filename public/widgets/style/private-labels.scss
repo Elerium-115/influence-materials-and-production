@@ -126,6 +126,13 @@ body {
                     color: var(--color-warning);
                 }
             }
+
+            &.is-blacklisted {
+                .address,
+                .label {
+                    color: var(--color-warning);
+                }
+            }
         }
     }
 }

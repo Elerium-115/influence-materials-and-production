@@ -9,13 +9,26 @@ if (!localStorage.getItem('widgetPrivateLabels')) {
 
 const privateLabels = JSON.parse(localStorage.getItem('widgetPrivateLabels'));
 
+// Convert obsolete JSON to new format
+Object.keys(privateLabels).forEach(address => {
+    const addressData = privateLabels[address];
+    if (typeof addressData === 'string') {
+        // Obsolete "addressData" is the label itself
+        privateLabels[address] = {
+            isBlacklisted: false, // NO blacklisting for obsolete JSON
+            label: addressData,
+        };
+    }
+});
+
 const elInputStarknetAddress = document.getElementById('input-starknet-address');
 const elInputPrivateLabel = document.getElementById('input-private-label');
 const elPrivateLabelsList = document.getElementById('private-labels-list');
 const elImportButton = document.getElementById('import-button');
 const elInputUpload = document.getElementById('input-upload');
 
-function injectElListItem(address, label) {
+function injectElListItemForAddress(address) {
+    const addressData = privateLabels[address];
     const elListItem = document.createElement('li');
     elListItem.innerHTML = /*html*/ `
         <div class="address" title="" onclick="onClickAddress(this)"></div>
@@ -25,8 +38,10 @@ function injectElListItem(address, label) {
     // Set values via "textContent", to avoid issues re: HTML entities - e.g. "<Q> Elerium"
     elListItem.querySelector('.address').textContent = getCompactAddress(address);
     elListItem.querySelector('.address').title = address;
-    elListItem.querySelector('.label').textContent = label;
+    // Set label via "textContent", NOT via "innerHTML", to avoid issues re: encoding
+    elListItem.querySelector('.label').textContent = addressData.label;
     elListItem.dataset.address = address;
+    elListItem.classList.toggle('is-blacklisted', addressData.isBlacklisted);
     elPrivateLabelsList.append(elListItem);
 }
 
@@ -72,7 +87,10 @@ function addPrivateLabel() {
         }
         removeLabelForElAddress(elRemove);
     }
-    privateLabels[address] = label;
+    privateLabels[address] = {
+        isBlacklisted: false, //// TO DO: add option to BLACKLIST when adding/updating a label
+        label,
+    };
     savePrivateLabels();
     renderPrivateLabels();
     // Reset inputs
@@ -102,13 +120,15 @@ function savePrivateLabels() {
  */
 function renderPrivateLabels() {
     elPrivateLabelsList.textContent = '';
-    const labelsSorted = Object.values(privateLabels).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+    const labelsSorted = Object.values(privateLabels)
+        .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()))
+        .map(addressData => addressData.label);
     const labelsSortedUnique = [...new Set(labelsSorted)];
     labelsSortedUnique.forEach(label => {
         // The same label may be associated with multiple addresses
-        const addresses = Object.keys(privateLabels).filter(address => privateLabels[address] === label);
+        const addresses = Object.keys(privateLabels).filter(address => privateLabels[address].label === label);
         addresses.forEach(address => {
-            injectElListItem(address, label);
+            injectElListItemForAddress(address);
         });
     });
 }
@@ -134,9 +154,20 @@ function handleUpload() {
     reader.onload = (event) => {
         const fileText = event.target.result;
         const privateLabelsNew = JSON.parse(fileText);
+        // Convert obsolete JSON to new format
+        Object.keys(privateLabelsNew).forEach(address => {
+            const addressData = privateLabelsNew[address];
+            if (typeof addressData === 'string') {
+                // Obsolete "addressData" is the label itself
+                privateLabelsNew[address] = {
+                    isBlacklisted: false, // NO blacklisting for obsolete JSON
+                    label: addressData,
+                };
+            }
+        });
         // Add new labels + update existing labels
-        for (const [address, label] of Object.entries(privateLabelsNew)) {
-            privateLabels[address] = label;
+        for (const [address, addressData] of Object.entries(privateLabelsNew)) {
+            privateLabels[address] = addressData;
         }
         savePrivateLabels();
         renderPrivateLabels();
