@@ -23,6 +23,7 @@ Object.keys(privateLabels).forEach(address => {
 
 const elInputStarknetAddress = document.getElementById('input-starknet-address');
 const elInputPrivateLabel = document.getElementById('input-private-label');
+const elInputIsBlacklisted = document.getElementById('input-is-blacklisted');
 const elPrivateLabelsList = document.getElementById('private-labels-list');
 const elImportButton = document.getElementById('import-button');
 const elInputUpload = document.getElementById('input-upload');
@@ -31,9 +32,9 @@ function injectElListItemForAddress(address) {
     const addressData = privateLabels[address];
     const elListItem = document.createElement('li');
     elListItem.innerHTML = /*html*/ `
-        <div class="address" title="" onclick="onClickAddress(this)"></div>
+        <div class="address" title=""></div>
         <div class="label"></div>
-        <div class="remove" onclick="removeLabelForElAddress(this)"></div>
+        <div class="remove"></div>
     `;
     // Set values via "textContent", to avoid issues re: HTML entities - e.g. "<Q> Elerium"
     elListItem.querySelector('.address').textContent = getCompactAddress(address);
@@ -42,30 +43,41 @@ function injectElListItemForAddress(address) {
     elListItem.querySelector('.label').textContent = addressData.label;
     elListItem.dataset.address = address;
     elListItem.classList.toggle('is-blacklisted', addressData.isBlacklisted);
+    elListItem.addEventListener('click', onClickPrivateLabel);
+    elListItem.querySelector('.remove').addEventListener('click', onClickPrivateLabelRemove);
     elPrivateLabelsList.append(elListItem);
 }
 
-function onClickAddress(elAddress) {
-    const elListItem = elAddress.closest('li');
-    if (!elListItem) {
-        return;
-    }
+function onClickPrivateLabel(event) {
+    const elListItem = event.target.closest('li');
     const address = elListItem.dataset.address;
-    navigator.clipboard.writeText(address);
-    elAddress.classList.add('flash-copy');
-    // Stop flashing after 3 flashes (based on animation-duration of ".flash-copy" in SCSS)
-    setTimeout(() => elAddress.classList.remove('flash-copy'), 600);
+    // Populate the inputs to update
+    elInputStarknetAddress.value = address;
+    elInputPrivateLabel.value = privateLabels[address].label;
+    elInputIsBlacklisted.checked = privateLabels[address].isBlacklisted;
+    elInputIsBlacklisted.dispatchEvent(new Event('change'));
+    // Focus the label input
+    elInputPrivateLabel.focus();
 }
 
-function removeLabelForElAddress(elRemove) {
-    const elListItem = elRemove.closest('li');
+function onClickPrivateLabelRemove(event) {
+    // Prevent this click from also triggering "onClickPrivateLabel"
+    event.stopPropagation();
+    const elListItem = event.target.closest('li');
+    const address = elListItem.dataset.address;
+    removeLabelForAddress(address);
+}
+
+function removeLabelForAddress(address, shouldSave = true) {
+    const elListItem = elPrivateLabelsList.querySelector(`[data-address="${address}"]`);
     if (!elListItem) {
         return;
     }
-    const address = elListItem.dataset.address;
     elListItem.parentElement.removeChild(elListItem);
     delete privateLabels[address];
-    savePrivateLabels();
+    if (shouldSave) {
+        savePrivateLabels();
+    }
 }
 
 function addPrivateLabel() {
@@ -80,15 +92,15 @@ function addPrivateLabel() {
         return;
     }
     if (privateLabels[address]) {
-        // Remove existing label, before adding it again
-        const elRemove = elPrivateLabelsList.querySelector(`[data-address="${address}"] .remove`);
-        if (!elRemove) {
-            return;
-        }
-        removeLabelForElAddress(elRemove);
+        /**
+         * Remove existing label, before adding it again.
+         * Bypass "savePrivateLabels" during "removeLabelForAddress",
+         * b/c "savePrivateLabels" will be called later in this function.
+         */
+        removeLabelForAddress(address, false);
     }
     privateLabels[address] = {
-        isBlacklisted: false, //// TO DO: add option to BLACKLIST when adding/updating a label
+        isBlacklisted: elInputIsBlacklisted.checked,
         label,
     };
     savePrivateLabels();
@@ -96,6 +108,8 @@ function addPrivateLabel() {
     // Reset inputs
     elInputStarknetAddress.value = '';
     elInputPrivateLabel.value = '';
+    elInputIsBlacklisted.checked = false;
+    elInputIsBlacklisted.dispatchEvent(new Event('change'));
 }
 
 /**

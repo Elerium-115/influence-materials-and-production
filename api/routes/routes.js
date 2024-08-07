@@ -354,4 +354,29 @@ router.get(
     }
 );
 
+/**
+ * @desc        Get inventory data for inventory name
+ * @route       GET /inventory-data/:name
+ */
+router.get(
+    '/inventory-data/:name/',
+    async (req, res) => {
+        console.log(`--- [router] GET /inventory-data/${req.params.name}`); //// TEST
+        const inventoryName = req.params.name;
+        const cachedData = cache.inventoryDataByName[inventoryName];
+        if (cachedData) {
+            console.log(`---> found CACHED data`); //// TEST
+            res.json(cachedData);
+            return;
+        }
+        const data = await providerInfluencethIo.fetchInventoryDataByInventoryName(inventoryName);
+        if (data.error) {
+            res.json({error: data.error});
+            return;
+        }
+        cache.inventoryDataByName[inventoryName] = data;
+        res.json(data);
+    }
+);
+
 module.exports = router;

@@ -35,7 +35,7 @@ a {
   color: var(--color-influence);
 }
 
-input {
+input:not([type=checkbox]) {
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(0, 0, 0, 0.5);
   color: var(--color-text);
@@ -43,11 +43,18 @@ input {
   height: 30px;
   padding: 0 8px;
 }
-input[type=number] {
+input:not([type=checkbox])[type=number] {
   padding-right: 0;
 }
-input[type=file] {
+input:not([type=checkbox])[type=file] {
   display: none;
+}
+
+label {
+  cursor: var(--cursor-url-active) 5 5, auto;
+}
+label input[type=checkbox] {
+  margin-right: 8px;
 }
 
 .cta {
@@ -118,12 +125,13 @@ body {
   align-items: center;
   display: flex;
   gap: var(--size-padding);
+  justify-content: space-between;
 }
 .root-section .section-form .form-row.disclaimer {
   font-size: 0.9rem;
   opacity: 0.5;
 }
-.root-section .section-form .form-row input {
+.root-section .section-form .form-row input:not([type=checkbox]) {
   width: 100%;
 }
 
@@ -140,6 +148,16 @@ body {
   }
 }
 
+#add-update-section label[for=input-is-blacklisted] {
+  padding: 4px 8px;
+}
+#add-update-section label[for=input-is-blacklisted].checked {
+  color: var(--color-warning);
+}
+#add-update-section label[for=input-is-blacklisted]:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
 #private-labels {
   height: 100%;
   overflow: hidden;
@@ -151,10 +169,11 @@ body {
   padding-bottom: var(--size-base);
 }
 #private-labels #private-labels-list li {
+  cursor: var(--cursor-url-active) 5 5, auto;
   align-items: center;
   display: grid;
   gap: var(--size-padding);
-  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) auto;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 5fr) auto;
   justify-content: space-between;
   padding: 0 var(--size-padding);
   position: relative;
@@ -168,25 +187,6 @@ body {
 #private-labels #private-labels-list li > * {
   position: relative;
 }
-#private-labels #private-labels-list li .address {
-  cursor: var(--cursor-url-active) 5 5, auto;
-}
-#private-labels #private-labels-list li .address:hover {
-  color: var(--color-influence);
-}
-#private-labels #private-labels-list li .address:hover::after {
-  content: "❐";
-  margin: -5px 0 0 8px;
-}
-#private-labels #private-labels-list li .address.flash-copy {
-  animation: flash-copy 200ms infinite;
-  transition: color 200ms;
-}
-@keyframes flash-copy {
-  50% {
-    color: white;
-  }
-}
 #private-labels #private-labels-list li .label {
   color: var(--color-influence-green);
   flex-grow: 1;
@@ -195,15 +195,14 @@ body {
   white-space: nowrap;
 }
 #private-labels #private-labels-list li .remove {
-  line-height: var(--size-base);
-  min-width: var(--size-base);
+  line-height: calc(var(--size-base) * 0.75);
+  min-width: calc(var(--size-base) * 0.75);
   text-align: center;
 }
 #private-labels #private-labels-list li .remove::after {
   content: "✕";
 }
 #private-labels #private-labels-list li .remove:hover {
-  cursor: var(--cursor-url-active) 5 5, auto;
   background: rgba(255, 255, 255, 0.1);
   color: var(--color-warning);
 }

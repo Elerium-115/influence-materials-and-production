@@ -25,7 +25,7 @@
             <div class="form-row disclaimer">Importing will update the labels for existing addresses, and will preserve all other labels.</div>
         </div>
     </section>
-    <section class="root-section">
+    <section id="add-update-section" class="root-section">
         <div class="section-title has-toggle" onclick="this.parentElement.classList.toggle('closed')">
             Add / Update Private Label
         </div>
@@ -35,6 +35,12 @@
             </div>
             <div class="form-row">
                 <input id="input-private-label" type="text" placeholder="Label">
+            </div>
+            <div class="form-row">
+                <label for="input-is-blacklisted">
+                    <input id="input-is-blacklisted" type="checkbox">
+                    Blocklisted
+                </label>
                 <div class="cta" onclick="addPrivateLabel()">Add / Update</div>
             </div>
         </div>

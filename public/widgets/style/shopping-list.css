@@ -35,7 +35,7 @@ a {
   color: var(--color-influence);
 }
 
-input {
+input:not([type=checkbox]) {
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(0, 0, 0, 0.5);
   color: var(--color-text);
@@ -43,11 +43,18 @@ input {
   height: 30px;
   padding: 0 8px;
 }
-input[type=number] {
+input:not([type=checkbox])[type=number] {
   padding-right: 0;
 }
-input[type=file] {
+input:not([type=checkbox])[type=file] {
   display: none;
+}
+
+label {
+  cursor: var(--cursor-url-active) 5 5, auto;
+}
+label input[type=checkbox] {
+  margin-right: 8px;
 }
 
 .cta {

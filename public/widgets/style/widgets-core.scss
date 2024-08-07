@@ -40,7 +40,7 @@ a {
     color: var(--color-influence);
 }
 
-input {
+input:not([type='checkbox']) {
     border: 1px solid rgba(255, 255, 255, 0.2);
     background: rgba(0, 0, 0, 0.5);
     color: var(--color-text);
@@ -54,6 +54,14 @@ input {
 
     &[type='file'] {
         display: none;
+    }
+}
+
+label {
+    @include cursor-active;
+
+    input[type='checkbox'] {
+        margin-right: 8px;
     }
 }
 

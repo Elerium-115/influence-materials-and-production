@@ -161,6 +161,13 @@ function parseShipData(rawData) {
     return metadata;
 }
 
+function parseInventoryData(rawData) {
+    const metadata = {
+        _raw: rawData, //// TEST
+    };
+    return metadata;
+}
+
 async function fetchCrewDataByCrewId(crewId) {
     try {
         // Fetch primary metadata
@@ -235,10 +242,52 @@ async function fetchShipDataByShipId(shipId) {
     }
 }
 
+async function fetchInventoryDataByInventoryName(inventoryName) {
+    try {
+        // Fetch primary metadata
+
+        const config = {
+            method: 'get',
+            url: `https://api.influenceth.io/v2/entities`,
+            params: {
+                label: 5, // buildings
+                // components: '',
+                match: `Name.name:"${inventoryName}"`,
+            },
+            headers: {
+                'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
+            },
+        };
+
+        // const config = {
+        //     method: 'get',
+        //     url: `https://api.influenceth.io/_search/building`,
+        //     params: {
+        //         label: 5, // buildings
+        //         // components: '',
+        //         match: `Name.name:"${inventoryName}"`,
+        //     },
+        //     headers: {
+        //         'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
+        //     },
+        // };
+
+        console.log(`--- [fetchInventoryDataByInventoryName] ${config.method.toUpperCase()} ${config.url} + params:`, config.params); //// TEST
+        const response = await axios(config);
+        const rawData = response.data[0];
+        console.log(`--- [fetchInventoryDataByInventoryName] rawData KEYS:`, Object.keys(rawData)); //// TEST
+        return parseInventoryData(rawData);
+    } catch (error) {
+        console.log(`--- [fetchInventoryDataByInventoryName] ERROR:`, error); //// TEST
+        return {error};
+    }
+}
+
 module.exports = {
     fetchAsteroidMetadata,
     fetchAsteroidsMetadataOwnedBy,
     fetchCrewDataByCrewId,
     fetchCrewmateImage,
+    fetchInventoryDataByInventoryName,
     fetchShipDataByShipId,
 };

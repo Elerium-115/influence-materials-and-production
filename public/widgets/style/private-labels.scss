@@ -18,13 +18,14 @@ body {
             align-items: center;
             display: flex;
             gap: var(--size-padding);
+            justify-content: space-between;
 
             &.disclaimer {
                 font-size: 0.9rem;
                 opacity: 0.5;
             }
 
-            input {
+            input:not([type='checkbox']) {
                 width: 100%;
             }
         }
@@ -50,6 +51,20 @@ body {
     }
 }
 
+#add-update-section {
+    label[for='input-is-blacklisted'] {
+        padding: 4px 8px;
+
+        &.checked {
+            color: var(--color-warning);
+        }
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+    }
+}
+
 #private-labels {
     height: 100%;
     overflow: hidden;
@@ -61,10 +76,11 @@ body {
         padding-bottom: var(--size-base);
 
         li {
+            @include cursor-active;
             align-items: center;
             display: grid;
             gap: var(--size-padding);
-            grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) auto;
+            grid-template-columns: minmax(0, 3fr) minmax(0, 5fr) auto;
             justify-content: space-between;
             padding: 0 var(--size-padding);
             position: relative;
@@ -83,26 +99,6 @@ body {
                 position: relative;
             }
 
-            .address {
-                @include cursor-active;
-
-                &:hover {
-                    color: var(--color-influence);
-    
-                    &::after {
-                        content: '❐'; // copy-to-clipboard symbol
-                        margin: -5px 0 0 8px;
-                    }
-                }
-
-                &.flash-copy {
-                    animation: flash-copy 200ms infinite;
-                    transition: color 200ms;
-    
-                    @keyframes flash-copy { 50% { color: white; } }
-                }
-            }
-
             .label {
                 color: var(--color-influence-green);
                 flex-grow: 1;
@@ -112,8 +108,8 @@ body {
             }
 
             .remove {
-                line-height: var(--size-base);
-                min-width: var(--size-base);
+                line-height: calc(var(--size-base) * 0.75);
+                min-width: calc(var(--size-base) * 0.75);
                 text-align: center;
 
                 &::after {
@@ -121,7 +117,6 @@ body {
                 }
 
                 &:hover {
-                    @include cursor-active;
                     background: rgba(255, 255, 255, 0.1);
                     color: var(--color-warning);
                 }
