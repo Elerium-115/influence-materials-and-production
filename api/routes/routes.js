@@ -273,7 +273,7 @@ router.get(
  * @route       GET /crew-data/:id
  */
 router.get(
-    '/crew-data/:id/',
+    '/crew-data/:id',
     async (req, res) => {
         console.log(`--- [router] GET /crew-data/${req.params.id}`); //// TEST
         const crewId = req.params.id;
@@ -298,7 +298,7 @@ router.get(
  * @route       GET /crewmate-image/:type/:id
  */
 router.get(
-    '/crewmate-image/:type/:id/',
+    '/crewmate-image/:type/:id',
     async (req, res) => {
         console.log(`--- [router] GET /crewmate-image/${req.params.type}/${req.params.id}`); //// TEST
         let bustOnly;
@@ -334,7 +334,7 @@ router.get(
  * @route       GET /ship-data/:id
  */
 router.get(
-    '/ship-data/:id/',
+    '/ship-data/:id',
     async (req, res) => {
         console.log(`--- [router] GET /ship-data/${req.params.id}`); //// TEST
         const shipId = req.params.id;
@@ -355,27 +355,36 @@ router.get(
 );
 
 /**
- * @desc        Get inventory data for inventory name
- * @route       GET /inventory-data/:name
+ * @desc        Get inventories data for list of building IDs (label 5) / ship IDs (label 6)
+ * @route       GET /inventories-data/:label/:ids
  */
 router.get(
-    '/inventory-data/:name/',
+    '/inventories-data/:label/:ids',
     async (req, res) => {
-        console.log(`--- [router] GET /inventory-data/${req.params.name}`); //// TEST
-        const inventoryName = req.params.name;
-        const cachedData = cache.inventoryDataByName[inventoryName];
-        if (cachedData) {
-            console.log(`---> found CACHED data`); //// TEST
-            res.json(cachedData);
-            return;
+        console.log(`--- [router] GET /inventories-data/${req.params.label}/${req.params.ids}`); //// TEST
+        const inventoriesLabel = req.params.label;
+        const inventoriesIds = req.params.ids.split(',');
+        // Fetch data only for NON-cached IDs associated w/ this label
+        const cachedData = cache.inventoriesDataByLabelAndId[inventoriesLabel];
+        const cachedIds = Object.keys(cachedData);
+        if (cachedIds.length) {
+            console.log(`---> found CACHED data for IDs:`, cachedIds); //// TEST
         }
-        const data = await providerInfluencethIo.fetchInventoryDataByInventoryName(inventoryName);
+        const nonCachedIds = inventoriesIds.filter(id => !cachedIds.includes(id));
+        const data = await providerInfluencethIo.fetchInventoriesDataByLabelAndIds(inventoriesLabel, nonCachedIds);
         if (data.error) {
             res.json({error: data.error});
             return;
         }
-        cache.inventoryDataByName[inventoryName] = data;
-        res.json(data);
+        /**
+         * At this point, the data for all IDs should be cached,
+         * via "fetchInventoriesDataByLabelAndIds" > "parseInventoriesData".
+         */
+        const finalData = {};
+        inventoriesIds.forEach(inventoryId => {
+            finalData[inventoryId] = cache.inventoriesDataByLabelAndId[inventoriesLabel][inventoryId];
+        });
+        res.json(finalData);
     }
 );
 

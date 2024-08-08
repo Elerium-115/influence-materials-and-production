@@ -1,12 +1,16 @@
 const axios = require('axios');
+const esb = require('elastic-builder');
 const influenceUtilsV2 = require('@influenceth/sdk');
 const utils = require('../../utils/utils');
 const dataPlayerByAddress = require('../../data/player-by-address');
+const cache = require('../../cache/cache');
 
 /**
  * Provider:
  * https://github.com/influenceth/sdk
  */
+
+const INFLUENCE_API_URL = 'https://api.influenceth.io';
 
 const ETHEREUM_ADDRESS_LENGTH = 42;
 const SWAY_PER_LOT = 6922;
@@ -19,6 +23,21 @@ const BONUS_TYPE_PRETTY = {
     rareearth: 'Rare-Earth',
     fissile: 'Fissiles',
 };
+
+//// TO DO: rework all functions to use "getAxiosInstance", similar to "fetchInventoriesDataByLabelAndIds"
+let axiosInstance = null;
+
+async function getAxiosInstance() {
+    if (!axiosInstance) {
+        axiosInstance = axios.create({
+            baseURL: INFLUENCE_API_URL,
+            headers: {
+                'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
+            },
+        });
+    }
+    return axiosInstance;
+}
 
 function parseAsteroidMetadata(rawData) {
     // console.log(`--- [parseAsteroidMetadata] rawData:`, rawData); //// TEST
@@ -67,7 +86,7 @@ async function fetchAsteroidMetadata(asteroidId) {
         // Fetch primary metadata
         const config = {
             method: 'get',
-            url: `https://api.influenceth.io/v2/entities`,
+            url: `${INFLUENCE_API_URL}/v2/entities`,
             params: {
                 label: 3, // asteroids
                 components: 'AsteroidReward,Celestial,Name,Nft',
@@ -95,7 +114,7 @@ async function fetchAsteroidsMetadataOwnedBy(address) {
     try {
         const config = {
             method: 'get',
-            url: `https://api.influenceth.io/v2/entities`,
+            url: `${INFLUENCE_API_URL}/v2/entities`,
             params: {
                 label: 3, // asteroids
                 components: 'AsteroidReward,Celestial,Name,Nft',
@@ -161,11 +180,30 @@ function parseShipData(rawData) {
     return metadata;
 }
 
-function parseInventoryData(rawData) {
-    const metadata = {
-        _raw: rawData, //// TEST
-    };
-    return metadata;
+async function parseInventoriesData(rawData) {
+    const parsedInventoryDataById = {};
+    try {
+        for (const inventoryDataRaw of rawData.hits.hits) {
+            const inventoryData = inventoryDataRaw._source;
+            const controllerCrewId = inventoryData.Control.controller.id;
+            let controllerCrewData = cache.crewsDataById[controllerCrewId];
+            if (!controllerCrewData) {
+                // Fetch non-cached crew-data + cache it
+                controllerCrewData = await fetchCrewDataByCrewId(controllerCrewId);
+                cache.crewsDataById[controllerCrewId] = controllerCrewData;
+            }
+            const parsedInventoryData = {
+                // _raw: inventoryData, //// TEST
+                controllerCrewData,
+                name: inventoryData.Name.name,
+            };
+            parsedInventoryDataById[inventoryData.id] = parsedInventoryData;
+            cache.inventoriesDataByLabelAndId[inventoryData.label][inventoryData.id] = parsedInventoryData;
+        }
+    } catch (error) {
+        // Swallow this error
+    }
+    return parsedInventoryDataById;
 }
 
 async function fetchCrewDataByCrewId(crewId) {
@@ -173,7 +211,7 @@ async function fetchCrewDataByCrewId(crewId) {
         // Fetch primary metadata
         const config = {
             method: 'get',
-            url: `https://api.influenceth.io/v2/entities`,
+            url: `${INFLUENCE_API_URL}/v2/entities`,
             params: {
                 label: 1, // crews
                 components: 'Crew,Nft',
@@ -221,7 +259,7 @@ async function fetchShipDataByShipId(shipId) {
         // Fetch primary metadata
         const config = {
             method: 'get',
-            url: `https://api.influenceth.io/v2/entities`,
+            url: `${INFLUENCE_API_URL}/v2/entities`,
             params: {
                 label: 6, // ships
                 // components: 'Inventories,Ship', // DISABLED b/c filtering by "Inventories" does NOT retrieve the expected data
@@ -242,43 +280,33 @@ async function fetchShipDataByShipId(shipId) {
     }
 }
 
-async function fetchInventoryDataByInventoryName(inventoryName) {
+async function fetchInventoriesDataByLabelAndIds(inventoriesLabel, inventoriesIds) {
     try {
-        // Fetch primary metadata
-
-        const config = {
-            method: 'get',
-            url: `https://api.influenceth.io/v2/entities`,
-            params: {
-                label: 5, // buildings
-                // components: '',
-                match: `Name.name:"${inventoryName}"`,
-            },
-            headers: {
-                'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
-            },
-        };
-
-        // const config = {
-        //     method: 'get',
-        //     url: `https://api.influenceth.io/_search/building`,
-        //     params: {
-        //         label: 5, // buildings
-        //         // components: '',
-        //         match: `Name.name:"${inventoryName}"`,
-        //     },
-        //     headers: {
-        //         'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
-        //     },
-        // };
-
-        console.log(`--- [fetchInventoryDataByInventoryName] ${config.method.toUpperCase()} ${config.url} + params:`, config.params); //// TEST
-        const response = await axios(config);
-        const rawData = response.data[0];
-        console.log(`--- [fetchInventoryDataByInventoryName] rawData KEYS:`, Object.keys(rawData)); //// TEST
-        return parseInventoryData(rawData);
+        let searchPath = '';
+        switch (Number(inventoriesLabel)) {
+            case influenceUtilsV2.Entity.IDS.BUILDING:
+                searchPath = 'building';
+                break;
+            case influenceUtilsV2.Entity.IDS.SHIP:
+                searchPath = 'ship';
+                break;
+            default:
+                throw Error(`Invalid inventoriesLabel [${inventoriesLabel}]`);
+        }
+        const axiosInstance = await getAxiosInstance();
+        const query = esb.boolQuery()
+            .filter(
+                esb.termsQuery('id', inventoriesIds), // search by list of building IDs / ship IDs
+            );
+        const requestBody = esb.requestBodySearch()
+            .query(query)
+            .size(inventoriesIds.length);
+        const response = await axiosInstance.post(`/_search/${searchPath}`, requestBody.toJSON());
+        const rawData = response.data;
+        console.log(`--- [fetchInventoriesDataByLabelAndIds] rawData KEYS:`, Object.keys(rawData)); //// TEST
+        return await parseInventoriesData(rawData);
     } catch (error) {
-        console.log(`--- [fetchInventoryDataByInventoryName] ERROR:`, error); //// TEST
+        console.log(`--- [fetchInventoriesDataByLabelAndIds] ERROR:`, error); //// TEST
         return {error};
     }
 }
@@ -288,6 +316,6 @@ module.exports = {
     fetchAsteroidsMetadataOwnedBy,
     fetchCrewDataByCrewId,
     fetchCrewmateImage,
-    fetchInventoryDataByInventoryName,
+    fetchInventoriesDataByLabelAndIds,
     fetchShipDataByShipId,
 };

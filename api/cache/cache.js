@@ -20,7 +20,10 @@ const crewsDataById = {};
 
 const shipsDataById = {};
 
-const inventoryDataByName = {};
+const inventoriesDataByLabelAndId = {
+    5: {}, // buildings
+    6: {}, // ships
+};
 
 /**
  * Format:
@@ -43,7 +46,7 @@ module.exports = {
     asteroidsMetadataById,
     asteroidsPlanByAddress,
     crewsDataById,
-    inventoryDataByName,
+    inventoriesDataByLabelAndId,
     ownedAsteroidsIdsByAddress,
     productionPlanDataById,
     shipsDataById,
