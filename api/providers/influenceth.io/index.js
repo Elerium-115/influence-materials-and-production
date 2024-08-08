@@ -189,19 +189,25 @@ async function parseInventoriesData(rawData) {
             let controllerCrewData = cache.crewsDataById[controllerCrewId];
             if (!controllerCrewData) {
                 // Fetch non-cached crew-data + cache it
+                //// TO DO: rework this via elastic-search for ALL crew IDs in a single call
                 controllerCrewData = await fetchCrewDataByCrewId(controllerCrewId);
                 cache.crewsDataById[controllerCrewId] = controllerCrewData;
             }
+            /**
+             * NOTE: "inventoryData.Name" NULL if inventory not yet named by its controller.
+             * In this case, a generic name is generated in the game client, which is likely
+             * based on the player's locale for the number formatting (e.g. "Warehouse #3,560").
+             * For this reason, the inventory name is NOT saved from here.
+             */
             const parsedInventoryData = {
                 // _raw: inventoryData, //// TEST
                 controllerCrewData,
-                name: inventoryData.Name.name,
             };
             parsedInventoryDataById[inventoryData.id] = parsedInventoryData;
             cache.inventoriesDataByLabelAndId[inventoryData.label][inventoryData.id] = parsedInventoryData;
         }
     } catch (error) {
-        // Swallow this error
+        console.log(`--- [parseInventoriesData] ERROR:`, error); //// TEST
     }
     return parsedInventoryDataById;
 }

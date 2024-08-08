@@ -367,9 +367,6 @@ router.get(
         // Fetch data only for NON-cached IDs associated w/ this label
         const cachedData = cache.inventoriesDataByLabelAndId[inventoriesLabel];
         const cachedIds = Object.keys(cachedData);
-        if (cachedIds.length) {
-            console.log(`---> found CACHED data for IDs:`, cachedIds); //// TEST
-        }
         const nonCachedIds = inventoriesIds.filter(id => !cachedIds.includes(id));
         const data = await providerInfluencethIo.fetchInventoriesDataByLabelAndIds(inventoriesLabel, nonCachedIds);
         if (data.error) {
