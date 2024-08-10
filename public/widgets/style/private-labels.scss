@@ -69,6 +69,28 @@ body {
     height: 100%;
     overflow: hidden;
 
+    .section-title {
+        position: relative;
+
+        #search-wrapper {
+            position: absolute;
+            right: var(--size-padding);
+            top: 0;
+
+            #input-search {
+                background: black;
+                text-align: right;
+                transition: width 300ms ease 0s;
+                width: 90px;
+
+                &:hover,
+                &:focus {
+                    width: 180px;
+                }
+            }
+        }
+    }
+
     #private-labels-list {
         font-size: 90%;
         height: 100%;
@@ -117,8 +139,8 @@ body {
                 }
 
                 &:hover {
-                    background: rgba(255, 255, 255, 0.1);
-                    color: var(--color-warning);
+                    background: var(--color-warning);
+                    color: white;
                 }
             }
 

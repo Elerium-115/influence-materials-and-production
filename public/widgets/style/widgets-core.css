@@ -57,6 +57,10 @@ label input[type=checkbox] {
   margin-right: 8px;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .cta {
   cursor: var(--cursor-url-active) 5 5, auto;
   align-items: center;

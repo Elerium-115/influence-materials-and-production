@@ -10,7 +10,7 @@
     <meta name="author" content="@elerium115">
 </head>
 <body>
-    <section id="import-export-section" class="root-section">
+    <section id="import-export-section" class="root-section closed">
         <div class="section-title has-toggle" onclick="this.parentElement.classList.toggle('closed')">
             Import / Export Private Labels
         </div>
@@ -48,6 +48,9 @@
     <section id="private-labels" class="root-section">
         <div class="section-title">
             My Private Labels
+            <div id="search-wrapper">
+                <input type="text" id="input-search" placeholder="Search  🔍" oninput="onInputSearch()">
+            </div>
         </div>
         <ul id="private-labels-list"></ul>
     </section>

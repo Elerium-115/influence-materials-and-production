@@ -57,6 +57,10 @@ label input[type=checkbox] {
   margin-right: 8px;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .cta {
   cursor: var(--cursor-url-active) 5 5, auto;
   align-items: center;
@@ -162,6 +166,23 @@ body {
   height: 100%;
   overflow: hidden;
 }
+#private-labels .section-title {
+  position: relative;
+}
+#private-labels .section-title #search-wrapper {
+  position: absolute;
+  right: var(--size-padding);
+  top: 0;
+}
+#private-labels .section-title #search-wrapper #input-search {
+  background: black;
+  text-align: right;
+  transition: width 300ms ease 0s;
+  width: 90px;
+}
+#private-labels .section-title #search-wrapper #input-search:hover, #private-labels .section-title #search-wrapper #input-search:focus {
+  width: 180px;
+}
 #private-labels #private-labels-list {
   font-size: 90%;
   height: 100%;
@@ -203,8 +224,8 @@ body {
   content: "✕";
 }
 #private-labels #private-labels-list li .remove:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--color-warning);
+  background: var(--color-warning);
+  color: white;
 }
 #private-labels #private-labels-list li.is-blacklisted .address,
 #private-labels #private-labels-list li.is-blacklisted .label {

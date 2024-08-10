@@ -21,12 +21,14 @@ Object.keys(privateLabels).forEach(address => {
     }
 });
 
+const elAddUpdateSection = document.getElementById('add-update-section');
 const elInputStarknetAddress = document.getElementById('input-starknet-address');
 const elInputPrivateLabel = document.getElementById('input-private-label');
 const elInputIsBlacklisted = document.getElementById('input-is-blacklisted');
 const elPrivateLabelsList = document.getElementById('private-labels-list');
 const elImportButton = document.getElementById('import-button');
 const elInputUpload = document.getElementById('input-upload');
+const elInputSearch = document.getElementById('input-search');
 
 function injectElListItemForAddress(address) {
     const addressData = privateLabels[address];
@@ -56,6 +58,8 @@ function onClickPrivateLabel(event) {
     elInputPrivateLabel.value = privateLabels[address].label;
     elInputIsBlacklisted.checked = privateLabels[address].isBlacklisted;
     elInputIsBlacklisted.dispatchEvent(new Event('change'));
+    // Ensure the label input is visible, i.e. its parent section is not closed
+    elAddUpdateSection.classList.remove('closed')
     // Focus the label input
     elInputPrivateLabel.focus();
 }
@@ -63,6 +67,10 @@ function onClickPrivateLabel(event) {
 function onClickPrivateLabelRemove(event) {
     // Prevent this click from also triggering "onClickPrivateLabel"
     event.stopPropagation();
+    if (!confirm('Are you sure you want to remove this label?')) {
+        // Abort removal
+        return;
+    }
     const elListItem = event.target.closest('li');
     const address = elListItem.dataset.address;
     removeLabelForAddress(address);
@@ -145,6 +153,8 @@ function renderPrivateLabels() {
             injectElListItemForAddress(address);
         });
     });
+    // Also reset the search input
+    elInputSearch.value = '';
 }
 
 function uploadPrivateLabels() {
@@ -193,6 +203,18 @@ function handleUpload() {
         setTimeout(() => elImportButton.classList.remove('flash-import'), 900);
     };
     reader.readAsText(this.files[0]);
+}
+
+function onInputSearch() {
+    const queryLowercase = elInputSearch.value.toLowerCase().trim();
+    [...elPrivateLabelsList.children].forEach(elListItem => {
+        const addressLowercase = elListItem.dataset.address.toLowerCase();
+        const labelLowercase = elListItem.textContent.toLowerCase();
+        const isMatch = !queryLowercase.length ||
+            addressLowercase.includes(queryLowercase) ||
+            labelLowercase.includes(queryLowercase);
+        elListItem.classList.toggle('hidden', !isMatch);
+    });
 }
 
 elInputUpload.addEventListener('change', handleUpload, false);
