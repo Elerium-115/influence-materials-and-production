@@ -60,21 +60,28 @@ const tools = [
         ],
     },
     {
+        category_short: 'Trading',
+        category: 'Trading Tools',
+        items: [
+            {title: 'Trader Dashboard', author: 'Denker', url: 'https://www.adalia.info/tools/trader-dashboard'},
+            {title: 'Marketplace Trades Summary', author: 'trevis & Dirac', url: 'https://starksight.plus/trades'},
+            {title: 'Resource Prices', author: 'trevis & Dirac', url: 'https://starksight.plus/trades/129/price'},
+            {title: 'Ships For Sale', author: 'Denker', url: 'https://www.adalia.info/tools/ships-for-sale'},
+        ],
+    },
+    {
         category_short: 'Information',
         category: 'Information Tools',
         items: [
             {title: 'Influence Wiki', author: '[official]', url: 'https://wiki.influenceth.io/'}, // blocked in iframe
             // {title: 'Wendash', author: 'Joosh & Admiral', url: 'https://influence.wendash.com/'}, // password gated
-            {title: 'Trader Dashboard', author: 'Denker', url: 'https://www.adalia.info/tools/trader-dashboard'},
-            {title: 'Marketplace Trades Summary', author: 'trevis & Dirac', url: 'https://starksight.plus/trades'},
-            {title: 'Resource Prices', author: 'trevis & Dirac', url: 'https://starksight.plus/trades/129/price'},
-            {title: 'Ships For Sale', author: 'Denker', url: 'https://www.adalia.info/tools/ships-for-sale'},
             {title: 'Adalia Academy', author: 'Grey Area & Skippy', url: 'https://adalia.academy/'},
             // {title: 'Influence Sales', author: 'Teandy', url: 'https://influence-sales.space/'}, // offline
             {title: 'Adalia.Guide', author: 'Korivak', url: 'https://adalia.guide/'},
             {title: 'Adalia Info', author: 'Denker', url: 'https://adalia.info/'},
             {title: 'StarkSight Topics', author: '[community]', url: 'https://starksight.plus/topics'},
-            {title: 'Analytics on Dune', author: 'brakmaar', url: 'https://dune.com/brakmaar/Influence-asteroids'}, // blocked in iframe
+            {title: 'Analytics on Dune (Starknet)', author: 'brakmaar', url: 'https://dune.com/brakmaar/influence-game-data'}, // blocked in iframe
+            {title: 'Analytics on Dune (L1)', author: 'brakmaar', url: 'https://dune.com/brakmaar/Influence-asteroids'}, // blocked in iframe
             // {title: 'Adalia.id', author: 'strwrsfrk & Myrhea', url: 'https://my.adalia.id/'}, // abandoned?
         ],
     },
