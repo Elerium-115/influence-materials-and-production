@@ -68,6 +68,7 @@ const tools = [
             {title: 'Trader Dashboard', author: 'Denker', url: 'https://www.adalia.info/tools/trader-dashboard'},
             {title: 'Marketplace Trades Summary', author: 'trevis & Dirac', url: 'https://starksight.plus/trades'},
             {title: 'Resource Prices', author: 'trevis & Dirac', url: 'https://starksight.plus/trades/129/price'},
+            {title: 'Ships For Sale', author: 'Denker', url: 'https://www.adalia.info/tools/ships-for-sale'},
             {title: 'Adalia Academy', author: 'Grey Area & Skippy', url: 'https://adalia.academy/'},
             // {title: 'Influence Sales', author: 'Teandy', url: 'https://influence-sales.space/'}, // offline
             {title: 'Adalia.Guide', author: 'Korivak', url: 'https://adalia.guide/'},
