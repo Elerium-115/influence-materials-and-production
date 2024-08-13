@@ -17,6 +17,7 @@ const tools = [
             // {title: 'Production Chains', author: 'Elerium115', url: 'https://influence.elerium.dev/production.html'}, // to be reworked
             {title: 'Process Finder', author: 'Denker', url: 'https://www.adalia.info/tools/process-finder'},
             {title: 'Production Tracker', author: 'Denker', url: 'https://www.adalia.info/tools/production-tracker'},
+            {title: 'Public Buildings', author: 'Denker', url: 'https://www.adalia.info/tools/public-buildings'},
             // {title: 'Product List', author: 'Daharius', url: 'https://influence.daharius.com/ProductList'}, // removed as requested by Daharius @ 2024-03-19
         ],
     },
