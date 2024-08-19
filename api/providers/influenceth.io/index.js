@@ -1,9 +1,10 @@
-const axios = require('axios');
-const esb = require('elastic-builder');
-const influenceUtilsV2 = require('@influenceth/sdk');
-const utils = require('../../utils/utils');
-const dataPlayerByAddress = require('../../data/player-by-address');
-const cache = require('../../cache/cache');
+import axios from 'axios';
+import esb from 'elastic-builder';
+import * as influenceUtilsV2 from '@influenceth/sdk';
+
+import cache from '../../cache/cache.js';
+import dataPlayerByAddress from '../../data/player-by-address.js';
+import utils from '../../utils/utils.js';
 
 /**
  * Provider:
@@ -135,7 +136,7 @@ async function fetchAsteroidsMetadataOwnedBy(address) {
 }
 
 function parseCrewData(rawData) {
-    // console.log(`--- [parseCrewMetadata] rawData:`, rawData); //// TEST
+    // console.log(`--- [parseCrewData] rawData:`, rawData); //// TEST
     const crewId = rawData.id;
     const delegatedToAddress = rawData.Crew.delegatedTo;
     const ownerAddress = rawData.Nft.owners.ethereum ? rawData.Nft.owners.ethereum : rawData.Nft.owners.starknet;
@@ -147,8 +148,62 @@ function parseCrewData(rawData) {
         ownerAddress,
         ownerName: dataPlayerByAddress.playerByAddress[ownerAddress.toLowerCase()] || null,
     };
-    // console.log(`---> [parseCrewMetadata] metadata:`, metadata); //// TEST
+    // console.log(`---> [parseCrewData] metadata:`, metadata); //// TEST
     return metadata;
+}
+
+function parseCrewsData(rawData) {
+    const parsedCrewDataById = {};
+    try {
+        for (const crewDataRaw of rawData.hits.hits) {
+            const crewData = crewDataRaw._source;
+            const parsedCrewData = parseCrewData(crewData);
+            parsedCrewDataById[crewData.id] = parsedCrewData;
+            cache.crewsDataById[crewData.id] = parsedCrewData;
+        }
+    } catch (error) {
+        console.log(`--- [parseCrewsData] ERROR:`, error); //// TEST
+    }
+    return parsedCrewDataById;
+}
+
+async function parseInventoriesData(rawData) {
+    const parsedInventoryDataById = {};
+    try {
+        let nonCachedCrewIds = [];
+        for (const inventoryDataRaw of rawData.hits.hits) {
+            const inventoryData = inventoryDataRaw._source;
+            const controllerCrewId = inventoryData.Control.controller.id;
+            if (!cache.crewsDataById[controllerCrewId] && !nonCachedCrewIds.includes(controllerCrewId)) {
+                nonCachedCrewIds.push(controllerCrewId);
+            }
+        }
+        if (nonCachedCrewIds.length) {
+            // Fetch crew-data for non-cached crew IDs + cache it (via "parseCrewsData")
+            await fetchCrewsDataByIds(nonCachedCrewIds);
+        }
+        // At this point, the data for all crew IDs should be cached
+        for (const inventoryDataRaw of rawData.hits.hits) {
+            const inventoryData = inventoryDataRaw._source;
+            const controllerCrewId = inventoryData.Control.controller.id;
+            const controllerCrewData = cache.crewsDataById[controllerCrewId];
+            /**
+             * NOTE: "inventoryData.Name" NULL if inventory not yet named by its controller.
+             * In this case, a generic name is generated in the game client, which is likely
+             * based on the player's locale for the number formatting (e.g. "Warehouse #3,560").
+             * For this reason, the inventory name is NOT saved from here.
+             */
+            const parsedInventoryData = {
+                // _raw: inventoryData, //// TEST
+                controllerCrewData,
+            };
+            parsedInventoryDataById[inventoryData.id] = parsedInventoryData;
+            cache.inventoriesDataByLabelAndId[inventoryData.label][inventoryData.id] = parsedInventoryData;
+        }
+    } catch (error) {
+        console.log(`--- [parseInventoriesData] ERROR:`, error); //// TEST
+    }
+    return parsedInventoryDataById;
 }
 
 function parseShipData(rawData) {
@@ -176,66 +231,8 @@ function parseShipData(rawData) {
         shipId,
         shipLoadedPropellantPercent,
     };
-    // console.log(`---> [parseCrewMetadata] metadata:`, metadata); //// TEST
+    // console.log(`---> [parseShipData] metadata:`, metadata); //// TEST
     return metadata;
-}
-
-async function parseInventoriesData(rawData) {
-    const parsedInventoryDataById = {};
-    try {
-        for (const inventoryDataRaw of rawData.hits.hits) {
-            const inventoryData = inventoryDataRaw._source;
-            const controllerCrewId = inventoryData.Control.controller.id;
-            let controllerCrewData = cache.crewsDataById[controllerCrewId];
-            if (!controllerCrewData) {
-                // Fetch non-cached crew-data + cache it
-                //// TO DO: rework this via elastic-search for ALL crew IDs in a single call
-                controllerCrewData = await fetchCrewDataByCrewId(controllerCrewId);
-                cache.crewsDataById[controllerCrewId] = controllerCrewData;
-            }
-            /**
-             * NOTE: "inventoryData.Name" NULL if inventory not yet named by its controller.
-             * In this case, a generic name is generated in the game client, which is likely
-             * based on the player's locale for the number formatting (e.g. "Warehouse #3,560").
-             * For this reason, the inventory name is NOT saved from here.
-             */
-            const parsedInventoryData = {
-                // _raw: inventoryData, //// TEST
-                controllerCrewData,
-            };
-            parsedInventoryDataById[inventoryData.id] = parsedInventoryData;
-            cache.inventoriesDataByLabelAndId[inventoryData.label][inventoryData.id] = parsedInventoryData;
-        }
-    } catch (error) {
-        console.log(`--- [parseInventoriesData] ERROR:`, error); //// TEST
-    }
-    return parsedInventoryDataById;
-}
-
-async function fetchCrewDataByCrewId(crewId) {
-    try {
-        // Fetch primary metadata
-        const config = {
-            method: 'get',
-            url: `${INFLUENCE_API_URL}/v2/entities`,
-            params: {
-                label: 1, // crews
-                components: 'Crew,Nft',
-                id: crewId,
-            },
-            headers: {
-                'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
-            },
-        };
-        console.log(`--- [fetchCrewDataByCrewId] ${config.method.toUpperCase()} ${config.url} + params:`, config.params); //// TEST
-        const response = await axios(config);
-        const rawData = response.data[0];
-        console.log(`--- [fetchCrewDataByCrewId] rawData KEYS:`, Object.keys(rawData)); //// TEST
-        return parseCrewData(rawData);
-    } catch (error) {
-        console.log(`--- [fetchCrewDataByCrewId] ERROR:`, error); //// TEST
-        return {error};
-    }
 }
 
 async function fetchCrewmateImage(crewmateId, bustOnly = false) {
@@ -260,33 +257,29 @@ async function fetchCrewmateImage(crewmateId, bustOnly = false) {
     }
 }
 
-async function fetchShipDataByShipId(shipId) {
+async function fetchCrewsDataByIds(crewsIds) {
+    console.log(`--- [fetchCrewsDataByIds] crewsIds:`, crewsIds); //// TEST
     try {
-        // Fetch primary metadata
-        const config = {
-            method: 'get',
-            url: `${INFLUENCE_API_URL}/v2/entities`,
-            params: {
-                label: 6, // ships
-                // components: 'Inventories,Ship', // DISABLED b/c filtering by "Inventories" does NOT retrieve the expected data
-                id: shipId,
-            },
-            headers: {
-                'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
-            },
-        };
-        console.log(`--- [fetchShipDataByShipId] ${config.method.toUpperCase()} ${config.url} + params:`, config.params); //// TEST
-        const response = await axios(config);
-        const rawData = response.data[0];
-        console.log(`--- [fetchShipDataByShipId] rawData KEYS:`, Object.keys(rawData)); //// TEST
-        return parseShipData(rawData);
+        const axiosInstance = await getAxiosInstance();
+        const query = esb.boolQuery()
+            .filter(
+                esb.termsQuery('id', crewsIds), // search by list of crew IDs
+            );
+        const requestBody = esb.requestBodySearch()
+            .query(query)
+            .size(crewsIds.length);
+        const response = await axiosInstance.post(`/_search/crew`, requestBody.toJSON());
+        const rawData = response.data;
+        console.log(`--- [fetchCrewsDataByIds] rawData KEYS:`, Object.keys(rawData)); //// TEST
+        return parseCrewsData(rawData);
     } catch (error) {
-        console.log(`--- [fetchShipDataByShipId] ERROR:`, error); //// TEST
+        console.log(`--- [fetchCrewsDataByIds] ERROR:`, error); //// TEST
         return {error};
     }
 }
 
 async function fetchInventoriesDataByLabelAndIds(inventoriesLabel, inventoriesIds) {
+    console.log(`--- [fetchInventoriesDataByLabelAndIds] label ${inventoriesLabel}, inventoriesIds:`, inventoriesIds); //// TEST
     try {
         let searchPath = '';
         switch (Number(inventoriesLabel)) {
@@ -317,11 +310,37 @@ async function fetchInventoriesDataByLabelAndIds(inventoriesLabel, inventoriesId
     }
 }
 
-module.exports = {
+async function fetchShipDataByShipId(shipId) {
+    try {
+        // Fetch primary metadata
+        const config = {
+            method: 'get',
+            url: `${INFLUENCE_API_URL}/v2/entities`,
+            params: {
+                label: 6, // ships
+                // components: 'Inventories,Ship', // DISABLED b/c filtering by "Inventories" does NOT retrieve the expected data
+                id: shipId,
+            },
+            headers: {
+                'Authorization': `Bearer ${await utils.loadAccessToken('influencethIo')}`,
+            },
+        };
+        console.log(`--- [fetchShipDataByShipId] ${config.method.toUpperCase()} ${config.url} + params:`, config.params); //// TEST
+        const response = await axios(config);
+        const rawData = response.data[0];
+        console.log(`--- [fetchShipDataByShipId] rawData KEYS:`, Object.keys(rawData)); //// TEST
+        return parseShipData(rawData);
+    } catch (error) {
+        console.log(`--- [fetchShipDataByShipId] ERROR:`, error); //// TEST
+        return {error};
+    }
+}
+
+export default {
     fetchAsteroidMetadata,
     fetchAsteroidsMetadataOwnedBy,
-    fetchCrewDataByCrewId,
     fetchCrewmateImage,
+    fetchCrewsDataByIds,
     fetchInventoriesDataByLabelAndIds,
     fetchShipDataByShipId,
 };

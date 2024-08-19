@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 async function fetchPrices() {
     try {
@@ -31,6 +31,6 @@ async function fetchPrices() {
     }
 }
 
-module.exports = {
+export default {
     fetchPrices,
 };

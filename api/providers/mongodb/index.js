@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const AsteroidsPlanRecord = require('./asteroids-plan-record-schema');
-const ProductionPlanRecord = require('./production-plan-schema');
-const utils = require('../../utils/utils');
+import AsteroidsPlanRecord from './asteroids-plan-record-schema.js';
+import ProductionPlanRecord from './production-plan-schema.js';
+
+import utils from '../../utils/utils.js';
 
 /*
 NOTE:
@@ -201,7 +201,7 @@ async function saveProductionPlan(productionPlanData, productionPlanId = null) {
     }
 }
 
-module.exports = {
+export default {
     fetchAsteroidsPlan,
     fetchProductionPlan,
     saveAsteroidsPlan,

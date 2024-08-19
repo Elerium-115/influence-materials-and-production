@@ -1,5 +1,5 @@
-const cache = require('../cache/cache');
-const authInfluencethIo = require('../providers/influenceth.io/auth');
+import cache from '../cache/cache.js';
+import providerInfluencethIoAuth from '../providers/influenceth.io/auth.js';
 
 /**
  * Get access token for "provider", and initialize "cache.accessTokens[provider]" if not set.
@@ -14,7 +14,7 @@ async function loadAccessToken(provider) {
     switch (provider) {
         case 'influencethIo':
             try {
-                token = await authInfluencethIo.fetchAccessToken(
+                token = await providerInfluencethIoAuth.fetchAccessToken(
                     process.env.INFLUENCETH_IO_API_ID,
                     process.env.INFLUENCETH_IO_API_KEY,
                 );
@@ -52,7 +52,7 @@ function removeProps(obj, keys) {
     }
 }
 
-module.exports = {
+export default {
     loadAccessToken,
     removeProps,
 };

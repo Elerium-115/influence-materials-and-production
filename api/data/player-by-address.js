@@ -19,6 +19,6 @@ const playerByAddress = {
     '0x0290217ee1b05debca3a34103dbaa479a72c102e14197ed8e3adf7eebc0437ad': '[SG] partiallyZen',
 };
 
-module.exports = {
+export default {
     playerByAddress,
 };

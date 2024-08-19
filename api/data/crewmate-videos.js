@@ -23,6 +23,6 @@ crewmateIdsWithVideo.forEach(crewmateId => {
     crewmateVideos[crewmateId] = `${crewmateVideosBaseUrl}/${crewmateId}.mp4`;
 });
 
-module.exports = {
+export default {
     crewmateVideos,
 };

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const productionPlanRecordSchema = new mongoose.Schema({
     itemDataById: Object,
@@ -10,4 +10,4 @@ productionPlanRecordSchema.statics.findOneByProductionPlanId = function(producti
     return this.findOne({productionPlanId});
 };
 
-module.exports = mongoose.model("ProductionPlanRecord", productionPlanRecordSchema);
+export default mongoose.model('ProductionPlanRecord', productionPlanRecordSchema);

@@ -5,6 +5,6 @@ const widgets = [
     {title: 'More coming soon...', url: null},
 ];
 
-module.exports = {
+export default {
     widgets,
 };

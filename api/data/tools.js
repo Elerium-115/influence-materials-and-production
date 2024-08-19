@@ -105,6 +105,6 @@ const tools = [
     },
 ];
 
-module.exports = {
+export default {
     tools,
 };

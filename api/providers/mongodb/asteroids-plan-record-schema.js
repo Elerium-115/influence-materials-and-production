@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const plannedProductSchema = new mongoose.Schema({
     planned_product_name: String,
@@ -24,4 +24,4 @@ asteroidsPlanRecordSchema.statics.findOneByAddress = function(address) {
     return this.findOne({address: new RegExp(address, 'i')}); // Case-insensitive search
 };
 
-module.exports = mongoose.model("AsteroidsPlanRecord", asteroidsPlanRecordSchema);
+export default mongoose.model('AsteroidsPlanRecord', asteroidsPlanRecordSchema);

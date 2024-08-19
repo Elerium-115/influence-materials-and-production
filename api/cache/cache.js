@@ -41,7 +41,7 @@ const ownedAsteroidsIdsByAddress = {};
 
 const productionPlanDataById = {};
 
-module.exports = {
+export default {
     accessTokens,
     asteroidsMetadataById,
     asteroidsPlanByAddress,

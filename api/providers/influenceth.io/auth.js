@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 async function fetchAccessToken(clientId, clientKey) {
     try {
@@ -22,6 +22,6 @@ async function fetchAccessToken(clientId, clientKey) {
     }
 }
 
-module.exports = {
+export default {
     fetchAccessToken,
 };

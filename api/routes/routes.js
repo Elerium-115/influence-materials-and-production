@@ -1,12 +1,13 @@
-const express = require('express');
-const cache = require('../cache/cache');
-const providerInfluencethIo = require('../providers/influenceth.io/index');
-const providerMock = require('../providers/mock/index');
-const providerMongoDB = require('../providers/mongodb/index');
-const providerStarkSightPlus = require('../providers/starksight.plus/index');
-const dataCrewmateVideos = require('../data/crewmate-videos');
-const dataTools = require('../data/tools');
-const dataWidgets = require('../data/widgets');
+import express from 'express';
+
+import cache from '../cache/cache.js';
+import dataCrewmateVideos from '../data/crewmate-videos.js';
+import dataTools from '../data/tools.js';
+import dataWidgets from '../data/widgets.js';
+import providerInfluencethIo from '../providers/influenceth.io/index.js';
+import providerMock from '../providers/mock/index.js';
+import providerMongoDB from '../providers/mongodb/index.js';
+import providerStarkSightPlus from '../providers/starksight.plus/index.js';
 
 const router = express.Router();
 
@@ -268,6 +269,7 @@ router.get(
     }
 );
 
+//// TO BE REMOVED after no longer used by Chrome extension
 /**
  * @desc        Get crew data for crew ID
  * @route       GET /crew-data/:id
@@ -283,7 +285,7 @@ router.get(
             res.json(cachedData);
             return;
         }
-        const data = await providerInfluencethIo.fetchCrewDataByCrewId(crewId);
+        const data = await providerInfluencethIo.fetchCrewsDataByIds([crewId]);
         if (data.error) {
             res.json({error: data.error});
             return;
@@ -330,6 +332,71 @@ router.get(
 );
 
 /**
+ * @desc        Get crews data for list of crew IDs
+ * @route       GET /crews-data/:ids
+ */
+router.get(
+    '/crews-data/:ids',
+    async (req, res) => {
+        console.log(`--- [router] GET /crews-data/${req.params.ids}`); //// TEST
+        const crewsIds = req.params.ids.split(',');
+        // Fetch data only for NON-cached IDs
+        const cachedData = cache.crewsDataById;
+        const cachedIds = Object.keys(cachedData);
+        const nonCachedIds = crewsIds.filter(id => !cachedIds.includes(id));
+        if (nonCachedIds.length) {
+            const data = await providerInfluencethIo.fetchCrewsDataByIds(nonCachedIds);
+            if (data.error) {
+                res.json({error: data.error});
+                return;
+            }
+        }
+        /**
+         * At this point, the data for all IDs should be cached,
+         * via "fetchCrewsDataByIds" > "parseCrewsData".
+         */
+        const finalData = {};
+        crewsIds.forEach(crewId => {
+            finalData[crewId] = cache.crewsDataById[crewId];
+        });
+        res.json(finalData);
+    }
+);
+
+/**
+ * @desc        Get inventories data for list of building IDs (label 5) / ship IDs (label 6)
+ * @route       GET /inventories-data/:label/:ids
+ */
+router.get(
+    '/inventories-data/:label/:ids',
+    async (req, res) => {
+        console.log(`--- [router] GET /inventories-data/${req.params.label}/${req.params.ids}`); //// TEST
+        const inventoriesLabel = req.params.label;
+        const inventoriesIds = req.params.ids.split(',');
+        // Fetch data only for NON-cached IDs associated w/ this label
+        const cachedData = cache.inventoriesDataByLabelAndId[inventoriesLabel];
+        const cachedIds = Object.keys(cachedData);
+        const nonCachedIds = inventoriesIds.filter(id => !cachedIds.includes(id));
+        if (nonCachedIds.length) {
+            const data = await providerInfluencethIo.fetchInventoriesDataByLabelAndIds(inventoriesLabel, nonCachedIds);
+            if (data.error) {
+                res.json({error: data.error});
+                return;
+            }
+        }
+        /**
+         * At this point, the data for all IDs should be cached,
+         * via "fetchInventoriesDataByLabelAndIds" > "parseInventoriesData".
+         */
+        const finalData = {};
+        inventoriesIds.forEach(inventoryId => {
+            finalData[inventoryId] = cache.inventoriesDataByLabelAndId[inventoriesLabel][inventoryId];
+        });
+        res.json(finalData);
+    }
+);
+
+/**
  * @desc        Get ship data for ship ID
  * @route       GET /ship-data/:id
  */
@@ -354,35 +421,4 @@ router.get(
     }
 );
 
-/**
- * @desc        Get inventories data for list of building IDs (label 5) / ship IDs (label 6)
- * @route       GET /inventories-data/:label/:ids
- */
-router.get(
-    '/inventories-data/:label/:ids',
-    async (req, res) => {
-        console.log(`--- [router] GET /inventories-data/${req.params.label}/${req.params.ids}`); //// TEST
-        const inventoriesLabel = req.params.label;
-        const inventoriesIds = req.params.ids.split(',');
-        // Fetch data only for NON-cached IDs associated w/ this label
-        const cachedData = cache.inventoriesDataByLabelAndId[inventoriesLabel];
-        const cachedIds = Object.keys(cachedData);
-        const nonCachedIds = inventoriesIds.filter(id => !cachedIds.includes(id));
-        const data = await providerInfluencethIo.fetchInventoriesDataByLabelAndIds(inventoriesLabel, nonCachedIds);
-        if (data.error) {
-            res.json({error: data.error});
-            return;
-        }
-        /**
-         * At this point, the data for all IDs should be cached,
-         * via "fetchInventoriesDataByLabelAndIds" > "parseInventoriesData".
-         */
-        const finalData = {};
-        inventoriesIds.forEach(inventoryId => {
-            finalData[inventoryId] = cache.inventoriesDataByLabelAndId[inventoriesLabel][inventoryId];
-        });
-        res.json(finalData);
-    }
-);
-
-module.exports = router;
+export default router;

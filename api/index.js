@@ -1,11 +1,15 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const utils = require('./utils/utils');
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
+import mongoose from 'mongoose';
+
+import router from './routes/routes.js';
+import utils from './utils/utils.js';
 
 console.log(`------`); //// TEST
+
+dotenv.config();
 
 /**
  * Start by connecting to MongoDB in the background, b/c this is the slowest operation.
@@ -29,7 +33,7 @@ utils.loadAccessToken('influencethIo');
 console.log(`---> #A`); //// TEST
 
 // Routes
-app.use('/', require('./routes/routes'));
+app.use('/', router);
 
 console.log(`---> #B`); //// TEST
 
