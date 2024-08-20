@@ -129,11 +129,11 @@ function savePrivateLabels() {
     localStorage.setItem('widgetPrivateLabels', privateLabelsString);
     // Emit event to parent window, after updating the private labels in the widget
     if (window.self !== window.top) {
-        const widgetEventData = {
-            widgetEventKey: 'PRIVATE_LABELS_UPDATED',
-            widgetEventValue: privateLabelsString,
+        const toolEventData = {
+            toolEventKey: 'PRIVATE_LABELS_UPDATED',
+            toolEventValue: privateLabelsString,
         };
-        window.parent.postMessage(widgetEventData, '*');
+        window.parent.postMessage(toolEventData, '*');
     }
 }
 
