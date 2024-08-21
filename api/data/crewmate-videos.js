@@ -17,6 +17,7 @@ const crewmateIdsWithVideo = [
     27392, // Elerium 115
     27395, // Elerium 115
     29933, // Elerium 115
+    35933, // Elerium 115
 ];
 
 crewmateIdsWithVideo.forEach(crewmateId => {

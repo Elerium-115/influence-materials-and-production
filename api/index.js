@@ -30,19 +30,19 @@ app.use(cors());
 // Async initialize "cache.accessTokens.influencethIo"
 utils.loadAccessToken('influencethIo');
 
-console.log(`---> #A`); //// TEST
+// console.log(`---> #A`); //// TEST
 
 // Routes
 app.use('/', router);
 
-console.log(`---> #B`); //// TEST
+// console.log(`---> #B`); //// TEST
 
 const PORT = Number(process.env.PORT) || 3001; // avoid "Error: listen EADDRINUSE: address already in use :::3000"
 app.listen(PORT, () => {
     console.log(`--- listening on port ${PORT}`);
 });
 
-console.log(`---> #C`); //// TEST
+// console.log(`---> #C`); //// TEST
 
 async function connectMongoDB() {
     /**
