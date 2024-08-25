@@ -21,7 +21,7 @@ let pricesDynamic = JSON.parse(localStorage.getItem('widgetPrices')) || prices;
  * Use this to quickly disable API prices (i.e. use only default prices),
  * in case of issues with the source of real-time prices on mainnet.
  */
-const isDisabledApiPrices = false;
+const isDisabledApiPrices = true;
 
 const HOUR_IN_MILLISECONDS = 3600000; // 60 * 60 * 1000
 
