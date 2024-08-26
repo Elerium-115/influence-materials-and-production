@@ -23,7 +23,7 @@ let pricesDynamic = JSON.parse(localStorage.getItem('widgetPrices')) || prices;
  */
 const isDisabledApiPrices = true;
 
-const HOUR_IN_MILLISECONDS = 3600000; // 60 * 60 * 1000
+const HOUR_IN_MILLISECONDS = 3_600_000; // 60 * 60 * 1000
 
 const elPlannedProductsList = document.getElementById('planned-products-list');
 const elShoppingListSection = document.getElementById('shopping-list-section');
@@ -172,7 +172,7 @@ function updateShoppingList() {
 async function refreshPrices() {
     // Do NOT update prices if recently updated (e.g. on previous page loads)
     const pricesTimestamp = Number(localStorage.getItem('widgetPricesTimestamp'));
-    if (pricesTimestamp && new Date().getTime() - pricesTimestamp < HOUR_IN_MILLISECONDS) {
+    if (pricesTimestamp && Date.now() - pricesTimestamp < HOUR_IN_MILLISECONDS) {
         return;
     }
     if (isDisabledApiPrices) {

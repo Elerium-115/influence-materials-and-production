@@ -141,9 +141,9 @@ function getMaxUnitsPerStorageForMassAndVolume(mass, volume) {
      * Light Transport: 2,000 t / 5,000 m3
      * Shuttle: 50 t / 125 m3
      */
-    const capacityWarehouse = Math.min(Math.floor(1500000 / massT), Math.floor(75000 / volumeM3));
-    const capacityHeavyTransport = Math.min(Math.floor(12000 / massT), Math.floor(30000 / volumeM3));
-    const capacityLightTransport = Math.min(Math.floor(2000 / massT), Math.floor(5000 / volumeM3));
+    const capacityWarehouse = Math.min(Math.floor(1_500_000 / massT), Math.floor(75_000 / volumeM3));
+    const capacityHeavyTransport = Math.min(Math.floor(12_000 / massT), Math.floor(30_000 / volumeM3));
+    const capacityLightTransport = Math.min(Math.floor(2_000 / massT), Math.floor(5_000 / volumeM3));
     const capacityShuttle = Math.min(Math.floor(50 / massT), Math.floor(125 / volumeM3));
     return [
         {storage_name: 'Warehouse', max_units_capacity: capacityWarehouse},

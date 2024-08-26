@@ -48,7 +48,7 @@ function parseAsteroidMetadata(rawData) {
     const bonuses = influenceUtilsV2.Asteroid.getBonuses(celestial.bonuses, spectralTypeId);
     const metadata = {
         // _raw: rawData, //// TEST
-        // area: Math.floor(4 * Math.PI * Math.pow(rawData.radius, 2) / 1000000), // km2
+        // area: Math.floor(4 * Math.PI * Math.pow(rawData.radius, 2) / 1_000_000), // km2
         area: influenceUtilsV2.Asteroid.getSurfaceArea(asteroidId),
         bonuses: parseAsteroidBonuses(bonuses),
         id: asteroidId,
