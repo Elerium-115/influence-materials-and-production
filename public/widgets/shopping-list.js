@@ -21,9 +21,10 @@ let pricesDynamic = JSON.parse(localStorage.getItem('widgetPrices')) || prices;
  * Use this to quickly disable API prices (i.e. use only default prices),
  * in case of issues with the source of real-time prices on mainnet.
  */
-const isDisabledApiPrices = true;
+const isDisabledApiPrices = false;
 
 const HOUR_IN_MILLISECONDS = 3_600_000; // 60 * 60 * 1000
+const DAY_IN_MILLISECONDS = 86_400_000; // 24 * 60 * 60 * 1000
 
 const elPlannedProductsList = document.getElementById('planned-products-list');
 const elShoppingListSection = document.getElementById('shopping-list-section');
@@ -171,8 +172,9 @@ function updateShoppingList() {
 // Update prices via API call
 async function refreshPrices() {
     // Do NOT update prices if recently updated (e.g. on previous page loads)
+    const cacheExpiresInMilliseconds = DAY_IN_MILLISECONDS;
     const pricesTimestamp = Number(localStorage.getItem('widgetPricesTimestamp'));
-    if (pricesTimestamp && Date.now() - pricesTimestamp < HOUR_IN_MILLISECONDS) {
+    if (pricesTimestamp && Date.now() - pricesTimestamp < cacheExpiresInMilliseconds) {
         return;
     }
     if (isDisabledApiPrices) {
@@ -223,7 +225,7 @@ function onUpdatePlannedProducts() {
 
 function onUpdatePrices() {
     localStorage.setItem('widgetPrices', JSON.stringify(pricesDynamic));
-    localStorage.setItem('widgetPricesTimestamp', new Date().getTime());
+    localStorage.setItem('widgetPricesTimestamp', Date.now());
     updateShoppingList();
 }
 
