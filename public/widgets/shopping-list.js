@@ -24,7 +24,6 @@ let pricesDynamic = JSON.parse(localStorage.getItem('widgetPrices')) || prices;
 const isDisabledApiPrices = false;
 
 const HOUR_IN_MILLISECONDS = 3_600_000; // 60 * 60 * 1000
-const DAY_IN_MILLISECONDS = 86_400_000; // 24 * 60 * 60 * 1000
 
 const elPlannedProductsList = document.getElementById('planned-products-list');
 const elShoppingListSection = document.getElementById('shopping-list-section');
@@ -172,7 +171,7 @@ function updateShoppingList() {
 // Update prices via API call
 async function refreshPrices() {
     // Do NOT update prices if recently updated (e.g. on previous page loads)
-    const cacheExpiresInMilliseconds = DAY_IN_MILLISECONDS;
+    const cacheExpiresInMilliseconds = HOUR_IN_MILLISECONDS;
     const pricesTimestamp = Number(localStorage.getItem('widgetPricesTimestamp'));
     if (pricesTimestamp && Date.now() - pricesTimestamp < cacheExpiresInMilliseconds) {
         return;
@@ -231,6 +230,11 @@ function onUpdatePrices() {
 
 // Periodically update prices via API call
 refreshPrices();
+/**
+ * Relatively frequent checks to determine if the prices need to be updated,
+ * but the actual frequency of API calls may be slower,
+ * as defined in "refreshPrices" > "cacheExpiresInMilliseconds".
+ */
 setInterval(refreshPrices, HOUR_IN_MILLISECONDS);
 
 // Click on product-name / qty in Shopping List => copy to clipboard + flash
