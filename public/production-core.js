@@ -217,6 +217,11 @@ function injectLevelContainerIfNeeded(renderOnLevel) {
         levelContainer = document.createElement('div');
         levelContainer.id = levelId;
         levelContainer.classList.add('level');
+        if (renderOnLevel % 2) {
+            levelContainer.classList.add('level--products');
+        } else {
+            levelContainer.classList.add('level--processes');
+        }
         productionChainItemsContainer.appendChild(levelContainer);
     }
     return levelContainer;

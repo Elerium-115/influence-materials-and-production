@@ -31,6 +31,7 @@ const tools = [
             {title: 'Asteroid Metadata Lookup by Daharius', author: 'Daharius', url: 'https://influence.daharius.com/AsteroidMetadata/1'},
             {title: 'Asteroid Metadata Lookup by trevis', author: 'trevis & Dirac', url: 'https://starksight.plus/collection/INFA/1'},
             {title: 'Lot Management', author: 'Denker', url: 'https://www.floodgate.space/tools/lot-management'},
+            {title: 'Expiring Lots', author: 'Denker', url: 'https://www.adalia.info/tools/expiring-lots'},
             {title: 'SLY’s Influence', author: '[SLY] Shadow Loyal', url: 'https://github.com/ImGroovin/SLYs-Influence/'}, // blocked in iframe
             // {title: 'Adalia Co-orbital Rocks', author: 'RGR', url: 'https://adalia.coorbital.rocks/'}, // offline
         ],

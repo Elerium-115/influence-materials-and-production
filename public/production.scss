@@ -406,15 +406,20 @@
 }
 
 #production-chain-items .level {
+    --items-gap: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    gap: 1rem;
-}
+    gap: var(--items-gap);
 
-#production-chain-items .level:nth-child(odd) {
-    /* larger gaps only bettwen non-process items, for ".item-qty" overlays */
-    gap: 1.5rem;
+    &:nth-child(odd) {
+        /* larger gaps only bettwen non-process items, for ".item-qty" overlays */
+        gap: 1.5rem;
+    }
+
+    &--processes {
+        --items-gap: 2rem; // larger gap for building-icons above each process
+    }
 }
 
 #production-chain-items [data-container-id] {
@@ -889,6 +894,32 @@
             display: block;
         }
     }
+}
+
+#production-chain-items .item-type-process {
+    &[data-building-id]::before {
+        background-repeat: no-repeat;
+        background-size: contain;
+        content: '';
+        display: block;
+        height: 1.5rem;
+        left: calc(50% - 0.75rem);
+        opacity: 0.5;
+        position: absolute;
+        top: -1.6rem;
+        width: 1.5rem;
+    }
+
+    &[data-building-id]:hover::before {
+        opacity: 1;
+    }
+
+    &[data-building-id='0']::before { background-image: url('./img/icons/buildings/Construction.png'); } // Empty Lot
+    &[data-building-id='2']::before { background-image: url('./img/icons/buildings/Extraction.png'); } // Extractor
+    &[data-building-id='3']::before { background-image: url('./img/icons/buildings/Refining.png'); } // Refinery
+    &[data-building-id='4']::before { background-image: url('./img/icons/buildings/Agriculture.png'); } // Bioreactor
+    &[data-building-id='5']::before { background-image: url('./img/icons/buildings/Manufacturing.png'); } // Factory
+    &[data-building-id='6']::before { background-image: url('./img/icons/buildings/Shipbuilding.png'); } // Shipyard
 }
 
 #production-chain-items .item-type-process:not(.inferior-process) .item-tooltip-wrapper .process-tooltip .throughput {

@@ -1098,6 +1098,7 @@ function createProcessContainerV2(itemId) {
     processContainer.dataset.parentContainerId = itemData.parentItemId;
     processContainer.dataset.processName = processName;
     processContainer.dataset.processCode = getCompactName(parentProductData.name) + '-' + getCompactName(processName);
+    processContainer.dataset.buildingId = processData.buildingId;
     processContainer.classList.add('item-type-process');
     /**
      * inner-container required for styling the outer-container with "filter: drop-shadow",

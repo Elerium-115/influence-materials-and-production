@@ -419,6 +419,7 @@ function createProcessContainer(processData, parentContainerId, processNameOverw
     processContainer.dataset.longestSubchainLength = 1;
     processContainer.dataset.processName = processName;
     processContainer.dataset.processCode = getCompactName(processData.output) + '-' + getCompactName(processData.process);
+    processContainer.dataset.buildingId = processData.buildingId;
     processContainer.classList.add('item-type-process');
     /**
      * inner-container required for styling the outer-container with "filter: drop-shadow",
