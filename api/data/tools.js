@@ -28,6 +28,7 @@ const tools = [
             {title: 'Asteroids Planner', author: 'Elerium115', url: 'https://influence.elerium.dev/asteroids-planner.html'},
             {title: 'Asteroid Management', author: 'Tyrell-Yutani', url: 'https://tyrell-yutani.app/#/asteroid'},
             {title: 'Asteroid Tracker & Visualizer', author: 'Daharius', url: 'https://influence.daharius.com/AsteroidsTracker'},
+            {title: 'Asteroid Distances', author: 'Denker', url: 'https://www.adalia.info/tools/asteroid-distances'},
             {title: 'Asteroid Metadata Lookup by Daharius', author: 'Daharius', url: 'https://influence.daharius.com/AsteroidMetadata/1'},
             {title: 'Asteroid Metadata Lookup by trevis', author: 'trevis & Dirac', url: 'https://starksight.plus/collection/INFA/1'},
             {title: 'Lot Management', author: 'Denker', url: 'https://www.floodgate.space/tools/lot-management'},
