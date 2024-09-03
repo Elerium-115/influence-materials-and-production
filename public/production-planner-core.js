@@ -1967,17 +1967,28 @@ function renderShoppingAndDiyList() {
     // #1 - required inputs for "Shopping List"
     if (shoppingAndDiyList.inputs.length) {
         // if (doDebug) console.log(`--- shoppingAndDiyList.inputs:`, shoppingAndDiyList.inputs);
+        let totalPrice = 0;
         const qtyMultiplier = shoppingListQtyFinalProductContainer.value;
         shoppingListQtyDisclaimerContainer.classList.remove('hidden');
         shoppingListHtml += /*html*/ `<div class="line line-title"><div>Inputs</div><div>Qty*</div></div>`;
         shoppingAndDiyList.inputs.forEach(inputData => {
+            const inputQtyMultiplied = inputData.qty * qtyMultiplier;
             shoppingListHtml += /*html*/ `
                 <div class="line">
                     <div class="list-product-name">${inputData.name}</div>
-                    <div class="qty">${getNiceNumber(inputData.qty * qtyMultiplier)}</div>
+                    <div class="qty">${getNiceNumber(inputQtyMultiplied)}</div>
                 </div>
             `;
+            totalPrice += prices[inputData.name] * inputQtyMultiplied;
         });
+        shoppingListHtml += `<hr>`;
+        // #1B - total price of inputs
+        shoppingListHtml += /*html*/ `
+            <div class="line line-title">
+                <div>Total Price</div>
+                <div class="sway">${getSwayPriceText(totalPrice)}</div>
+            </div>
+        `;
         shoppingListHtml += `<hr>`;
     } else {
         shoppingListHtml = `No products required from other sources.`;

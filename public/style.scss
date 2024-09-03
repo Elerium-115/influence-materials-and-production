@@ -10,6 +10,14 @@
 
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
+@mixin price-icon {
+    background-image: url('./img/sway.svg');
+    background-position-y: center;
+    background-repeat: no-repeat;
+    content: '';
+    display: block;
+}
+
 :root {
     --default-bg: #202634;
     --default-overlay-bg: rgba(32, 38, 52, 0.95);
@@ -170,6 +178,18 @@ input[type='range'] {
 
     &:hover {
         animation: spin 500ms ease-in-out;
+    }
+}
+
+.sway {
+    align-items: center;
+    display: flex;
+    gap: 0.25rem;
+
+    &::before {
+        @include price-icon;
+        height: 1rem;
+        width: 1rem;
     }
 }
 

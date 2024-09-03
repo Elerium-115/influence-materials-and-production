@@ -2,7 +2,7 @@
 @import '../../products-list.scss';
 
 @mixin price-icon {
-    background-image: url('../assets/images/sway.svg');
+    background-image: url('../../img/sway.svg');
     background-position-y: center;
     background-repeat: no-repeat;
     content: '';

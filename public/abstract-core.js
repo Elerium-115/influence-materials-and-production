@@ -52,6 +52,10 @@ function getNiceNumber(num) {
     return Math.round(num * mult) / mult;
 }
 
+function getSwayPriceText(num) {
+    return Intl.NumberFormat().format(Math.ceil(num));
+}
+
 /**
  * e.g. "Thin-film Resistor" => "Thin-filmResistor"
  */

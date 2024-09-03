@@ -154,6 +154,21 @@ input[type=range] {
   animation: spin 500ms ease-in-out;
 }
 
+.sway {
+  align-items: center;
+  display: flex;
+  gap: 0.25rem;
+}
+.sway::before {
+  background-image: url("./img/sway.svg");
+  background-position-y: center;
+  background-repeat: no-repeat;
+  content: "";
+  display: block;
+  height: 1rem;
+  width: 1rem;
+}
+
 body {
   background-color: var(--default-bg);
   color: var(--default-text);

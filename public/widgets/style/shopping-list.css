@@ -428,7 +428,7 @@ label input[type=checkbox] {
   z-index: -1;
 }
 #shopping-list-section #shopping-list li .qty-wrapper .price::before {
-  background-image: url("../assets/images/sway.svg");
+  background-image: url("../../img/sway.svg");
   background-position-y: center;
   background-repeat: no-repeat;
   content: "";
@@ -464,7 +464,7 @@ label input[type=checkbox] {
   padding-right: var(--padding-right);
 }
 #shopping-list-section #price-total .price-value::before {
-  background-image: url("../assets/images/sway.svg");
+  background-image: url("../../img/sway.svg");
   background-position-y: center;
   background-repeat: no-repeat;
   content: "";
