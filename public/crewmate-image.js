@@ -10,7 +10,7 @@ function onErrorGenerateCrewmateImage(errorMessage) {
     elCrewmateImageWrapper.classList.add('error');
 }
 
-// Update prices via API call
+// Generate crewmate image via API call
 async function generateCrewmateImage() {
     elCrewmateImageWrapper.classList.remove('error');
     if (!crewmateId) {

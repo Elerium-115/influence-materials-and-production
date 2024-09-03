@@ -1,4 +1,15 @@
 /**
+ * Whenever "prices" is changed in "prices-core.js",
+ * it should also trigger "updateShoppingList".
+ */
+pricesChangedHandlers.push(() => updateShoppingList());
+
+//// TO DO: remove this later on
+// Delete old local-storage keys for widget prices re: now using "prices-core.js"
+localStorage.removeItem('widgetPrices');
+localStorage.removeItem('widgetPricesTimestamp');
+
+/**
  * Array of objects with format:
  * - `{id: '123', name: 'Warehouse', qty: 2, processId: '456'}`
  * 
@@ -6,24 +17,6 @@
  * Whenever this is changed, it should also trigger "onUpdatePlannedProducts".
  */
 let plannedProducts = JSON.parse(localStorage.getItem('widgetPlannedProducts')) || [];
-
-/**
- * Object containing the price of each product, with format:
- * - `{"Acetylene": 0.008972, "Acrylonitrile": 0.15838, ...}`
- * 
- * Pre-load from local-storage (if set), otherwise default to "prices" from "prices.js".
- * Then periodically update via API call.
- * Whenever this is changed, it should also trigger "onUpdatePrices".
- */
-let pricesDynamic = JSON.parse(localStorage.getItem('widgetPrices')) || prices;
-
-/**
- * Use this to quickly disable API prices (i.e. use only default prices),
- * in case of issues with the source of real-time prices on mainnet.
- */
-const isDisabledApiPrices = false;
-
-const HOUR_IN_MILLISECONDS = 3_600_000; // 60 * 60 * 1000
 
 const elPlannedProductsList = document.getElementById('planned-products-list');
 const elShoppingListSection = document.getElementById('shopping-list-section');
@@ -146,7 +139,7 @@ function updateShoppingList() {
         // Check if the "nice" qty is integer (NOT the "raw" qty, re: JS rounding issues)
         const isIntegerQty = Number.isInteger(qtyNice);
         const qtyWarningClass = isIntegerQty ? '' : 'warning';
-        const price = pricesDynamic[input.name] ? pricesDynamic[input.name] * qtyNice : 0;
+        const price = prices[input.name] ? prices[input.name] * qtyNice : 0;
         priceTotal += price;
         elListItem.innerHTML = /*html*/ `
             <div class="product-image" onclick="toggleShoppingListItem(this)">
@@ -168,74 +161,9 @@ function updateShoppingList() {
     elPriceTotal.classList.toggle('hidden', !shoppingListInputsSorted.length);
 }
 
-// Update prices via API call
-async function refreshPrices() {
-    // Do NOT update prices if recently updated (e.g. on previous page loads)
-    const cacheExpiresInMilliseconds = HOUR_IN_MILLISECONDS;
-    const pricesTimestamp = Number(localStorage.getItem('widgetPricesTimestamp'));
-    if (pricesTimestamp && Date.now() - pricesTimestamp < cacheExpiresInMilliseconds) {
-        return;
-    }
-    if (isDisabledApiPrices) {
-        pricesDynamic = prices;
-        onUpdatePrices();
-        return;
-    }
-    const config = {
-        method: 'get',
-        url: `${apiUrl}/data/prices`,
-    };
-    try {
-        const response = await axios(config);
-        const rawData = response.data;
-        // console.log(`--- rawData from API:`, rawData); //// TEST
-        if (rawData.error) {
-            // Abort re: error in data from API
-            console.log(`--- ERROR in data from API:`, rawData.error); //// TEST
-            return;
-        }
-        // Sanity check
-        if (!rawData['Hydrogen']) {
-            // Abort re: failed sanity check
-            console.log(`--- FAILED sanity check re: rawData['Hydrogen']`); //// TEST
-            return;
-        }
-        // Always start with the default prices, e.g. in case the prices from local-storage are borked
-        pricesDynamic = prices;
-        // Update prices only for products which have a dynamic price (i.e. already being traded)
-        for (const [productName, price] of Object.entries(rawData)) {
-            if (!pricesDynamic[productName]) {
-                // All products should already exist in "pricesDynamic", from the default prices
-                console.log(`--- UNEXPECTED API product "${productName}", API price: ${price}`); //// TEST
-            }
-            pricesDynamic[productName] = price;
-        }
-        onUpdatePrices();
-    } catch (error) {
-        // Abort re: error from API
-        console.log(`--- ERROR from API:`, error); //// TEST
-        return;
-    }
-}
-
 function onUpdatePlannedProducts() {
     localStorage.setItem('widgetPlannedProducts', JSON.stringify(plannedProducts));
 }
-
-function onUpdatePrices() {
-    localStorage.setItem('widgetPrices', JSON.stringify(pricesDynamic));
-    localStorage.setItem('widgetPricesTimestamp', Date.now());
-    updateShoppingList();
-}
-
-// Periodically update prices via API call
-refreshPrices();
-/**
- * Relatively frequent checks to determine if the prices need to be updated,
- * but the actual frequency of API calls may be slower,
- * as defined in "refreshPrices" > "cacheExpiresInMilliseconds".
- */
-setInterval(refreshPrices, HOUR_IN_MILLISECONDS);
 
 // Click on product-name / qty in Shopping List => copy to clipboard + flash
 on('click', '#shopping-list .product-name, #shopping-list .qty', el => {

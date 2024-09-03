@@ -18,6 +18,8 @@ if (window.location.hostname === '127.0.0.1') {
     apiUrl = `${window.location.protocol}//${window.location.hostname}:3001`;
 }
 
+const HOUR_IN_MILLISECONDS = 3_600_000; // 60 * 60 * 1000
+
 /**
  * Get asteroid ID (and type) injected from iframe parent, if any
  * e.g. game URL: https://game.influenceth.io/asteroids/104

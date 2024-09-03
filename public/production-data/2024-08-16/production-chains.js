@@ -1,5 +1,5 @@
 /**
- * Source: Influenceth SDK export @ 2024-06-23
+ * Source: Influenceth SDK export @ 2024-08-16
  * 
  * WARNING: Product IDs for ships and buildings are NOT numeric - e.g. "S1", "S2", ..., "B1", "B2", ...
  * 

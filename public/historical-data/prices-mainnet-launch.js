@@ -1,4 +1,4 @@
-// Prices snapshot at launch - i.e. seed prices / estimated prices
+// Prices snapshot at mainnet launch - i.e. seed prices / estimated prices
 const prices = {
     "Acetylene": 0.008972,
     "Acrylonitrile": 0.15838,
