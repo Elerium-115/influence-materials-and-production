@@ -6,6 +6,7 @@
  */
 const playerByAddress = {
     '0x0795a0690f51905f34f2d52b482e18ebc39b87638e30eb4bd4fc65ff67a7beec': 'Unstoppable Games',
+    '0x048242eca329a05af1909fa79cb1f9a4275ff89b987d405ec7de08f73b85588f': 'Unstoppable Games',
     '0x02f7fe3689845c3ebb064f973c4d2978b4cbca5adc78b82bb3be9fb1edbef3af': 'protoplanetary',
     '0x0750c9945938b4c89baf68acc9a97d52d59eeef6b399c57edc75c8127a70f050': '<Q> Ciefa',
     '0x02ac310971056cf7ee6f6f27e5f91a551df5f12b215b0972045b486d43c47b38': '<Q> Daharius', // primary address
