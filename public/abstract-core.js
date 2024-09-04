@@ -52,7 +52,7 @@ function getNiceNumber(num) {
     return Math.round(num * mult) / mult;
 }
 
-function getSwayPriceText(num) {
+function getFormattedCeil(num) {
     return Intl.NumberFormat().format(Math.ceil(num));
 }
 

@@ -130,16 +130,14 @@ function updateShoppingList() {
         });
     });
     elShoppingList.textContent = '';
-    let hasNonIntegerQty = false;
     let priceTotal = 0;
     const shoppingListInputsSorted = Object.values(shoppingListInputs).sort(compareListItemsByName);
     shoppingListInputsSorted.forEach(input => {
         const elListItem = document.createElement('li');
-        const qtyNice = getNiceNumber(input.qty);
-        // Check if the "nice" qty is integer (NOT the "raw" qty, re: JS rounding issues)
-        const isIntegerQty = Number.isInteger(qtyNice);
-        const qtyWarningClass = isIntegerQty ? '' : 'warning';
-        const price = prices[input.name] ? prices[input.name] * qtyNice : 0;
+        // Round up each qty
+        const qty = Math.ceil(input.qty);
+        // Round up each price
+        const price = prices[input.name] ? Math.ceil(prices[input.name] * qty) : 0;
         priceTotal += price;
         elListItem.innerHTML = /*html*/ `
             <div class="product-image" onclick="toggleShoppingListItem(this)">
@@ -147,17 +145,15 @@ function updateShoppingList() {
             </div>
             <div class="product-name">${input.name}</div>
             <div class="qty-wrapper">
-                <div class="qty ${qtyWarningClass}">${qtyNice}</div>
-                <div class="price">${getNiceNumber(price)}</div>
+                <div class="qty">${getFormattedCeil(qty)}</div>
+                <div class="price">${getFormattedCeil(price)}</div>
             </div>
         `;
         elShoppingList.append(elListItem);
-        hasNonIntegerQty = hasNonIntegerQty || !isIntegerQty;
     });
-    elShoppingList.classList.toggle('warning', hasNonIntegerQty);
-    const shouldShowPrices = shoppingListInputsSorted.length && true; //// TEST - force visible
+    const shouldShowPrices = shoppingListInputsSorted.length;
     elShoppingListSection.classList.toggle('prices-visible', shouldShowPrices);
-    elPriceTotal.querySelector('.price-value').textContent = getNiceNumber(priceTotal);
+    elPriceTotal.querySelector('.price-value').textContent = getFormattedCeil(priceTotal);
     elPriceTotal.classList.toggle('hidden', !shoppingListInputsSorted.length);
 }
 

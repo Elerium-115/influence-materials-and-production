@@ -1986,7 +1986,7 @@ function renderShoppingAndDiyList() {
         shoppingListHtml += /*html*/ `
             <div class="line line-title">
                 <div>Total Price</div>
-                <div class="sway">${getSwayPriceText(totalPrice)}</div>
+                <div class="sway">${getFormattedCeil(totalPrice)}</div>
             </div>
         `;
         shoppingListHtml += `<hr>`;

@@ -330,12 +330,6 @@ label input[type=checkbox] {
   opacity: 0.5;
   padding: 0 var(--size-padding);
 }
-#shopping-list-section #shopping-list.warning::before {
-  content: "You may need to round up some quantities";
-  color: var(--color-warning);
-  line-height: var(--size-base);
-  padding: 0 var(--size-padding);
-}
 #shopping-list-section #shopping-list li {
   --copy-icon-offset: 3px;
   --copy-icon-size: 10px;
@@ -402,30 +396,17 @@ label input[type=checkbox] {
     color: white;
   }
 }
-#shopping-list-section #shopping-list li .qty {
-  padding-right: var(--padding-right);
-}
-#shopping-list-section #shopping-list li .qty.warning {
-  color: var(--color-warning);
-}
-#shopping-list-section #shopping-list li .qty.warning::before, #shopping-list-section #shopping-list li .qty.warning::after {
-  border-color: var(--color-warning);
-  color: var(--color-warning);
-}
 #shopping-list-section #shopping-list li .qty-wrapper {
-  --price-height: 16px;
-  padding-bottom: var(--price-height);
-  position: relative;
+  line-height: 100%;
+  padding-right: var(--padding-right);
+  text-align: right;
 }
 #shopping-list-section #shopping-list li .qty-wrapper .price {
   align-items: center;
   display: flex;
   font-size: 0.8rem;
+  justify-content: flex-end;
   opacity: 0.5;
-  position: absolute;
-  right: var(--padding-right);
-  top: 16px;
-  z-index: -1;
 }
 #shopping-list-section #shopping-list li .qty-wrapper .price::before {
   background-image: url("../../img/sway.svg");
@@ -433,8 +414,8 @@ label input[type=checkbox] {
   background-repeat: no-repeat;
   content: "";
   display: block;
-  height: var(--price-height);
-  width: var(--price-height);
+  height: var(16px);
+  width: var(16px);
 }
 #shopping-list-section #shopping-list li.done {
   opacity: 0.25;
