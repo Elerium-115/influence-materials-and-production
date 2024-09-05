@@ -1,0 +1,164 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Jura:wght@300;400;700");
+:root {
+  --color-influence: rgb(54, 167, 205);
+  --color-influence-faded-25: rgba(54, 167, 205, 0.25);
+  --color-influence-green: rgb(136, 230, 117);
+  --color-text: #ccc;
+  --color-warning: rgb(223, 67, 0);
+  --cursor-url-active: url("../assets/images/cursor-active.png");
+  --cursor-url-default: url("../assets/images/cursor.png");
+  --size-base: 40px;
+  --size-padding: 16px;
+}
+
+html, body {
+  cursor: var(--cursor-url-default) 5 5, auto;
+  color: var(--color-text);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  scrollbar-color: rgba(255, 255, 255, 0.25) rgba(50, 50, 50, 0.3);
+  width: 100%;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Jura, sans-serif;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: var(--color-influence);
+}
+
+input:not([type=checkbox]) {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  height: 30px;
+  padding: 0 8px;
+}
+input:not([type=checkbox])[type=number] {
+  padding-right: 0;
+}
+input:not([type=checkbox])[type=file] {
+  display: none;
+}
+
+label {
+  cursor: var(--cursor-url-active) 5 5, auto;
+}
+label input[type=checkbox] {
+  margin-right: 8px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.cta {
+  cursor: var(--cursor-url-active) 5 5, auto;
+  align-items: center;
+  background: black;
+  border: 1px solid var(--color-influence);
+  color: var(--color-influence);
+  display: flex;
+  height: 30px;
+  justify-content: center;
+  padding: 0 8px;
+  transition: all 300ms ease 0s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  white-space: nowrap;
+}
+.cta:hover {
+  background: var(--color-influence-faded-25);
+  color: white;
+}
+
+.root-section {
+  padding-bottom: var(--size-base);
+}
+.root-section .section-title {
+  cursor: var(--cursor-url-active) 5 5, auto;
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--color-influence);
+  font-weight: bold;
+  line-height: var(--size-base);
+  padding: 0 var(--size-padding);
+  position: relative;
+  transition: all 300ms ease 0s;
+}
+.root-section .section-title:hover {
+  background: black;
+  color: white;
+}
+.root-section .section-title.has-toggle:hover::after {
+  content: "▲";
+  position: absolute;
+  right: var(--size-padding);
+}
+.root-section.closed {
+  height: var(--size-base);
+  overflow: hidden;
+}
+.root-section.closed .section-title.has-toggle:hover::after {
+  content: "▼";
+}
+
+#penalty-secondary-outputs {
+  padding: var(--size-padding) var(--size-padding) 0 var(--size-padding);
+}
+#penalty-secondary-outputs::before {
+  content: "Penalty for secondary outputs:";
+  margin-right: var(--size-padding);
+  opacity: 0.5;
+}
+#penalty-secondary-outputs .penalty-details {
+  font-size: 0.8rem;
+  margin-top: calc(var(--size-padding) / 2);
+}
+
+#process-profits-list {
+  font-size: 0.9rem;
+  line-height: 100%;
+  padding-top: var(--size-padding);
+}
+#process-profits-list .list-item {
+  align-items: center;
+  display: flex;
+  gap: var(--size-padding);
+  justify-content: space-between;
+  padding: 0 var(--size-padding);
+}
+#process-profits-list .list-item.list-header {
+  color: var(--color-influence);
+  padding-bottom: var(--size-padding);
+}
+#process-profits-list .list-item:not(.list-header) {
+  padding-bottom: calc(var(--size-padding) / 2);
+  padding-top: calc(var(--size-padding) / 2);
+}
+#process-profits-list .list-item:not(.list-header):hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+#process-profits-list .list-item .process-and-primary-output .primary-output {
+  margin-top: 4px;
+  opacity: 0.5;
+}
+#process-profits-list .list-item .process-and-primary-output .primary-output::before {
+  content: "↳";
+  margin-right: 4px;
+  opacity: 0.5;
+}
+#process-profits-list .list-item .profit-percent::after {
+  content: "%";
+  margin-left: 4px;
+  opacity: 0.5;
+}/*# sourceMappingURL=process-profits.css.map */

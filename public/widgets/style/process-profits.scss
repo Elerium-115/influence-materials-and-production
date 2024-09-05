@@ -1,0 +1,65 @@
+@import './widgets-core.scss';
+
+#penalty-secondary-outputs {
+    padding: var(--size-padding) var(--size-padding) 0 var(--size-padding);
+
+    &::before {
+        content: 'Penalty for secondary outputs:';
+        margin-right: var(--size-padding);
+        opacity: 0.5;
+    }
+
+    .penalty-details {
+        font-size: 0.8rem;
+        margin-top: calc(var(--size-padding) / 2);
+    }
+}
+
+#process-profits-list {
+    font-size: 0.9rem;
+    line-height: 100%;
+    padding-top: var(--size-padding);
+
+    .list-item {
+        align-items: center;
+        display: flex;
+        gap: var(--size-padding);
+        justify-content: space-between;
+        padding: 0 var(--size-padding);
+
+        &.list-header {
+            color: var(--color-influence);
+            padding-bottom: var(--size-padding);
+        }
+
+        &:not(.list-header) {
+            padding-bottom: calc(var(--size-padding) / 2);
+            padding-top: calc(var(--size-padding) / 2);
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.05);
+            }
+        }
+
+        .process-and-primary-output {
+            .primary-output {
+                margin-top: 4px;
+                opacity: 0.5;
+
+                &::before {
+                    content: '↳';
+                    margin-right: 4px;
+                    opacity: 0.5;
+                }
+            }
+        }
+
+        .profit-percent {
+            &::after {
+                content: '%';
+                margin-left: 4px;
+                opacity: 0.5;
+            }
+        }
+    }
+}

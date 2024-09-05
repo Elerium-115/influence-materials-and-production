@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/process-profits.css">
+    <link rel="icon" href="../img/site-icon.png" type="image/png">
+    <title>Process Profits - Influence Widget</title>
+    <meta name="description" content="View all processes ranked by their relative profit, based on the price of inputs vs. outputs.">
+    <meta name="author" content="@elerium115">
+</head>
+<body>
+    <section id="refining-penalty-section" class="root-section">
+        <div class="section-title has-toggle" onclick="this.parentElement.classList.toggle('closed')">
+            Refining Penalty
+        </div>
+        <div id="penalty-secondary-outputs"></div>
+    </section>
+    <section id="process-profits-section" class="root-section">
+        <div class="section-title">
+            Process Profits
+        </div>
+        <div id="process-profits-list"></div>
+    </section>
+
+    <script>
+        const isWidget = true; // required for the relative "root" in other scripts
+    </script>
+    <script src="../axios.min.js"></script>
+    <script src="../loader-production-data-version.js"></script>
+    <script src="../loader-production-chains.js"></script>
+    <script src="../loader-products-vs-spectral-types.js"></script>
+    <script src="../abstract-core.js"></script>
+    <script src="../prices-core.js"></script>
+    <script src="../production-planner-core.js"></script>
+    <script src="./process-profits.js"></script>
+</body>
+</html>
