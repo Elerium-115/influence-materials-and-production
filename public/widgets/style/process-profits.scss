@@ -88,6 +88,7 @@
         &:not(.list-header) {
             &:hover {
                 background: rgba(255, 255, 255, 0.05);
+                color: white;
 
                 &::before {
                     background: var(--color-influence);
@@ -110,6 +111,11 @@
                     position: absolute;
                     width: var(--after-width);
                     z-index: 1;
+                }
+
+                .primary-output {
+                    color: var(--color-influence);
+                    opacity: 1;
                 }
             }
         }

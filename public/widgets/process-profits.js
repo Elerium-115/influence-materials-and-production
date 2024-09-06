@@ -123,6 +123,7 @@ function updateProcessProfitsList() {
             <div class="profit-percent">${getFormattedCeil(parseInt(processProfitsData.profitPercent))}</div>
         `;
         elListItem.dataset.tooltip = `Inputs price: ${getNiceNumber(processProfitsData.priceInputs)} vs. Outputs price: ${getNiceNumber(processProfitsData.priceOutputs)}`;
+        elListItem.addEventListener('click', onClickListItem);
         elProcessProfitsList.append(elListItem);
         //// DELME?
         // if (processProfitsData.ultraExpensiveInputs.length) {
@@ -144,6 +145,20 @@ function updateProcessProfitsList() {
     });
     // Re-apply the search, if any
     onInputSearch();
+}
+
+function onClickListItem(event) {
+    const elListItem = event.target.closest('.list-item');
+    const processName = elListItem.querySelector('.process-name').textContent;
+    const productName = elListItem.querySelector('.primary-output').textContent;
+    // Emit event to parent window, when clicking on a list item
+    if (window.self !== window.top) {
+        const toolEventData = {
+            toolEventKey: 'PROCESS_PROFITS_CLICKED_LIST_ITEM',
+            toolEventValue: {processName, productName},
+        };
+        window.parent.postMessage(toolEventData, '*');
+    }
 }
 
 function onInputSearch() {

@@ -205,6 +205,7 @@ label input[type=checkbox] {
 }
 #process-profits-list .list-item:not(.list-header):hover {
   background: rgba(255, 255, 255, 0.05);
+  color: white;
 }
 #process-profits-list .list-item:not(.list-header):hover::before {
   background: var(--color-influence);
@@ -226,6 +227,10 @@ label input[type=checkbox] {
   position: absolute;
   width: var(--after-width);
   z-index: 1;
+}
+#process-profits-list .list-item:not(.list-header):hover .primary-output {
+  color: var(--color-influence);
+  opacity: 1;
 }
 #process-profits-list .list-item .process-and-primary-output .primary-output {
   margin-top: 4px;
