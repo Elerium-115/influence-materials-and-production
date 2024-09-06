@@ -58,11 +58,14 @@ function setItemDataByIdDecodedFromHash(hashEncodedFromItemDataById) {
 /**
  * The "hash" can be either a single product, generated via "getCompactName"
  * (e.g. "Thin-filmResistor"), or it can also include the entire (encoded) state
- * of the production chain, in this format: "Thin-filmResistor___hashEncodedFromItemDataById".
+ * of the production chain, in this format: "Thin-filmResistor__hashEncodedFromItemDataById".
+ * 
+ * UPDATE: The hash may also have this format with a compact process name:
+ * "BisphenolA____BPAAlgaeGrowing" (separator "____" instead of "__")
  */
 function selectPlannedProductHash(hash) {
     hideAndResetProductsList();
-    const [plannedProductCompactName, hashEncodedFromItemDataById] = hash.split('__');
+    const [plannedProductCompactName, hashEncodedFromItemDataById, processVariantCompactName] = hash.split('__');
     // Update link to other production chain type, for the same product
     chainTypeLinkContainer.querySelector('a').setAttribute('href', `./derived-products.html#${plannedProductCompactName}`);
     const productName = productNamesByHash[plannedProductCompactName];
@@ -89,6 +92,20 @@ function selectPlannedProductHash(hash) {
         // if (doDebug) console.log(`%c--- RENDER only the planned product and its inputs`, 'background: blue');
         const plannedProductId = String(productDataByName[productName].id);
         selectPlannedProductId(plannedProductId);
+        // Select the process variant from the hash, if the planned product has multiple process variants
+        if (processVariantCompactName) {
+            const processVariantItemIds = getProcessVariantItemIdsForOutputProductItemId(1);
+            if (processVariantItemIds.length > 1) {
+                processVariantItemIds.some(itemId => {
+                    const itemContainer = getItemContainerById(itemId);
+                    if (getCompactName(itemContainer.dataset.processName) === processVariantCompactName) {
+                        selectProcessItemId(itemId);
+                        // Stop parsing remaining process variants
+                        return true;
+                    }
+                });
+            }
+        }
     }
 }
 

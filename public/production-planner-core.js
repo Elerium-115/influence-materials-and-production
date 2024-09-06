@@ -2062,7 +2062,7 @@ function refreshDetailsAndConnections(skipHashEncoding = false) {
     if (!skipHashEncoding && isToolProductionPlanner) {
         /**
          * Encode the current state of the chain into the URL hash,
-         * in this format: "Thin-filmResistor___hashEncodedFromItemDataById".
+         * in this format: "Thin-filmResistor__hashEncodedFromItemDataById".
          */
         const plannedProductId = itemDataById[1].productId;
         const plannedProductCompactName = getCompactName(productDataById[plannedProductId].name);
