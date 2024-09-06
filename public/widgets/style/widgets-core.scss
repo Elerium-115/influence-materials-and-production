@@ -69,6 +69,10 @@ label {
     display: none !important;
 }
 
+.warning {
+    color: var(--color-warning);
+}
+
 .cta {
     @include cursor-active;
     align-items: center;
@@ -112,6 +116,24 @@ label {
                 content: '▲';
                 position: absolute;
                 right: var(--size-padding);
+            }
+        }
+
+        #search-wrapper {
+            position: absolute;
+            right: var(--size-padding);
+            top: 0;
+
+            #input-search {
+                background: black;
+                text-align: right;
+                transition: width 300ms ease 0s;
+                width: 90px;
+
+                &:hover,
+                &:focus {
+                    width: 180px;
+                }
             }
         }
     }

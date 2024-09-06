@@ -1,19 +1,18 @@
 /**
  * Rank processes based on highest profit, by comparing:
  * - the price of all inputs per SR
- * - vs. the price of all outputs per SR, calculated individually for each output as the primary output
+ * - vs. the price of all outputs per SR, calculated separately for each output as the primary output
  * - taking into account the "penaltyForSecondaryOutputs"
  */
 
-const penaltyForSecondaryOutputs = 0.5; // 1 Scientist = 50% penalty
-const penaltyForSecondaryOutputsDetails = '1 Scientist = 50% penalty';
-// const penaltyForSecondaryOutputs = 0.27; // 4 Scientists = 27% penalty
-// const penaltyForSecondaryOutputsDetails = '4 Scientists = 27% penalty';
+let penaltyForSecondaryOutputs = 0.75; // 0 Scientist = -75% penalty
 
 //// DELME?
 // const ultraExpensivePrice = 1_000_000; // 1,000,000 SWAY
 
+const elScientistsInCrew = document.getElementById('scientists-in-crew');
 const elPenaltySecondaryOutputs = document.getElementById('penalty-secondary-outputs');
+const elInputSearch = document.getElementById('input-search');
 const elProcessProfitsList = document.getElementById('process-profits-list');
 
 const priceDataByProcessName = {};
@@ -102,7 +101,10 @@ function updateProcessProfitsList() {
     const elListHeader = document.createElement('div');
     elListHeader.classList.add('list-item', 'list-header');
     elListHeader.innerHTML = /*html*/ `
-        <div class="process-and-primary-output">Process Name and Primary Output</div>
+        <div class="process-and-primary-output">
+            <div class="process-name">Process Name</div>
+            <div class="primary-output">Primary Output</div>
+        </div>
         <div class="profit-percent">Profit</div>
     `;
     // Empty the process profits list
@@ -112,7 +114,7 @@ function updateProcessProfitsList() {
     processProfitsListSorted.forEach(processProfitsData => {
         const elListItem = document.createElement('div');
         elListItem.classList.add('list-item');
-        const outputProductionPlannerUrl = `../public/production-planner.html#${getCompactName(processProfitsData.primaryOutputName)}`;
+        elListItem.classList.toggle('warning', processProfitsData.profitPercent < 0);
         elListItem.innerHTML = /*html*/ `
             <div class="process-and-primary-output">
                 <div class="process-name">${processProfitsData.processName}</div>
@@ -120,11 +122,7 @@ function updateProcessProfitsList() {
             </div>
             <div class="profit-percent">${getFormattedCeil(parseInt(processProfitsData.profitPercent))}</div>
         `;
-        //// TO DO: REWORK via tooltip?
-        /*
-            <span class="price-inputs">${getNiceNumber(processProfitsData.priceInputs)}</span>
-            <span class="price-outputs">${getNiceNumber(processProfitsData.priceOutputs)}</span>
-        */
+        elListItem.dataset.tooltip = `Inputs price: ${getNiceNumber(processProfitsData.priceInputs)} vs. Outputs price: ${getNiceNumber(processProfitsData.priceOutputs)}`;
         elProcessProfitsList.append(elListItem);
         //// DELME?
         // if (processProfitsData.ultraExpensiveInputs.length) {
@@ -144,11 +142,46 @@ function updateProcessProfitsList() {
         //     elProcessProfitsList.append(elUltraExpensiveOutputs);
         // };
     });
+    // Re-apply the search, if any
+    onInputSearch();
 }
 
-updateProcessProfitsList();
+function onInputSearch() {
+    const queryLowercase = elInputSearch.value.toLowerCase().trim();
+    elProcessProfitsList.querySelectorAll('.list-item:not(.list-header)').forEach(elListItem => {
+        const isMatch = !queryLowercase.length ||
+            elListItem.textContent.toLowerCase().includes(queryLowercase);
+        elListItem.classList.toggle('hidden', !isMatch);
+    });
+}
 
-elPenaltySecondaryOutputs.innerHTML = /*html*/ `
-    ${penaltyForSecondaryOutputs}
-    <div class="penalty-details">(${penaltyForSecondaryOutputsDetails})</div>
-`;
+function setScientistsInCrew(count) {
+    // Source: https://wiki.influenceth.io/en/game/crews/crew-bonuses#refinery-secondary-waste-reduction
+    switch (count) {
+        case 5:
+            penaltyForSecondaryOutputs = 0.255; // -25.5%
+            break;
+        case 4:
+            penaltyForSecondaryOutputs = 0.261; // -26.1%
+            break;
+        case 3:
+            penaltyForSecondaryOutputs = 0.273; // -27.3%
+            break;
+        case 2:
+            penaltyForSecondaryOutputs = 0.3; // -30%
+            break;
+        case 1:
+            penaltyForSecondaryOutputs = 0.375; // -37.5%
+            break;
+        case 0:
+        default:
+            penaltyForSecondaryOutputs = 0.75; // -75%
+    }
+    elScientistsInCrew.querySelectorAll('.scientists-count').forEach(elCount => {
+        elCount.classList.toggle('selected', elCount.textContent === count.toString());
+    });
+    elPenaltySecondaryOutputs.textContent = `-${penaltyForSecondaryOutputs * 100}%`;
+    updateProcessProfitsList();
+}
+
+setScientistsInCrew(1);

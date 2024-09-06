@@ -1,43 +1,116 @@
 @import './widgets-core.scss';
 
-#penalty-secondary-outputs {
+#refining-penalty-content {
     padding: var(--size-padding) var(--size-padding) 0 var(--size-padding);
 
-    &::before {
-        content: 'Penalty for secondary outputs:';
-        margin-right: var(--size-padding);
-        opacity: 0.5;
+    #scientists-in-crew {
+        display: flex;
+
+        &::before {
+            content: 'Scientists in crew:';
+            font-size: 0.9rem;
+            margin-right: var(--size-padding);
+            opacity: 0.5;
+        }
+
+        .scientists-count {
+            @include cursor-active;
+            padding: calc(var(--size-padding) / 2) var(--size-padding);
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+            }
+
+            &.selected {
+                background: var(--color-influence);
+                color: black;
+
+                &:hover {
+                    color: white;
+                }
+
+                &.warning-if-selected {
+                    background: var(--color-warning);
+                }
+            }
+        }
     }
 
-    .penalty-details {
-        font-size: 0.8rem;
-        margin-top: calc(var(--size-padding) / 2);
+    #penalty-secondary-outputs {
+        color: var(--color-influence);
+        padding-top: var(--size-padding);
+
+        &::before {
+            content: 'Penalty for secondary outputs:';
+            font-size: 0.9rem;
+            margin-right: var(--size-padding);
+            opacity: 0.5;
+        }
+    }
+}
+
+#process-profits-about {
+    font-size: 0.9rem;
+    padding: var(--size-padding) var(--size-padding) 0 var(--size-padding);
+    opacity: 0.5;
+
+    ul {
+        padding-left: var(--size-padding);
+
+        li {
+            padding-top: calc(var(--size-padding) / 2);
+        }
     }
 }
 
 #process-profits-list {
     font-size: 0.9rem;
     line-height: 100%;
-    padding-top: var(--size-padding);
 
     .list-item {
         align-items: center;
         display: flex;
         gap: var(--size-padding);
         justify-content: space-between;
-        padding: 0 var(--size-padding);
+        padding: calc(var(--size-padding) / 2) var(--size-padding);
+        position: relative;
 
         &.list-header {
+            background: rgb(15, 15, 15);
             color: var(--color-influence);
-            padding-bottom: var(--size-padding);
+            padding: var(--size-padding);
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
         &:not(.list-header) {
-            padding-bottom: calc(var(--size-padding) / 2);
-            padding-top: calc(var(--size-padding) / 2);
-
             &:hover {
                 background: rgba(255, 255, 255, 0.05);
+
+                &::before {
+                    background: var(--color-influence);
+                    bottom: calc(100% + 8px);
+                    color: black;
+                    content: attr(data-tooltip);
+                    left: 0;
+                    padding: var(--size-padding);
+                    position: absolute;
+                    right: 0;
+                    z-index: 1;
+                }
+
+                &::after {
+                    --after-width: 16px;
+                    bottom: calc(100% - 3px);
+                    color: var(--color-influence);
+                    content: '▼';
+                    left: calc(50% - (var(--after-width) / 2));
+                    position: absolute;
+                    width: var(--after-width);
+                    z-index: 1;
+                }
             }
         }
 

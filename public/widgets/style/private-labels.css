@@ -61,6 +61,10 @@ label input[type=checkbox] {
   display: none !important;
 }
 
+.warning {
+  color: var(--color-warning);
+}
+
 .cta {
   cursor: var(--cursor-url-active) 5 5, auto;
   align-items: center;
@@ -103,6 +107,20 @@ label input[type=checkbox] {
   content: "▲";
   position: absolute;
   right: var(--size-padding);
+}
+.root-section .section-title #search-wrapper {
+  position: absolute;
+  right: var(--size-padding);
+  top: 0;
+}
+.root-section .section-title #search-wrapper #input-search {
+  background: black;
+  text-align: right;
+  transition: width 300ms ease 0s;
+  width: 90px;
+}
+.root-section .section-title #search-wrapper #input-search:hover, .root-section .section-title #search-wrapper #input-search:focus {
+  width: 180px;
 }
 .root-section.closed {
   height: var(--size-base);
@@ -165,23 +183,6 @@ body {
 #private-labels {
   height: 100%;
   overflow: hidden;
-}
-#private-labels .section-title {
-  position: relative;
-}
-#private-labels .section-title #search-wrapper {
-  position: absolute;
-  right: var(--size-padding);
-  top: 0;
-}
-#private-labels .section-title #search-wrapper #input-search {
-  background: black;
-  text-align: right;
-  transition: width 300ms ease 0s;
-  width: 90px;
-}
-#private-labels .section-title #search-wrapper #input-search:hover, #private-labels .section-title #search-wrapper #input-search:focus {
-  width: 180px;
 }
 #private-labels #private-labels-list {
   font-size: 90%;

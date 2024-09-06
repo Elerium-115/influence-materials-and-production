@@ -14,11 +14,36 @@
         <div class="section-title has-toggle" onclick="this.parentElement.classList.toggle('closed')">
             Refining Penalty
         </div>
-        <div id="penalty-secondary-outputs"></div>
+        <div id="refining-penalty-content">
+            <div id="scientists-in-crew">
+                <span class="scientists-count warning-if-selected" onclick="setScientistsInCrew(0)">0</span>
+                <span class="scientists-count" onclick="setScientistsInCrew(1)">1</span>
+                <span class="scientists-count" onclick="setScientistsInCrew(2)">2</span>
+                <span class="scientists-count" onclick="setScientistsInCrew(3)">3</span>
+                <span class="scientists-count" onclick="setScientistsInCrew(4)">4</span>
+                <span class="scientists-count" onclick="setScientistsInCrew(5)">5</span>
+            </div>
+            <div id="penalty-secondary-outputs"></div>
+        </div>
+    </section>
+    <section id="refining-penalty-section" class="root-section closed">
+        <div class="section-title has-toggle" onclick="this.parentElement.classList.toggle('closed')">
+            About
+        </div>
+        <div id="process-profits-about">
+            <div>Processes are ranked based on highest profit, by comparing:</div>
+            <ul>
+                <li>the price of all inputs per SR (standard recipe)</li>
+                <li>vs. the price of all outputs per SR, calculated separately for each output as the primary output, and taking into account the penalty for secondary outputs</li>
+            </ul>
+        </div>
     </section>
     <section id="process-profits-section" class="root-section">
         <div class="section-title">
             Process Profits
+            <div id="search-wrapper">
+                <input type="text" id="input-search" placeholder="Search  🔍" oninput="onInputSearch()">
+            </div>
         </div>
         <div id="process-profits-list"></div>
     </section>
