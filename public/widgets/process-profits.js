@@ -106,6 +106,7 @@ function updateProcessProfitsList() {
             <div class="primary-output">Primary Output</div>
         </div>
         <div class="profit-percent">Profit</div>
+        <div class="profit-per-hour">Profit per hour</div>
     `;
     // Empty the process profits list
     elProcessProfitsList.textContent = '';

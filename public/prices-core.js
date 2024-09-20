@@ -1,3 +1,9 @@
+/**
+ * Dependencies:
+ * - axios.min.js
+ * - abstract-core.js
+ */
+
 // Prices snapshot @ 2024-09-04
 const pricesDefault = {
     "Acetylene": 0.0245,
@@ -308,6 +314,11 @@ async function refreshPrices() {
         url: `${apiUrl}/data/prices`,
     };
     try {
+        if (typeof axios === 'undefined') {
+            // This can be fixed by including "axios.min.js"
+            console.log(`--- ERROR: axios not found`); //// TEST
+            return;
+        }
         const response = await axios(config);
         const rawData = response.data;
         // console.log(`--- rawData from API:`, rawData); //// TEST

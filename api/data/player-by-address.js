@@ -13,6 +13,10 @@ const playerByAddress = {
     '0x06f9aebffaaeb5df2ad943ee7b639d5431f0af2c603b7622c1d6d402bd92dbf6': '<Q> Daharius', // secondary address
     '0x02fd7308ef5321c18475e93e8387a0ca960db68307d1e2afe4ed09085acda7c6': '<Q> Elerium115',
     '0x059a67b550ac4543a0afddf2fe4e20f0e54d498e4b9f701f527ae22e32e36561': '[1ST] Cheveuxxx｜floodgate.space',
+    '0x0708804F54d45C40b4C81921Cd308b4f058c36679ddbd6C03EaaDF190230ca8F': '[1ST] DrJones | Tyrell-Yutani',
+    '0x054e1c559aaea40281c40d610d203cf7b65231ee9f68a26fcddf73c5d6988cc4': '[1ST] f-r-e-d',
+    '0x03395f326d463f068a94b0312ec4275757ce152f2abbe2cc17eeb5173b43bc38': '[1ST] I.P_address',
+    '0x0208ae30370a43236e03c6b72b4c9cf14bcd11c3dbe89020967df0bd649438ae': '[1ST] k3n_n3k | (^-^) ノ',
     '0x019f0f563f9468e1995cc55fec8dfddfc30bb667ce4b020a6c8b7d9aa412aa06': '[1ST] NeilKD',
     '0x013fb68a3fd7b98e32397f9d2dc5214bb14f7ffb9717b20485c6200c6dfea906': '[1ST] ProfessorSabre',
     '0x0631acdbf5a79758cbcc84301b387aebfb5c0ec7476aa48a0ceb98662973c5ce': '[1ST] Skippy The Magnificent',
