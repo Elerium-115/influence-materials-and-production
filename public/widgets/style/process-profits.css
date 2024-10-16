@@ -134,6 +134,7 @@ label input[type=checkbox] {
   padding: var(--size-padding) var(--size-padding) 0 var(--size-padding);
 }
 #refining-penalty-content #scientists-in-crew {
+  align-items: center;
   display: flex;
 }
 #refining-penalty-content #scientists-in-crew::before {

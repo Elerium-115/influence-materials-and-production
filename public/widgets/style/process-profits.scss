@@ -4,6 +4,7 @@
     padding: var(--size-padding) var(--size-padding) 0 var(--size-padding);
 
     #scientists-in-crew {
+        align-items: center;
         display: flex;
 
         &::before {

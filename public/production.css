@@ -1535,12 +1535,10 @@
   z-index: 1;
   opacity: 0.75;
 }
-
 #minimap-wrapper:hover {
   opacity: 1;
 }
-
-#minimap-toggle {
+#minimap-wrapper #minimap-toggle {
   position: absolute;
   top: 0;
   right: 1.5rem;
@@ -1550,27 +1548,22 @@
   cursor: pointer;
   padding-right: 1.5rem;
 }
-
-#minimap-toggle:hover {
+#minimap-wrapper #minimap-toggle:hover {
   color: var(--link-hover);
 }
-
-#minimap-toggle::after {
+#minimap-wrapper #minimap-toggle::after {
   content: "✕";
   position: absolute;
   bottom: -0.1rem;
   right: 0;
 }
-
-#minimap-wrapper.minimized #minimap-toggle::after {
-  content: "▼";
-}
-
-#minimap-canvas {
+#minimap-wrapper #minimap-canvas {
   display: block;
   margin: 3rem auto 1rem auto; /* top-margin should match the height of the ".topbar" links */
 }
-
+#minimap-wrapper.minimized #minimap-toggle::after {
+  content: "▼";
+}
 #minimap-wrapper.minimized #minimap-canvas {
   display: none;
 }
