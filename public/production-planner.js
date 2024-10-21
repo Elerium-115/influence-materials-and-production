@@ -157,6 +157,42 @@ function fetchShareLink() {
         });
 }
 
+function onClickGenerateIndustryPlan() {
+    if (isProcessVariantWaitingSelection(itemDataById)) {
+        // Waiting for user to select a required process variant => NOT generating the industry plan
+        alert('Please select a required process variant');
+        return null;
+    }
+    const startupProductIds = [];
+    const plannedProcessDataById = {};
+    Object.values(itemDataById).reverse().forEach(itemData => {
+        if (itemData.productId !== null && !itemData.isSelected && !itemData.isDisabled) {
+            // Unselected product (i.e. shopping list product) => startup product in industry plan
+            uniquePushToArray(startupProductIds, itemData.productId);
+        }
+        if (itemData.processId !== null && itemData.isSelected && !itemData.isDisabled) {
+            /**
+             * Selected process => process in industry plan.
+             * 
+             * NOTE: If the same process ID is parsed multiple times,
+             * then "primaryOutputId" will be updated each time, with the
+             * last-set value being the one closest to the final product.
+             */
+            const parentItemData = itemDataById[itemData.parentItemId];
+            plannedProcessDataById[itemData.processId] = {
+                id: itemData.processId,
+                primaryOutputId: parentItemData.productId,
+            };
+        }
+    });
+    const plannedProductJSON = {
+        startupProductIds,
+        plannedProcessDataById,
+        plannedProductId: itemDataById[1].productId,
+    };
+    location.href = `https://influence-industry-planner.onrender.com/?planned-product-json=${JSON.stringify(plannedProductJSON)}`;
+}
+
 /**
  * Refresh connections whenever a new font has finished loading,
  * b/c the position of items in the production chain changes:
