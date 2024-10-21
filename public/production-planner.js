@@ -157,11 +157,11 @@ function fetchShareLink() {
         });
 }
 
-function onClickGenerateIndustryPlan() {
+function updateGenerateIndustryPlanLink() {
     if (isProcessVariantWaitingSelection(itemDataById)) {
         // Waiting for user to select a required process variant => NOT generating the industry plan
-        alert('Please select a required process variant');
-        return null;
+        generateIndustryPlanLinkContainer.querySelector('a').removeAttribute('href');
+        return;
     }
     const startupProductIds = [];
     const plannedProcessDataById = {};
@@ -180,7 +180,7 @@ function onClickGenerateIndustryPlan() {
              */
             const parentItemData = itemDataById[itemData.parentItemId];
             plannedProcessDataById[itemData.processId] = {
-                id: itemData.processId,
+                id: mapProcessIdForIndustryPlanner(itemData.processId),
                 primaryOutputId: parentItemData.productId,
             };
         }
@@ -190,7 +190,8 @@ function onClickGenerateIndustryPlan() {
         plannedProcessDataById,
         plannedProductId: itemDataById[1].productId,
     };
-    location.href = `https://influence-industry-planner.onrender.com/?planned-product-json=${JSON.stringify(plannedProductJSON)}`;
+    const url = `https://influence-industry-planner.onrender.com/?planned-product-json=${JSON.stringify(plannedProductJSON)}`;
+    generateIndustryPlanLinkContainer.querySelector('a').setAttribute('href', url);
 }
 
 /**

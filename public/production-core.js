@@ -16,6 +16,7 @@ const productsListContainer = document.getElementById('products-list');
 const scaleSliderRange = document.getElementById('scale-slider-range');
 const selectedItemNameContainer = document.getElementById('selected-item-name');
 const chainTypeLinkContainer = document.getElementById('chain-type-link');
+const generateIndustryPlanLinkContainer = document.getElementById('generate-indutry-plan');
 const productionChainItemsContainer = document.getElementById('production-chain-items');
 const elMinimapWrapper = document.getElementById('minimap-wrapper');
 
@@ -160,6 +161,29 @@ function getRealHours(adalianHoursOrNaN) {
 
 function getCurrentHash() {
     return window.location.hash.replace(/^#/, '');
+}
+
+function mapProcessIdForIndustryPlanner(processId) {
+    //// TO DO: find a future-proof solution, instead of this hardcoding
+    if (processId <= 247) {
+        return processId;
+    }
+    const mapProcessId = {
+        310: 251, // Light Transport Integration
+        311: 252, // Heavy Transport Integration
+        312: 250, // Shuttle Integration
+        313: 300, // Warehouse Construction
+        314: 301, // Extractor Construction
+        315: 302, // Refinery Construction
+        316: 303, // Bioreactor Construction
+        317: 304, // Factory Construction
+        318: 305, // Shipyard Construction
+        319: 306, // Spaceport Construction
+        320: 307, // Marketplace Construction
+        321: 308, // Habitat Construction
+        322: 309, // Tank Farm Construction
+    };
+    return mapProcessId[processId];
 }
 
 function resetFadedItemsAndConnectionsCore() {

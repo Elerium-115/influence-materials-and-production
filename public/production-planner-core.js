@@ -2069,6 +2069,9 @@ function refreshDetailsAndConnections(skipHashEncoding = false) {
         const hashEncodedFromItemDataById = getHashEncodedFromItemDataById();
         setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById);
     }
+    if (isToolProductionPlanner) {
+        updateGenerateIndustryPlanLink();
+    }
 }
 
 function injectPlannedProductNameAndImage(plannedProductId) {
