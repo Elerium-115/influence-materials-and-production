@@ -1,6 +1,3 @@
-
-let doDebug = location.href.includes('127.0.0.1');
-
 /**
  * Fix for Firefox bug re: checkbox inputs keeping
  * the "checked" PROPERTY cached after a SOFT-reload.
@@ -12,11 +9,9 @@ document.querySelectorAll('.options label > input').forEach(elInput => {
     elInput.checked = elInput.parentElement.classList.contains('checked');
 });
 
-let apiUrl = `https://elerium-influence-api.vercel.app`;
-if (window.location.hostname === '127.0.0.1') {
-    // localhost API @ http://127.0.0.1:3001
-    apiUrl = `${window.location.protocol}//${window.location.hostname}:3001`;
-}
+const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const doDebug = isLocalhost;
+const apiUrl = isLocalhost ? 'http://127.0.0.1:3001' : 'https://elerium-influence-api.vercel.app';
 
 const HOUR_IN_MILLISECONDS = 3_600_000; // 60 * 60 * 1000
 

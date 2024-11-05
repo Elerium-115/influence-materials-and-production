@@ -2058,18 +2058,18 @@ function refreshDetailsAndConnections(skipHashEncoding = false) {
         renderShoppingAndDiyList();
     }
     refreshConnections();
-    // Hash encoding is only used in the Production Planner tool
-    if (!skipHashEncoding && isToolProductionPlanner) {
-        /**
-         * Encode the current state of the chain into the URL hash,
-         * in this format: "Thin-filmResistor__hashEncodedFromItemDataById".
-         */
-        const plannedProductId = itemDataById[1].productId;
-        const plannedProductCompactName = getCompactName(productDataById[plannedProductId].name);
-        const hashEncodedFromItemDataById = getHashEncodedFromItemDataById();
-        setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById);
-    }
     if (isToolProductionPlanner) {
+        // Hash encoding is only used in the Production Planner tool
+        if (!skipHashEncoding) {
+            /**
+             * Encode the current state of the chain into the URL hash,
+             * in this format: "Thin-filmResistor__hashEncodedFromItemDataById".
+             */
+            const plannedProductId = itemDataById[1].productId;
+            const plannedProductCompactName = getCompactName(productDataById[plannedProductId].name);
+            const hashEncodedFromItemDataById = getHashEncodedFromItemDataById();
+            setCurrentHash(plannedProductCompactName, hashEncodedFromItemDataById);
+        }
         updateGenerateIndustryPlanLink();
     }
 }
