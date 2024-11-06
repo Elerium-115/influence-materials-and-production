@@ -11,7 +11,9 @@ document.querySelectorAll('.options label > input').forEach(elInput => {
 
 const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
 const doDebug = isLocalhost;
-const apiUrl = isLocalhost ? 'http://127.0.0.1:3001' : 'https://elerium-influence-api.vercel.app';
+const apiUrlV1Vercel = 'https://elerium-influence-api.vercel.app'; // no longer used, as of 2024-11-07
+const apiUrlV1Coolify = 'https://influence-api.elerium.dev';
+const apiUrl = isLocalhost ? 'http://127.0.0.1:3001' : apiUrlV1Coolify;
 
 const HOUR_IN_MILLISECONDS = 3_600_000; // 60 * 60 * 1000
 
