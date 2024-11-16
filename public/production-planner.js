@@ -190,7 +190,7 @@ function updateGenerateIndustryPlanLink() {
         plannedProcessDataById,
         plannedProductId: itemDataById[1].productId,
     };
-    const url = `https://influence-industry-planner.onrender.com/?planned-product-json=${JSON.stringify(plannedProductJSON)}`;
+    const url = `https://influence-industry-planner.elerium.dev/?planned-product-json=${JSON.stringify(plannedProductJSON)}`;
     generateIndustryPlanLinkContainer.querySelector('a').setAttribute('href', url);
 }
 
