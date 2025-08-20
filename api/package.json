@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "API and data storage for Influence tools by Elerium115",
     "engines": {
-        "node": "18.x"
+        "node": "22.x"
     },
     "main": "index.js",
     "type": "module",
@@ -14,13 +14,13 @@
     "author": "@elerium115",
     "license": "ISC",
     "dependencies": {
-        "@influenceth/sdk": "^2.3.0",
-        "axios": "^1.7.4",
-        "body-parser": "^1.20.2",
+        "@influenceth/sdk": "^2.3.9",
+        "axios": "^1.11.0",
+        "body-parser": "^2.2.0",
         "cors": "^2.8.5",
-        "dotenv": "^16.4.5",
-        "elastic-builder": "^2.29.0",
-        "express": "^4.19.2",
-        "mongoose": "^8.5.3"
+        "dotenv": "^17.2.1",
+        "elastic-builder": "^3.0.0",
+        "express": "^5.1.0",
+        "mongoose": "^8.17.2"
     }
 }
